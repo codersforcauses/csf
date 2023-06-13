@@ -19,7 +19,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-        restart: true
     container_name: csf_server
     restart: unless-stopped
     env_file: .env.dev
