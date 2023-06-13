@@ -5,6 +5,7 @@ services:
     volumes:
       - ./data/db:/var/lib/postgresql/data
     env_file: .env.dev
+    # healthcheck for sever container
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 3s
@@ -26,4 +27,4 @@ services:
       - 8081:8081
     volumes:
       - ./server:/app
-    command: python manage.py runserver 0.0.0.0:8081
+    entrypoint: /entrypoint.sh
