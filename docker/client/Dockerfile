@@ -16,8 +16,5 @@ COPY client/ .
 # Build the Vue app
 RUN yarn build
 
-# Expose the default port for the Vue app
-# EXPOSE 8082
-
 # Start the Vue app
 CMD ["yarn", "dev"]

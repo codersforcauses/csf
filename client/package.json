@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite --port 8082",
+    "dev": "vite --port 8082 --host 0.0.0.0",
     "build": "run-p type-check build-only",
     "preview": "vite preview",
     "test:unit": "vitest",
