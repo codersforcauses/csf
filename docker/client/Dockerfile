@@ -1,5 +1,5 @@
 # Base image
-FROM node:16
+FROM node:18-slim
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -12,9 +12,6 @@ RUN yarn install --frozen-lockfile
 
 # Copy the entire client directory to the working directory
 COPY client/ .
-
-# Build the Vue app
-RUN yarn build
 
 # Start the Vue app
 CMD ["yarn", "dev"]
