@@ -1,7 +1,13 @@
 name: PR Source Code Check
 
 on:
-  - push
+  pull_request:
+    type: [opened, edited]
+    paths:
+      - "**.ts"
+      - "**.cjs"
+      - "**.mjs"
+      - "**.vue"
 
 jobs:
   lint:
