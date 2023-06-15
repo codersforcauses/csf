@@ -2,7 +2,7 @@ name: PR Source Code Check
 
 on:
   pull_request:
-    type: [opened, edited]
+    types: [opened, edited]
     paths:
       - "**.ts"
       - "**.cjs"
