@@ -1,6 +1,6 @@
 ---
 name: New feature
-about: Suggest an idea for the POOPs project
+about: Suggest an idea for this project
 title: ""
 labels: enhancement
 assignees: ""
