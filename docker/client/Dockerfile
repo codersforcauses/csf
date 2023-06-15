@@ -1,17 +1,23 @@
-# Base image
-FROM node:18-slim
+FROM node:18-slim as development-stage
 
-# Set the working directory inside the container
+# SET WORKING DIRECTORY
 WORKDIR /app
 
-# Copy package.json and yarn.lock to the working directory
-COPY client/package.json client/yarn.lock ./
+# Copy runtime script & make it executable
+COPY /docker/client/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-# Install dependencies
-RUN yarn install --frozen-lockfile
+# Copy Application code into a directory called `app`
+COPY ./client /app
 
-# Copy the entire client directory to the working directory
-COPY client/ .
+# Install ALL Dependencies
+RUN yarn install
 
-# Start the Vue app
-CMD ["yarn", "dev"]
+# ========================================
+# ---- Executed at Container Runtime ----
+# ========================================
+
+# CMD commands get executed at container runtime!
+CMD ["/entrypoint.sh"]
+
+# TODO: Production 
