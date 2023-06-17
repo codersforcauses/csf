@@ -1,5 +1,7 @@
 # CSF Winter 2023
 
+//TODO contents, style guide, branding
+
 ## Table of Contents
 
 ## Project Overview
@@ -71,3 +73,20 @@ Other
 ## Branding
 
 ## Code Conventions
+
+### Linting
+- Be sure to enable {format on save} on VS Code
+
+ ### Naming Conventions
+- `.py` files
+    - variable names in snake case e.g., `variable_name`
+    - class names in pascal case e.g., `ClassName`
+    - file name in lowercase e.g., `filename.py`
+- `.vue` files
+    - file name in pascal case e.g., `FileName.vue`
+- `.ts` files
+    - variable names in camel case e.g., `variableName`
+    - file name in lowercase e.g., `filename.ts`
+
+### Documentation
+- Code should be documented
