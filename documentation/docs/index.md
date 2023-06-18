@@ -1,9 +1,5 @@
 # CSF Winter 2023
 
-//TODO contents, style guide, branding
-
-## Table of Contents
-
 ## Project Overview
 
 The objective is to re-energise Stride for Education, so it better caters to users and is less resource demanding to administer.
@@ -68,16 +64,21 @@ Other
 - [Docker](https://www.docker.com/)
 - [MkDocs](https://www.mkdocs.org/)
 
-## Style Guide
+## Style Guide and Branding
 
-## Branding
+See [this guide](https://drive.google.com/file/d/1kAWqTCt_j9zyLtmKWeBiV-Fk5ybMYDhV/view?usp=sharing) for a quick overview of logos, colours, and typography.
+
+See [this folder](https://drive.google.com/drive/folders/1auwjbas9B0eKndSAQdmVk-J9NXTrohL_?usp=share_link) for media assets such as avatars, fonts, and videos.
+
+See [this document](https://docs.google.com/document/d/15tQjiH7VnaAhLnafIznboitilpdyP6Wl/edit?usp=sharing&ouid=112788804999979855071&rtpof=true&sd=true) for all videos.
 
 ## Code Conventions
 
 ### Linting
 - Be sure to enable {format on save} on VS Code
 
- ### Naming Conventions
+### Naming Conventions
+
 - `.py` files
     - variable names in snake case e.g., `variable_name`
     - class names in pascal case e.g., `ClassName`
