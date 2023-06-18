@@ -27,3 +27,17 @@ services:
     volumes:
       - ./server:/app
     entrypoint: /entrypoint.sh
+
+  client:
+    build:
+      context: .
+      dockerfile: docker/client/Dockerfile
+    container_name: csf_client
+    restart: unless-stopped
+    env_file:
+      - .env.dev
+    ports:
+      - 8082:8082
+    volumes:
+      - ./client:/app
+      - /app/node_modules
