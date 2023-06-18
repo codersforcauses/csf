@@ -1,0 +1,7 @@
+site_name: CSF Documentation
+copyright: Copyright Coders for Causes
+site_url: https://example.com/
+repu_url: https://github.com/codersforcauses/csf
+
+theme:
+  name: "readthedocs"
