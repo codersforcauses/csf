@@ -1,59 +1,57 @@
 <template>
   <v-container class="fill-height">
     <v-row justify="center" align="center" align-content="center">
-      <v-col cols="6">
-        <v-card>
-          <v-card-text>
-            <v-form ref="form"> 
+      <v-col xs="12" md="6">
+        <v-card class="pa-10">
+            <v-form ref="form" @submit.prevent> 
               <v-text-field 
                 v-model="username" 
-                :rules="nameRules" 
-                :counter="10" 
+                :counter="25" 
                 label="Username"
                 required
               ></v-text-field>
               <v-text-field 
                 v-model="firstname" 
-                :rules="nameRules" 
-                :counter="10" 
+                :counter="25" 
                 label="First name"
                 required
               ></v-text-field>
               <v-text-field 
                 v-model="lastname" 
-                :rules="nameRules" 
-                :counter="10" 
+                :counter="25" 
                 label="Last name" 
                 required
               ></v-text-field>
               <v-text-field 
-                v-model="email" 
-                :rules="emailRules" 
+                v-model="email"  
+                :counter="25" 
                 label="E-mail" 
                 required
               ></v-text-field>
               <v-text-field 
                 v-model="password" 
-                :rules="emailRules" 
                 label="Password" 
                 required
               ></v-text-field>
-              <v-row justify="end">
-                <v-checkbox-btn
+              <v-row justify="center">
+                <v-checkbox
                 v-model="teamSignUp"
-                :rules="emailRules"
                 label="Team Sign Up"
+                
                 required
-              ></v-checkbox-btn>
-                <v-checkbox-btn
+              ></v-checkbox>
+                <v-checkbox
                 v-model="hasConsent"
-                :rules="emailRules"
                 label="Has Consent"
+                hint="Does CSF have permission to use their data?"
+                :persistent-hint="true"
                 required
-              ></v-checkbox-btn>
+              ></v-checkbox>
+              </v-row>
+              <v-row>
+                <v-btn type="submit" block class="mt-2">Submit</v-btn>
               </v-row>
             </v-form>
-          </v-card-text>
         </v-card>
       </v-col>
     </v-row>
@@ -78,6 +76,9 @@ export default {
       password: '',
       teamSignUp: false,
       hasConsent: false
+      // validation rules - might want to use a specialized component
+      // like Vee-validate or vuelidate
+
     }
   }
 }
