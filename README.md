@@ -4,3 +4,4 @@ Run the Vue and Django server
 ```
 docker compose up
 ```
+TEST
