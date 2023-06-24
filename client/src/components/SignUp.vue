@@ -94,7 +94,7 @@
                                             <v-text-field v-model="state.email" label="Email*" required></v-text-field>
                                         </v-col>
                                         <v-col cols="12" sm="6">
-                                            <v-text-field v-model="state.email" label="Confirm Email*"
+                                            <v-text-field v-model="state.confirmEmail" label="Confirm Email*"
                                                 required></v-text-field>
                                         </v-col>
                                         <v-col cols="12" sm="6">
@@ -102,7 +102,7 @@
                                                 required></v-text-field>
                                         </v-col>
                                         <v-col cols="12" sm="6">
-                                            <v-text-field v-model="state.password" label="Confirm Password*" type="password"
+                                            <v-text-field v-model="state.confirmPassword" label="Confirm Password*" type="password"
                                                 required></v-text-field>
                                         </v-col>
                                         <v-col cols="12" sm="6">
@@ -147,18 +147,20 @@ const { mobile } = useDisplay();
 const emit = defineEmits(['submit']);
 
 const dialog = ref(false)
-type initialState = {
+interface initialState {
     username?: string;
     firstName?: string;
     lastName?: string;
     email?: string;
+    confirmEmail?: string;
     password?: string;
+    confirmPassword?: string;
     avatar?: string;
     teamSignup?: boolean;
     hasConsent?: boolean;
 }
 
-let state: initialState = {};
+const state: initialState = reactive({});
 
 const test = () => {
     console.log(state);
