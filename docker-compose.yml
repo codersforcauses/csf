@@ -40,4 +40,3 @@ services:
       - 8082:8082
     volumes:
       - ./client:/app
-      - /app/node_modules
