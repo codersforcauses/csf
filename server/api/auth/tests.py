@@ -26,7 +26,7 @@ class JWTTestCase(TestCase):
     def test_jwt_token(self):
         resp = self._token()
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
-        for k,v in resp.data.items():
+        for k, v in resp.data.items():
             self.assertTrue(k in ["refresh", "access"])
             self.assertTrue(v.split(".", maxsplit=1)[0] == "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9")
 
@@ -46,6 +46,6 @@ class JWTTestCase(TestCase):
 
     def test_jwt_verify_with_invalid_token(self):
         token = self._token().data["access"]
-        token = token[:50] + chr(ord(token[50])+1) + token[51:] # increment 50th character to make invalid
+        token = token[:50] + chr(ord(token[50])+1) + token[51:]  # increment 50th character to make invalid
         resp = self.client.post(reverse("jwt_verify"), {"token": token}, format="json")
         self.assertEqual(resp.status_code, status.HTTP_401_UNAUTHORIZED)
