@@ -6,7 +6,7 @@
           <v-btn v-bind="props">Signup</v-btn>
         </template>
         <v-card>
-          <form @submit.prevent="submit()">
+          <form @submit.prevent="">
             <v-card-title>
               <span class="text-h5">Signup</span>
             </v-card-title>
@@ -85,10 +85,9 @@
                 color="blue-darken-1"
                 variant="text"
                 @click="
-                  dialog = false
-                  submit()
-                "
-              >
+                () => {
+                  dialog = false,
+                  submit();}">
                 Submit
               </v-btn>
             </v-card-actions>
@@ -105,8 +104,6 @@ import { useDisplay } from 'vuetify'
 import signup from '../types/signup'
 
 const { mobile } = useDisplay()
-
-const emit = defineEmits(['submit'])
 
 const dialog = ref(false)
 
