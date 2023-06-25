@@ -8,6 +8,7 @@ on:
       - "**.cjs"
       - "**.mjs"
       - "**.vue"
+  workflow_dispatch:
 
 jobs:
   lint:
