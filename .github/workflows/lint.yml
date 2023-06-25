@@ -23,6 +23,7 @@ jobs:
         with:
           node-version: "18"
           cache: "yarn"
+          cache-dependency-path: client/yarn.lock
       - run: yarn
       - run: yarn lint:strict
 
@@ -38,6 +39,7 @@ jobs:
         with:
           node-version: "18"
           cache: "yarn"
+          cache-dependency-path: client/yarn.lock
       - run: yarn
       - run: yarn type-check
 
@@ -53,5 +55,6 @@ jobs:
         with:
           node-version: "18"
           cache: "yarn"
+          cache-dependency-path: client/yarn.lock
       - run: yarn
       - run: yarn format:check
