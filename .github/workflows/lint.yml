@@ -2,46 +2,59 @@ name: PR Source Code Check
 
 on:
   pull_request:
-    types: [opened, edited]
+    types: ["opened", "synchronize", "reopened", "edited"]
     paths:
       - "**.ts"
       - "**.cjs"
       - "**.mjs"
       - "**.vue"
+  workflow_dispatch:
 
 jobs:
   lint:
     name: Run ESLint
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: "18"
           cache: "yarn"
+          cache-dependency-path: client/yarn.lock
       - run: yarn
-      - run: yarn lint:strict
+      - run: yarn lint
 
   tsc:
     name: Run Type Check
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: "18"
           cache: "yarn"
+          cache-dependency-path: client/yarn.lock
       - run: yarn
-      - run: yarn typecheck
+      - run: yarn type-check
 
   prettier:
     name: Run Prettier Check
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: "18"
           cache: "yarn"
+          cache-dependency-path: client/yarn.lock
       - run: yarn
       - run: yarn format:check
