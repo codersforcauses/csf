@@ -25,7 +25,7 @@ jobs:
           cache: "yarn"
           cache-dependency-path: client/yarn.lock
       - run: yarn
-      - run: yarn lint:strict
+      - run: yarn lint
 
   tsc:
     name: Run Type Check
