@@ -21,6 +21,9 @@ jobs:
           cache: "yarn"
       - run: yarn
       - run: yarn lint:strict
+    defaults:
+      run:
+        working-directory: client
 
   tsc:
     name: Run Type Check
@@ -32,7 +35,10 @@ jobs:
           node-version: "18"
           cache: "yarn"
       - run: yarn
-      - run: yarn typecheck
+      - run: yarn type-check
+    defaults:
+      run:
+        working-directory: client
 
   prettier:
     name: Run Prettier Check
@@ -45,3 +51,6 @@ jobs:
           cache: "yarn"
       - run: yarn
       - run: yarn format:check
+    defaults:
+      run:
+        working-directory: client
