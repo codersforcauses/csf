@@ -18,12 +18,12 @@ const app = createApp(App)
 const csfCustomTheme: ThemeDefinition = {
   dark: false,
   colors: {
-    red: 'rgb(237, 28, 36)',
-    black: 'rgb(0, 0, 0)',
-    white: 'rgb(255, 255, 255)',
-    green: 'rgb(0, 157, 79)',
-    blue: 'rgb(52, 94, 158)',
-    tint: 'rgb(249, 241, 227)'
+    primaryRed: 'rgb(237, 28, 36)',
+    primaryBlack: 'rgb(0, 0, 0)',
+    primaryWhite: 'rgb(255, 255, 255)',
+    secondaryGreen: 'rgb(0, 157, 79)',
+    secondaryBlue: 'rgb(52, 94, 158)',
+    secondaryTint: 'rgb(249, 241, 227)'
   }
 }
 
