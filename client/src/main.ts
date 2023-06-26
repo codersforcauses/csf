@@ -7,6 +7,7 @@ import 'vuetify/styles'
 import { ThemeDefinition, createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+import * as icons from 'vuetify/iconsets/mdi-svg'
 
 import App from './App.vue'
 import router from './router'
@@ -33,7 +34,8 @@ const vuetify = createVuetify({
       csfCustomTheme,
     },
     defaultTheme: 'csfCustomTheme'
-  }
+  },
+  icons
 })
 
 app.use(createPinia())
