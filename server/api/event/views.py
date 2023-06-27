@@ -20,6 +20,11 @@ def get_event(request, event_id):
     print(serializer.data)
     return Response(serializer.data)
 
+@api_view(['GET'])
+def get_events(request):
+    events = Event.objects.all()
+    serializer = EventSerialiser(events, many=True)
+    return Response(serializer.data)
 
 @api_view(['PUT'])
 def update_event(request, event_id):
