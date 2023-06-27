@@ -4,8 +4,9 @@ from . import views
 
 app_name="event"
 urlpatterns = [
-    path("create_event/", views.create_event, name="createEvent"),
-    path("get_event/<int:event_id>", views.get_event, name="getEvent"),
-    path("update_event/<int:event_id>", views.update_event, name="updateEvent"),
-    path("delete_event/<int:event_id>", views.delete_event, name="deleteEvent"),
+    path('create/', views.create_competition, name='competition-create'),
+    path('retrieve/', views.retrieve_competitions_list, name='competition-read'),
+    path('retrieve/<int:id>', views.get_competition, name='competition-details'),
+    path('update/<int:id>', views.update_competition, name='competition-update'),
+    path('delete/<int:id>', views.delete_competition, name='competition-delete'),
 ]
