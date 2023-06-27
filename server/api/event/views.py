@@ -12,6 +12,7 @@ def create_event(request):
         serialiser.save()
         return Response(serialiser.data)
 
+
 @api_view(['GET'])
 def get_event(request, event_id):
     event = Event.objects.get(event_id=event_id)
