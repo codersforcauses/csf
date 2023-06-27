@@ -6,20 +6,14 @@ from .serializers import EventSerialiser
 
 
 @api_view(['POST'])
-def create_competition(request):
+def create_event(request):
     serialiser = EventSerialiser(data=request.data)
     if serialiser.is_valid():
         serialiser.save()
         return Response(serialiser.data)
 
 @api_view(['GET'])
-def retrieve_competitions_list(request):
-    events = Event.objects.all()
-    serializer = EventSerialiser(events, many=True)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-def get_competition(request, event_id):
+def get_event(request, event_id):
     event = Event.objects.get(event_id=event_id)
     serializer = EventSerialiser(event)
     print(serializer.data)
@@ -27,7 +21,7 @@ def get_competition(request, event_id):
 
 
 @api_view(['PUT'])
-def update_competition(request, event_id):
+def update_event(request, event_id):
     event = Event.objects.get(event_id=event_id)
     if event.is_public is False:
         serializer = EventSerialiser(instance=event, data=request.data)
@@ -39,7 +33,7 @@ def update_competition(request, event_id):
 
 
 @api_view(['DELETE'])
-def delete_competition(request, event_id):
+def delete_event(request, event_id):
     event = Event.objects.get(event_id=event_id)
     if event.is_public is False:
         event.delete()
