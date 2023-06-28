@@ -1,6 +1,5 @@
 <template>
-  <img id="app" src="@/assets/Footer-min.jpeg" class="border"/>
-  <v-toolbar dark app color="black" class="hidden-sm-and-down mt-2">
+  <v-toolbar dark app color="black" class="hidden-sm-and-down">
     <img alt="CSF Logo"  src="@/assets/CSF_Logo_WHITE.png" width="125" height="60" />
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down">
@@ -9,23 +8,28 @@
       }}</v-btn>
     </v-toolbar-items>
   </v-toolbar>
-  <v-toolbar dark app color="black" class="hidden-md-and-up mt-2">
+  <v-toolbar dark app color="black" class="hidden-md-and-up">
     <img alt="CSF Logo"  src="@/assets/CSF_Logo_WHITE.png" width="125" height="60" />
     <v-spacer></v-spacer>
-    <v-dialog v-model="dialog" :fullscreen="mobile" transition="dialog-up-transition">
+    <v-dialog v-model="dialog" :fullscreen="mobile" transition="dialog-up-transition" class="hidden-md-and-up">
       <template v-slot:activator="{ props }" >
-        <v-btn icon v-bind="props" class="hidden-md-and-up">
-          <v-icon :icon="menuBarIcon"></v-icon>
+        <v-btn icon v-bind="props" class="hidden-md-and-up menuIcon">
+          <v-icon>mdi-menu</v-icon>
         </v-btn>
       </template>
-      <v-card class="overall mt-2">
-        <v-toolbar dark app color="black" class="mt-2">
-          <img alt="CSF Logo"  src="@/assets/CSF_Logo_WHITE.png" width="125" height="60" />
-          <v-spacer></v-spacer>
-          <v-btn icon @click="dialog = false" class="hidden-md-and-up">
-            <v-icon :icon="closeMenuBarIcon"></v-icon>
-          </v-btn>
-        </v-toolbar>
+      <v-card class="overall">
+        <v-container class="pa-0 ma-0">
+          <v-toolbar dark app color="black" class="hidden-md-and-up">
+            <img alt="CSF Logo"  src="@/assets/CSF_Logo_WHITE.png" width="125" height="60" />
+            <v-spacer></v-spacer>
+            <v-btn icon @click="dialog = false" class="hidden-md-and-up menuIcon">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-toolbar>
+        </v-container>
+        <v-container class="pt-0 pl-0 pb-2 pr-0 border-container">
+          <img id="app" src="@/assets/Footer-min.jpeg" class="border hidden-md-and-up"/>
+        </v-container>
         <v-list class="listItem"> 
           <v-list-item
             v-for="(item, index) in menu"
@@ -43,31 +47,31 @@
       </v-card>
     </v-dialog>
   </v-toolbar>
+  <img id="app" src="@/assets/Footer-min.jpeg" class="border hidden-sm-and-down"/>
+  <img id="app" src="@/assets/Footer-min.jpeg" class="border hidden-md-and-up"/>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
-import { aliases } from 'vuetify/iconsets/mdi-svg';
 
 const { mobile } = useDisplay()
 const dialog = ref(false)
 const menu = [
-        { icon: "fa fa-address-card", title: "About Us", link: "/" },
-        { icon: "fa fa-chart-line", title: "Dashboard", link: "/"  },
-        { icon: "fa fa-trophy", title: "Challenges", link: "/"  },
-        { icon: "fa fa-users", title: "Team Page", link: "/"  },
-        { icon: "fa fa-calendar", title: "Events", link: "/"  },
-        { icon: "fa fa-star", title: "Leaderboards", link: "/"  },
-        { icon: "fa fa-sign-in-alt", title: "Login", link: "/"  },
-        { icon: "fa fa-pen-square", title: "Sign Up", link: "/signup"  },
+        { icon: "mdi-card-account-details-outline", title: "About Us", link: "/" },
+        { icon: "mdi-chart-bar", title: "Dashboard", link: "/"  },
+        { icon: "mdi-trophy", title: "Challenges", link: "/"  },
+        { icon: "mdi-account-group", title: "Team Page", link: "/"  },
+        { icon: "mdi-calendar", title: "Events", link: "/"  },
+        { icon: "mdi-star", title: "Leaderboards", link: "/"  },
+        { icon: "mdi-login", title: "Login", link: "/"  },
+        { icon: "mdi-pencil-box", title: "Sign Up", link: "/signup"  },
 ]
-const menuBarIcon = aliases.menu
-const closeMenuBarIcon = aliases.close
 </script>
+
 <style>
 @import url('https://use.fontawesome.com/releases/v5.15.4/css/all.css');
-.hidden-md-and-up {
+.menuIcon {
   padding-right: 3%;
 }
 .listItem{
@@ -80,9 +84,14 @@ const closeMenuBarIcon = aliases.close
 .border {
   height: 100%;
   width: 100%;
-  max-height: 15px;
+  max-height: 10px;
   overflow: hidden;
   position: absolute;
-  top: 0;
+}
+.border-container{
+  position: relative;
+}
+.v-list{
+  padding-top:0px;
 }
 </style>
