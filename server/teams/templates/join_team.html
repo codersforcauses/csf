@@ -1,0 +1,12 @@
+<h1>JOIN A TEAM</h1>
+
+{% if err %}
+{{ err }}
+{% endif %}
+
+<form action="{% url 'teams:join_team' %}" method="POST">
+    {% csrf_token %}
+    {{ form.join_code.label }}
+    {{ form.join_code }}
+    <input type="submit">
+</form>

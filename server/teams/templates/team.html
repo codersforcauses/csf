@@ -1,0 +1,52 @@
+<h1>TEAM</h1>
+{{ a }}
+<!-- If user is admin -->
+{% if user_info.is_admin %}
+<!-- if user does not have any team created -->
+{% if user_info.team_id is None %}
+<button><a href="{% url 'teams:create_team' %}">Create new team</a></button>
+<!-- if user already has a team created -->
+{% else %}
+<p>Your team is: {{ team_info.name }}</p>
+<p>Your join code is: {{ team_info.join_code }}</p>
+<!-- if team does not have any members (exclude ownself) -->
+<!-- if team has members -->
+<ul>
+    {% for member in team_members %}
+    <li>{{ member.username }}: {{ member.first_name }}</li>
+    {% endfor %}
+</ul>
+<!-- Edit team -->
+<button><a href="{% url 'teams:edit_team' team_info.team_id %}">Edit team</a></button>
+<!-- Delete team -->
+<button><a href="{% url 'teams:delete_team' team_info.team_id %}">Delete team</a></button>
+{% endif %}
+
+<!-- Display outcome of delete -->
+{% if err %}
+{{ err }}
+{% endif %}
+{% if message %}
+{{ message }}
+{% endif %}
+
+<!-- If user is not admin -->
+{% else %}
+<!-- If user has not joined any team -->
+{% if user_info.team_id is None %}
+<button><a href="{% url 'teams:join_team' %}">Join a team</a></button>
+<!-- If user already has a team joined -->
+{% else %}
+<p>You have joined the team: {{ team_info.name }} </p>
+<p>Team Members:</p>
+<ul>
+    {% for member in team_members %}
+    <li>{{ member.username }}: {{ member.first_name }} {% if member.is_admin %}<span> (Team Admin) </span>{% endif %}
+    </li>
+    {% endfor %}
+</ul>
+<!-- Leave team -->
+<button><a href="{% url 'teams:leave_team' team_info.team_id %}">Leave team</a></button>
+{{ msg }}
+{% endif %}
+{% endif %}
