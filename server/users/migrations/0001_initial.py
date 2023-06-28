@@ -19,10 +19,11 @@ class Migration(migrations.Migration):
             fields=[
                 ('password', models.CharField(max_length=128, verbose_name='password')),
                 ('last_login', models.DateTimeField(blank=True, null=True, verbose_name='last login')),
-                ('is_superuser', models.BooleanField(default=False, help_text='User has every permission without assigning them.', verbose_name='superuser status')),
-                ('is_staff', models.BooleanField(default=False, help_text='Designates if user can log into this admin site.', verbose_name='staff status')),
-                ('is_active', models.BooleanField(default=True, help_text='Designates if user should be treated as active. Unselect instead of deleting accounts.', 
-                                                  verbose_name='active')),
+                ('is_superuser', models.BooleanField(default=False, help_text='User has permissions without assigning them.', 
+                                                     verbose_name='superuser status')),
+                ('is_staff', models.BooleanField(default=False, help_text='Designates if user can login admin site.', verbose_name='staff status')),
+                ('is_active', models.BooleanField(default=True, help_text='Designates if user should be treated as active.'
+                                                  'Unselect instead of deleting accounts.', verbose_name='active')),
                 ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
                 ('user_id', models.AutoField(primary_key=True, serialize=False)),
                 ('username', models.CharField(max_length=20, unique=True)),
