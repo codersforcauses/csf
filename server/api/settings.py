@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     "users",
     "api.event",
     "rest_framework",
-    "rest_framework_simplejwt"
+    # "rest_framework_simplejwt"
 ]
 
 MIDDLEWARE = [
@@ -136,8 +136,8 @@ AUTH_USER_MODEL = "users.User"
 
 # JWT
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
-}
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework_simplejwt.authentication.JWTAuthentication',
+#     )
+# }
