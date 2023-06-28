@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 from users.models import User
 
+
 class Command(BaseCommand):
     help = "To create a superuser, enter a username with -u <username> and password with -p <password>."
 
@@ -16,6 +17,5 @@ class Command(BaseCommand):
 
         if username and password:
             User.objects.create_superuser(username=username, password=password, **extra_fields)
-        
         else:
             print(self.help)

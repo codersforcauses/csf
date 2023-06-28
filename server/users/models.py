@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 
+
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
@@ -22,7 +23,7 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_active", True)
 
-        email = extra_fields.setdefault("email", "admin@admin.com")
+        extra_fields.setdefault("email", "admin@admin.com")
 
         if extra_fields.get("is_staff") is not True:
             raise ValueError("Superuser must have is_staff=True")
@@ -35,14 +36,15 @@ class UserManager(BaseUserManager):
 
         return self.create_user(username, password, **extra_fields)
 
+
 class User(AbstractUser):
-    user_id = models.AutoField(primary_key=True) # primary key
+    user_id = models.AutoField(primary_key=True)  # primary key
     username = models.CharField(max_length=20, unique=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField(unique=True, null=True)
-    team_signup = models.BooleanField(default=False) # boolean
-    has_consent = models.BooleanField(default=False) # boolean
+    team_signup = models.BooleanField(default=False)  # boolean
+    has_consent = models.BooleanField(default=False)  # boolean
 
     objects = UserManager()
     
