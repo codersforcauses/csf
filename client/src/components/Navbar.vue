@@ -22,7 +22,7 @@
         <v-toolbar dark app color="black" class="mt-2">
           <img alt="CSF Logo"  src="@/assets/CSF_Logo_WHITE.png" width="125" height="60" />
           <v-spacer></v-spacer>
-          <v-btn icon @click.native="dialog = false" class="hidden-md-and-up">
+          <v-btn icon @click="dialog = false" class="hidden-md-and-up">
             <v-icon :icon="closeMenuBarIcon"></v-icon>
           </v-btn>
         </v-toolbar>
@@ -32,7 +32,7 @@
             :key="index"
             :value="index"
             :to="item.link"
-            @click.native="dialog = false"
+            @click="dialog = false"
           >
             <template v-slot:prepend>
               <v-icon v-if="item.icon">{{item.icon}}</v-icon>
