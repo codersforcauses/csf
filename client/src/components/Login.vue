@@ -11,8 +11,8 @@
             </v-card-title>
             <v-card-text>
               <v-form>
-                <v-text-field v-model="email" label="Email"></v-text-field>
-                <v-text-field v-model="password" label="Password" type="password"></v-text-field>
+                <v-text-field v-model="form.email" label="Email"></v-text-field>
+                <v-text-field v-model="form.password" label="Password" type="password"></v-text-field>
               </v-form>
             </v-card-text>
             <v-card-actions>
@@ -26,33 +26,27 @@
     </section>
   </template>
   
-  <script setup lang="ts">
+<script setup lang="ts">
   import { ref } from 'vue'
   import { useDisplay } from 'vuetify'  
   const { mobile } = useDisplay()
   
   const dialog = ref(false)
-  const email = ref('')
-  const password = ref('')
-  
+
+  const form = ref({
+    email: '',
+    password: ''
+  })
+
   const submitForm = () => {
-    console.log('Email:', email.value)
-    console.log('Password:', password.value)
+    console.log('Email:', form.value.email)
+    console.log('Password:', form.value.password)
     dialog.value = false
   }
   
   const closeDialog = () => {
     dialog.value = false
   }
-  
-  const setup = () => {
-    return {
-      dialog,
-      email,
-      password,
-      submitForm,
-      closeDialog
-    }
-  }
-  </script>
+
+</script>
   
