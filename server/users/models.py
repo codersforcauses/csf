@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AbstractUser, BaseManagerUser
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 
 class UserManager(BaseUserManager):
@@ -6,10 +6,10 @@ class UserManager(BaseUserManager):
 
     def create_user(self, username, password, **extra_fields):
         if not username:
-            raise ValueError("Users must have a username")
-
-        email = extra_fields.setdefault("email", "admin.admin.com")
-        self.normalize_email(extra_fields['email'])
+            raise ValueError("Users must have a username.")
+        
+        if 'email' in extra_fields:
+            self.normalize_email(extra_fields['email'])
 
         user = self.model(username=username, **extra_fields)
         user.set_password(password)
@@ -21,6 +21,8 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_active", True)
+
+        email = extra_fields.setdefault("email", "admin@admin.com")
 
         if extra_fields.get("is_staff") is not True:
             raise ValueError("Superuser must have is_staff=True")
@@ -38,12 +40,13 @@ class User(AbstractUser):
     username = models.CharField(max_length=20, unique=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
-    team_signup = models.BooleanField() # boolean
-    has_consent = models.BooleanField() # boolean
+    email = models.EmailField(unique=True, null=True)
+    team_signup = models.BooleanField(default=False) # boolean
+    has_consent = models.BooleanField(default=False) # boolean
 
     objects = UserManager()
-    REQUIRED_FIELDS = ['username', 'password', 'email']
+    
+    REQUIRED_FIELDS = ['password', 'email']
 
     def __str__(self):
-        return self.user_id
+        return self.username
