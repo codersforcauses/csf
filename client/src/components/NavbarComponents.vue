@@ -50,8 +50,7 @@
       </v-card>
     </v-dialog>
   </v-toolbar>
-  <img id="app" src="@/assets/Footer-min.jpeg" class="border hidden-sm-and-down" />
-  <img id="app" src="@/assets/Footer-min.jpeg" class="border hidden-md-and-up" />
+  <v-img src="/images/Footer-min.jpeg" width="100%" height="8" cover></v-img>
 </template>
 
 <script setup lang="ts">
@@ -73,7 +72,6 @@ const menu = [
 </script>
 
 <style>
-@import url('https://use.fontawesome.com/releases/v5.15.4/css/all.css');
 .menuIcon {
   padding-right: 3%;
 }
@@ -96,5 +94,8 @@ const menu = [
 }
 .v-list {
   padding-top: 0px;
+}
+.img {
+  height: 200px;
 }
 </style>
