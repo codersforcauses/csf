@@ -7,6 +7,7 @@ export default class signup {
   password?: string
   confirmPassword?: string
   avatar?: string
+  method?: string
   teamSignup?: boolean
   hasConsent?: boolean
 }

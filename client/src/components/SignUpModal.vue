@@ -90,20 +90,52 @@
               <v-card-text>
                 <v-container>
                   <v-row>
-                    <v-col cols="12" sm="6">
-                      <div v-for="image in avatarPaths" :key="image.url">
-                        <p>{{ Object.keys(image) }}</p>
-                        <img :src="image.url" :alt="image.alt">
-                      </div>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-checkbox :rules="[required]" v-model="state.teamSignup"
-                        label="If signing up on behalf of a class, please tick"></v-checkbox>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-checkbox :rules="[required]" v-model="state.hasConsent"
-                        label="Does Community Spirit Foundation have permission to use your data?"></v-checkbox>
-                    </v-col>
+                    <v-row>
+                      <v-col cols="12">
+                        <p>Select an Avatar</p>
+                      </v-col>
+                      <v-row class="px-8">
+                        <v-col v-for="avatar in avatarPaths" :key="avatar.url" cols="4">
+                          <div style="padding-top: 5px; padding-bottom: 5px;">
+                            <v-avatar size="80" @click="selectAvatar(avatar.url)"
+                              :class="{ 'avatar-selected': avatar.isSelected === true }">
+                              <v-img :src="avatar.url" :alt="avatar.alt"></v-img>
+                            </v-avatar>
+                          </div>
+                        </v-col>
+                      </v-row>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="12">
+                        <p style="padding-top: 5px;">Select main method of travel</p>
+                      </v-col>
+                      <v-container class="d-flex  justify-space-evenly">
+                        <div v-for="method in  travelMethod " :key="method.logo" class="text-center">
+                          <v-avatar size="52px" variant="text"
+                            :class="{ 'mode-selected': method.isSelected === true }"><v-icon
+                              :color="method.isSelected ? 'white' : ''" size="44px" :icon="method.logo"
+                              @click="() => { selectMode(method.mode) }"></v-icon>
+                          </v-avatar>
+                          <p>{{ method.mode }}</p>
+                        </div>
+                      </v-container>
+                    </v-row>
+                    <v-container fluid fill-height class="my-4">
+                      <v-row no-gutters>
+                        <v-col cols="12">
+                          <v-checkbox density="default" v-model="state.teamSignup"
+                            label="I am signing up on behalf of a class"></v-checkbox>
+                        </v-col>
+                        <v-col cols="12">
+                          <v-checkbox density="default" v-model="state.hasConsent"
+                            label="I give consent for my data to be used by CSF"></v-checkbox>
+                          <p class=" text-caption">For more information please view <span
+                              style="text-decoration: underline; color: blue;"><a href="https://www.google.com">our
+                                privacy
+                                statement</a></span></p>
+                        </v-col>
+                      </v-row>
+                    </v-container>
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -111,7 +143,8 @@
                 <v-container>
                   <v-row align="center" justify="center">
                     <v-col cols="auto">
-                      <v-btn variant="flat" rounded="lg" color="primaryRed" @click="submit">CREATE ACCOUNT</v-btn>
+                      <v-btn variant="text" class="mx-2" @click="firstPage = !firstPage">BACK</v-btn>
+                      <v-btn variant="flat" class="mx-2" rounded="lg" color="primaryRed" @click="submit">CREATE ACCOUNT</v-btn>
                     </v-col>
                   </v-row>
                   <v-row align="center" justify="center">
@@ -130,9 +163,17 @@
 </template>
 
 <script setup lang="ts">
+import avatar1 from "../assets/Avatars/avatar1.jpg";
+import avatar2 from "../assets/Avatars/avatar2.jpg";
+import avatar3 from "../assets/Avatars/avatar3.jpg";
+import avatar4 from "../assets/Avatars/avatar4.jpg";
+import avatar5 from "../assets/Avatars/avatar5.jpg";
+import avatar6 from "../assets/Avatars/avatar6.jpg";
 import SvgIcon from "@jamescoyle/vue-icon";
 import { mdiClose } from '@mdi/js';
-import { ref, reactive, onMounted } from 'vue'
+
+
+import { ref, reactive } from 'vue'
 import { useDisplay } from 'vuetify'
 import signup from '../types/signup'
 
@@ -140,17 +181,8 @@ const { mobile } = useDisplay()
 const path = mdiClose;
 const firstPage = ref(true);
 const dialog = ref(false)
-const avatarPaths = [{url: "../assets/Avatars/avatar1.jpg", alt: "avatar1"}, {url: "../assets/Avatars/avatar2.jpg", alt: "avatar2"},{url: "../assets/Avatars/avatar3.jpg", alt: "avatar3"}, {url: "../assets/Avatars/avatar4.jpg", alt: "avatar4"}, {url: "../assets/Avatars/avatar5.jpg", alt: "avatar5"}, {url: "../assets/Avatars/avatar6.jpg", alt: "avatar6"}];
-
-onMounted(async () => {
-  try {
-    // await getPhotos();
-  } catch (error) {
-    console.log(error);
-  }
-  // console.log(avatarImages);
-
-})
+const avatarPaths = ref([{ url: avatar1, alt: "avatar1", isSelected: false }, { url: avatar2, alt: "avatar2", isSelected: false }, { url: avatar3, alt: "avatar3", isSelected: false }, { url: avatar4, alt: "avatar4", isSelected: false }, { url: avatar5, alt: "avatar5", isSelected: false }, { url: avatar6, alt: "avatar6", isSelected: false }]);
+const travelMethod = ref([{ logo: "mdi-run-fast", mode: "RUNNING", isSelected: false }, { logo: "mdi-wheelchair-accessibility", mode: "WHEELING", isSelected: false }, { logo: "mdi-walk", mode: "WALKING", isSelected: false }]);
 
 const state: signup = reactive({})
 
@@ -158,17 +190,38 @@ const submit = () => {
   console.log(state)
 }
 
+const selectAvatar = (url: string) => {
+  avatarPaths.value.forEach((avatar) => {
+    if (avatar.url === url)
+      avatar.isSelected = !avatar.isSelected;
+    if (avatar.url !== url)
+      avatar.isSelected = false;
+  })
+  state.avatar = url;
+}
+
+const selectMode = (mode: string) => {
+  travelMethod.value.forEach((method) => {
+    if (method.mode === mode)
+      method.isSelected = !method.isSelected;
+    if (method.mode !== mode)
+      method.isSelected = false;
+  })
+  state.method = mode;
+}
+
 const required = (v: string) => {
   return !!v || 'Field is required'
 };
 </script>
 
-<!-- stuff to move  -->
-<!-- <v-btn color="blue-darken-1" variant="text" @click="dialog = false"> Close </v-btn>
-                <v-btn color="blue-darken-1" variant="text" @click="() => {
-                  ; (dialog = false), submit()
-                }
-                  ">
-                  Submit
-                </v-btn> -->
+<style scoped>
+.avatar-selected {
+  border: 4px solid #345E9E !important;
+}
+
+.mode-selected {
+  background-color: #345E9E !important;
+}
+</style>
                 
