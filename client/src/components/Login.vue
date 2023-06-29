@@ -41,7 +41,7 @@ const form = ref({
 const submitForm = () => {
   console.log('Email:', form.value.email)
   console.log('Password:', form.value.password)
-  dialog.value = false
+  closeDialog()
 }
 
 const closeDialog = () => {
