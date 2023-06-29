@@ -31,10 +31,10 @@ class Migration(migrations.Migration):
                 ('email', models.EmailField(max_length=254, null=True, unique=True)),
                 ('team_signup', models.BooleanField(default=True)),
                 ('has_consent', models.BooleanField(default=True)),
-                ('groups', models.ManyToManyField(blank=True, help_text='The groups user belongs to.' 
-                    'User has permissions in groups.', related_name='user_set', related_query_name='user', to='auth.group', verbose_name='groups')),
-                ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name=
-                                                    'user_set', related_query_name='user', to='auth.permission', verbose_name='user permissions')),
+                ('groups', models.ManyToManyField(blank=True, help_text='The groups user belongs to.', related_name='user'
+                                                  '_set', related_query_name='user', to='auth.group', verbose_name='groups')),
+                ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_'
+                                                            'set', related_query_name='user', to='auth.permission', verbose_name='user permissions')),
             ],
             options={
                 'verbose_name': 'user',
