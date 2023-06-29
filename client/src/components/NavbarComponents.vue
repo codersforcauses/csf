@@ -48,7 +48,7 @@
             </v-btn>
           </v-toolbar>
         </v-container>
-        <v-container class="pa-0 border-container">
+        <v-container class="pa-0">
           <v-img
             src="/images/Footer-min.jpeg"
             width="100%"
