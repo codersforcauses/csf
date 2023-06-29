@@ -84,13 +84,13 @@ import { useDisplay } from 'vuetify'
 const { mobile } = useDisplay()
 const dialog = ref(false)
 const menu = [
-  { icon: 'mdi-card-account-details-outline', title: 'About Us', link: '/' },
+  { icon: 'mdi-card-account-details-outline', title: 'About Us', link: '/about' },
   { icon: 'mdi-chart-bar', title: 'Dashboard', link: '/' },
   { icon: 'mdi-trophy', title: 'Challenges', link: '/' },
-  { icon: 'mdi-account-group', title: 'Team Page', link: '/' },
+  { icon: 'mdi-account-group', title: 'Team Page', link: '/teams' },
   { icon: 'mdi-calendar', title: 'Events', link: '/' },
   { icon: 'mdi-star', title: 'Leaderboards', link: '/' },
-  { icon: 'mdi-login', title: 'Login', link: '/' },
+  { icon: 'mdi-login', title: 'Login', link: '/login' },
   { icon: 'mdi-pencil-box', title: 'Sign Up', link: '/signup' }
 ]
 </script>
