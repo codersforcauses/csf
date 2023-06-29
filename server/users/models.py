@@ -8,7 +8,7 @@ class UserManager(BaseUserManager):
     def create_user(self, username, password, **extra_fields):
         if not username:
             raise ValueError("Users must have a username.")
-        
+
         if 'email' in extra_fields:
             self.normalize_email(extra_fields['email'])
 
@@ -47,7 +47,7 @@ class User(AbstractUser):
     has_consent = models.BooleanField(default=False)  # boolean
 
     objects = UserManager()
-    
+
     REQUIRED_FIELDS = ['password', 'email']
 
     def __str__(self):

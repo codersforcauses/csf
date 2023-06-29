@@ -19,8 +19,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('password', models.CharField(max_length=128, verbose_name='password')),
                 ('last_login', models.DateTimeField(blank=True, null=True, verbose_name='last login')),
-                ('is_superuser', models.BooleanField(default=False, help_text='User has permissions without assigning them.'
-                                                     ,verbose_name='superuser status')),
+                ('is_superuser', models.BooleanField(default=False, help_text='User has permissions, unassigned.', verbose_name='superuser status')),
                 ('is_staff', models.BooleanField(default=False, help_text='Designates if user can login admin site.', verbose_name='staff status')),
                 ('is_active', models.BooleanField(default=True, help_text='Designates if user should be treated as active.'
                                                   'Unselect instead of deleting accounts.', verbose_name='active')),
@@ -32,10 +31,10 @@ class Migration(migrations.Migration):
                 ('email', models.EmailField(max_length=254, null=True, unique=True)),
                 ('team_signup', models.BooleanField(default=True)),
                 ('has_consent', models.BooleanField(default=True)),
-                ('groups', models.ManyToManyField(blank=True, help_text='The groups user belongs to. User gets all permissions granted to groups.', 
-                                                  related_name='user_set', related_query_name='user', to='auth.group', verbose_name='groups')),
-                ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', 
-                                                            related_query_name='user', to='auth.permission', verbose_name='user permissions')),
+                ('groups', models.ManyToManyField(blank=True, help_text='The groups user belongs to.' 
+                    'User has permissions in groups.', related_name='user_set', related_query_name='user', to='auth.group', verbose_name='groups')),
+                ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name=
+                                                    'user_set', related_query_name='user', to='auth.permission', verbose_name='user permissions')),
             ],
             options={
                 'verbose_name': 'user',
