@@ -1,6 +1,6 @@
 <template>
     <v-card>
-        <v-card-title>{{ name }} <v-icon icon="mdi-pencil"></v-icon></v-card-title>
+        <v-card-title>{{ name }} <v-icon v-if="canEdit" icon="mdi-pencil"></v-icon></v-card-title>
 
         <v-card-subtitle>{{ startDate }} - {{ endDate }}</v-card-subtitle>
         <v-card-text>{{ description }}</v-card-text>
@@ -8,11 +8,11 @@
 </template>
 
 <script setup lang="ts">
-    defineProps(['name','startDate','endDate','description'])
+    defineProps(['name','startDate','endDate','description','canEdit'])
 </script>
 
 <style>
     .v-card-subtitle {
-        color: #ED1C24;
+        color: #ED1C24
     }
 </style>
