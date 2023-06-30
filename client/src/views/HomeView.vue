@@ -1,5 +1,9 @@
 <script setup lang="ts"></script>
 
 <template>
-  <main></main>
+  <nav>
+    <RouterLink to="/">Home</RouterLink>
+    <RouterLink to="/login">Login</RouterLink>
+    <RouterLink to="/signup">signup</RouterLink>
+  </nav>
 </template>
