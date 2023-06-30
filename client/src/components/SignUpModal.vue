@@ -5,18 +5,20 @@
         <template v-slot:activator="{ props }">
           <v-btn v-bind="props">Signup</v-btn>
         </template>
-        <v-card>
+        <v-card style="height: 100%;">
           <div v-if="firstPage">
-            <form style="background-color:#ECECEC; bottom: auto;" @submit.prevent="">
-              <v-divider class="border-opacity-100" :thickness="12" color="primaryRed"></v-divider>
+            <form style="background-color:#ECECEC;" @submit.prevent="">
+              <v-container class="pa-0">
+                <v-img src="/images/Footer-min.jpeg" width="100%" height="10" cover></v-img>
+              </v-container>
               <v-row justify="end">
                 <v-col cols="auto">
-                  <v-btn variant="text" @click="() => { dialog = false; }"><svg-icon type="mdi"
-                      :path="path"></svg-icon></v-btn>
+                  <v-btn variant="text" @click="() => { dialog = false; }"> <v-icon icon="mdi-close"
+                      size="32px"></v-icon></v-btn>
                 </v-col>
               </v-row>
               <v-card-title class="d-flex justify-center">
-                <v-card class="" flat color="#ECECEC">
+                <v-card flat color="#ECECEC">
                   <v-card-item>
                     <v-card-title class="text-center text-h4 pb-2">Register</v-card-title>
                     <v-card-subtitle class="text-center text-subtitle-1
@@ -28,26 +30,29 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6">
-                      <v-text-field :rules="[required]" v-model="state.username" label="Username" required></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                      <v-text-field :rules="[required]" v-model="state.firstName" label="First name"
+                      <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.username" label="Username"
                         required></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6">
-                      <v-text-field :rules="[required]" v-model="state.lastName" label="Last name"></v-text-field>
+                      <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.firstName" label="First name"
+                        required></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.lastName"
+                        label="Last name"></v-text-field>
                     </v-col>
 
                     <v-col cols="12" sm="6">
-                      <v-text-field :rules="[required]" v-model="state.email" label="Email" required></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                      <v-text-field :rules="[required]" v-model="state.password" label="Password" type="password"
+                      <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.email" label="Email"
                         required></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6">
-                      <v-text-field :rules="[required]" v-model="state.confirmPassword" label="Confirm Password"
+                      <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.password" label="Password"
                         type="password" required></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.confirmPassword"
+                        label="Confirm Password" type="password" required></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -62,7 +67,9 @@
                   </v-row>
                   <v-row align="center" justify="center">
                     <v-col cols="auto">
-                      <v-btn variant="text">Already Have an account?</v-btn>
+                      <!-- todo add in routing to login modal when its ready -->
+                      <v-btn variant="text" color="secondaryBlue" style="font-size: 12px;">Already Have an
+                        account?</v-btn>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -71,11 +78,13 @@
           </div>
           <div v-if="!firstPage">
             <form style="background-color:#ECECEC; bottom: auto;" @submit.prevent="">
-              <v-divider class="border-opacity-100" :thickness="12" color="primaryRed"></v-divider>
+              <v-container class="pa-0">
+                <v-img src="/images/Footer-min.jpeg" width="auto" height="10" cover></v-img>
+              </v-container>
               <v-row justify="end">
                 <v-col cols="auto">
-                  <v-btn variant="text" @click="() => { dialog = false; }"><svg-icon type="mdi"
-                      :path="path"></svg-icon></v-btn>
+                  <v-btn variant="text" @click="() => { dialog = false; }">
+                    <v-icon icon="mdi-close" size="32px"></v-icon></v-btn>
                 </v-col>
               </v-row>
               <v-card-title class="d-flex justify-center">
@@ -94,9 +103,9 @@
                       <v-col cols="12">
                         <p>Select an Avatar</p>
                       </v-col>
-                      <v-row class="px-8">
+                      <v-row>
                         <v-col v-for="avatar in avatarPaths" :key="avatar.url" cols="4">
-                          <div style="padding-top: 5px; padding-bottom: 5px;">
+                          <div style="padding-top: 5px; padding-bottom: 5px;" class="text-center">
                             <v-avatar size="80" @click="selectAvatar(avatar.url)"
                               :class="{ 'avatar-selected': avatar.isSelected === true }">
                               <v-img :src="avatar.url" :alt="avatar.alt"></v-img>
@@ -144,12 +153,15 @@
                   <v-row align="center" justify="center">
                     <v-col cols="auto">
                       <v-btn variant="text" class="mx-2" @click="firstPage = !firstPage">BACK</v-btn>
-                      <v-btn variant="flat" class="mx-2" rounded="lg" color="primaryRed" @click="submit">CREATE ACCOUNT</v-btn>
+                      <v-btn variant="flat" class="mx-2" rounded="lg" color="primaryRed" @click="submit">CREATE
+                        ACCOUNT</v-btn>
                     </v-col>
                   </v-row>
                   <v-row align="center" justify="center">
                     <v-col cols="auto">
-                      <v-btn variant="text">Already Have an account?</v-btn>
+                      <!-- todo add in routing to login modal when its ready -->
+                      <v-btn variant="text" color="secondaryBlue" style="font-size: 12px;">Already Have an
+                        account?</v-btn>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -169,7 +181,6 @@ import avatar3 from "../assets/Avatars/avatar3.jpg";
 import avatar4 from "../assets/Avatars/avatar4.jpg";
 import avatar5 from "../assets/Avatars/avatar5.jpg";
 import avatar6 from "../assets/Avatars/avatar6.jpg";
-import SvgIcon from "@jamescoyle/vue-icon";
 import { mdiClose } from '@mdi/js';
 
 
@@ -181,12 +192,17 @@ const { mobile } = useDisplay()
 const path = mdiClose;
 const firstPage = ref(true);
 const dialog = ref(false)
-const avatarPaths = ref([{ url: avatar1, alt: "avatar1", isSelected: false }, { url: avatar2, alt: "avatar2", isSelected: false }, { url: avatar3, alt: "avatar3", isSelected: false }, { url: avatar4, alt: "avatar4", isSelected: false }, { url: avatar5, alt: "avatar5", isSelected: false }, { url: avatar6, alt: "avatar6", isSelected: false }]);
-const travelMethod = ref([{ logo: "mdi-run-fast", mode: "RUNNING", isSelected: false }, { logo: "mdi-wheelchair-accessibility", mode: "WHEELING", isSelected: false }, { logo: "mdi-walk", mode: "WALKING", isSelected: false }]);
+const avatarPaths = ref([{ url: avatar1, alt: "avatar1", isSelected: true }, { url: avatar2, alt: "avatar2", isSelected: false }, { url: avatar3, alt: "avatar3", isSelected: false }, { url: avatar4, alt: "avatar4", isSelected: false }, { url: avatar5, alt: "avatar5", isSelected: false }, { url: avatar6, alt: "avatar6", isSelected: false }]);
+const travelMethod = ref([{ logo: "mdi-run-fast", mode: "RUNNING", isSelected: true }, { logo: "mdi-wheelchair-accessibility", mode: "WHEELING", isSelected: false }, { logo: "mdi-walk", mode: "WALKING", isSelected: false }]);
 
 const state: signup = reactive({})
 
-const submit = () => {
+const submit = async () => {
+  // need this here as default values sorta mess stuff up but it works
+  const avatar = avatarPaths.value.filter((avatar) => avatar.isSelected === true)
+  const method = travelMethod.value.filter((method) => method.isSelected === true)
+  state.method = method[0].mode;
+  state.avatar = avatar[0].url;
   console.log(state)
 }
 
@@ -217,7 +233,7 @@ const required = (v: string) => {
 
 <style scoped>
 .avatar-selected {
-  border: 4px solid #345E9E !important;
+  border: 6px solid #345E9E !important;
 }
 
 .mode-selected {
