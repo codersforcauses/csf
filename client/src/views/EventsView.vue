@@ -5,7 +5,7 @@
     <v-btn v-if="tempIsTeamAdmin" icon="mdi-plus" size="small" id="add-event-btn"></v-btn>
   </v-toolbar>
   
-  <Event v-for="event in temporaryEventsList" :name="event.name" :startDate="event.startDate" :endDate="event.endDate" :description="event.description" :canEdit="tempIsTeamAdmin && event.isPrivate"/>
+  <Event v-for="event in temporaryEventsList" :name="event.name" :startDate="event.startDate" :endDate="event.endDate" :description="event.description" :canEdit="tempIsTeamAdmin && event.isPrivate" :isPrivate="event.isPrivate"/>
 </template>
 
 <script setup lang="ts">
@@ -22,13 +22,13 @@
 
 <style>
   #add-event-btn {
-    background-color: #ED1C24;
-    color: white;
+    background-color: rgb(var(--v-theme-primaryRed));
+    color: rgb(var(--v-theme-primaryWhite));
     font-size: 20px;
     margin-right: 20px;
   }
   .v-toolbar {
-    background-color: white;
+    background-color: rgb(var(--v-theme-primaryWhite));
   }
   .v-text-field {
     margin: 20px;
