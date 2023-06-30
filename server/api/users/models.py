@@ -14,11 +14,11 @@ class UserManager(BaseUserManager):
         # Check if username already exists
         if self.filter(username=username).exists():
             raise ValueError("Username already exists.")
-        
+
         email = extra_fields.get('email')
         if email and self.filter(email=email).exists():
             raise ValueError("Email already exists.")
-        
+
         user = self.model(username=username, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
