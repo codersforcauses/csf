@@ -11,7 +11,14 @@ class UserManager(BaseUserManager):
 
         if 'email' in extra_fields:
             self.normalize_email(extra_fields['email'])
-
+        # Check if username already exists
+        if self.filter(username=username).exists():
+            raise ValueError("Username already exists.")
+        
+        email = extra_fields.get('email')
+        if email and self.filter(email=email).exists():
+            raise ValueError("Email already exists.")
+        
         user = self.model(username=username, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
@@ -23,7 +30,7 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_active", True)
 
-        extra_fields.setdefault("email", "admin@admin.com")
+        extra_fields.setdefault("email", f"{username}@admin.com")
 
         if extra_fields.get("is_staff") is not True:
             raise ValueError("Superuser must have is_staff=True")
@@ -40,11 +47,12 @@ class UserManager(BaseUserManager):
 class User(AbstractUser):
     user_id = models.AutoField(primary_key=True)  # primary key
     username = models.CharField(max_length=20, unique=True)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    email = models.EmailField(unique=True, null=True)
+    first_name = models.CharField(max_length=100, blank=True)
+    last_name = models.CharField(max_length=100, blank=True)
+    email = models.EmailField(unique=True)
     team_signup = models.BooleanField(default=False)  # boolean
     has_consent = models.BooleanField(default=False)  # boolean
+    travel_method = models.CharField(max_length=100, blank=True)
 
     objects = UserManager()
 

@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from users.models import User
+from api.users.models import User
 
 
 class Command(BaseCommand):
@@ -13,7 +13,9 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         username = kwargs['username']
         password = kwargs['password']
-        extra_fields = {'email': kwargs['email']} if 'email' in kwargs else {}
+        extra_fields = {}
+        if kwargs['email']:
+            extra_fields = {'email': kwargs['email']}
 
         if username and password:
             User.objects.create_superuser(username=username, password=password, **extra_fields)
