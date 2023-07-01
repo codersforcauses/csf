@@ -20,11 +20,11 @@ jobs:
 
     # Server Docker image
     - name: Build the server Docker image
-      run: docker build . --file ./docker/server/Dockerfile --tag ${{ secrets.DOCKERHUB_USERNAME}}/csf-prod-server:${{ steps.date.outputs.date }}
+      run: docker build . --file ./docker/server/Dockerfile --tag ${{ vars.DOCKERHUB_USERNAME}}/csf-prod-server:${{ steps.date.outputs.date }}
     - name: Login
-      run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+      run: docker login -u ${{ vars.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
     - name: Push server image
-      run: docker push ${{ secrets.DOCKERHUB_USERNAME}}/csf-prod-server:${{ steps.date.outputs.date }}
+      run: docker push ${{ vars.DOCKERHUB_USERNAME}}/csf-prod-server:${{ steps.date.outputs.date }}
 
   frontend:
 
@@ -37,9 +37,9 @@ jobs:
       run: echo "::set-output name=date::$(date +'%Y%m%d%H%M%S')"
     # Login
     - name: Login
-      run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+      run: docker login -u ${{ vars.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
     # Client Docker image
     - name: Build the client Docker image
-      run: docker build . --file ./client/Dockerfile --tag ${{ secrets.DOCKERHUB_USERNAME}}/csf-prod-client:${{ steps.date.outputs.date }}
+      run: docker build . --file ./client/Dockerfile --tag ${{ vars.DOCKERHUB_USERNAME}}/csf-prod-client:${{ steps.date.outputs.date }}
     - name: Push client image
-      run: docker push ${{ secrets.DOCKERHUB_USERNAME}}/csf-prod-client:${{ steps.date.outputs.date }}
+      run: docker push ${{ vars.DOCKERHUB_USERNAME}}/csf-prod-client:${{ steps.date.outputs.date }}
