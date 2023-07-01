@@ -6,7 +6,7 @@ import PopupDialog from '../components/PopupDialog.vue'
 const display = ref(false)
 const title = ref('Title')
 const text = ref('text paragraph writing words')
-const submit = ref('Create')
+const submitText = ref('Create')
 
 const handleSubmit = () => {
   console.log('Submit')
@@ -24,7 +24,7 @@ const handleSubmit = () => {
       v-model="display"
       :title="title"
       :text="text"
-      :submit="submit"
+      :submit-text="submitText"
       @handle-submit="handleSubmit"
     />
     Popup

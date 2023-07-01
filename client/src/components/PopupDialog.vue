@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { useDisplay } from 'vuetify'
 
 const emit = defineEmits(['update:modelValue', 'handleSubmit'])
-const props = defineProps(['modelValue', 'display', 'title', 'text', 'submit'])
+const props = defineProps(['modelValue', 'display', 'title', 'text', 'submitText'])
 
 const value = computed({
   get() {
@@ -34,7 +34,7 @@ const { mobile } = useDisplay()
           }
         "
       >
-        {{ submit }}
+        {{ submitText }}
       </v-btn>
     </div>
   </v-dialog>
