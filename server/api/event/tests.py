@@ -3,22 +3,36 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from .models import Event
-from .serializers import EventSerialiser
+
+import datetime
 
 class EventTests(APITestCase):
     def setUp(self):
-        Event.objects.create(event_id=1, name="eventTestPublic", 
-                                         description="public event for unit test",
-                                         is_public=True, is_archived=False)
-        Event.objects.create(event_id=2, name="eventTestArchived", 
-                                         description="archived event for unit test",
-                                         is_public=True, is_archived=True)
+        Event.objects.create( 
+                                name="eventTestPublic", 
+                                start_date = datetime.date.today(),
+                                end_date = datetime.date.today(),
+                                description="public event for unit test",
+                                is_public=True, 
+                                is_archived=False)
+        Event.objects.create(
+                                name="eventTestArchived", 
+                                start_date = datetime.date.today(),
+                                end_date = datetime.date.today(),
+                                description="archived event for unit test",
+                                is_public=True, 
+                                is_archived=True)
         
     def test_create_event(self):
         response = self.client.post(
             reverse("event:create-event"),
-            {   "name":"eventTestPublic", 
+            {   
+                "name":"eventTestPublic", 
+                "start_date":datetime.date.today(),
+                "end_date":datetime.date.today(),
                 "description":"public event for unit test",
+                "is_public":True,
+                "is_archived":False
             },
             format="json",
         )
@@ -28,20 +42,14 @@ class EventTests(APITestCase):
         all_event = Event.objects.get()
         response = self.client.get(
             reverse("event:get-event"),
-            # {   "name":"eventTestPublic", 
-            #     "description":"public event for unit test",
-            # },
-            # format="json",
+            kwargs={"event_id":1}
         )
         
     def test_get_events(self):
         all_event = Event.objects.get()
         response = self.client.get(
             reverse("event:get-event"),
-            # {   "name":"eventTestPublic", 
-            #     "description":"public event for unit test",
-            # },
-            # format="json",
+            kwargs
         )
 
     def test_update_event(self):
