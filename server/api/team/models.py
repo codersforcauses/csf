@@ -9,7 +9,7 @@ class Team(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.join_code}"
-    
+
     def save(self, *args, **kwargs):
         if self.join_code is None:
             self.join_code = hashlib.sha256(self.name.encode('utf-8')).hexdigest()
