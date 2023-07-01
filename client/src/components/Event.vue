@@ -1,7 +1,7 @@
 <template>
   <v-card class="mx-3">
     <v-card-title>
-      <span>{{ name }}</span>
+      <span class="font-weight-bold">{{ name }}</span>
       <v-icon v-if="canEdit" icon="mdi-pencil" @click="openModal"></v-icon>
       <v-spacer></v-spacer>
       <v-chip
@@ -10,7 +10,7 @@
         >{{ isPrivate ? 'Private' : 'Official' }}</v-chip
       >
     </v-card-title>
-    <v-card-subtitle class="text-primaryRed">{{ startDate }} - {{ endDate }}</v-card-subtitle>
+    <v-card-subtitle class="text-primaryRed font-italic text-high-emphasis">{{ startDate }} - {{ endDate }}</v-card-subtitle>
     <v-card-text>{{ description }}</v-card-text>
   </v-card>
 </template>
