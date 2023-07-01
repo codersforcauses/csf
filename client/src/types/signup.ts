@@ -10,5 +10,3 @@ export interface Signup {
   teamSignup: boolean
   hasConsent: boolean
 }
-
-
