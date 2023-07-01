@@ -29,7 +29,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
+import { useUserStore } from '@/stores/user'
+
 const { mobile } = useDisplay()
+const userStore = useUserStore()
+
+// onMounted(async () => {
+//   await userStore.getUser()
+// })
 
 const dialog = ref(false)
 
@@ -38,9 +45,14 @@ const form = ref({
   password: ''
 })
 
-const submitForm = () => {
+const submitForm = async () => {
   console.log('Email:', form.value.email)
   console.log('Password:', form.value.password)
+
+  await userStore.getUser(form.value.email, form.value.password)
+
+  // userLogin()
+  // userLogin(form.value.email, form.value.password)
   closeDialog()
 }
 
