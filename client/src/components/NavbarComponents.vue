@@ -4,7 +4,8 @@
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down">
       <v-btn v-for="item in menu" :key="item.title" :to="item.link" flat>{{ item.title }}</v-btn>
-      <v-btn flat>hello</v-btn>
+      <!-- this is how login modal will work as well copy all associated to how this works -->
+      <v-btn active @click="modalTrigger">SIGNUP</v-btn>
     </v-toolbar-items>
   </v-toolbar>
   <v-toolbar dark app color="black" class="hidden-md-and-up">
@@ -31,7 +32,6 @@
         </v-container>
         <v-list class="listItem pa-0">
           <v-list-item v-for="(item, index) in menu" :key="index" :value="index" :to="item.link" @click="dialog = false">
-            <!-- item.title !== 'Sign Up' ? item.link: undefined" @click="item.title === 'Sign Up' ? modalTrigger() : dialog = false -->
             <template v-slot:prepend>
               <v-icon v-if="item.icon">{{ item.icon }}</v-icon>
             </template>
@@ -39,7 +39,7 @@
           </v-list-item>
           <v-list-item @click="modalTrigger" variant="tonal">
             <template v-slot:prepend>
-             <v-icon style="color: #fff; opacity: 1;" icon="mdi-pencil-box"></v-icon>
+              <v-icon style="color: #fff; opacity: 1;" icon="mdi-pencil-box"></v-icon>
             </template>
             <v-list-item-title>Sign Up</v-list-item-title>
           </v-list-item>
@@ -49,7 +49,7 @@
   </v-toolbar>
   <v-img src="/images/Footer-min.jpeg" width="100%" height="8" cover></v-img>
 
-  <SignUpModal :dialog-modal="dialogModal" v-if="dialogModal" @modal-trigger="modalTrigger" />
+  <SignUpModal :dialog-modal="signupModal" v-if="signupModal" @modal-trigger="modalTrigger" />
 </template>
 
 <script setup lang="ts">
@@ -59,11 +59,10 @@ import SignUpModal from './SignUpModal.vue'
 
 const { mobile } = useDisplay()
 const dialog = ref<boolean>(false)
-const dialogModal = ref<boolean>(false);
+const signupModal = ref<boolean>(false);
 
 const modalTrigger = () => {
-  dialogModal.value = !dialogModal.value;
-  console.log(dialogModal.value)
+  signupModal.value = !signupModal.value;
 }
 const menu = [
   { icon: 'mdi-card-account-details-outline', title: 'About Us', link: '/about' },
@@ -72,6 +71,7 @@ const menu = [
   { icon: 'mdi-account-group', title: 'Team Page', link: '/' },
   { icon: 'mdi-calendar', title: 'Events', link: '/' },
   { icon: 'mdi-star', title: 'Leaderboards', link: '/' },
+  // todo remove this and copy the signup design exactly
   { icon: 'mdi-login', title: 'Login', link: '/' },
 ]
 </script>
