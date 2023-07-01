@@ -1,9 +1,16 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import PopupDialog from '../components/PopupDialog.vue'
-import { fa } from 'vuetify/locale'
 
-const popup = ref(false)
+// should this be a single object or multiple refs
+const display = ref(false)
+const title = ref('Title')
+const text = ref('text paragraph writing words')
+const submit = ref('Create')
+
+const handleSubmit = () => {
+  console.log('Submit')
+}
 </script>
 
 <template>
@@ -12,8 +19,14 @@ const popup = ref(false)
     <RouterLink to="/login">Login</RouterLink>
     <RouterLink to="/signup">signup</RouterLink>
   </nav>
-  <v-button @click="popup = !popup" @close="popup = false">
-    <PopupDialog :popup="popup" />
+  <v-btn @click="display = true">
+    <PopupDialog
+      v-model="display"
+      :title="title"
+      :text="text"
+      :submit="submit"
+      @handle-submit="handleSubmit"
+    />
     Popup
-  </v-button>
+  </v-btn>
 </template>
