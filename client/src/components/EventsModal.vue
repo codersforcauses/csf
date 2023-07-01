@@ -1,9 +1,10 @@
 <template>
   <v-dialog fullscreen>
       <v-card color="#ECECEC">
+        <v-img src="/images/Footer-min.jpeg" width="100%" height="16" cover></v-img>  
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-icon class="me-1" icon="mdi-close" @click="closeModal"></v-icon>
+          <v-icon icon="mdi-close" size="x-large" @click="closeModal"></v-icon>
         </v-card-actions>
         <v-card-title class="justify-center text-h4">{{ type === 'Create' ? 'Create Event' : 'Edit Event' }}</v-card-title>
         <v-text-field hide-details bg-color="white" placeholder="Event Name" v-model="name"></v-text-field>
