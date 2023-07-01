@@ -6,4 +6,3 @@ class TeamSerialiser(ModelSerializer):
     class Meta:
         model = Team
         fields = '__all__'
-        

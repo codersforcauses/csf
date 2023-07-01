@@ -47,4 +47,3 @@ def delete_team(request, team_id):
         return Response("Team successfully deleted")
     else:
         return Response("Team is not private")
-    
