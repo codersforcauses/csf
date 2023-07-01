@@ -1,13 +1,11 @@
 @import './base.css';
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-
   font-weight: normal;
+  width: 100%;
+  padding: 0 !important;
 }
-
+/*
 a,
 .green {
   text-decoration: none;
@@ -32,4 +30,4 @@ a,
     grid-template-columns: 1fr 1fr;
     padding: 0 2rem;
   }
-}
+} */

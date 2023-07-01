@@ -1,8 +1,12 @@
 #!/bin/bash
 
+# Syncs python env with deps incase container image has not
+# been rebuilt with the latest poetry.lock
+echo "Installing dependencies"
+poetry install --sync
+
 echo "Applying database migrations"
 python manage.py migrate --noinput
-
 
 # Create Django Superuser
 echo "Creating Django Superuser"
