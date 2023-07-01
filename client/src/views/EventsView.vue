@@ -6,16 +6,16 @@
   </v-toolbar>
   <Event v-for="event in filteredEventsList" :name="event.name" :startDate="event.startDate" :endDate="event.endDate" :description="event.description" :canEdit="tempIsTeamAdmin && event.isPrivate" :isPrivate="event.isPrivate"/>
   <v-dialog v-model="addingEvent" fullscreen>
-      <v-card class="bg-secondaryTint">
+      <v-card color="#ECECEC">
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-icon class="me-1" icon="mdi-close" @click="addingEvent = false"></v-icon>
         </v-card-actions>
         <v-card-title class="justify-center">Add Event</v-card-title>
-        <v-text-field class="bg-primaryWhite" label="Event Name"></v-text-field>
-        <v-text-field class="bg-primaryWhite" label="Start Date" type="date"></v-text-field>
-        <v-text-field class="bg-primaryWhite" label="End Date" type="date"></v-text-field>
-        <v-textarea class="bg-primaryWhite" label="Description"></v-textarea>
+        <v-text-field hide-details bg-color="white" label="Event Name"></v-text-field>
+        <v-text-field hide-details bg-color="white" label="Start Date" type="date"></v-text-field>
+        <v-text-field hide-details bg-color="white" label="End Date" type="date"></v-text-field>
+        <v-textarea hide-details bg-color="white" label="Description"></v-textarea>
       </v-card>
     </v-dialog>
 </template>
