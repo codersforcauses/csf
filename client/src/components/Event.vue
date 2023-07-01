@@ -10,7 +10,7 @@
         >{{ isPrivate ? 'Private' : 'Official' }}</v-chip
       >
     </v-card-title>
-    <v-card-subtitle class="text-primaryRed font-italic text-high-emphasis">{{ startDate }} - {{ endDate }}</v-card-subtitle>
+    <v-card-subtitle class="text-primaryRed font-italic">{{ startDate }} - {{ endDate }}</v-card-subtitle>
     <v-card-text>{{ description }}</v-card-text>
   </v-card>
 </template>
