@@ -38,7 +38,7 @@
                 <v-btn color="red" @click="submitForm">Login</v-btn>
               </v-row>
               <v-row justify="center">
-                <p>or <RounterLink to="/">Register</RounterLink></p>
+                <p>or <RouterLink to="/">Register</RouterLink></p>
               </v-row>
             </v-col>
           </v-container>
