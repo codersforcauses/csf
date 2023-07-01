@@ -2,7 +2,7 @@
     <v-card>
         <v-card-title>
             <span>{{ name }}</span>
-            <v-icon v-if="canEdit" icon="mdi-pencil"></v-icon>
+            <v-icon v-if="canEdit" icon="mdi-pencil" @click="openModal"></v-icon>
             <v-spacer></v-spacer>
             <v-chip variant="outlined" :class="{ 'text-secondaryGreen': isPrivate, 'text-secondaryBlue': !isPrivate }">{{ isPrivate ? "Private" : "Official" }}</v-chip>
         </v-card-title>
@@ -12,7 +12,9 @@
 </template>
 
 <script setup lang="ts">
+
     interface Props {
+        id: number
         name: string
         startDate: string
         endDate: string
@@ -20,7 +22,12 @@
         canEdit: boolean
         isPrivate: boolean
     }
-    defineProps<Props>()
+    const props = defineProps<Props>()
+    const emit = defineEmits(['edit'])
+
+    function openModal() {
+        emit('edit',props.id)
+    }
 </script>
 
 <style>
