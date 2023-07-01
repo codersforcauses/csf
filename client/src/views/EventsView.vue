@@ -1,7 +1,7 @@
 
 <template>
   <v-toolbar class="bg-primaryWhite">
-    <v-text-field prepend-inner-icon="mdi-magnify" hide-details label="Search Events" clearable v-model="searchQuery"/>
+    <v-text-field prepend-inner-icon="mdi-magnify" hide-details placeholder="Search Events" clearable v-model="searchQuery"/>
     <v-btn v-if="tempIsTeamAdmin" icon="mdi-plus" size="small" id="add-event-btn" class="bg-primaryRed text-primaryWhite" @click="isAddingEvent = true"></v-btn>
   </v-toolbar>
   <Event v-for="event in filteredEventsList" :id="event.id" :name="event.name" :start-date="event.startDate" :end-date="event.endDate" :description="event.description" :can-edit="tempIsTeamAdmin && event.isPrivate" :is-private="event.isPrivate"

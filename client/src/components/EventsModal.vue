@@ -11,8 +11,8 @@
         <v-text-field hide-details bg-color="white" placeholder="End Date" type="date" v-model="endDate"></v-text-field>
         <v-textarea hide-details bg-color="white" placeholder="Description" v-model="description"></v-textarea> 
         <v-card-actions v-if="type === 'Edit'" class="justify-center">
-          <v-btn  variant="outlined" class="text-secondaryBlue" @click="archiveEvent">ARCHIVE</v-btn>
-          <v-btn class="bg-primaryRed" @click="editEvent">DONE</v-btn>
+          <v-btn variant="outlined" class="text-secondaryBlue mr-16"  @click="archiveEvent">ARCHIVE</v-btn>
+          <v-btn class="bg-primaryRed ml-16" @click="editEvent">DONE</v-btn>
         </v-card-actions>
         <v-card-actions v-else class="justify-center">
           <v-btn class="bg-primaryRed" @click="addEvent">DONE</v-btn>
