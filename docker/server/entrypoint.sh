@@ -3,7 +3,7 @@
 # Syncs python env with deps incase container image has not
 # been rebuilt with the latest poetry.lock
 echo "Installing dependencies"
-poetry install --sync
+poetry install
 
 echo "Applying database migrations"
 python manage.py migrate --noinput
