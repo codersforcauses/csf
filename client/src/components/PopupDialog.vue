@@ -2,7 +2,7 @@
 
 <template>
   <Transition name="modal">
-    <div v-if="show" class="modal-mask">
+    <div v-if="popup" class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
           <div class="modal-header">
@@ -25,12 +25,8 @@
   </Transition>
 </template>
 
-<script lang="ts">
-export default {
-  props: {
-    show: Boolean
-  }
-}
+<script setup lang="ts">
+const props = defineProps(['popup'])
 </script>
 
 <style scoped>
