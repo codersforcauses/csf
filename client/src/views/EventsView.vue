@@ -1,7 +1,7 @@
 
 <template>
   <v-toolbar>
-    <v-text-field prepend-inner-icon="mdi-magnify" hide-details label="Search Events" v-model="searchQuery"/>
+    <v-text-field prepend-inner-icon="mdi-magnify" hide-details label="Search Events" clearable v-model="searchQuery"/>
     <v-btn v-if="tempIsTeamAdmin" icon="mdi-plus" size="small" id="add-event-btn"></v-btn>
   </v-toolbar>
   
@@ -18,7 +18,7 @@
   ])
   const searchQuery = ref("")
   const filteredEventsList = computed(() => {
-    let query = searchQuery.value.toLowerCase()
+    let query = searchQuery.value ? searchQuery.value.toLowerCase() : ""
     return temporaryEventsList.value.filter( e => e.name.toLowerCase().includes(query) || e.description.toLowerCase().includes(searchQuery.value))
   })
   const tempIsTeamAdmin = ref(true)
