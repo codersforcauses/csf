@@ -2,7 +2,7 @@
 
 <template>
   <Transition name="modal">
-    <div v-if="popup" class="modal-mask">
+    <div v-show="popup" class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
           <div class="modal-header">
