@@ -5,26 +5,12 @@
     <v-btn v-if="tempIsTeamAdmin" icon="mdi-plus" size="small" id="add-event-btn" class="bg-primaryRed text-primaryWhite" @click="addingEvent = true"></v-btn>
   </v-toolbar>
   <Event v-for="event in filteredEventsList" :name="event.name" :startDate="event.startDate" :endDate="event.endDate" :description="event.description" :canEdit="tempIsTeamAdmin && event.isPrivate" :isPrivate="event.isPrivate"/>
-  <v-dialog v-model="addingEvent" fullscreen>
-      <v-card color="#ECECEC">
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-icon class="me-1" icon="mdi-close" @click="addingEvent = false"></v-icon>
-        </v-card-actions>
-        <v-card-title class="justify-center text-h4">Create Event</v-card-title>
-        <v-text-field hide-details bg-color="white" label="Event Name"></v-text-field>
-        <v-text-field hide-details bg-color="white" label="Start Date" type="date"></v-text-field>
-        <v-text-field hide-details bg-color="white" label="End Date" type="date"></v-text-field>
-        <v-textarea hide-details bg-color="white" label="Description"></v-textarea>
-        <v-card-actions class="justify-center">
-          <v-btn class="bg-primaryRed" @click="addEvent">CREATE</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+  <EventsModal :type="'Create'" :display="addingEvent || editingEvent" @close="closeEvent" v-model="addingEvent"></EventsModal>
 </template>
 
 <script setup lang="ts">
   import Event from '../components/Event.vue'
+  import EventsModal from '../components/EventsModal.vue'
   import { ref, computed } from 'vue'
 
   interface Event {
@@ -48,10 +34,11 @@
   })
   const tempIsTeamAdmin = ref<boolean>(true)
   const addingEvent = ref<boolean>(false)
+  const editingEvent = ref<boolean>(false)
 
-  function addEvent() {
+  function closeEvent() {
     addingEvent.value = false
-    //do stuff with backend...
+    editingEvent.value = false
   }
 </script> 
 
