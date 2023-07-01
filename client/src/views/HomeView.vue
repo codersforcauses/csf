@@ -11,6 +11,6 @@ const popup = ref(false)
     <RouterLink to="/login">Login</RouterLink>
     <RouterLink to="/signup">signup</RouterLink>
     <PopupDialog />
+    <v-button @click="popup = !popup">Popup</v-button>
   </nav>
-  <v-button @click="popup = !popup">Popup</v-button>
 </template>
