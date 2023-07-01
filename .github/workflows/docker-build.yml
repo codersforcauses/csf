@@ -52,6 +52,6 @@ jobs:
 
     # Client Docker image
     - name: Build the client Docker image
-      run: docker build . --file ./client/Dockerfile --tag ${{ vars.DOCKERHUB_USERNAME}}/csf-prod-client:${{ steps.date.outputs.date }}
+      run: docker build . --file ./docker/client/Dockerfile --tag ${{ vars.DOCKERHUB_USERNAME}}/csf-prod-client:${{ steps.date.outputs.date }}
     - name: Push client image
       run: docker push ${{ vars.DOCKERHUB_USERNAME}}/csf-prod-client:${{ steps.date.outputs.date }}
