@@ -1,34 +1,57 @@
 <template>
-  <section>
-    <v-dialog v-model="dialog" :fullscreen="mobile" max-width="500px">
-      <template v-slot:activator="{ props }">
-        <v-btn v-bind="props">Login</v-btn>
-      </template>
-      <v-card>
-        <form @submit.prevent="submitForm">
-          <v-card-title>
-            <span class="text-h5">Login</span>
-          </v-card-title>
-          <v-card-text>
+  <v-model fullscreen :scrim="false">
+  <v-col>
+  <v-row justify="center">
+    <v-container>
+      <v-row justify="end">
+        <RouterLink to="/"><v-icon>mdi-close</v-icon></RouterLink>
+      </v-row>
+    </v-container>
+  </v-row>
+  
+  <v-row justify="center">
+    <v-img :src="image" :max-width="250"/>
+  </v-row>
+
+  <v-row justify="center">
+        <v-form @submit.prevent="submitForm">
+        <v-container>
+        <v-row justify="center">
+            <span class="text-h3 text-center">Welcome Back</span>
+        </v-row>
+        <v-row justify="center">
+            <span class="text-h6">Login to your existing account</span>
+        </v-row>
+        </v-container>
+        <v-container>
             <v-form>
               <v-text-field v-model="form.email" label="Email"></v-text-field>
               <v-text-field v-model="form.password" label="Password" type="password"></v-text-field>
+              <v-row justify="center">
+                <RouterLink to="/">Forgot Password?</RouterLink>
+              </v-row>
             </v-form>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="primary" @click="submitForm">Submit</v-btn>
-            <v-btn color="primary" @click="closeDialog">Cancel</v-btn>
-          </v-card-actions>
-        </form>
-      </v-card>
-    </v-dialog>
-  </section>
+        </v-container>
+        <v-container class="mt-10">
+            <v-col>
+                <v-row justify="center">
+                <v-btn color="red" @click="submitForm">Login</v-btn>
+                </v-row>
+                <v-row justify="center">
+                  <p>or <RounterLink to="/">Register</RounterLink></p>
+                </v-row>
+            </v-col>  
+        </v-container> 
+        </v-form>
+      </v-row>
+</v-col>
+</v-model>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
+import image from '../assets/CSF_Logo_RGB.png'
 const { mobile } = useDisplay()
 
 const dialog = ref(false)
