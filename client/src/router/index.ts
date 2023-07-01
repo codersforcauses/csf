@@ -24,7 +24,7 @@ const router = createRouter({
       component: SignupView
     },
     {
-      path: '/Challenge',
+      path: '/challenge',
       name: 'challenge',
       component: ChallengeView
     }

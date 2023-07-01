@@ -1,16 +1,53 @@
+<script setup lang="ts">
+
+</script>
+
 <template>
-    <div class="about">
-      <h1>This is a challenge page</h1>
-    </div>
-  </template>
+    <v-sheet class="d-flex flex-wrap justify-center">
+        <v-sheet class="ma-2 pa-2 align-self-auto challenge-card" flat color="transparent">
+            <v-card title="Card title" text="...">
+                <v-card-actions>
+                    <v-btn>Now there is a lot more text</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-sheet>
+        <v-sheet class="ma-2 pa-2 align-self-auto challenge-card" flat color="transparent">
+            <v-card title="Card title" text="...">
+                <v-card-actions>
+                    <v-btn>Now there is a lot more text</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-sheet>
+        <v-sheet class="ma-2 pa-2 align-self-auto challenge-card" flat color="transparent">
+            <v-card title="Card title" text="...">
+                <v-card-actions>
+                    <v-btn>Now there is a lot more text</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-sheet>
+        <v-sheet class="ma-2 pa-2 align-self-auto challenge-card" flat color="transparent">
+            <v-card title="Card title" text="...">
+                <v-card-actions>
+                    <v-btn>Now there is a lot more text</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-sheet>
+
+    </v-sheet>
+</template>
   
-  <style>
-  @media (min-width: 1024px) {
-    .about {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
+<style>
+@media only screen and (max-width: 800px) {
+    .challenge-card {
+        width: 80vw;
     }
-  }
-  </style>
+}
+
+@media only screen and (min-width: 800px) {
+    .challenge-card {
+        width: 40vw;
+    }
+}
+
+</style>
   
