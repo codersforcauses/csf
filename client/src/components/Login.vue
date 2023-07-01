@@ -50,9 +50,6 @@ const submitForm = async () => {
   console.log('Password:', form.value.password)
 
   await userStore.getUser(form.value.email, form.value.password)
-
-  // userLogin()
-  // userLogin(form.value.email, form.value.password)
   closeDialog()
 }
 
