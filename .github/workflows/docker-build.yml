@@ -6,13 +6,9 @@ on:
   pull_request:
     branches: [ "main" ]
 
-env:
-  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-  DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
-
 jobs:
 
-  build:
+  backend:
 
     runs-on: ubuntu-latest
 
@@ -24,14 +20,26 @@ jobs:
 
     # Server Docker image
     - name: Build the server Docker image
-      run: docker build . --file ./docker/server/Dockerfile --tag zhanerken/cfs-prod-server:${{ steps.date.outputs.date }}
+      run: docker build . --file ./docker/server/Dockerfile --tag ${{ secrets.DOCKERHUB_USERNAME}}/csf-prod-server:${{ steps.date.outputs.date }}
     - name: Login
-      run: docker login -u ${{ env.DOCKER_USERNAME }} -p ${{ env.DOCKER_TOKEN }}
+      run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ env.DOCKER_TOKEN }}
     - name: Push server image
-      run: docker push zhanerken/cfs-prod-server:${{ steps.date.outputs.date }}
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME}}/csf-prod-server:${{ steps.date.outputs.date }}
 
+  frontend:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Get the date
+      id: date
+      run: echo "::set-output name=date::$(date +'%Y%m%d%H%M%S')"
+    # Login
+    - name: Login
+      run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ env.DOCKER_TOKEN }}
     # Client Docker image
     - name: Build the client Docker image
-      run: docker build . --file ./client/Dockerfile --tag zhanerken/cfs-prod-client:${{ steps.date.outputs.date }}
+      run: docker build . --file ./client/Dockerfile --tag ${{ secrets.DOCKERHUB_USERNAME}}/csf-prod-client:${{ steps.date.outputs.date }}
     - name: Push client image
-      run: docker push zhanerken/cfs-prod-client:${{ steps.date.outputs.date }}
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME}}/csf-prod-client:${{ steps.date.outputs.date }}
