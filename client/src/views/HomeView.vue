@@ -5,5 +5,7 @@
     <RouterLink to="/">Home</RouterLink>
     <RouterLink to="/login">Login</RouterLink>
     <RouterLink to="/signup">signup</RouterLink>
+    <RouterLink to="/Challenge">Challenge</RouterLink>
   </nav>
+  <p>Test</p>
 </template>
