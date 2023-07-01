@@ -8,7 +8,7 @@ on:
 
 env:
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
 
 jobs:
 
@@ -26,7 +26,7 @@ jobs:
     - name: Build the server Docker image
       run: docker build . --file ./docker/server/Dockerfile --tag zhanerken/cfs-prod-server:${{ steps.date.outputs.date }}
     - name: Login
-      run: docker login -u ${{ env.DOCKER_USERNAME }} -p ${{ env.DOCKER_PASSWORD }}
+      run: docker login -u ${{ env.DOCKER_USERNAME }} -p ${{ env.DOCKER_TOKEN }}
     - name: Push server image
       run: docker push zhanerken/cfs-prod-server:${{ steps.date.outputs.date }}
 
