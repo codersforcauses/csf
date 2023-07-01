@@ -4,8 +4,11 @@
     <v-text-field prepend-inner-icon="mdi-magnify" hide-details placeholder="Search Events" clearable v-model="searchQuery"/>
     <v-btn v-if="tempIsTeamAdmin" icon="mdi-plus" size="small" id="add-event-btn" class="bg-primaryRed text-primaryWhite" @click="isAddingEvent = true"></v-btn>
   </v-toolbar>
-  <Event v-for="event in filteredEventsList" :id="event.id" :name="event.name" :start-date="event.startDate" :end-date="event.endDate" :description="event.description" :can-edit="tempIsTeamAdmin && event.isPrivate" :is-private="event.isPrivate"
+  <div id="cards-container">
+    <br>
+    <Event v-for="(event, index) in filteredEventsList" key="event.id" :id="event.id" :name="event.name" :start-date="event.startDate" :end-date="event.endDate" :description="event.description" :can-edit="tempIsTeamAdmin && event.isPrivate" :is-private="event.isPrivate"
   @edit="openEditModal"/>
+  </div>
   <EventsModal :type="'Create'" @close="closeModal" v-model="isAddingEvent"></EventsModal>
   <EventsModal v-if="isEditingEvent" :type="'Edit'" @close="closeModal" v-model="isEditingEvent" :id="editingEvent.id" :orignal-name="editingEvent.name" :original-start-date="editingEvent.startDate" :original-end-date ="editingEvent.endDate" :original-description ="editingEvent.description"></EventsModal>
 </template>
@@ -52,6 +55,7 @@
       isEditingEvent.value = true
     }
   }
+
 </script> 
 
 <style>
@@ -61,5 +65,8 @@
   }
   .v-text-field {
     margin: 20px;
+  }
+  #cards-container > .v-card:nth-child(odd) {
+    background-color: #f4f4f4;
   }
 </style>

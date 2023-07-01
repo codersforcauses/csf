@@ -1,5 +1,5 @@
 <template>
-    <v-card>
+    <v-card class="mx-3">
         <v-card-title>
             <span>{{ name }}</span>
             <v-icon v-if="canEdit" icon="mdi-pencil" @click="openModal"></v-icon>
