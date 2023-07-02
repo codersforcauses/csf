@@ -144,7 +144,7 @@
                 </v-col>
                 <v-row dense class="px-10">
                   <v-col v-for="avatar in avatarPaths" :key="avatar.url" cols="4">
-                    <div class="text-center py-5">
+                    <div class="text-center py-3">
                       <v-avatar
                         size="70"
                         @click="selectAvatar(avatar.url)"
@@ -155,10 +155,10 @@
                     </div>
                   </v-col>
                 </v-row>
+                <v-col cols="12">
+                  <p class="pt-5">Select main method of travel</p>
+                </v-col>
                 <v-row>
-                  <v-col cols="12">
-                    <p class="pt-5">Select main method of travel</p>
-                  </v-col>
                   <v-container class="d-flex justify-space-evenly">
                     <div v-for="method in travelMethod" :key="method.logo" class="text-center">
                       <v-avatar
@@ -180,7 +180,7 @@
                     </div>
                   </v-container>
                 </v-row>
-                <v-row no-gutters>
+                <v-row no-gutters class="px-2 pt-4">
                   <v-col cols="12">
                     <v-checkbox
                       density="default"
@@ -194,7 +194,7 @@
                       v-model="state.hasConsent"
                       label="I give consent for my data to be used by CSF"
                     ></v-checkbox>
-                    <p class="text-caption">
+                    <p class="text-caption px-4">
                       For more information please view
                       <span style="text-decoration: underline" class="text-secondaryBlue"
                         ><a href="https://www.google.com">our privacy statement</a></span
