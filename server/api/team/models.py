@@ -12,5 +12,6 @@ class Team(models.Model):
 
     def save(self, *args, **kwargs):
         if self.join_code is None:
-            self.join_code = hashlib.sha256(self.name.encode('utf-8')).hexdigest()
-        super().save(*args, **kwargs)  # Call the "real" save() method.
+            # self.join_code = hashlib.sha256(self.name.encode('utf-8')).hexdigest()
+            self.join_code = hashlib.shake_256(self.name.encode("utf-8")).hexdigest(length=8)
+        super().save(*args, **kwargs)  # Call the "real" save() method.e
