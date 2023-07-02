@@ -150,7 +150,7 @@
                         @click="selectAvatar(avatar.url)"
                         :class="{ 'avatar-selected': avatar.isSelected === true }"
                       >
-                        <v-img :src="avatar.url" :alt="avatar.alt"></v-img>
+                        <v-img :src="`/src/assets/avatars/${avatar.url}`" :alt="avatar.alt"></v-img>
                       </v-avatar>
                     </div>
                   </v-col>
@@ -232,12 +232,6 @@
 </template>
 
 <script setup lang="ts">
-import avatar1 from '../assets/Avatars/avatar1.jpg'
-import avatar2 from '../assets/Avatars/avatar2.jpg'
-import avatar3 from '../assets/Avatars/avatar3.jpg'
-import avatar4 from '../assets/Avatars/avatar4.jpg'
-import avatar5 from '../assets/Avatars/avatar5.jpg'
-import avatar6 from '../assets/Avatars/avatar6.jpg'
 import { ref, reactive, watchEffect } from 'vue'
 import { type Signup } from '../types/signup'
 
@@ -251,12 +245,12 @@ const isFullscreen = ref(false)
 const firstPage = ref<boolean>(true)
 const dialog = ref(true)
 const avatarPaths = ref([
-  { url: avatar1, alt: 'avatar1', isSelected: true },
-  { url: avatar2, alt: 'avatar2', isSelected: false },
-  { url: avatar3, alt: 'avatar3', isSelected: false },
-  { url: avatar4, alt: 'avatar4', isSelected: false },
-  { url: avatar5, alt: 'avatar5', isSelected: false },
-  { url: avatar6, alt: 'avatar6', isSelected: false }
+  { url: "avatar1.jpg", alt: 'avatar1', isSelected: true },
+  { url: "avatar2.jpg", alt: 'avatar2', isSelected: false },
+  { url: "avatar3.jpg", alt: 'avatar3', isSelected: false },
+  { url: "avatar4.jpg", alt: 'avatar4', isSelected: false },
+  { url: "avatar5.jpg", alt: 'avatar5', isSelected: false },
+  { url: "avatar6.jpg", alt: 'avatar6', isSelected: false }
 ])
 const travelMethod = ref([
   { logo: 'mdi-run-fast', mode: 'RUNNING', isSelected: true },
@@ -306,14 +300,13 @@ const required = (v: string) => {
   return !!v || 'Field is required'
 }
 
-watchEffect(() => {
-  const updateFullscreen = () => {
-    console.log(window.innerWidth)
+watchEffect(async () => {
+  const updateFullscreen = async() => {
     isFullscreen.value = window.innerWidth <= 500 // Adjust the breakpoint as needed
   }
 
   // Initial update
-  updateFullscreen()
+  await updateFullscreen()
 
   // Add window resize event listener
   window.addEventListener('resize', updateFullscreen)
