@@ -30,15 +30,9 @@
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
 import { useUserStore } from '@/stores/user'
-import { storeToRefs } from 'pinia'
 
 const { mobile } = useDisplay()
 const userStore = useUserStore()
-const { user } = storeToRefs(userStore)
-
-// onMounted(async () => {
-//   await userStore.getUser()
-// })
 
 const dialog = ref(false)
 
