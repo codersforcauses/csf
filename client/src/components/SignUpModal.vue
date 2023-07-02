@@ -26,7 +26,7 @@
           <v-card-text>
             <v-container>
               <v-row dense>
-                <v-col cols="12" sm="6">
+                <v-col cols="12" >
                   <v-text-field
                     bg-color="#FFFFFF"
                     :rules="[required]"
@@ -35,7 +35,7 @@
                     required
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" sm="6">
+                <v-col cols="12" >
                   <v-text-field
                     bg-color="#FFFFFF"
                     :rules="[required]"
@@ -44,7 +44,7 @@
                     required
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" sm="6">
+                <v-col cols="12" >
                   <v-text-field
                     bg-color="#FFFFFF"
                     :rules="[required]"
@@ -53,7 +53,7 @@
                   ></v-text-field>
                 </v-col>
 
-                <v-col cols="12" sm="6">
+                <v-col cols="12" >
                   <v-text-field
                     bg-color="#FFFFFF"
                     :rules="[required]"
@@ -62,7 +62,7 @@
                     required
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" sm="6">
+                <v-col cols="12" >
                   <v-text-field
                     bg-color="#FFFFFF"
                     :rules="[required]"
@@ -72,7 +72,7 @@
                     required
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" sm="6">
+                <v-col cols="12" >
                   <v-text-field
                     bg-color="#FFFFFF"
                     :rules="[required]"
