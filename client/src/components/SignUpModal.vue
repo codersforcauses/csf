@@ -142,7 +142,7 @@
                 <v-col cols="12">
                   <p>Select an Avatar</p>
                 </v-col>
-                <v-row dense  class="px-10">
+                <v-row dense class="px-10">
                   <v-col v-for="avatar in avatarPaths" :key="avatar.url" cols="4">
                     <div class="text-center py-5">
                       <v-avatar
