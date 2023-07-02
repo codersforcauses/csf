@@ -196,7 +196,7 @@
                     ></v-checkbox>
                     <p class="text-caption">
                       For more information please view
-                      <span style="text-decoration: underline; color: blue"
+                      <span style="text-decoration: underline;" class="text-secondaryBlue"
                         ><a href="https://www.google.com">our privacy statement</a></span
                       >
                     </p>
