@@ -84,7 +84,11 @@
   </v-toolbar>
   <v-img src="/images/Footer-min.jpeg" width="100%" height="8" cover></v-img>
 
-  <SignUpModal :dialog-modal="signupModal" v-if="signupModal" @open-signUp-modal="openSignUpModal" />
+  <SignUpModal
+    :dialog-modal="signupModal"
+    v-if="signupModal"
+    @open-signUp-modal="openSignUpModal"
+  />
 </template>
 
 <script setup lang="ts">
