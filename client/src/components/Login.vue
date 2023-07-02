@@ -34,7 +34,7 @@ import { storeToRefs } from 'pinia'
 
 const { mobile } = useDisplay()
 const userStore = useUserStore()
-const { token } = storeToRefs(userStore)
+const { user } = storeToRefs(userStore)
 
 // onMounted(async () => {
 //   await userStore.getUser()
@@ -50,10 +50,8 @@ const form = ref({
 const submitForm = async () => {
   console.log('Email:', form.value.email)
   console.log('Password:', form.value.password)
-  await userStore.getToken(form.value.email, form.value.password)
-  console.log(token.value)
-
-  // await userStore.getUser(form.value.email, form.value.password)
+  await userStore.loginUser(form.value.email, form.value.password)
+  console.log(user.value)
   closeDialog()
 }
 
