@@ -1,11 +1,11 @@
 from django.db import models
+from api.team.models import Team
 
 
 class SubTeam(models.Model):
     subteam_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=254)
-    # to add in later like chantelle said in issue
-    # team_id = models.ForeignKey()
+    team_id = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='teamOf', default="")
 
     def __str__(self):
         return f"{self.name}"
