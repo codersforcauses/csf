@@ -26,7 +26,7 @@
           <v-card-text>
             <v-container>
               <v-row dense>
-                <v-col cols="12" >
+                <v-col cols="12">
                   <v-text-field
                     bg-color="#FFFFFF"
                     :rules="[required]"
@@ -35,7 +35,7 @@
                     required
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" >
+                <v-col cols="12">
                   <v-text-field
                     bg-color="#FFFFFF"
                     :rules="[required]"
@@ -44,7 +44,7 @@
                     required
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" >
+                <v-col cols="12">
                   <v-text-field
                     bg-color="#FFFFFF"
                     :rules="[required]"
@@ -53,7 +53,7 @@
                   ></v-text-field>
                 </v-col>
 
-                <v-col cols="12" >
+                <v-col cols="12">
                   <v-text-field
                     bg-color="#FFFFFF"
                     :rules="[required]"
@@ -62,7 +62,7 @@
                     required
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" >
+                <v-col cols="12">
                   <v-text-field
                     bg-color="#FFFFFF"
                     :rules="[required]"
@@ -72,7 +72,7 @@
                     required
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" >
+                <v-col cols="12">
                   <v-text-field
                     bg-color="#FFFFFF"
                     :rules="[required]"
@@ -245,12 +245,12 @@ const isFullscreen = ref(false)
 const firstPage = ref<boolean>(true)
 const dialog = ref(true)
 const avatarPaths = ref([
-  { url: "avatar1.jpg", alt: 'avatar1', isSelected: true },
-  { url: "avatar2.jpg", alt: 'avatar2', isSelected: false },
-  { url: "avatar3.jpg", alt: 'avatar3', isSelected: false },
-  { url: "avatar4.jpg", alt: 'avatar4', isSelected: false },
-  { url: "avatar5.jpg", alt: 'avatar5', isSelected: false },
-  { url: "avatar6.jpg", alt: 'avatar6', isSelected: false }
+  { url: 'avatar1.jpg', alt: 'avatar1', isSelected: true },
+  { url: 'avatar2.jpg', alt: 'avatar2', isSelected: false },
+  { url: 'avatar3.jpg', alt: 'avatar3', isSelected: false },
+  { url: 'avatar4.jpg', alt: 'avatar4', isSelected: false },
+  { url: 'avatar5.jpg', alt: 'avatar5', isSelected: false },
+  { url: 'avatar6.jpg', alt: 'avatar6', isSelected: false }
 ])
 const travelMethod = ref([
   { logo: 'mdi-run-fast', mode: 'RUNNING', isSelected: true },
@@ -301,7 +301,7 @@ const required = (v: string) => {
 }
 
 watchEffect(async () => {
-  const updateFullscreen = async() => {
+  const updateFullscreen = async () => {
     isFullscreen.value = window.innerWidth <= 500 // Adjust the breakpoint as needed
   }
 
