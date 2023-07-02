@@ -12,17 +12,20 @@ export const useUserStore = defineStore('user', {
   },
   actions: {
     async loginUser(username: string, password: string) {
-      console.log(`${baseUrl}/auth/token`)
-      await axios
-        .post(`${baseUrl}/auth/token/`, {
-          username: username,
-          password: password
-        })
-        .then((res) => {
-          if (res.status == 200) {
-            this.authUser = username
-          }
-        })
+      try {
+        await axios
+          .post(`${baseUrl}/auth/token/`, {
+            username: username,
+            password: password
+          })
+          .then((res) => {
+            if (res.status == 200) {
+              this.authUser = username
+            }
+          })
+      } catch (error) {
+        return error
+      }
     }
   }
 })
