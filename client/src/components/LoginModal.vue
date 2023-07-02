@@ -1,9 +1,6 @@
 <template>
   <section>
     <v-dialog v-model="dialog" :fullscreen="mobile" max-width="500px">
-      <template v-slot:activator="{ props }">
-        <v-btn v-bind="props">Login</v-btn>
-      </template>
       <v-card>
         <form @submit.prevent="submitForm">
           <v-card-title>
@@ -29,9 +26,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
-const { mobile } = useDisplay()
 
-const dialog = ref(false)
+const { mobile } = useDisplay()
+const dialog = ref(true)
 
 const form = ref({
   email: '',
@@ -43,7 +40,6 @@ const submitForm = () => {
   console.log('Password:', form.value.password)
   closeDialog()
 }
-
 const closeDialog = () => {
   dialog.value = false
 }
