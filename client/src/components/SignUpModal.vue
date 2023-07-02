@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" :fullscreen="mobile" max-width="912px">
+  <v-dialog v-model="dialog" :fullscreen="isFullscreen" max-width="500px">
     <v-card style="height: 100%">
       <div v-if="firstPage">
         <form class="bg-primaryForm">
@@ -196,7 +196,7 @@
                     ></v-checkbox>
                     <p class="text-caption">
                       For more information please view
-                      <span style="text-decoration: underline;" class="text-secondaryBlue"
+                      <span style="text-decoration: underline" class="text-secondaryBlue"
                         ><a href="https://www.google.com">our privacy statement</a></span
                       >
                     </p>
@@ -238,8 +238,7 @@ import avatar3 from '../assets/Avatars/avatar3.jpg'
 import avatar4 from '../assets/Avatars/avatar4.jpg'
 import avatar5 from '../assets/Avatars/avatar5.jpg'
 import avatar6 from '../assets/Avatars/avatar6.jpg'
-import { ref, reactive } from 'vue'
-import { useDisplay } from 'vuetify'
+import { ref, reactive, watchEffect } from 'vue'
 import { type Signup } from '../types/signup'
 
 defineProps(['dialogModal'])
@@ -248,8 +247,7 @@ const emit = defineEmits(['openSignUpModal'])
 const closeModal = () => {
   emit('openSignUpModal', false)
 }
-
-const { mobile } = useDisplay()
+const isFullscreen = ref(false)
 const firstPage = ref<boolean>(true)
 const dialog = ref(true)
 const avatarPaths = ref([
@@ -307,6 +305,24 @@ const selectMode = (mode: string) => {
 const required = (v: string) => {
   return !!v || 'Field is required'
 }
+
+watchEffect(() => {
+  const updateFullscreen = () => {
+    console.log(window.innerWidth)
+    isFullscreen.value = window.innerWidth <= 500 // Adjust the breakpoint as needed
+  }
+
+  // Initial update
+  updateFullscreen()
+
+  // Add window resize event listener
+  window.addEventListener('resize', updateFullscreen)
+
+  // Cleanup: Remove window resize event listener
+  return () => {
+    window.removeEventListener('resize', updateFullscreen)
+  }
+})
 </script>
 
 <style scoped>
