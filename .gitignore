@@ -287,4 +287,5 @@ dist
 .pnp.*
 
 # misc
-**./DS_STORE
+*.DS_Store
+
