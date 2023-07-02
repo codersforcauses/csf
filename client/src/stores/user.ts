@@ -1,24 +1,29 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
-const baseUrl = 'https://localhost:8081'
+const baseUrl = 'http://localhost:8081/api'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    user: null
+    authUser: null,
+    token: null
   }),
   getters: {
-    user: (state) => state.user
+    user: (state) => state.authUser
   },
   actions: {
-    async getToken(username: string) {
-      await axios.get(`${baseUrl}/token/${username}`)
+    async getToken(username: string, password: string) {
+      console.log(`${baseUrl}/auth/token`)
+      this.token = await axios.post(`${baseUrl}/auth/token/`, {
+        username: username,
+        password: password
+      })
     },
     async getUser(username: string, password: string) {
-      const data = await axios.get(`${baseUrl}/user/${username}/${password}`)
+      const data = await axios.post(`${baseUrl}/auth/verify/${username}/${password}`)
       if (data.data) {
-        this.getToken(username)
-        this.user = data.data
+        // this.getToken()
+        this.authUser = data.data
       }
     }
   }
