@@ -23,7 +23,8 @@ const csfCustomTheme: ThemeDefinition = {
     primaryWhite: 'rgb(255, 255, 255)',
     secondaryGreen: 'rgb(0, 157, 79)',
     secondaryBlue: 'rgb(52, 94, 158)',
-    secondaryTint: 'rgb(249, 241, 227)'
+    secondaryTint: 'rgb(249, 241, 227)',
+    primaryForm: 'rgb(236,236,236)'
   }
 }
 

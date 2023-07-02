@@ -1,9 +1,8 @@
 <template>
-  <v-row justify="center" items="center" class="width">
     <v-dialog v-model="dialog" :fullscreen="mobile" max-width="912px">
       <v-card style="height: 100%">
         <div v-if="firstPage">
-          <form style="background-color: #ececec">
+          <form class="bg-primaryForm">
             <v-container class="pa-0">
               <v-img src="/images/Footer-min.jpeg" width="100%" height="10" cover></v-img>
             </v-container>
@@ -15,7 +14,7 @@
               </v-col>
             </v-row>
             <v-card-title class="d-flex justify-center">
-              <v-card flat color="#ECECEC">
+              <v-card flat color="primaryForm">
                 <v-card-item>
                   <v-card-title class="text-center text-h4 pb-2">Register</v-card-title>
                   <v-card-subtitle class="text-center text-subtitle-1"
@@ -26,7 +25,7 @@
             </v-card-title>
             <v-card-text>
               <v-container>
-                <v-row>
+                <v-row dense>
                   <v-col cols="12" sm="6">
                     <v-text-field
                       bg-color="#FFFFFF"
@@ -116,7 +115,7 @@
           </form>
         </div>
         <div v-if="!firstPage">
-          <form style="background-color: #ececec; bottom: auto" @submit.prevent="">
+          <form style="bottom: auto" class="bg-primaryForm" @submit.prevent="">
             <v-container class="pa-0">
               <v-img src="/images/Footer-min.jpeg" width="auto" height="10" cover></v-img>
             </v-container>
@@ -128,7 +127,7 @@
               </v-col>
             </v-row>
             <v-card-title class="d-flex justify-center">
-              <v-card class="" flat color="#ECECEC">
+              <v-card class="" flat color="primaryForm">
                 <v-card-item>
                   <v-card-title class="text-center text-h4 pb-2">Register</v-card-title>
                   <v-card-subtitle class="text-center text-subtitle-1"
@@ -140,15 +139,14 @@
             <v-card-text>
               <v-container>
                 <v-row>
-                  <v-row>
                     <v-col cols="12">
                       <p>Select an Avatar</p>
                     </v-col>
-                    <v-row>
+                    <v-row dense>
                       <v-col v-for="avatar in avatarPaths" :key="avatar.url" cols="4">
-                        <div style="padding-top: 5px; padding-bottom: 5px" class="text-center">
+                        <div class="text-center py-5">
                           <v-avatar
-                            size="80"
+                            size="70"
                             @click="selectAvatar(avatar.url)"
                             :class="{ 'avatar-selected': avatar.isSelected === true }"
                           >
@@ -157,10 +155,9 @@
                         </div>
                       </v-col>
                     </v-row>
-                  </v-row>
                   <v-row>
                     <v-col cols="12">
-                      <p style="padding-top: 5px">Select main method of travel</p>
+                      <p class="pt-5">Select main method of travel</p>
                     </v-col>
                     <v-container class="d-flex justify-space-evenly">
                       <div v-for="method in travelMethod" :key="method.logo" class="text-center">
@@ -183,7 +180,6 @@
                       </div>
                     </v-container>
                   </v-row>
-                  <v-container fluid fill-height class="my-4">
                     <v-row no-gutters>
                       <v-col cols="12">
                         <v-checkbox
@@ -206,7 +202,6 @@
                         </p>
                       </v-col>
                     </v-row>
-                  </v-container>
                 </v-row>
               </v-container>
             </v-card-text>
@@ -239,7 +234,6 @@
         </div>
       </v-card>
     </v-dialog>
-  </v-row>
 </template>
 
 <script setup lang="ts">
@@ -254,10 +248,10 @@ import { useDisplay } from 'vuetify'
 import { type Signup } from '../types/signup'
 
 defineProps(['dialogModal'])
-const emit = defineEmits(['modalTrigger'])
+const emit = defineEmits(['openSignUpModal'])
 
 const closeModal = () => {
-  emit('modalTrigger', false)
+  emit('openSignUpModal', false)
 }
 
 const { mobile } = useDisplay()

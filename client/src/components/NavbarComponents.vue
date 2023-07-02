@@ -11,7 +11,7 @@
     <v-toolbar-items class="hidden-sm-and-down">
       <v-btn v-for="item in menu" :key="item.title" :to="item.link" flat>{{ item.title }}</v-btn>
       <!-- this is how login modal will work as well copy all associated to how this works -->
-      <v-btn active @click="modalTrigger">SIGNUP</v-btn>
+      <v-btn active @click="openSignUpModal">SIGNUP</v-btn>
     </v-toolbar-items>
   </v-toolbar>
   <v-toolbar dark app color="black" class="hidden-md-and-up">
@@ -72,7 +72,7 @@
             </template>
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>
-          <v-list-item @click="modalTrigger" variant="tonal">
+          <v-list-item @click="openSignUpModal" variant="tonal">
             <template v-slot:prepend>
               <v-icon style="color: #fff; opacity: 1" icon="mdi-pencil-box"></v-icon>
             </template>
@@ -84,7 +84,7 @@
   </v-toolbar>
   <v-img src="/images/Footer-min.jpeg" width="100%" height="8" cover></v-img>
 
-  <SignUpModal :dialog-modal="signupModal" v-if="signupModal" @modal-trigger="modalTrigger" />
+  <SignUpModal :dialog-modal="signupModal" v-if="signupModal" @open-signUp-modal="openSignUpModal" />
 </template>
 
 <script setup lang="ts">
@@ -96,7 +96,7 @@ const { mobile } = useDisplay()
 const dialog = ref<boolean>(false)
 const signupModal = ref<boolean>(false)
 
-const modalTrigger = () => {
+const openSignUpModal = () => {
   signupModal.value = !signupModal.value
 }
 const menu = [
