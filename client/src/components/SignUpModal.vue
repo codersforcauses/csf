@@ -287,14 +287,14 @@ const state = reactive<Signup>({
   teamSignup: false,
   hasConsent: false,
   avatar: '',
-  method: ''
+  travelMethod: ''
 })
 
 const submit = async () => {
   // need this here as default values sorta mess stuff up but it works
   const avatar = avatarPaths.value.filter((avatar) => avatar.isSelected === true)
   const method = travelMethod.value.filter((method) => method.isSelected === true)
-  state.method = method[0].mode
+  state.travelMethod = method[0].mode
   state.avatar = avatar[0].url
   console.log(state)
 }
@@ -312,7 +312,7 @@ const selectMode = (mode: string) => {
     if (method.mode === mode) method.isSelected = !method.isSelected
     if (method.mode !== mode) method.isSelected = false
   })
-  state.method = mode
+  state.travelMethod = mode
 }
 
 const required = (v: string) => {

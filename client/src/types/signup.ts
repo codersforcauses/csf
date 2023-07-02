@@ -6,7 +6,7 @@ export interface Signup {
   password: string
   confirmPassword: string
   avatar: string
-  method: string
+  travelMethod: string
   teamSignup: boolean
   hasConsent: boolean
 }
