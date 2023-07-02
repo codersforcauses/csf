@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "api.users",
     "api.event",
+    "api.subteam",
     "rest_framework",
     "rest_framework_simplejwt"
 ]
