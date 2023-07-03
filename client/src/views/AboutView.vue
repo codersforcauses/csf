@@ -31,9 +31,9 @@
     Foundation's journey of helping to support First Nations young people to realise their potential
     through lifelong learning.
   </p>
-  <v-row justify="center" class="px-8 pb-4" no-gutters>
+  <v-row justify="center" class="my-4" no-gutters>
     <v-btn
-      class="bg-primaryRed pb-14"
+      class="bg-primaryRed pb-14 mb-8"
       size="x-large"
       variant="flat"
       :style="{ fontFamily: 'Hackney', fontSize: '42px' }"
@@ -88,9 +88,9 @@
       By donating to Community Spirit Foundation you will be supporting Aboriginal and Torres Strait
       Islander Children to dream big and have choices.
     </p>
-    <v-row justify="center" class="pa-8" no-gutters>
+    <v-row justify="center" class="my-7" no-gutters>
       <v-btn
-        class="bg-primaryRed pb-14"
+        class="bg-primaryRed pb-14 mb-6"
         size="x-large"
         :style="{ fontFamily: 'Hackney', fontSize: '42px' }"
         style="letter-spacing: -0.5px"
