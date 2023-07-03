@@ -19,7 +19,7 @@ const { mobile } = useDisplay()
 
 <template>
   <v-dialog v-model="value" :fullscreen="mobile" max-width="912px">
-    <v-card class="d-flex flex-column">
+    <v-card  class="d-flex flex-column">
       <div style="height:8px">
         <v-img
           src="/images/Footer-min.jpeg"
@@ -29,10 +29,10 @@ const { mobile } = useDisplay()
       </div>
       <v-card-item>
         <v-card-title>{{ title }}</v-card-title>
-        <v-card-text>{{ text }}</v-card-text>
       </v-card-item>
+      <v-card-text>{{ text }}</v-card-text>
       <v-spacer></v-spacer>
-      <v-card-actions class="d-flex justify-end bg-grey-lighten-4">
+      <v-card-actions class="d-flex justify-end bg-backgroundGrey">
         <v-btn @click="$emit('update:modelValue', !modelValue)">Cancel</v-btn>
         <v-btn variant="elevated" color="primaryRed"
           @click="() => {
