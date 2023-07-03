@@ -13,7 +13,7 @@
 
 - `create_team/` - Create a new team
 - `get_teams/` - Retrieve a list of teams
-- `get_teams/<int:team_id>` - Retrieve a team by id
+- `get_team/<int:team_id>` - Retrieve a team by id
 - `update_team/<int:team_id>` - Update a team by id
 - `delete_team/<int:team_id>` - Delete a team by id
 
@@ -34,7 +34,6 @@
 
 - `create_event/` - Create a new event
 - `get_events/` - Retrieve a list of events
-- `get_events/<int:event_id>` - Retrieve an event by id
 - `update_event/<int:event_id>` - Update an event by id
 - `delete_event/<int:event_id>` - Delete an event by id
 
