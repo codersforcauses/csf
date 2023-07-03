@@ -1,6 +1,6 @@
 <template>
   <v-dialog fullscreen>
-    <v-card class="bg-primaryForm">
+    <v-card class="bg-backgroundGrey">
       <v-img src="/images/Footer-min.jpeg" width="100%" max-height="16" cover></v-img>
       <v-card-actions>
         <v-spacer></v-spacer>
