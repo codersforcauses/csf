@@ -16,18 +16,18 @@ class EventTests(APITestCase):
                                 is_public=True, 
                                 is_archived=False)
         Event.objects.create(
-                                name="eventTestArchived", 
+                                name="eventTestPrivate", 
                                 start_date = datetime.date.today(),
                                 end_date = datetime.date.today(),
-                                description="archived event for unit test",
-                                is_public=True, 
+                                description="private event for unit test",
+                                is_public=False, 
                                 is_archived=True)
         
     def test_create_event(self):
         response = self.client.post(
             reverse("event:create-event"),
             {   
-                "name":"eventTestPublic", 
+                "name":"createEventTestPublic", 
                 "start_date":datetime.date.today(),
                 "end_date":datetime.date.today(),
                 "description":"public event for unit test",
@@ -36,31 +36,60 @@ class EventTests(APITestCase):
             },
             format="json",
         )
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        created_event = Event.objects.get(name="createEventTestPublic")
+        self.assertEqual(created_event.name, "createEventTestPublic")
+        self.assertEqual(created_event.start_date, datetime.date.today())
+        self.assertEqual(created_event.end_date, datetime.date.today())
+        self.assertEqual(created_event.description, "public event for unit test")
+        self.assertEqual(created_event.is_public, True)
+        self.assertEqual(created_event.is_archived, False)        
     
     def test_get_event(self):
         all_event = Event.objects.get()
         response = self.client.get(
-            reverse("event:get-event"),
-            kwargs={"event_id":1}
+            reverse("event:get-event")
         )
         
     def test_get_events(self):
-        all_event = Event.objects.get()
+        all_event = Event.objects.all()
         response = self.client.get(
-            reverse("event:get-event"),
-            kwargs
+            reverse("event:get-events")
         )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data_count = 0
+        for x in response.data:
+            data_count = data_count + 1
+        self.assertEqual(all_event.count(), data_count)
 
-    def test_update_event(self):
-        all_event = Event.objects.get()
-        response = self.client.get(
-            reverse("event:get-event"),
-            # {   "name":"eventTestPublic", 
-            #     "description":"public event for unit test",
-            # },
-            # format="json",
+    def  test_update_private_event(self):
+        eventBeforeUpdate = Event.objects.get(name="eventTestPrivate")
+        response = self.client.put(
+            reverse("event:update-event",kwargs={"event_id":eventBeforeUpdate.event_id}),
+            {   
+                "name":"updateEventTestPrivate", 
+                "description":"unit test try update",
+            },
+            format="json",
+            
         )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["name"], "updateEventTestPrivate")
+        self.assertEqual(response.data["description"], "unit test try update")
+
+    def  test_update_public_event(self):
+        eventBeforeUpdate = Event.objects.get(name="eventTestPublic")
+        response = self.client.put(
+            reverse("event:update-event",kwargs={"event_id":eventBeforeUpdate.event_id}),
+            {   
+                "name":"updateEventTestPrivate", 
+                "description":"unit test try update",
+            },
+            format="json",
+            
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, "Event is not private")
 
     def test_delete_event(self):
         all_event = Event.objects.get()
