@@ -47,7 +47,4 @@ const submitForm = () => {
   console.log('Password:', form.value.password)
   closeModal()
 }
-// const closeDialog = () => {
-//   dialog.value = false
-// }
 </script>
