@@ -22,7 +22,7 @@
     </v-col>
   </v-row>
   <div id="cards-container" class="bg-primaryWhite pt-4">
-    <Event
+    <EventCard
       v-for="event in filteredEventsList"
       key="event.id"
       :event="event"
@@ -30,29 +30,21 @@
       @edit="openEditModal"
     />
   </div>
-  <EventsModal v-if="isAddingEvent" :type="'Create'" @close="closeModal" v-model="isAddingEvent"></EventsModal>
+  <EventsModal v-if="isAddingEvent" :type="'Create'" @close="closeModal" v-model="isAddingEvent" />
   <EventsModal
     v-if="isEditingEvent"
     :type="'Edit'"
     :event="editingEvent"
     @close="closeModal"
     v-model="isEditingEvent"
-  ></EventsModal>
+  />
 </template>
 
 <script setup lang="ts">
-import Event from '../components/Event.vue'
+import EventCard from '../components/EventCard.vue'
+import type Event from "../types/event"
 import EventsModal from '../components/EventsModal.vue'
 import { ref, computed } from 'vue'
-
-interface Event {
-  id: number
-  name: string
-  startDate: string
-  endDate: string
-  description: string
-  isPrivate: boolean
-}
 
 const temporaryEventsList = ref<Event[]>([
   {

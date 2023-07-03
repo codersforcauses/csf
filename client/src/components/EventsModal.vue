@@ -54,14 +54,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-interface Event {
-  id: number
-  name: string
-  startDate: string
-  endDate: string
-  description: string
-  isPrivate: boolean
-}
+import type Event from "../types/event"
 const props = defineProps<{type: 'Create' | 'Edit', event?: Event}>()
 const emit = defineEmits(['close'])
 

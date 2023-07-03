@@ -18,14 +18,7 @@
 </template>
 
 <script setup lang="ts">
-interface Event {
-  id: number
-  name: string
-  startDate: string
-  endDate: string
-  description: string
-  isPrivate: boolean
-}
+import Event from "../types/event"
 const props = defineProps<{event: Event, isTeamAdmin: boolean}>()
 const emit = defineEmits(['edit'])
 
