@@ -46,10 +46,17 @@ class EventTests(APITestCase):
         self.assertEqual(created_event.is_archived, False)        
     
     def test_get_event(self):
-        all_event = Event.objects.get()
+        one_event = Event.objects.get(name="eventTestPublic")
         response = self.client.get(
-            reverse("event:get-event")
+            reverse("event:get-event", kwargs={"event_id":one_event.event_id})
         )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(one_event.name, "eventTestPublic")
+        self.assertEqual(one_event.start_date, datetime.date.today())
+        self.assertEqual(one_event.end_date, datetime.date.today())
+        self.assertEqual(one_event.description, "public event for unit test")
+        self.assertEqual(one_event.is_public, True)
+        self.assertEqual(one_event.is_archived, False)  
         
     def test_get_events(self):
         all_event = Event.objects.all()
@@ -91,9 +98,22 @@ class EventTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, "Event is not private")
 
-    def test_delete_event(self):
+    def test_delete_private_event(self):
+        eventCountBeforeDelete = Event.objects.all().count()
         eventToDelete = Event.objects.get(name="eventTestPrivate")
-        response = self.client.get(
-            reverse("event:get-event",kwargs={"event_id":eventToDelete.event_id}),
+        response = self.client.delete(
+            reverse("event:delete-event",kwargs={"event_id":eventToDelete.event_id}),
         )
+        eventCountAfterDelete = Event.objects.all().count()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(eventCountBeforeDelete - 1, eventCountAfterDelete)
 
+    def test_delete_public_event(self):
+        eventCountBeforeDelete = Event.objects.all().count()
+        eventToDelete = Event.objects.get(name="eventTestPublic")
+        response = self.client.delete(
+            reverse("event:delete-event",kwargs={"event_id":eventToDelete.event_id}),
+        )
+        eventCountAfterDelete = Event.objects.all().count()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, "Event is not private")
