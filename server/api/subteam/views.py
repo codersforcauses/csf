@@ -13,16 +13,8 @@ def create_subteam(request):
 
 
 @api_view(['GET'])
-def get_subteam(request, subteam_id):
-    subteam = SubTeam.objects.get(subteam_id=subteam_id)
-    serializer = SubTeamSerialiser(subteam)
-    print(serializer.data)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-def get_subteams(request):
-    subteams = SubTeam.objects.all()
+def get_subteams(request, team_id):
+    subteams = SubTeam.objects.filter(team_id=team_id)
     serializer = SubTeamSerialiser(subteams, many=True)
     return Response(serializer.data)
 
