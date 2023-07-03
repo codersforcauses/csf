@@ -39,6 +39,7 @@
       variant="flat"
       :style="{ fontFamily: 'Hackney', fontSize: '42px' }"
       style="letter-spacing: -1px"
+      @click="openSignUpModal"
     >
       REGISTER NOW
     </v-btn>
@@ -95,7 +96,7 @@
         :style="{ fontFamily: 'Hackney', fontSize: '42px' }"
         style="letter-spacing: -0.5px"
       >
-        <span>DONATE</span>
+        DONATE
       </v-btn>
     </v-row>
   </v-row>
@@ -109,11 +110,22 @@
     </p></v-row
   >
   <Footer />
+  <SignUpModal
+    :dialog-modal="signupModal"
+    v-if="signupModal"
+    @open-signUp-modal="openSignUpModal"
+  />
 </template>
 
 <script setup lang="ts">
 import Footer from '@/components/Footer.vue'
 import { ref } from 'vue'
+import SignUpModal from '@/components/SignUpModal.vue'
+
+const signupModal = ref<boolean>(false)
+const openSignUpModal = () => {
+  signupModal.value = !signupModal.value
+}
 
 const beliefs = [
   'Every young person we work with should be able to dream big and be proud.',
