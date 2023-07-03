@@ -19,24 +19,28 @@ const { mobile } = useDisplay()
 
 <template>
   <v-dialog v-model="value" :fullscreen="mobile" max-width="912px">
-    <div class="title">{{ title }}</div>
-    <div class="text">{{ text }}</div>
-    <div class="footer">
-      <v-btn class="modal-default-button" @click="$emit('update:modelValue', !modelValue)"
-        >cancel</v-btn
-      >
-      <v-btn
-        class="modal-default-button"
-        @click="
-          () => {
+    <v-card class="d-flex flex-column">
+      <div style="height:8px">
+        <v-img
+          src="/images/Footer-min.jpeg"
+          width="100%"
+          cover
+        ></v-img>
+      </div>
+      <v-card-item>
+        <v-card-title>{{ title }}</v-card-title>
+        <v-card-text>{{ text }}</v-card-text>
+      </v-card-item>
+      <v-spacer></v-spacer>
+      <v-card-actions class="d-flex justify-end bg-grey-lighten-4">
+        <v-btn @click="$emit('update:modelValue', !modelValue)">Cancel</v-btn>
+        <v-btn variant="elevated" color="primaryRed"
+          @click="() => {
             $emit('handleSubmit')
             $emit('update:modelValue', !modelValue)
-          }
-        "
-      >
-        {{ submitText }}
-      </v-btn>
-    </div>
+          }">{{ submitText }}</v-btn>
+      </v-card-actions>
+    </v-card>
   </v-dialog>
 </template>
 
