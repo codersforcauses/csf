@@ -1,5 +1,5 @@
 <template>
-  <v-img src="/images/CSF_Website_Banner_01.jpg" width="100%"></v-img>
+  <v-img :src="CSFBanner" width="100%"></v-img>
   <v-row style="background-color: #202020" class="pt-8 px-8" no-gutters justify="center">
     <h2 class="text-secondaryTint text-center">
       <span class="font-weight-bold">Education changes lives:</span>
@@ -12,7 +12,7 @@
       d="m0 64 60 10.7c60 10.3 180 32.3 300 48 120 16.3 240 26.3 360 16C840 128 960 96 1080 85.3c120-10.3 240-.3 300 5.4l60 5.3V0H0Z"
     />
   </svg>
-  <v-img src="/images/SFE_RGB_Logo.png" class="px-8 mt-n8 mb-8" width="100%"></v-img>
+  <v-img :src="StrideForEducationRBGLogo" class="px-8 mt-n8 mb-8" width="100%"></v-img>
   <v-divider class="mx-4" />
   <p class="pa-8">
     Community Spirit Foundation is running Stride For Education – a challenge designed to motivate
@@ -25,7 +25,7 @@
     other participants. Compare your progress with other users, teams, or even your own teammates,
     and let the friendly competition inspire you to reach new levels of achievement.
   </p>
-  <v-img src="/gif/Stride_1.gif" width="100%"></v-img>
+  <v-img :src="StrideForEducationGif" width="100%"></v-img>
   <p class="pa-8">
     Every step you take as part of this challenge is one step further in Community Spirit
     Foundation's journey of helping to support First Nations young people to realise their potential
@@ -76,7 +76,7 @@
       </v-list-item>
     </v-list>
   </v-row>
-  <v-img src="/images/students_learning.webp" width="100%"></v-img>
+  <v-img :src="studentsLearning" width="100%"></v-img>
   <v-row class="px-8 bg-secondaryGrey text-secondaryTint" no-gutters>
     <h2 class="py-2" :style="{ fontFamily: 'Hackney', fontSize: '58px' }">DONATE TODAY</h2>
     <v-divider class="mr-16" />
@@ -100,7 +100,7 @@
       </v-btn>
     </v-row>
   </v-row>
-  <v-img src="/images/thank_you.jpg" width="100%"></v-img>
+  <v-img :src="thankYou" width="100%"></v-img>
   <v-row class="ma-8" no-gutters>
     <p>
       The Community Spirit Foundation acknowledges and pays our respects to the past, present and
@@ -121,6 +121,11 @@
 import Footer from '@/components/Footer.vue'
 import { ref } from 'vue'
 import SignUpModal from '@/components/SignUpModal.vue'
+import studentsLearning from '@/assets/images/students_learning.webp'
+import thankYou from '@/assets/images/thank_you.jpg'
+import StrideForEducationGif from '@/assets/gif/Stride_1.gif'
+import CSFBanner from '@/assets/images/CSF_Banner.jpg'
+import StrideForEducationRBGLogo from '@/assets/images/SFE_RGB_Logo.png'
 
 const signupModal = ref<boolean>(false)
 const openSignUpModal = () => {

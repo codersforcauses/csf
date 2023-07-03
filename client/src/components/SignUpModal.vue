@@ -4,7 +4,7 @@
       <div v-if="firstPage">
         <form class="bg-primaryForm">
           <v-container class="pa-0">
-            <v-img src="/images/Footer-min.jpeg" width="100%" height="10" cover></v-img>
+            <v-img :src="FooterBanner" width="100%" height="10" cover></v-img>
           </v-container>
           <v-row justify="end">
             <v-col cols="auto">
@@ -233,6 +233,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, watchEffect } from 'vue'
+import FooterBanner from '@/assets/images/Footer-min.jpeg'
 import { type Signup } from '../types/signup'
 
 defineProps(['dialogModal'])

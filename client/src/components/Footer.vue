@@ -1,5 +1,5 @@
 <template>
-  <v-img src="/images/Footer-min.jpeg" height="120" cover>
+  <v-img :src="FooterBanner" height="120" cover>
     <p class="text-primaryWhite pl-3 font-weight-bold mt-2">Contact Us</p>
     <v-row align="center" no-gutters class="pl-5">
       <v-col cols="auto">
@@ -63,4 +63,6 @@
   </v-img>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import FooterBanner from '@/assets/images/Footer-min.jpeg'
+</script>

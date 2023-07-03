@@ -1,12 +1,6 @@
 <template>
   <v-toolbar dark app color="black" class="hidden-sm-and-down">
-    <v-img
-      src="/images/CSF_Logo_WHITE.png"
-      width="125"
-      height="60"
-      max-width="125"
-      max-height="60"
-    ></v-img>
+    <v-img :src="CSFLogoWhite" width="125" height="60" max-width="125" max-height="60"></v-img>
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down">
       <v-btn v-for="item in menu" :key="item.title" :to="item.link" flat>{{ item.title }}</v-btn>
@@ -15,13 +9,7 @@
     </v-toolbar-items>
   </v-toolbar>
   <v-toolbar dark app color="black" class="hidden-md-and-up">
-    <v-img
-      src="/images/CSF_Logo_WHITE.png"
-      width="125"
-      height="60"
-      max-width="125"
-      max-height="60"
-    ></v-img>
+    <v-img :src="CSFLogoWhite" width="125" height="60" max-width="125" max-height="60"></v-img>
     <v-spacer></v-spacer>
     <v-dialog
       v-model="dialog"
@@ -38,7 +26,7 @@
         <v-container class="pa-0 ma-0">
           <v-toolbar dark app color="black" class="hidden-md-and-up">
             <v-img
-              src="/images/CSF_Logo_WHITE.png"
+              :src="CSFLogoWhite"
               width="125"
               height="60"
               max-width="125"
@@ -51,13 +39,7 @@
           </v-toolbar>
         </v-container>
         <v-container class="pa-0">
-          <v-img
-            src="/images/Footer-min.jpeg"
-            width="100%"
-            height="8"
-            class="hidden-md-and-up"
-            cover
-          ></v-img>
+          <v-img :src="FooterBanner" width="100%" height="8" class="hidden-md-and-up" cover></v-img>
         </v-container>
         <v-list class="listItem pa-0">
           <v-list-item
@@ -82,7 +64,7 @@
       </v-card>
     </v-dialog>
   </v-toolbar>
-  <v-img src="/images/Footer-min.jpeg" width="100%" height="8" cover></v-img>
+  <v-img :src="FooterBanner" width="100%" height="8" cover></v-img>
 
   <SignUpModal
     :dialog-modal="signupModal"
@@ -95,6 +77,8 @@
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
 import SignUpModal from './SignUpModal.vue'
+import FooterBanner from '@/assets/images/Footer-min.jpeg'
+import CSFLogoWhite from '@/assets/images/CSF_Logo_WHITE.png'
 
 const { mobile } = useDisplay()
 const dialog = ref<boolean>(false)
