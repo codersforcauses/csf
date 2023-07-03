@@ -45,7 +45,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractUser):
-    user_id = models.AutoField(primary_key=True)  # primary key
+    id = models.AutoField(primary_key=True)  # primary key
     username = models.CharField(max_length=20, unique=True)
     first_name = models.CharField(max_length=100, blank=True)
     last_name = models.CharField(max_length=100, blank=True)
