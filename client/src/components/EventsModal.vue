@@ -54,21 +54,21 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-interface Props {
-  type: 'Create' | 'Edit'
-  id?: number
-  orignalName?: string
-  originalStartDate?: string
-  originalEndDate?: string
-  originalDescription?: string
+interface Event {
+  id: number
+  name: string
+  startDate: string
+  endDate: string
+  description: string
+  isPrivate: boolean
 }
-const props = defineProps<Props>()
+const props = defineProps<{type: 'Create' | 'Edit', event?: Event}>()
 const emit = defineEmits(['close'])
 
-const name = ref(props.orignalName)
-const startDate = ref(props.originalStartDate)
-const endDate = ref(props.originalEndDate)
-const description = ref(props.originalDescription)
+const name = ref(props.event ? props.event.name : "")
+const startDate = ref(props.event ? props.event.startDate : "")
+const endDate = ref(props.event ? props.event.endDate : "")
+const description = ref(props.event ? props.event.description: "")
 
 function addEvent() {
   console.log(
@@ -82,19 +82,23 @@ function addEvent() {
 }
 
 function editEvent() {
-  console.log(
-    'Contact backend to edit the event',
-    props.id,
-    name.value,
-    startDate.value,
-    endDate.value,
-    description.value
-  )
+  if (props.event) {
+    console.log(
+      'Contact backend to edit the event',
+      props.event.id,
+      name.value,
+      startDate.value,
+      endDate.value,
+      description.value
+    )
+  }
   closeModal()
 }
 
 function archiveEvent() {
-  console.log('Contact backend to archive the event', props.id)
+  if (props.event) {
+    console.log('Contact backend to archive the event', props.event.id)
+  }
   closeModal()
 }
 

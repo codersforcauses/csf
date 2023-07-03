@@ -1,37 +1,36 @@
 <template>
   <v-card class="mx-3">
     <v-card-title>
-      <span class="font-weight-bold">{{ name }}</span>
-      <v-icon v-if="canEdit" icon="mdi-pencil" @click="openModal"></v-icon>
+      <span class="font-weight-bold">{{ event.name }}</span>
+      <v-icon v-if="isTeamAdmin && event.isPrivate" icon="mdi-pencil" @click="openModal"></v-icon>
       <v-spacer></v-spacer>
       <v-chip
         variant="outlined"
-        :class="{ 'text-secondaryGreen': isPrivate, 'text-secondaryBlue': !isPrivate }"
-        >{{ isPrivate ? 'Private' : 'Official' }}</v-chip
+        :class="{ 'text-secondaryGreen': event.isPrivate, 'text-secondaryBlue': !event.isPrivate }"
+        >{{ event.isPrivate ? 'Private' : 'Official' }}</v-chip
       >
     </v-card-title>
     <v-card-subtitle class="text-primaryRed font-italic"
-      >{{ startDate }} - {{ endDate }}</v-card-subtitle
+      >{{ event.startDate }} - {{ event.endDate }}</v-card-subtitle
     >
-    <v-card-text>{{ description }}</v-card-text>
+    <v-card-text>{{ event.description }}</v-card-text>
   </v-card>
 </template>
 
 <script setup lang="ts">
-interface Props {
+interface Event {
   id: number
   name: string
   startDate: string
   endDate: string
   description: string
-  canEdit: boolean
   isPrivate: boolean
 }
-const props = defineProps<Props>()
+const props = defineProps<{event: Event, isTeamAdmin: boolean}>()
 const emit = defineEmits(['edit'])
 
 function openModal() {
-  emit('edit', props.id)
+  emit('edit', props.event.id)
 }
 </script>
 

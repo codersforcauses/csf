@@ -1,48 +1,42 @@
 <template>
-  <v-toolbar class="bg-primaryWhite py-2">
-    <v-text-field
+  <v-row class="bg-primaryWhite pl-4 pt-4" align="center" no-gutters>
+    <v-col>
+      <v-text-field
       prepend-inner-icon="mdi-magnify"
       hide-details
       placeholder="Search Events"
       clearable
       v-model="searchQuery"
-      class="ma-5"
     />
-    <v-btn
-      v-if="tempIsTeamAdmin"
-      size="x-large"
-      density="compact"
-      icon="mdi-plus"
-      class="bg-primaryRed text-primaryWhite mr-5"
-      @click="isAddingEvent = true"
-    >
-    </v-btn>
-  </v-toolbar>
+    </v-col>
+    <v-col class="justify-center d-flex" cols="2">
+      <v-btn
+        v-if="tempIsTeamAdmin"
+        size="x-large"
+        density="compact"
+        icon="mdi-plus"
+        class="bg-primaryRed text-primaryWhite"
+        @click="isAddingEvent = true"
+      >
+      </v-btn>
+    </v-col>
+  </v-row>
   <div id="cards-container" class="bg-primaryWhite pt-4">
     <Event
-      v-for="(event, index) in filteredEventsList"
+      v-for="event in filteredEventsList"
       key="event.id"
-      :id="event.id"
-      :name="event.name"
-      :start-date="event.startDate"
-      :end-date="event.endDate"
-      :description="event.description"
-      :can-edit="tempIsTeamAdmin && event.isPrivate"
-      :is-private="event.isPrivate"
+      :event="event"
+      :isTeamAdmin="tempIsTeamAdmin"
       @edit="openEditModal"
     />
   </div>
-  <EventsModal :type="'Create'" @close="closeModal" v-model="isAddingEvent"></EventsModal>
+  <EventsModal v-if="isAddingEvent" :type="'Create'" @close="closeModal" v-model="isAddingEvent"></EventsModal>
   <EventsModal
     v-if="isEditingEvent"
     :type="'Edit'"
+    :event="editingEvent"
     @close="closeModal"
     v-model="isEditingEvent"
-    :id="editingEvent.id"
-    :orignal-name="editingEvent.name"
-    :original-start-date="editingEvent.startDate"
-    :original-end-date="editingEvent.endDate"
-    :original-description="editingEvent.description"
   ></EventsModal>
 </template>
 
