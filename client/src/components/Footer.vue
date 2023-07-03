@@ -1,13 +1,13 @@
 <template>
   <v-img src="/images/Footer-min.jpeg" height="120" cover>
-    <p class="text-primaryWhite pl-2 font-weight-bold mt-2">Contact Us</p>
-    <v-row align="center" no-gutters class="pl-3">
+    <p class="text-primaryWhite pl-3 font-weight-bold mt-2">Contact Us</p>
+    <v-row align="center" no-gutters class="pl-5">
       <v-col cols="auto">
         <v-icon color="white" class="pr-3">mdi-email</v-icon>
         <a class="text-primaryWhite">admin@communityspiritfoundation.org.au</a>
       </v-col>
     </v-row>
-    <v-row align="center" no-gutters class="pl-4">
+    <v-row align="center" no-gutters class="pl-6">
       <v-icon color="white" size="small" class="pr-4">mdi-phone</v-icon>
       <p class="text-primaryWhite">(03) 9686 4813</p>
     </v-row>
