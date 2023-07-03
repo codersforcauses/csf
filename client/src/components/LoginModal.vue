@@ -1,9 +1,6 @@
 <template>
   <section>
     <v-dialog v-model="dialog" :fullscreen="mobile" max-width="500px">
-      <template v-slot:activator="{ props }">
-        <v-btn v-bind="props">Login</v-btn>
-      </template>
       <v-card>
         <form @submit.prevent="submitForm">
           <v-card-title>
@@ -29,25 +26,20 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
-import { useUserStore } from '@/stores/user'
 
 const { mobile } = useDisplay()
-const userStore = useUserStore()
-
-const dialog = ref(false)
+const dialog = ref(true)
 
 const form = ref({
   email: '',
   password: ''
 })
 
-const submitForm = async () => {
+const submitForm = () => {
   console.log('Email:', form.value.email)
   console.log('Password:', form.value.password)
-  await userStore.loginUser(form.value.email, form.value.password)
   closeDialog()
 }
-
 const closeDialog = () => {
   dialog.value = false
 }
