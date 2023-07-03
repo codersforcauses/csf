@@ -2,8 +2,8 @@
   <v-img src="/images/CSF_Website_Banner_01.jpg" width="100%"></v-img>
   <v-row style="background-color: #202020" class="pt-8 px-8" no-gutters justify="center">
     <h2 class="text-secondaryTint text-center">
-      <span class="font-weight-bold">Education changes lives:</span> we are challenging all of you
-      to let your kilometres make a difference!
+      <span class="font-weight-bold">Education changes lives:</span>
+      we are challenging all of you to let your kilometres make a difference!
     </h2>
   </v-row>
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
@@ -33,11 +33,19 @@
   </p>
   <!-- TODO: Use CSF for button -->
   <v-row justify="end" class="px-8 pb-4" no-gutters>
-    <v-btn class="bg-primaryRed" size="x-large" variant="flat"> REGISTER NOW </v-btn>
+    <v-btn
+      class="bg-primaryRed pb-14"
+      size="x-large"
+      variant="flat"
+      :style="{ fontFamily: 'Hackney', fontSize: '42px' }"
+      style="letter-spacing: -1px"
+    >
+      REGISTER NOW
+    </v-btn>
   </v-row>
 
   <v-row class="px-8 bg-secondaryBlue" no-gutters>
-    <h2 class="py-5">OUR STORY</h2>
+    <h2 class="py-2" :style="{ fontFamily: 'Hackney', fontSize: '58px' }">OUR STORY</h2>
     <v-divider class="mr-16" />
     <p class="py-5">
       Working in partnership with remote First Nations peoples to ensure their young people have the
@@ -46,7 +54,7 @@
     </p>
   </v-row>
   <v-row class="px-8 bg-secondaryGreen" no-gutters>
-    <h2 class="py-5">OUR MISSION</h2>
+    <h2 class="py-2" :style="{ fontFamily: 'Hackney', fontSize: '58px' }">OUR MISSION</h2>
     <v-divider class="mr-16" />
     <p class="py-5">
       To work alongside remote First Nations Peoples and communities to enable their young people to
@@ -54,7 +62,7 @@
     </p>
   </v-row>
   <v-row class="px-8 bg-primaryRed" no-gutters>
-    <h2 class="py-5">OUR BELIEFS</h2>
+    <h2 class="py-2" :style="{ fontFamily: 'Hackney', fontSize: '58px' }">OUR BELIEFS</h2>
     <v-divider class="mr-16" />
     <v-list no-gutters class="bg-primaryRed my-3">
       <v-list-item v-for="belief in beliefs" :key="belief">
@@ -68,8 +76,8 @@
     </v-list>
   </v-row>
   <v-img src="/images/students_learning.webp" width="100%"></v-img>
-  <v-row class="px-8 pt-5 bg-secondaryGrey text-secondaryTint" no-gutters>
-    <h2 class="py-5">DONATE TODAY</h2>
+  <v-row class="px-8 bg-secondaryGrey text-secondaryTint" no-gutters>
+    <h2 class="py-2" :style="{ fontFamily: 'Hackney', fontSize: '58px' }">DONATE TODAY</h2>
     <v-divider class="mr-16" />
     <p class="py-5">
       The vision at Community Spirit Foundation has always been ambitious but simple: An Australia
@@ -80,8 +88,15 @@
       By donating to Community Spirit Foundation you will be supporting Aboriginal and Torres Strait
       Islander Children to dream big and have choices.
     </p>
-    <v-row justify="end" class="pa-8 mb-4" no-gutters>
-      <v-btn class="bg-primaryRed" size="x-large"> DONATE </v-btn>
+    <v-row justify="end" class="pa-8" no-gutters>
+      <v-btn
+        class="bg-primaryRed pb-14"
+        size="x-large"
+        :style="{ fontFamily: 'Hackney', fontSize: '42px' }"
+        style="letter-spacing: -0.5px"
+      >
+        <span>DONATE</span>
+      </v-btn>
     </v-row>
   </v-row>
   <v-img src="/images/thank_you.jpg" width="100%"></v-img>
@@ -100,14 +115,14 @@
 import Footer from '@/components/Footer.vue'
 import { ref } from 'vue'
 
-const beliefs = ref([
+const beliefs = [
   'Every young person we work with should be able to dream big and be proud.',
   'Building community capacity is our priority.',
   'We work to a community development approach with long term partnerships at the core.',
   'To achieve and have a life full of opportunity, we believe education is key.',
   'Education can be in many forms – formal, informal, and lifelong. Culturally responsive education is paramount.',
   'Culturally responsive education is paramount.'
-])
+]
 </script>
 
 <style></style>
