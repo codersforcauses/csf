@@ -104,7 +104,7 @@ const openSignUpModal = () => {
   signupModal.value = !signupModal.value
 }
 const menu = [
-  { icon: 'mdi-card-account-details-outline', title: 'About Us', link: '/about' },
+  { icon: 'mdi-card-account-details-outline', title: 'About Us', link: '/' },
   { icon: 'mdi-chart-bar', title: 'Dashboard', link: '/' },
   { icon: 'mdi-trophy', title: 'Challenges', link: '/' },
   { icon: 'mdi-account-group', title: 'Team Page', link: '/' },
