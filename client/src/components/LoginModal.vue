@@ -42,7 +42,6 @@ const closeModal = () => {
   emit('openLoginModal', false)
 }
 
-
 const submitForm = () => {
   console.log('Email:', form.value.email)
   console.log('Password:', form.value.password)
