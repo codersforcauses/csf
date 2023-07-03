@@ -92,12 +92,8 @@ class EventTests(APITestCase):
         self.assertEqual(response.data, "Event is not private")
 
     def test_delete_event(self):
-        all_event = Event.objects.get()
+        eventToDelete = Event.objects.get(name="eventTestPrivate")
         response = self.client.get(
-            reverse("event:get-event"),
-            # {   "name":"eventTestPublic", 
-            #     "description":"public event for unit test",
-            # },
-            # format="json",
+            reverse("event:get-event",kwargs={"event_id":eventToDelete.event_id}),
         )
 
