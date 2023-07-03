@@ -108,7 +108,7 @@ const menu = [
   { icon: 'mdi-chart-bar', title: 'Dashboard', link: '/' },
   { icon: 'mdi-trophy', title: 'Challenges', link: '/' },
   { icon: 'mdi-account-group', title: 'Team Page', link: '/' },
-  { icon: 'mdi-calendar', title: 'Events', link: '/' },
+  { icon: 'mdi-calendar', title: 'Events', link: '/events' },
   { icon: 'mdi-star', title: 'Leaderboards', link: '/' },
   // todo remove this and copy the signup design exactly
   { icon: 'mdi-login', title: 'Login', link: '/' }

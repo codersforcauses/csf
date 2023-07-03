@@ -2,7 +2,7 @@
   <v-dialog v-model="dialog" :fullscreen="isFullscreen" max-width="500px">
     <v-card style="height: 100%">
       <div v-if="firstPage">
-        <form class="bg-primaryForm">
+        <form class="bg-backgroundGrey">
           <v-container class="pa-0">
             <v-img src="/images/Footer-min.jpeg" width="100%" height="10" cover></v-img>
           </v-container>
@@ -14,7 +14,7 @@
             </v-col>
           </v-row>
           <v-card-title class="d-flex justify-center">
-            <v-card flat color="primaryForm">
+            <v-card flat color="backgroundGrey">
               <v-card-item>
                 <v-card-title class="text-center text-h4 pb-2">Register</v-card-title>
                 <v-card-subtitle class="text-center text-subtitle-1"
@@ -115,7 +115,7 @@
         </form>
       </div>
       <div v-if="!firstPage">
-        <form style="bottom: auto" class="bg-primaryForm" @submit.prevent="">
+        <form style="bottom: auto" class="bg-backgroundGrey" @submit.prevent="">
           <v-container class="pa-0">
             <v-img src="/images/Footer-min.jpeg" width="auto" height="10" cover></v-img>
           </v-container>
@@ -127,7 +127,7 @@
             </v-col>
           </v-row>
           <v-card-title class="d-flex justify-center">
-            <v-card class="" flat color="primaryForm">
+            <v-card class="" flat color="backgroundGrey">
               <v-card-item>
                 <v-card-title class="text-center text-h4 pb-2">Register</v-card-title>
                 <v-card-subtitle class="text-center text-subtitle-1"
