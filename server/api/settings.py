@@ -24,6 +24,7 @@ SECRET_KEY = os.environ.get("API_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("APP_ENV") == "DEVELOPMENT"
+
 ALLOWED_HOSTS = (
     os.environ.get("API_ALLOWED_HOSTS").split()
     if os.environ.get("API_ALLOWED_HOSTS")
