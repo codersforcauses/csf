@@ -18,8 +18,8 @@
 </template>
 
 <script setup lang="ts">
-import Event from "../types/event"
-const props = defineProps<{event: Event, isTeamAdmin: boolean}>()
+import type Event from '../types/event'
+const props = defineProps<{ event: Event; isTeamAdmin: boolean }>()
 const emit = defineEmits(['edit'])
 
 function openModal() {

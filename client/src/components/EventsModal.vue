@@ -54,14 +54,14 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import type Event from "../types/event"
-const props = defineProps<{type: 'Create' | 'Edit', event?: Event}>()
+import type Event from '../types/event'
+const props = defineProps<{ type: 'Create' | 'Edit'; event?: Event }>()
 const emit = defineEmits(['close'])
 
-const name = ref(props.event ? props.event.name : "")
-const startDate = ref(props.event ? props.event.startDate : "")
-const endDate = ref(props.event ? props.event.endDate : "")
-const description = ref(props.event ? props.event.description: "")
+const name = ref(props.event ? props.event.name : '')
+const startDate = ref(props.event ? props.event.startDate : '')
+const endDate = ref(props.event ? props.event.endDate : '')
+const description = ref(props.event ? props.event.description : '')
 
 function addEvent() {
   console.log(

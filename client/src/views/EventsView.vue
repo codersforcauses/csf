@@ -2,12 +2,12 @@
   <v-row class="bg-primaryWhite pl-4 pt-4" align="center" no-gutters>
     <v-col>
       <v-text-field
-      prepend-inner-icon="mdi-magnify"
-      hide-details
-      placeholder="Search Events"
-      clearable
-      v-model="searchQuery"
-    />
+        prepend-inner-icon="mdi-magnify"
+        hide-details
+        placeholder="Search Events"
+        clearable
+        v-model="searchQuery"
+      />
     </v-col>
     <v-col class="justify-center d-flex" cols="2">
       <v-btn
@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import EventCard from '../components/EventCard.vue'
-import type Event from "../types/event"
+import type Event from '../types/event'
 import EventsModal from '../components/EventsModal.vue'
 import { ref, computed } from 'vue'
 
@@ -98,8 +98,8 @@ const isEditingEvent = ref<boolean>(false)
 const editingEvent = ref<Event>(<Event>{})
 
 function closeModal() {
-  isAddingEvent.value = false;
-  isEditingEvent.value = false;
+  isAddingEvent.value = false
+  isEditingEvent.value = false
 }
 
 function openEditModal(id: number) {
