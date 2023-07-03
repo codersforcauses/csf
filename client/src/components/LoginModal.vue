@@ -15,7 +15,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="primary" @click="submitForm">Submit</v-btn>
-            <v-btn color="primary" @click="closeDialog">Cancel</v-btn>
+            <v-btn color="primary" @click="closeModal">Cancel</v-btn>
           </v-card-actions>
         </form>
       </v-card>
@@ -35,12 +35,20 @@ const form = ref({
   password: ''
 })
 
+defineProps(['loginModal'])
+const emit = defineEmits(['openLoginModal'])
+
+const closeModal = () => {
+  emit('openLoginModal', false)
+}
+
+
 const submitForm = () => {
   console.log('Email:', form.value.email)
   console.log('Password:', form.value.password)
-  closeDialog()
+  closeModal()
 }
-const closeDialog = () => {
-  dialog.value = false
-}
+// const closeDialog = () => {
+//   dialog.value = false
+// }
 </script>

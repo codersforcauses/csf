@@ -96,7 +96,7 @@
     @open-signUp-modal="openSignUpModal"
   />
 
-  <LoginModalVue :dialog-modal="loginModal" v-if="loginModal" @open-signUp-modal="openLoginModal" />
+  <LoginModalVue :dialog-modal="loginModal" v-if="loginModal" @open-login-modal="openLoginModal" />
 </template>
 
 <script setup lang="ts">
