@@ -1,6 +1,6 @@
 <template>
   <v-img :src="CSFBanner" width="100%"></v-img>
-  <v-row style="background-color: #202020" class="pt-8 px-8" no-gutters justify="center">
+  <v-row class="pt-8 px-8 bg-secondaryGrey" no-gutters justify="center">
     <h2 class="text-secondaryTint text-center">
       <span class="font-weight-bold">Education changes lives:</span>
       we are challenging all of you to let your kilometres make a difference!
@@ -12,7 +12,7 @@
       d="m0 64 60 10.7c60 10.3 180 32.3 300 48 120 16.3 240 26.3 360 16C840 128 960 96 1080 85.3c120-10.3 240-.3 300 5.4l60 5.3V0H0Z"
     />
   </svg>
-  <v-img :src="StrideForEducationRBGLogo" class="px-8 mt-n8 mb-8" width="100%"></v-img>
+  <v-img :src="StrideForEducationRBGLogo" class="px-8 mt-n8 mb-8 w-100" />
   <v-divider class="mx-4" />
   <p class="pa-8">
     Community Spirit Foundation is running Stride For Education – a challenge designed to motivate
@@ -31,8 +31,7 @@
     Foundation's journey of helping to support First Nations young people to realise their potential
     through lifelong learning.
   </p>
-  <!-- TODO: Use CSF for button -->
-  <v-row justify="end" class="px-8 pb-4" no-gutters>
+  <v-row justify="center" class="px-8 pb-4" no-gutters>
     <v-btn
       class="bg-primaryRed pb-14"
       size="x-large"
@@ -89,7 +88,7 @@
       By donating to Community Spirit Foundation you will be supporting Aboriginal and Torres Strait
       Islander Children to dream big and have choices.
     </p>
-    <v-row justify="end" class="pa-8" no-gutters>
+    <v-row justify="center" class="pa-8" no-gutters>
       <v-btn
         class="bg-primaryRed pb-14"
         size="x-large"
