@@ -1,23 +1,24 @@
 <template>
-  <v-toolbar class="bg-primaryWhite">
+  <v-toolbar class="bg-primaryWhite py-2">
     <v-text-field
       prepend-inner-icon="mdi-magnify"
       hide-details
       placeholder="Search Events"
       clearable
       v-model="searchQuery"
+      class="ma-5"
     />
     <v-btn
       v-if="tempIsTeamAdmin"
+      size="x-large"
+      density="compact"
       icon="mdi-plus"
-      size="small"
-      id="add-event-btn"
-      class="bg-primaryRed text-primaryWhite"
+      class="bg-primaryRed text-primaryWhite mr-5"
       @click="isAddingEvent = true"
-    ></v-btn>
+    >
+    </v-btn>
   </v-toolbar>
-  <div id="cards-container">
-    <br />
+  <div id="cards-container" class="bg-primaryWhite pt-4">
     <Event
       v-for="(event, index) in filteredEventsList"
       key="event.id"
@@ -111,8 +112,8 @@ const isEditingEvent = ref<boolean>(false)
 const editingEvent = ref<Event>(<Event>{})
 
 function closeModal() {
-  isAddingEvent.value = false
-  isEditingEvent.value = false
+  isAddingEvent.value = false;
+  isEditingEvent.value = false;
 }
 
 function openEditModal(id: number) {
@@ -125,13 +126,6 @@ function openEditModal(id: number) {
 </script>
 
 <style>
-#add-event-btn {
-  font-size: 20px;
-  margin-right: 20px;
-}
-.v-text-field {
-  margin: 20px;
-}
 #cards-container > .v-card:nth-child(odd) {
   background-color: #f4f4f4;
 }
