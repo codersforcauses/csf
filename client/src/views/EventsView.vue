@@ -97,7 +97,7 @@ const isAddingEvent = ref<boolean>(false)
 const isEditingEvent = ref<boolean>(false)
 const editingEvent = ref<Event>(<Event>{})
 
-function closeModal() {
+let closeModal = () => {
   isAddingEvent.value = false
   isEditingEvent.value = false
 }
