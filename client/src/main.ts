@@ -24,7 +24,8 @@ const csfCustomTheme: ThemeDefinition = {
     secondaryGreen: 'rgb(0, 157, 79)',
     secondaryBlue: 'rgb(52, 94, 158)',
     secondaryTint: 'rgb(249, 241, 227)',
-    secondaryGrey: '#202020'
+    secondaryGrey: '#202020',
+    primaryForm: 'rgb(236,236,236)'
   }
 }
 
