@@ -19,7 +19,6 @@ coverage
 
 # Editor directories and files
 
-client/.yarn
 
 .vscode/*
 !.vscode/extensions.json
