@@ -21,4 +21,5 @@ import { ref } from 'vue'
 // change these values to show the different modals
 const user_id = ref(true)
 const team_id = ref(true)
+
 </script>
