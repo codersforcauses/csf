@@ -1,12 +1,8 @@
 <template>
   <v-toolbar dark app color="black" class="hidden-sm-and-down">
-    <v-img
-      src="/images/CSF_Logo_WHITE.png"
-      width="125"
-      height="60"
-      max-width="125"
-      max-height="60"
-    ></v-img>
+    <v-btn :width="125" :height="60" :to="homelink" :active="false">
+      <v-img :width="125" :height="60" cover src="../../public/images/CSF_Logo_WHITE.png"></v-img>
+    </v-btn>
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down">
       <v-btn v-for="item in menu" :key="item.title" :to="item.link" flat>{{ item.title }}</v-btn>
@@ -15,13 +11,9 @@
     </v-toolbar-items>
   </v-toolbar>
   <v-toolbar dark app color="black" class="hidden-md-and-up">
-    <v-img
-      src="/images/CSF_Logo_WHITE.png"
-      width="125"
-      height="60"
-      max-width="125"
-      max-height="60"
-    ></v-img>
+    <v-btn :width="125" :height="60" :to="homelink" :active="false">
+      <v-img :width="125" :height="60" cover src="../../public/images/CSF_Logo_WHITE.png"></v-img>
+    </v-btn>
     <v-spacer></v-spacer>
     <v-dialog
       v-model="dialog"
@@ -37,13 +29,9 @@
       <v-card color="black">
         <v-container class="pa-0 ma-0">
           <v-toolbar dark app color="black" class="hidden-md-and-up">
-            <v-img
-              src="/images/CSF_Logo_WHITE.png"
-              width="125"
-              height="60"
-              max-width="125"
-              max-height="60"
-            ></v-img>
+            <v-btn :width="125" :height="60" :to="homelink" @click="dialog = false" :active="false">
+              <v-img :width="125" :height="60" cover src="../../public/images/CSF_Logo_WHITE.png"></v-img>
+            </v-btn>
             <v-spacer></v-spacer>
             <v-btn icon @click="dialog = false" class="hidden-md-and-up pr-3">
               <v-icon>mdi-close</v-icon>
@@ -110,6 +98,8 @@ const dialog = ref<boolean>(false)
 const signupModal = ref<boolean>(false)
 const loginModal = ref<boolean>(false)
 
+let homelink = '/'
+
 const openSignUpModal = () => {
   signupModal.value = !signupModal.value
 }
@@ -117,6 +107,7 @@ const openSignUpModal = () => {
 const openLoginModal = () => {
   loginModal.value = !loginModal.value
 }
+
 
 const menu = [
   { icon: 'mdi-card-account-details-outline', title: 'About Us', link: '/about' },
