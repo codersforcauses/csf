@@ -1,7 +1,3 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
     <div id="header-container" class="text-white">
         <h1 class="text-md-h1 mt-10 mb-10">Challenges</h1>
@@ -12,30 +8,22 @@
         </div>
     </div>
     <v-sheet class="d-flex flex-wrap justify-center">
-        <v-card class="pa-2 align-self-auto challenge-card" >
-            <v-img class="text-white challenge-image" src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"> 
-                <v-title class="text-h4">Challenge</v-title>
-
-            </v-img>
-        </v-card>
-        <v-card class="pa-2 align-self-auto challenge-card" title="Card title" text="...">
-            <v-card-actions>
-                <v-btn>Now there is a lot more text</v-btn>
-            </v-card-actions>
-        </v-card>
-        <v-card class="pa-2 align-self-auto challenge-card" title="Card title" text="...">
-            <v-card-actions>
-                <v-btn>Now there is a lot more text</v-btn>
-            </v-card-actions>
-        </v-card>
-        <v-card class="pa-2 align-self-auto challenge-card" title="Card title" text="...">
-            <v-card-actions>
-                <v-btn>Now there is a lot more text</v-btn>
-            </v-card-actions>
+        <v-card class="pa-2 align-self-auto challenge-card dark" v-for="challenge in challenges" v-bind:style="{ backgroundImage: 'url(' + challenge.img + ')' }" style>
+            <v-title class="text-h4">{{ challenge.title }}</v-title>
         </v-card>
 
     </v-sheet>
 </template>
+
+<script setup lang="ts">
+const challenges = [
+    { title: "card1", img: "https://cdn.vuetifyjs.com/images/cards/docks.jpg", about: "some text", km: "", totalkm: ""},
+    { title: "card1", img: "https://cdn.vuetifyjs.com/images/cards/docks.jpg", about: "some text", km: "", totalkm: ""},
+    { title: "card1", img: "https://cdn.vuetifyjs.com/images/cards/docks.jpg", about: "some text", km: "", totalkm: ""},
+    { title: "card1", img: "https://cdn.vuetifyjs.com/images/cards/docks.jpg", about: "some text", km: "", totalkm: ""}
+]
+
+</script>
   
 <style>
 @media only screen and (max-width: 800px) {
