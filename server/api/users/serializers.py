@@ -1,5 +1,5 @@
 from rest_framework import serializers
- 
+
 from . import User
 
 class signup_modelSerializer(serializers.ModelSerializer):
