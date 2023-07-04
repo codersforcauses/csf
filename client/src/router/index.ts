@@ -3,6 +3,8 @@ import HomeView from '../views/HomeView.vue'
 import SignupView from '../views/SignupView.vue'
 
 import LoginView from '../views/LoginView.vue'
+
+import EventsView from '../views/EventsView.vue'
 import ChallengeView from '../views/ChallengeView.vue'
 
 const router = createRouter({
@@ -22,11 +24,6 @@ const router = createRouter({
       path: '/signup',
       name: 'signup',
       component: SignupView
-    },
-    {
-      path: '/challenge',
-      name: 'challenge',
-      component: ChallengeView
     }
   ]
 })
