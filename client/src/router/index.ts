@@ -24,6 +24,16 @@ const router = createRouter({
       path: '/signup',
       name: 'signup',
       component: SignupView
+    },
+    {
+      path: '/events',
+      name: 'events',
+      component: EventsView
+    },
+    {
+      path: '/challenge',
+      name: 'challenge',
+      component: ChallengeView
     }
   ]
 })
