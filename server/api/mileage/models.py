@@ -10,4 +10,4 @@ class Mileage(models.Model):
     date = models.DateField(default=datetime.date.today)
 
     def __str__(self):
-        return f'{self.user} {self.kilometres} {self.date}'
+        return f'{self.user_id} {self.kilometres} {self.date}'
