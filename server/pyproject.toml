@@ -11,6 +11,7 @@ Django = "^4.2.2"
 djangorestframework = "^3.14.0"
 psycopg = {extras = ["binary", "pool"], version = "^3.1.9"}
 djangorestframework-simplejwt = "^5.2.2"
+django-cors-headers = "^4.1.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.3.2"
