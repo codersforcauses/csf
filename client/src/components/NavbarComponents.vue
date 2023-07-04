@@ -10,6 +10,8 @@
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down">
       <v-btn v-for="item in menu" :key="item.title" :to="item.link" flat>{{ item.title }}</v-btn>
+      <v-btn active @click="openLoginModal">LOGIN</v-btn>
+      <v-btn active @click="openSignUpModal">SIGNUP</v-btn>
     </v-toolbar-items>
   </v-toolbar>
   <v-toolbar dark app color="black" class="hidden-md-and-up">
@@ -70,28 +72,59 @@
             </template>
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>
+          <v-list-item @click="openLoginModal" variant="tonal">
+            <template v-slot:prepend>
+              <v-icon style="color: #fff; opacity: 1" icon="mdi-login"></v-icon>
+            </template>
+            <v-list-item-title>Login</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="openSignUpModal" variant="tonal">
+            <template v-slot:prepend>
+              <v-icon style="color: #fff; opacity: 1" icon="mdi-pencil-box"></v-icon>
+            </template>
+            <v-list-item-title>Sign Up</v-list-item-title>
+          </v-list-item>
         </v-list>
       </v-card>
     </v-dialog>
   </v-toolbar>
   <v-img src="/images/Footer-min.jpeg" width="100%" height="8" cover></v-img>
+
+  <SignUpModal
+    :dialog-modal="signupModal"
+    v-if="signupModal"
+    @open-signUp-modal="openSignUpModal"
+  />
+
+  <LoginModalVue :dialog-modal="loginModal" v-if="loginModal" @open-login-modal="openLoginModal" />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
+import SignUpModal from './SignUpModal.vue'
+import LoginModalVue from './LoginModal.vue'
 
 const { mobile } = useDisplay()
-const dialog = ref(false)
+const dialog = ref<boolean>(false)
+const signupModal = ref<boolean>(false)
+const loginModal = ref<boolean>(false)
+
+const openSignUpModal = () => {
+  signupModal.value = !signupModal.value
+}
+
+const openLoginModal = () => {
+  loginModal.value = !loginModal.value
+}
+
 const menu = [
   { icon: 'mdi-card-account-details-outline', title: 'About Us', link: '/about' },
   { icon: 'mdi-chart-bar', title: 'Dashboard', link: '/' },
   { icon: 'mdi-trophy', title: 'Challenges', link: '/' },
-  { icon: 'mdi-account-group', title: 'Team Page', link: '/teams' },
-  { icon: 'mdi-calendar', title: 'Events', link: '/' },
-  { icon: 'mdi-star', title: 'Leaderboards', link: '/' },
-  { icon: 'mdi-login', title: 'Login', link: '/login' },
-  { icon: 'mdi-pencil-box', title: 'Sign Up', link: '/signup' }
+  { icon: 'mdi-account-group', title: 'Team Page', link: '/' },
+  { icon: 'mdi-calendar', title: 'Events', link: '/events' },
+  { icon: 'mdi-star', title: 'Leaderboards', link: '/' }
 ]
 </script>
 
