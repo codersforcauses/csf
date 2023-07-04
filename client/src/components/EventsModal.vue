@@ -49,8 +49,10 @@
             :title="confirmEditTitle"
             :text="confirmEditText"
             :submit-text="submitEditEvent"
-            @handle-submit="editEvent"/>
-          DONE</v-btn>
+            @handle-submit="editEvent"
+          />
+          DONE</v-btn
+        >
       </v-card-actions>
       <v-card-actions v-else class="justify-center mb-4">
         <v-btn class="bg-primaryRed" @click="displayConfirmAdd = true">
@@ -59,8 +61,10 @@
             :title="confirmAddTitle"
             :text="confirmAddText"
             :submit-text="submitAddEvent"
-            @handle-submit="addEvent"/>
-          DONE</v-btn>
+            @handle-submit="addEvent"
+          />
+          DONE</v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -77,7 +81,7 @@ const startDate = ref(props.event ? props.event.startDate : '')
 const endDate = ref(props.event ? props.event.endDate : '')
 const description = ref(props.event ? props.event.description : '')
 
-import PopupDialog from './PopupDialog.vue';
+import PopupDialog from './PopupDialog.vue'
 const displayConfirmAdd = ref(false)
 const confirmAddTitle = ref('Confirm create event')
 const confirmAddText = ref('Are you sure you wish to create this event?')
