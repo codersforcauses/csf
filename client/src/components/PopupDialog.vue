@@ -13,15 +13,13 @@ const value = computed({
     emit('update:modelValue', value)
   }
 })
-
-const { mobile } = useDisplay()
 </script>
 
 <template>
-  <v-dialog v-model="value" :fullscreen="mobile" max-width="912px">
+  <v-dialog v-model="value" max-width="912px">
     <v-card class="d-flex flex-column">
       <div style="height: 8px">
-        <v-img src="/images/Footer-min.jpeg" width="100%" cover></v-img>
+        <v-img src="/images/Footer-min.jpeg" width="100%" cover/>
       </div>
       <v-card-item>
         <v-card-title>{{ title }}</v-card-title>
