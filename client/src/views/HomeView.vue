@@ -19,14 +19,4 @@ const handleSubmit = () => {
     <RouterLink to="/login">Login</RouterLink>
     <RouterLink to="/signup">signup</RouterLink>
   </nav>
-  <v-btn @click="display = true">
-    <PopupDialog
-      v-model="display"
-      :title="title"
-      :text="text"
-      :submit-text="submitText"
-      @handle-submit="handleSubmit"
-    />
-    Popup
-  </v-btn>
 </template>
