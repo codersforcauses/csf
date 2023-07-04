@@ -2,12 +2,12 @@
   <v-card class="mx-3">
     <v-card-title>
       <span class="font-weight-bold">{{ event.name }}</span>
-      <v-icon v-if="isTeamAdmin && event.isPrivate" icon="mdi-pencil" @click="openModal"></v-icon>
+      <v-icon v-if="isTeamAdmin && !event.isPublic" icon="mdi-pencil" @click="openModal"></v-icon>
       <v-spacer></v-spacer>
       <v-chip
         variant="outlined"
-        :class="{ 'text-secondaryGreen': event.isPrivate, 'text-secondaryBlue': !event.isPrivate }"
-        >{{ event.isPrivate ? 'Private' : 'Official' }}</v-chip
+        :class="{ 'text-secondaryGreen': !event.isPublic, 'text-secondaryBlue': event.isPublic }"
+        >{{ !event.isPublic ? 'Private' : 'Official' }}</v-chip
       >
     </v-card-title>
     <v-card-subtitle class="text-primaryRed font-italic"

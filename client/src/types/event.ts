@@ -4,5 +4,5 @@ export default interface Event {
   startDate: string
   endDate: string
   description: string
-  isPrivate: boolean
+  isPublic: boolean
 }
