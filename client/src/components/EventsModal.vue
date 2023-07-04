@@ -43,10 +43,24 @@
         <v-btn variant="outlined" class="text-secondaryBlue mr-16" @click="archiveEvent"
           >ARCHIVE</v-btn
         >
-        <v-btn class="bg-primaryRed ml-16" @click="editEvent">DONE</v-btn>
+        <v-btn class="bg-primaryRed ml-16" @click="displayConfirmEdit = true">
+          <PopupDialog
+            v-model="displayConfirmEdit"
+            :title="confirmEditTitle"
+            :text="confirmEditText"
+            :submit-text="submitEditEvent"
+            @handle-submit="editEvent"/>
+          DONE</v-btn>
       </v-card-actions>
       <v-card-actions v-else class="justify-center mb-4">
-        <v-btn class="bg-primaryRed" @click="addEvent">DONE</v-btn>
+        <v-btn class="bg-primaryRed" @click="displayConfirmAdd = true">
+          <PopupDialog
+            v-model="displayConfirmAdd"
+            :title="confirmAddTitle"
+            :text="confirmAddText"
+            :submit-text="submitAddEvent"
+            @handle-submit="addEvent"/>
+          DONE</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -62,6 +76,17 @@ const name = ref(props.event ? props.event.name : '')
 const startDate = ref(props.event ? props.event.startDate : '')
 const endDate = ref(props.event ? props.event.endDate : '')
 const description = ref(props.event ? props.event.description : '')
+
+import PopupDialog from './PopupDialog.vue';
+const displayConfirmAdd = ref(false)
+const confirmAddTitle = ref('Confirm create event')
+const confirmAddText = ref('Are you sure you wish to create this event?')
+const submitAddEvent = ref('Create')
+
+const displayConfirmEdit = ref(false)
+const confirmEditTitle = ref('Confirm event change')
+const confirmEditText = ref('Are you sure you wish to edit this event?')
+const submitEditEvent = ref('Edit')
 
 function addEvent() {
   console.log(
