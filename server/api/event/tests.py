@@ -2,13 +2,17 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from .models import Event
+from .models import Event, Team
 
 import datetime
 
 
 class EventTests(APITestCase):
     def setUp(self):
+        createTeam = Team.objects.create(
+                name="mockTeam",
+                join_code="mockTeam",
+        )
         Event.objects.create(
             name="eventTestPublic",
             start_date=datetime.date.today(),
@@ -16,6 +20,7 @@ class EventTests(APITestCase):
             description="public event for unit test",
             is_public=True,
             is_archived=False,
+            team_id=createTeam,
         )
         Event.objects.create(
             name="eventTestPrivate",
@@ -24,6 +29,7 @@ class EventTests(APITestCase):
             description="private event for unit test",
             is_public=False,
             is_archived=True,
+            team_id=createTeam,
         )
 
     def test_create_event(self):
@@ -51,6 +57,7 @@ class EventTests(APITestCase):
         self.assertEqual(created_event.is_archived, False)
 
     def test_get_event(self):
+        existingTeam = Team.objects.get()
         one_event = Event.objects.get(name="eventTestPublic")
         response = self.client.get(
             reverse("event:get-event", kwargs={"event_id": one_event.event_id})
@@ -62,6 +69,7 @@ class EventTests(APITestCase):
         self.assertEqual(one_event.description, "public event for unit test")
         self.assertEqual(one_event.is_public, True)
         self.assertEqual(one_event.is_archived, False)
+        self.assertEqual(one_event.team_id, existingTeam)
 
     def test_get_events(self):
         all_event = Event.objects.all()
