@@ -16,8 +16,9 @@
         class="mx-5"></v-text-field>
       <v-textarea hide-details bg-color="white" label="Description" v-model="description" class="mx-5"></v-textarea>
       <v-card-actions v-if="type === 'Edit'" class="justify-center mb-4">
-        <v-btn variant="outlined" class="text-secondaryBlue mr-16" @click="archiveEvent">ARCHIVE</v-btn>
-        <v-btn class="bg-primaryRed ml-16" @click="editEvent">DONE</v-btn>
+        <v-btn variant="outlined" class="text-secondaryBlue mr-16 " @click="archiveEvent">ARCHIVE</v-btn>
+        <v-btn class="bg-primaryRed" @click="editEvent">DONE</v-btn>
+        <v-btn variant="outlined" class="text-primaryRed ml-16" @click="deleteEvent">DELETE</v-btn>
       </v-card-actions>
       <v-card-actions v-else class="justify-center mb-4">
         <v-btn class="bg-primaryRed" @click="addEvent">DONE</v-btn>
@@ -30,7 +31,7 @@
 import { ref } from 'vue'
 import { type Event } from '../types/event'
 import { useEventStore } from '../stores/event';
-const props = defineProps<{ type: 'Create' | 'Edit'; event?: Event }>()
+const props = defineProps<{ type: 'Create' | 'Edit'; event: Event }>()
 const emit = defineEmits(['close'])
 const eventStore = useEventStore();
 
@@ -49,25 +50,38 @@ const addEvent = async () => {
   closeModal()
 }
 
-function editEvent() {
-  if (props.event) {
-    console.log(
-      'Contact backend to edit the event',
-      props.event.id,
-      name.value,
-      startDate.value,
-      endDate.value,
-      description.value
-    )
+const editEvent = async () => {
+  try {
+    if (props.event) {
+      await eventStore.editEvent(props.event.eventId, name.value, startDate.value, endDate.value, description.value, props.event.isPublic, props.event.isArchived);
+    }
+  } catch (error) {
+    console.log(error);
+    return;
   }
   closeModal()
 }
 
-function archiveEvent() {
-  if (props.event) {
-    console.log('Contact backend to archive the event', props.event.id)
+const archiveEvent = async () => {
+  try {
+    if (props.event) {
+      await eventStore.editEvent(props.event.eventId, name.value, startDate.value, endDate.value, description.value, props.event.isPublic, true);
+    }
+  } catch (error) {
+    console.log(error);
+    return;
   }
   closeModal()
+}
+
+const deleteEvent = async () => {
+  try {
+    await eventStore.deleteEvent(props.event.eventId);
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+  closeModal();
 }
 
 function closeModal() {
