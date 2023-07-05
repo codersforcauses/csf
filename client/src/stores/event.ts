@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
+import type { Event } from '../types/event'
 
 const baseURL = 'http://localhost:8081/api/event'
 
@@ -78,11 +79,14 @@ export const useEventStore = defineStore('event', {
     },
     async deleteEvent(eventId: number) {
       // event must be private
-      console.log(eventId)
+      
+      // await axios.delete(`${baseURL}/delete/${eventId}`).then(() => {
+      //   console.log('event deleted')
+      // })
 
-      await axios.delete(`${baseURL}/delete/${eventId}`).then((res) => {
-        console.log('event deleted')
-      })
+      this.events = this.events.filter((event: Event) => event.eventId !== eventId);
+      console.log(this.events);
+      
     },
     async getEvents() {
       this.events = <Event[]>[]

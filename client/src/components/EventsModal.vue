@@ -31,7 +31,7 @@
 import { ref } from 'vue'
 import { type Event } from '../types/event'
 import { useEventStore } from '../stores/event';
-const props = defineProps<{ type: 'Create' | 'Edit'; event: Event }>()
+const props = defineProps<{ type: 'Create' | 'Edit'; event?: Event }>()
 const emit = defineEmits(['close'])
 const eventStore = useEventStore();
 
@@ -76,7 +76,9 @@ const archiveEvent = async () => {
 
 const deleteEvent = async () => {
   try {
-    await eventStore.deleteEvent(props.event.eventId);
+    if (props.event)
+      await eventStore.deleteEvent(props.event.eventId);
+
   } catch (error) {
     console.log(error);
     return;
