@@ -48,4 +48,3 @@ def delete_event(request, event_id):
         return Response("Event successfully deleted")
     else:
         return Response("Event is not private")
-
