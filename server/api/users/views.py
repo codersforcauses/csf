@@ -11,7 +11,7 @@ def register(request):
     serializer = SignUpmodelSerializer(data=request.data)
     data = {}
     if serializer.is_valid():
-        account = serializer.save()
+        user = serializer.save()
     else:
         data = serializer.errors
     return Response(data)
