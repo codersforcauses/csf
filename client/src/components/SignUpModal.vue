@@ -234,6 +234,8 @@
 <script setup lang="ts">
 import { ref, reactive, watchEffect } from 'vue'
 import { type Signup } from '../types/signup'
+import { useUserStore } from '../stores/user'
+const userStore = useUserStore()
 
 defineProps(['dialogModal'])
 const emit = defineEmits(['openSignUpModal'])
@@ -271,6 +273,15 @@ const state = reactive<Signup>({
   travelMethod: ''
 })
 
+// const submit = async () => {
+//   // need this here as default values sorta mess stuff up but it works
+//   const avatar = avatarPaths.value.filter((avatar) => avatar.isSelected === true)
+//   const method = travelMethod.value.filter((method) => method.isSelected === true)
+//   state.travelMethod = method[0].mode
+//   state.avatar = avatar[0].url
+//   console.log(state)
+// }
+
 const submit = async () => {
   // need this here as default values sorta mess stuff up but it works
   const avatar = avatarPaths.value.filter((avatar) => avatar.isSelected === true)
@@ -278,8 +289,14 @@ const submit = async () => {
   state.travelMethod = method[0].mode
   state.avatar = avatar[0].url
   console.log(state)
+  try {
+    await userStore.registerUser(state.firstName,state.lastName,state.email);
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+  // closeModal()
 }
-
 const selectAvatar = (url: string) => {
   avatarPaths.value.forEach((avatar) => {
     if (avatar.url === url) avatar.isSelected = !avatar.isSelected

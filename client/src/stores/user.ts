@@ -44,6 +44,7 @@ export const useUserStore = defineStore('user', {
             if (res.status == 200) {
               // this.authUser = username
               this.authToken = JSON.stringify(res.data)
+              console.log("success")
             }
           })
       } catch (error) {
@@ -52,4 +53,4 @@ export const useUserStore = defineStore('user', {
       }
   }
 }
-}
+})

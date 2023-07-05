@@ -10,7 +10,7 @@ def register(request):
 
     serializer = SignUpmodelSerializer(data=request.data)
     data = {}
-    print(serializer)
+    print(data)
     if serializer.is_valid():
         account = serializer.save()
     else:
