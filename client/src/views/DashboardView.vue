@@ -34,10 +34,10 @@
         <v-col>
             <v-card variant="flat">
                 <v-card-title>Mileage Graph</v-card-title>
+                <mileage-graph :labels="tempLabels" :datasets="tempDatasets"/>
             </v-card>
         </v-col>
     </v-row>
-    <mileage-graph :labels="tempLabels" :datasets="tempDatasets"/>
 </template>
 
 <script setup lang="ts">
@@ -55,6 +55,8 @@
             data: [40, 39, 10, 40, 39, 80, 40]
         }
     ])
+
+
 </script>
 
 <style scoped></style>
