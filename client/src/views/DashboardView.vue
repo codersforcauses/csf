@@ -10,7 +10,7 @@
     <v-divider/>
     <v-row class="ma-0 pl-4 pr-4 pb-0 pt-0" align="center">
         <v-col>
-            <v-card variant="flat" class="pb-1">
+            <v-card variant="flat" class="pb-2 pr-2">
                 <v-container class="ma-0 pa-0" fluid>
                     <v-row>
                         <v-col cols="auto">
@@ -22,7 +22,7 @@
                         </v-col>
                         <v-spacer/>
                         <v-col cols="auto">
-                            <v-btn variant="elevated" color="primaryRed" icon="mdi-plus" size="large"></v-btn>
+                            <v-btn variant="elevated" color="primaryRed" icon="mdi-plus" size="large" elevation="4"></v-btn>
                         </v-col>
                     </v-row>
                 </v-container>
@@ -55,6 +55,8 @@
             data: [40, 39, 10, 40, 39, 80, 40]
         }
     ])
+
+
 </script>
 
 <style scoped></style>
