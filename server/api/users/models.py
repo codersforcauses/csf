@@ -49,6 +49,7 @@ class User(AbstractUser):
     username = models.CharField(max_length=20, unique=True)
     first_name = models.CharField(max_length=100, blank=True)
     last_name = models.CharField(max_length=100, blank=True)
+    password = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
     team_signup = models.BooleanField(default=False)  # boolean
     has_consent = models.BooleanField(default=False)  # boolean
