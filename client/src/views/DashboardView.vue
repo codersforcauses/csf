@@ -1,33 +1,36 @@
 <template>
-    <v-row class="ma-0 pl-4 pr-4 pt-4 pb-0" align="center">
+    <v-row class="ma-0 pl-4 pr-4 pt-4 pb-0 bg-primaryWhite" align="center">
         <v-col>
-            <v-card variant="flat">
+            <h1>Welcome back, {{ tempUserFirstName }}!</h1>
+            <!-- <v-card variant="flat">
                 <v-card-title class="pa-0">Welcome back, {{ tempUserFirstName }}!</v-card-title>
-            </v-card>
+            </v-card> -->
         </v-col>
     </v-row>
     <v-divider/>
     <v-row class="ma-0 pl-4 pr-4 pb-0 pt-0" align="center">
         <v-col>
-            <v-card variant="outlined">
-                <v-row>
-                    <v-col cols="auto">
-                        <v-icon icon="mdi-run-fast" size="48"/>
-                    </v-col>
-                    <v-col>
-                        <v-chip color="green" class="rounded text-h6">{{ tempUserMileage }} KM</v-chip>
-                        <v-card-subtitle>TOTAL</v-card-subtitle>
-                    </v-col>
-                    <v-spacer/>
-                    <v-col>
-                        ADD
-                    </v-col>
-                </v-row>
+            <v-card variant="flat pb-2">
+                <v-container class="ma-0 pa-0" fluid>
+                    <v-row>
+                        <v-col cols="auto">
+                            <v-icon icon="mdi-run-fast" size="52"/>
+                        </v-col>
+                        <v-col>
+                            <v-chip color="green" class="rounded text-h5">{{ tempUserMileage }} KM</v-chip>
+                            <v-card-subtitle>TOTAL</v-card-subtitle>
+                        </v-col>
+                        <v-spacer/>
+                        <v-col cols="auto">
+                            <v-btn variant="elevated" color="primaryRed" icon="mdi-plus" size="large"></v-btn>
+                        </v-col>
+                    </v-row>
+                </v-container>
             </v-card>
         </v-col>
     </v-row>
     <v-divider/>
-    <v-row align="center">
+    <v-row class="ma-0" align="center">
         <v-col>
             <v-card variant="flat">
                 <v-card-title>Mileage Graph</v-card-title>
