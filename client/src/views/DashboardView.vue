@@ -23,7 +23,7 @@
         </v-col>
     </v-row>
     <v-divider/>
-    <v-row class="pl-4 pr-4">
+    <v-row align="center">
         <v-col>
             <v-card variant="flat">
                 <v-card-title>Mileage Graph</v-card-title>
