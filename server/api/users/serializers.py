@@ -21,10 +21,10 @@ class SignUpmodelSerializer(serializers.ModelSerializer):
             travel_method=self.validated_data['travel_method'],
 
         )
-        password = self.validated_data['password']
-        confirm_password = self.validated_data['confirm_password']
-        if password != confirm_password:
-            raise serializers.ValidationError({'password': 'The Password do not match.'})
+        # password = self.validated_data['password']
+        # confirm_password = self.validated_data['confirm_password']
+        # if password != confirm_password:
+        #     raise serializers.ValidationError({'password': 'The Password do not match.'})
         user.set_password(password)
         user.save()
         return user
