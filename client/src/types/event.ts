@@ -1,8 +1,10 @@
 export interface Event {
-  id: number
+  eventId: number
   name: string
   startDate: string
   endDate: string
   description: string
   isPublic: boolean
+  isArchived: boolean
+  teamId: number | null
 }

@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import EventCard from '../components/EventCard.vue'
-import type Event from '../types/event'
+import { type Event } from '../types/event'
 import EventsModal from '../components/EventsModal.vue'
 import { ref, computed, onMounted } from 'vue'
 import { useEventStore } from '../stores/event'
@@ -99,7 +99,7 @@ const closeModal = () => {
 }
 
 function openEditModal(id: number) {
-  let foundEvent = eventList.value.find((e: Event) => e.id === id)
+  let foundEvent = eventList.value.find((e: Event) => e.eventId === id)
   if (foundEvent) {
     editingEvent.value = foundEvent
     isEditingEvent.value = true

@@ -23,7 +23,7 @@ const props = defineProps<{ event: Event; isTeamAdmin: boolean }>()
 const emit = defineEmits(['edit'])
 
 function openModal() {
-  emit('edit', props.event.id)
+  emit('edit', props.event.eventId)
 }
 </script>
 
