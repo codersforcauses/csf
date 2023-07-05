@@ -30,10 +30,12 @@
             </v-card>
         </v-col>
     </v-row>
+    <mileage-graph/>
 </template>
 
 <script setup lang="ts">
     import { ref } from "vue"
+    import MileageGraph from "@/components/MileageGraph.vue";
 
     const tempIsLoggedIn = ref(true)
     const tempUserFirstName = ref("John")
