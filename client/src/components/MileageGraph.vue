@@ -1,36 +1,26 @@
 <template>
-  <Bar :data="data" :options="options" />
+  <Bar :data="chartData" />
 </template>
 
-<script lang="ts">
-import {
-  Chart as ChartJS,
-  Title,
-  Tooltip,
-  Legend,
-  BarElement,
-  CategoryScale,
-  LinearScale
-} from 'chart.js'
+<script setup lang="ts">
+import { ref } from 'vue'
 import { Bar } from 'vue-chartjs'
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
-export default {
-  name: 'App',
-  components: {
-    Bar
+const props = defineProps({
+  labels: {
+    type: Array,
+    required: true
   },
-  data() {
-    return {
-      data: {
-        labels: ['January', 'February', 'March'],
-        datasets: [{ data: [40, 20, 12] }]
-      },
-      options: {
-        responsive: true
-      }
-    }
+  datasets: {
+    type: Array,
+    required: true
   }
-}
+})
+
+const chartData = {
+        labels: props.labels,
+        datasets: props.datasets}
 </script>

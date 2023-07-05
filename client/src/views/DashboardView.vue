@@ -37,7 +37,7 @@
             </v-card>
         </v-col>
     </v-row>
-    <mileage-graph/>
+    <mileage-graph :labels="tempLabels" :datasets="tempDatasets"/>
 </template>
 
 <script setup lang="ts">
@@ -47,6 +47,14 @@
     const tempIsLoggedIn = ref(true)
     const tempUserFirstName = ref("John")
     const tempUserMileage = ref(100)
+    const tempLabels = ref(["January", "February", "March", "April", "May", "June", "July"])
+    const tempDatasets = ref([
+        {
+            label: 'Yearly Mileage',
+            backgroundColor: '#f87979',
+            data: [40, 39, 10, 40, 39, 80, 40]
+        }
+    ])
 </script>
 
 <style scoped></style>
