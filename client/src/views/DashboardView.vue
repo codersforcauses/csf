@@ -10,7 +10,7 @@
     <v-divider/>
     <v-row class="ma-0 pl-4 pr-4 pb-0 pt-0" align="center">
         <v-col>
-            <v-card variant="flat pb-2">
+            <v-card variant="flat" class="pb-1">
                 <v-container class="ma-0 pa-0" fluid>
                     <v-row>
                         <v-col cols="auto">
