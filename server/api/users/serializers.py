@@ -6,15 +6,17 @@ class SignUpmodelSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         # fields = ['first_name', 'last_name', 'email', 'password', 'confirm_password']
-        fields = ['first_name', 'last_name', 'email']
+        fields = ['firstName', 'lastName', 'email']
         extra_kwargs = {
             'password': {'write_only': True}
         }
 
     def save(self):
+        print(self.validated_data, "data")
+        print()
         user = User(
-            first_name=self.validated_data['first_name'],
-            last_name=self.validated_data['last_name'],
+            first_name=self.validated_data['firstName'],
+            last_name=self.validated_data['lastName'],
             email=self.validated_data['email'],
         )
         # password = self.validated_data['password']

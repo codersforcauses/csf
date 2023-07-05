@@ -9,8 +9,8 @@ from api.users.serializers import SignUpmodelSerializer
 def register(request):
 
     serializer = SignUpmodelSerializer(data=request.data)
+    print(request.data)
     data = {}
-    print(data)
     if serializer.is_valid():
         account = serializer.save()
     else:
