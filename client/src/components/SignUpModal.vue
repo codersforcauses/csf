@@ -235,6 +235,7 @@
 import { ref, reactive, watchEffect } from 'vue'
 import { type Signup } from '../types/signup'
 import { useUserStore } from '../stores/user'
+import snakeize from 'snakeize'
 const userStore = useUserStore()
 
 defineProps(['dialogModal'])
@@ -288,9 +289,10 @@ const submit = async () => {
   const method = travelMethod.value.filter((method) => method.isSelected === true)
   state.travelMethod = method[0].mode
   state.avatar = avatar[0].url
-  console.log(state)
+  const obj = snakeize(state)
+  console.log(obj)
   try {
-    await userStore.registerUser(state.firstName,state.lastName,state.email);
+    await userStore.registerUser(obj.first_name,obj.last_name,obj.email);
   } catch (error) {
     console.log(error);
     return;

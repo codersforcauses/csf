@@ -32,24 +32,16 @@ export const useUserStore = defineStore('user', {
         this.authToken = null
       }
     },
-    async registerUser(firstName : string, lastName: string, email: string) {
+    async registerUser(first_name : string, last_name: string, email: string) {
       try {
         await axios
           .post(`${BASE_URL}/users/register/`, {
-            firstName: firstName,
-            lastName: lastName,
+            first_name: first_name,
+            last_name: last_name,
             email: email
           })
-          .then((res) => {
-            if (res.status == 200) {
-              // this.authUser = username
-              this.authToken = JSON.stringify(res.data)
-              console.log("success")
-            }
-          })
       } catch (error) {
-        // this.authUser = null
-        this.authToken = null
+        console.log(error)
       }
   }
 }
