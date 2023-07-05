@@ -11,9 +11,9 @@
     <v-row class="ma-0 pl-4 pr-4 pb-0 pt-0" align="center">
         <v-col>
             <v-card variant="flat" class="pb-1">
-                <v-container class="ma-0 pa-0" fluid>
-                    <v-row>
-                        <v-col cols="auto">
+                <v-container class="pa-0" fluid>
+                    <v-row class="ma-0">
+                        <v-col cols="auto" class="pl-0 pr-0">
                             <v-icon icon="mdi-run-fast" size="52"/>
                         </v-col>
                         <v-col>
@@ -22,7 +22,7 @@
                         </v-col>
                         <v-spacer/>
                         <v-col cols="auto">
-                            <v-btn variant="elevated" color="primaryRed" icon="mdi-plus" size="large"></v-btn>
+                            <v-btn variant="elevated" elevated="2" :ripple="true" icon="mdi-plus" color="primaryRed"></v-btn>
                         </v-col>
                     </v-row>
                 </v-container>
@@ -44,7 +44,7 @@
     import { ref } from "vue"
     import MileageGraph from "@/components/MileageGraph.vue";
 
-    const tempIsLoggedIn = ref(true)
+    // const tempIsLoggedIn = ref(true)
     const tempUserFirstName = ref("John")
     const tempUserMileage = ref(100)
     const tempLabels = ref(["January", "February", "March", "April", "May", "June", "July"])
