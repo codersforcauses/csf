@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 
 from api.users.serializers import SignUpmodelSerializer
 
-@api_view(['POST',])
+@api_view(['POST'])
 def register(request):
 
     serializer = SignUpmodelSerializer(data=request.data)
