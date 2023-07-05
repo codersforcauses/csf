@@ -12,11 +12,10 @@ def register(request):
     print("data:", request.data)
     data = {}
     if serializer.is_valid():
-        print('hi')
+        print('if')
         user = serializer.save()
-        print(user)
     else:
-        print('hiasdf')
+        print('else')
         data = serializer.errors
     return Response(data)
 
