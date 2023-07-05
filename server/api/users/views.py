@@ -9,10 +9,13 @@ from api.users.serializers import SignUpmodelSerializer
 def register(request):
 
     serializer = SignUpmodelSerializer(data=request.data)
-    print(request.data)
+    print("data:", request.data)
     data = {}
     if serializer.is_valid():
+        print('hi')
         account = serializer.save()
+        print(account)
     else:
+        print('hiasdf')
         data = serializer.errors
     return Response(data)

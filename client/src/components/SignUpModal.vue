@@ -292,7 +292,7 @@ const submit = async () => {
   const obj = snakeize(state)
   console.log(obj)
   try {
-    await userStore.registerUser(obj.username, obj.first_name,obj.last_name,obj.email, obj.password, obj.confirm_password, obj.teamSignup, obj.has_consent, obj.travel_method);
+    await userStore.registerUser(obj.username, obj.first_name,obj.last_name,obj.email, obj.password, obj.team_signup, obj.has_consent, obj.travel_method);
   } catch (error) {
     console.log(error);
     return;
