@@ -6,8 +6,14 @@ from .serializers import MileageSerialiser
 
 @api_view(['GET'])
 def get_mileage(request, user_id):
-  pass
+    event = Mileage.objects.get(user_id=user_id)
+    serializer = MileageSerialiser(event)
+    print(serializer.data)
+    return Response(serializer.data)
 
 @api_view(['POST'])
 def post_mileage(request):
-  pass
+    serialiser = MileageSerialiser(data=request.data)
+    if serialiser.is_valid():
+        serialiser.save()
+        return Response(serialiser.data)
