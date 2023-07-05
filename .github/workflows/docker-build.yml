@@ -3,8 +3,6 @@ name: Docker Image CI
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
 
@@ -27,10 +25,14 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     # Server Docker image
-    - name: Build the server Docker image
-      run: docker build . --file ./docker/server/Dockerfile --tag ${{ vars.DOCKERHUB_USERNAME}}/csf-prod-server:${{ steps.date.outputs.date }}
-    - name: Push server image
-      run: docker push ${{ vars.DOCKERHUB_USERNAME}}/csf-prod-server:${{ steps.date.outputs.date }}
+    -
+      name: Build and push the server Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        dockerfile: ./docker/server/Dockerfile
+        push: true
+        tags: ${{ vars.DOCKERHUB_USERNAME}}/csf-prod-server:${{ steps.date.outputs.date }}, ${{ vars.DOCKERHUB_USERNAME }}/csf-prod-server:latest
 
   frontend:
 
@@ -51,7 +53,11 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     # Client Docker image
-    - name: Build the client Docker image
-      run: docker build . --file ./docker/client/Dockerfile --tag ${{ vars.DOCKERHUB_USERNAME}}/csf-prod-client:${{ steps.date.outputs.date }}
-    - name: Push client image
-      run: docker push ${{ vars.DOCKERHUB_USERNAME}}/csf-prod-client:${{ steps.date.outputs.date }}
+    -
+      name: Build and push the client Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        dockerfile: ./docker/client/Dockerfile
+        push: true
+        tags: ${{ vars.DOCKERHUB_USERNAME}}/csf-prod-client:${{ steps.date.outputs.date }}, ${{ vars.DOCKERHUB_USERNAME }}/csf-prod-client:latest
