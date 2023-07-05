@@ -8,8 +8,39 @@ export const useEventStore = defineStore('event', {
     events: <Event[]>[]
   }),
   actions: {
-    async createEvent(event: Event) {
-      // set to private
+    async createEvent(name: string, startDate: string, endDate: string, description: string) {
+      let event = {
+        name: name,
+        startDate: startDate,
+        endDate: endDate,
+        description: description,
+        isPublic: false,
+        isArchived: false
+      }
+
+      const convertKeysToCamelCase = <T>(obj: { [key: string]: any }): T => {
+        const newObj: { [key: string]: any } = {}
+        for (const key in obj) {
+          // eslint-disable-next-line no-prototype-builtins
+          if (obj.hasOwnProperty(key)) {
+            const snakeCaseKey = key.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase()
+            newObj[snakeCaseKey] = obj[key]
+          }
+        }
+        return newObj as T
+      }
+
+      event = await convertKeysToCamelCase(event)
+      console.log(event)
+
+      await axios
+        .post(`${baseURL}/create/`, event)
+        .then((res) => {
+          console.log(res)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     },
     async editEvent(event: Event) {
       // event must be private
