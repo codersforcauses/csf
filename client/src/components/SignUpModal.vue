@@ -234,6 +234,9 @@
 <script setup lang="ts">
 import { ref, reactive, watchEffect } from 'vue'
 import { type Signup } from '../types/signup'
+import { useUserStore } from '../stores/user'
+import snakeize from 'snakeize'
+const userStore = useUserStore()
 
 defineProps(['dialogModal'])
 const emit = defineEmits(['openSignUpModal'])
@@ -271,15 +274,31 @@ const state = reactive<Signup>({
   travelMethod: ''
 })
 
+// const submit = async () => {
+//   // need this here as default values sorta mess stuff up but it works
+//   const avatar = avatarPaths.value.filter((avatar) => avatar.isSelected === true)
+//   const method = travelMethod.value.filter((method) => method.isSelected === true)
+//   state.travelMethod = method[0].mode
+//   state.avatar = avatar[0].url
+//   console.log(state)
+// }
+
 const submit = async () => {
   // need this here as default values sorta mess stuff up but it works
   const avatar = avatarPaths.value.filter((avatar) => avatar.isSelected === true)
   const method = travelMethod.value.filter((method) => method.isSelected === true)
   state.travelMethod = method[0].mode
   state.avatar = avatar[0].url
-  console.log(state)
+  const obj = snakeize(state)
+  console.log(obj)
+  try {
+    await userStore.registerUser(obj.username, obj.first_name,obj.last_name,obj.email, obj.password, obj.team_signup, obj.has_consent, obj.travel_method);
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+  // closeModal()
 }
-
 const selectAvatar = (url: string) => {
   avatarPaths.value.forEach((avatar) => {
     if (avatar.url === url) avatar.isSelected = !avatar.isSelected
