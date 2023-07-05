@@ -1,15 +1,7 @@
 <template>
-  <div>
-    <template v-if="user_id && team_id">
-      <TeamDashboard />
-    </template>
-    <template v-else-if="user_id && !team_id">
-      <CreateOrJoinTeam />
-    </template>
-    <template v-else>
-      <LoginModal />
-    </template>
-  </div>
+  <TeamDashboard v-if="user_id && team_id" />
+  <CreateOrJoinTeam v-else-if="user_id && !team_id" />
+  <LoginModal v-else />
 </template>
 
 <script setup lang="ts">

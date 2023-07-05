@@ -23,7 +23,7 @@
             </v-form>
           </v-card-text>
           <v-card-actions>
-            <v-spacer></v-spacer>
+            <v-spacer />
             <v-row>
               <v-btn size="large" justify="center" bg-color="red" @click="submitForm">Create</v-btn>
             </v-row>
