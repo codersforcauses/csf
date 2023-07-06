@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
+import axios, {AxiosResponse} from 'axios'
 import type { Event } from '../types/event'
+import camelize from "camelize-ts"
+import snakify, { Snakify } from "snakify-ts"
 
 const baseURL = 'http://localhost:8081/api/event'
 
@@ -9,108 +11,36 @@ export const useEventStore = defineStore('event', {
     events: <Event[]>[]
   }),
   actions: {
-    async createEvent(name: string, startDate: string, endDate: string, description: string) {
-      let event = {
-        name: name,
-        startDate: startDate,
-        endDate: endDate,
-        description: description,
-        isPublic: false,
-        isArchived: false
-      }
-
-      const convertKeysToCamelCase = <T>(obj: { [key: string]: any }): T => {
-        const newObj: { [key: string]: any } = {}
-        for (const key in obj) {
-          // eslint-disable-next-line no-prototype-builtins
-          if (obj.hasOwnProperty(key)) {
-            const snakeCaseKey = key.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase()
-            newObj[snakeCaseKey] = obj[key]
-          }
-        }
-        return newObj as T
-      }
-
-      event = await convertKeysToCamelCase(event)
-
-      await axios
-        .post(`${baseURL}/create/`, event)
-        .then((res) => {
-          console.log(res)
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+    async createEvent(partialEvent: Omit<Event, "eventId" | "isArchived" | "teamId">) {
+      const { data, status }: AxiosResponse<Snakify<Event>> = await axios
+        .post(`${baseURL}/create/`, snakify({
+          ...partialEvent,
+          isArchived: false,
+          teamId: null // temp
+        }))
+      if (status == 200) this.events.push(camelize(data))
     },
-    async editEvent(
-      eventId: number,
-      name: string,
-      startDate: string,
-      endDate: string,
-      description: string,
-      isPublic: boolean,
-      isArchived: boolean
-    ) {
-      // change it so it changes the this.event as well
-      let event = {
-        id: eventId,
-        name: name,
-        startDate: startDate,
-        endDate: endDate,
-        description: description,
-        isPublic: isPublic,
-        isArchived: isArchived
-      }
+    async editEvent(event: Event) {
+      const index = this.events.findIndex(e => e.eventId == event.eventId && !e.isPublic)
 
-      const convertKeysToCamelCase = <T>(obj: { [key: string]: any }): T => {
-        const newObj: { [key: string]: any } = {}
-        for (const key in obj) {
-          // eslint-disable-next-line no-prototype-builtins
-          if (obj.hasOwnProperty(key)) {
-            const snakeCaseKey = key.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase()
-            newObj[snakeCaseKey] = obj[key]
-          }
-        }
-        return newObj as T
+      if (index > -1) {
+        await axios.put(`${baseURL}/update/${event.eventId}`, snakify(event))
+        console.log("event updated")
+        this.events[index] = event
       }
-      event = await convertKeysToCamelCase(event)
-
-      await axios.put(`${baseURL}/update/${event.id}`, event)
     },
-    async deleteEvent(eventId: number) {
-      // event must be private
-      
-      // await axios.delete(`${baseURL}/delete/${eventId}`).then(() => {
-      //   console.log('event deleted')
-      // })
+    async deleteEvent(eventId: Event["eventId"]) {
+      const index = this.events.findIndex(e => eventId == e.eventId && !e.isPublic)
 
-      this.events = this.events.filter((event: Event) => event.eventId !== eventId);
-      console.log(this.events);
-      
+      if (index > -1) {
+        await axios.delete(`${baseURL}/delete/${eventId}`)
+        console.log('event deleted')
+        this.events.splice(index, 1)
+      }
     },
     async getEvents() {
-      this.events = <Event[]>[]
-      let events = <Event[]>[]
-      await axios.get<Event[]>(`${baseURL}/get/`).then((result) => {
-        events = result.data
-      })
-
-      const convertKeysToCamelCase = <T>(obj: { [key: string]: any }): T => {
-        const newObj: { [key: string]: any } = {}
-        for (const key in obj) {
-          // eslint-disable-next-line no-prototype-builtins
-          if (obj.hasOwnProperty(key)) {
-            const camelCaseKey = key.replace(/_(\w)/g, (_, p1) => p1.toUpperCase())
-            newObj[camelCaseKey] = obj[key]
-          }
-        }
-        return newObj as T
-      }
-
-      for (let i = 0; i < events.length; i++) {
-        events[i] = await convertKeysToCamelCase(events[i])
-      }
-      this.events = [...events]
+      const { data }: AxiosResponse<Snakify<Event>[]> = await axios.get(`${baseURL}/get/`)
+      this.events = camelize(data)
     }
   },
   getters: {}
