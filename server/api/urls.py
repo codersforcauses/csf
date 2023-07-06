@@ -23,5 +23,4 @@ urlpatterns = [
     path("api/event/", include("api.event.urls")),
     path("api/auth/", include("api.auth.urls")),
     path("api/subteam/", include("api.subteam.urls")),
-    path("api/users/", include("api.users.urls")),
 ]

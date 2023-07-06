@@ -1,9 +1,9 @@
-from django.urls import path
+# from django.urls import path
 
-from . import views
+# from . import views
 
-app_name = 'users'
+# app_name = 'users'
 
-urlpatterns = [
-    path("register/", views.register, name="register"),
-]
+# urlpatterns = [
+#     path("register/", views.register, name="register"),
+# ]
