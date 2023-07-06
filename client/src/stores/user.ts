@@ -4,6 +4,7 @@ import { useStorage } from '@vueuse/core'
 
 const BASE_URL = 'http://localhost:8081/api'
 
+
 export const useUserStore = defineStore('user', {
   state: () => ({
     authUser: useStorage('authUser', null as string | null),
@@ -32,23 +33,13 @@ export const useUserStore = defineStore('user', {
         this.authToken = null
       }
     },
-    async registerUser(username: string, first_name : string, last_name: string, email: string, password: string, team_signup: boolean, has_consent: boolean, travel_method: string) {
-      try {
-        await axios
-          .post(`${BASE_URL}/users/register/`, {
-            username: username,
-            first_name: first_name,
-            last_name: last_name,
-            email: email,
-            password: password,
-            team_signup : team_signup,
-            has_consent : has_consent,
-            travel_method : travel_method
-
-          })
-      } catch (error) {
-        console.log(error)
-      }
-  }
+  async registerUser(obj : object) {
+    try {
+      await axios
+        .post(`${BASE_URL}/users/register/`, obj)
+    } catch (error) {
+      console.log(error)
+    }
+}
 }
 })

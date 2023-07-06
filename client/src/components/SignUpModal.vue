@@ -274,30 +274,21 @@ const state = reactive<Signup>({
   travelMethod: ''
 })
 
-// const submit = async () => {
-//   // need this here as default values sorta mess stuff up but it works
-//   const avatar = avatarPaths.value.filter((avatar) => avatar.isSelected === true)
-//   const method = travelMethod.value.filter((method) => method.isSelected === true)
-//   state.travelMethod = method[0].mode
-//   state.avatar = avatar[0].url
-//   console.log(state)
-// }
-
 const submit = async () => {
-  // need this here as default values sorta mess stuff up but it works
   const avatar = avatarPaths.value.filter((avatar) => avatar.isSelected === true)
   const method = travelMethod.value.filter((method) => method.isSelected === true)
   state.travelMethod = method[0].mode
   state.avatar = avatar[0].url
   const obj = snakeize(state)
   console.log(obj)
+  delete obj.confirm_password
+  delete obj.avatar
   try {
-    await userStore.registerUser(obj.username, obj.first_name,obj.last_name,obj.email, obj.password, obj.team_signup, obj.has_consent, obj.travel_method);
+    await userStore.registerUser(obj);
   } catch (error) {
     console.log(error);
     return;
   }
-  // closeModal()
 }
 const selectAvatar = (url: string) => {
   avatarPaths.value.forEach((avatar) => {
