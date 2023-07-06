@@ -4,7 +4,7 @@
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down">
       <v-btn v-for="item in menu" :key="item.title" :to="item.link" flat>{{ item.title }}</v-btn>
-      <!-- this is how login modal will work as well copy all associated to how this works -->
+      <v-btn active @click="openLoginModal">LOGIN</v-btn>
       <v-btn active @click="openSignUpModal">SIGNUP</v-btn>
     </v-toolbar-items>
   </v-toolbar>
@@ -54,6 +54,12 @@
             </template>
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>
+          <v-list-item @click="openLoginModal" variant="tonal">
+            <template v-slot:prepend>
+              <v-icon style="color: #fff; opacity: 1" icon="mdi-login"></v-icon>
+            </template>
+            <v-list-item-title>Login</v-list-item-title>
+          </v-list-item>
           <v-list-item @click="openSignUpModal" variant="tonal">
             <template v-slot:prepend>
               <v-icon style="color: #fff; opacity: 1" icon="mdi-pencil-box"></v-icon>
@@ -71,6 +77,8 @@
     v-if="signupModal"
     @open-signUp-modal="openSignUpModal"
   />
+
+  <LoginModalVue :dialog-modal="loginModal" v-if="loginModal" @open-login-modal="openLoginModal" />
 </template>
 
 <script setup lang="ts">
@@ -79,23 +87,28 @@ import { useDisplay } from 'vuetify'
 import SignUpModal from './SignUpModal.vue'
 import FooterBanner from '@/assets/images/Footer-min.jpeg'
 import CSFLogoWhite from '@/assets/images/CSF_Logo_WHITE.png'
+import LoginModalVue from './LoginModal.vue'
 
 const { mobile } = useDisplay()
 const dialog = ref<boolean>(false)
 const signupModal = ref<boolean>(false)
+const loginModal = ref<boolean>(false)
 
 const openSignUpModal = () => {
   signupModal.value = !signupModal.value
 }
+
+const openLoginModal = () => {
+  loginModal.value = !loginModal.value
+}
+
 const menu = [
   { icon: 'mdi-card-account-details-outline', title: 'About Us', link: '/' },
   { icon: 'mdi-chart-bar', title: 'Dashboard', link: '/' },
   { icon: 'mdi-trophy', title: 'Challenges', link: '/' },
-  { icon: 'mdi-account-group', title: 'Team Page', link: '/' },
+  { icon: 'mdi-account-group', title: 'Team Page', link: '/teams' },
   { icon: 'mdi-calendar', title: 'Events', link: '/events' },
-  { icon: 'mdi-star', title: 'Leaderboards', link: '/' },
-  // todo remove this and copy the signup design exactly
-  { icon: 'mdi-login', title: 'Login', link: '/' }
+  { icon: 'mdi-star', title: 'Leaderboards', link: '/' }
 ]
 </script>
 
