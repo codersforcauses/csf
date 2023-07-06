@@ -12,34 +12,14 @@
       <v-text-field hide-details bg-color="white" label="End Date" type="date" v-model="endDate" class="mx-5" />
       <v-textarea hide-details bg-color="white" label="Description" v-model="description" class="mx-5" />
       <v-card-actions v-if="type === 'Edit'" class="justify-center mb-4">
-        <v-btn variant="outlined" class="text-secondaryBlue mr-16" @click="archiveEvent"
-          >ARCHIVE</v-btn
-        >
-        <v-btn class="bg-primaryRed ml-16" @click="displayConfirmEdit = true">
-          <PopupDialog
-            v-model="displayConfirmEdit"
-            :title="confirmEditTitle"
-            :text="confirmEditText"
-            :submit-text="submitEditEvent"
-            @handle-submit="editEvent"
-          />
-          DONE</v-btn
-        >
+        <v-btn variant="outlined" class="text-secondaryBlue mr-16 " @click="archiveEvent">ARCHIVE</v-btn>
+        <ConfirmButton :action="'edit'" :object="'event'" :use-done-for-button="true" @handle-confirm="editEvent"/>
         <v-btn variant="outlined" class="text-primaryRed ml-16" @click="deleteEvent">DELETE</v-btn>
       </v-card-actions>
       <v-card-actions v-else class="justify-center mb-4">
         <!-- not sure if you are supposed to be able to private event after creation -->
         <v-switch hide-details bg-color="white" label="Is Public" v-model="isPublic" class="mx-5" />
-        <v-btn class="bg-primaryRed" @click="displayConfirmAdd = true">
-          <PopupDialog
-            v-model="displayConfirmAdd"
-            :title="confirmAddTitle"
-            :text="confirmAddText"
-            :submit-text="submitAddEvent"
-            @handle-submit="addEvent"
-          />
-          DONE</v-btn
-        >
+        <ConfirmButton :action="'create'" :object="'event'" :use-done-for-button="true" @handle-confirm="addEvent"/>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -49,6 +29,8 @@
 import { ref } from 'vue'
 import { type Event } from '../types/event'
 import { useEventStore } from '../stores/event';
+import ConfirmButton from './ConfirmButton.vue' 
+
 const props = defineProps<{ type: 'Create' | 'Edit'; event?: Event }>()
 const emit = defineEmits(['close'])
 const eventStore = useEventStore();
@@ -58,17 +40,6 @@ const startDate = ref(props.event?.startDate ?? '')
 const endDate = ref(props.event?.endDate ?? '')
 const description = ref(props.event?.description ?? '')
 const isPublic = ref(props.event?.isPublic ?? false)
-
-import PopupDialog from './PopupDialog.vue'
-const displayConfirmAdd = ref(false)
-const confirmAddTitle = ref('Confirm create event')
-const confirmAddText = ref('Are you sure you wish to create this event?')
-const submitAddEvent = ref('Create')
-
-const displayConfirmEdit = ref(false)
-const confirmEditTitle = ref('Confirm event change')
-const confirmEditText = ref('Are you sure you wish to edit this event?')
-const submitEditEvent = ref('Edit')
 
 const refs = () => ({
   name: name.value,
