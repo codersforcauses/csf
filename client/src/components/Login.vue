@@ -1,4 +1,5 @@
 <template>
+  <v-button>
   <v-model fullscreen :scrim="false">
   <v-col>
   <v-row justify="center">
@@ -44,8 +45,9 @@
         </v-container> 
         </v-form>
       </v-row>
-</v-col>
-</v-model>
+  </v-col>
+  </v-model>
+  </v-button>
 </template>
 
 <script setup lang="ts">
