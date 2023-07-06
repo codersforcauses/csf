@@ -44,7 +44,7 @@ class SubteamTests(APITestCase):
 
     def test_get_subteams(self):
         existingTeam = Team.objects.get()
-        subteams = SubTeam.objects.filter(team_id = existingTeam.team_id)
+        subteams = SubTeam.objects.filter(team_id=existingTeam.team_id)
         response = self.client.get(
             reverse("subteam:get-subteams", kwargs={"team_id": existingTeam.team_id})
         )
