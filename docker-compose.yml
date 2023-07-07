@@ -13,25 +13,18 @@ services:
       retries: 5
 
   server:
-    build:
-      context: .
-      dockerfile: ./docker/server/Dockerfile
-    depends_on:
-      db:
-        condition: service_healthy
+    image: ${DOCKERHUB_USERNAME}/csf-prod-server:latest
     container_name: csf_server
     restart: unless-stopped
     env_file: .env.dev
     ports:
       - 8081:8081
     volumes:
-      - ./server:/app
-    entrypoint: /entrypoint.sh
+      - ./docker/server:/app
+    entrypoint: /app/entrypoint.sh
 
   client:
-    build:
-      context: .
-      dockerfile: docker/client/Dockerfile
+    image: ${DOCKERHUB_USERNAME}/csf-prod-client:latest
     container_name: csf_client
     restart: unless-stopped
     env_file:
@@ -39,4 +32,25 @@ services:
     ports:
       - 8082:8082
     volumes:
-      - ./client:/app
+      - ./docker/client:/app
+
+  nginx:
+    image: nginx
+    container_name: csf_nginx
+    restart: unless-stopped
+    ports:
+      - 80:80
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/server/staticfiles:/server/staticfiles
+      - ./docker/client:/app_code
+    depends_on:
+      - server
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: csf_watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 30
