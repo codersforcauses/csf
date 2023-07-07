@@ -2,6 +2,10 @@
   <v-dialog v-model="dialog" :fullscreen="mobile" max-width="500px">
     <v-card style="height: 100%">
       <form @submit.prevent="submitForm" class="bg-backgroundGrey">
+        <v-container class="pa-0">
+          <v-img src="/images/Footer-min.jpeg" width="100%" height="10" cover></v-img>
+        </v-container>
+
         <v-row justify="end">
           <v-col cols="auto">
             <v-btn variant="plain" @click="closeModal"
