@@ -2,13 +2,15 @@
   <v-card class="mx-3">
     <v-card-title>
       <span class="font-weight-bold">{{ event.name }}</span>
-      <v-icon v-if="isTeamAdmin && event.isPrivate" icon="mdi-pencil" @click="openModal"></v-icon>
+      <v-icon v-if="isTeamAdmin && !event.isPublic" icon="mdi-pencil" @click="openModal"></v-icon>
       <v-spacer></v-spacer>
       <v-chip
         variant="outlined"
-        :class="{ 'text-secondaryGreen': event.isPrivate, 'text-secondaryBlue': !event.isPrivate }"
-        >{{ event.isPrivate ? 'Private' : 'Official' }}</v-chip
+        :class="event.isPublic ? 'text-secondaryBlue' : 'text-secondaryGreen'"
       >
+        {{ event.isPublic ? 'Official' : 'Private' }}
+      </v-chip>
+      <v-chip v-if="event.isArchived"> Archived </v-chip>
     </v-card-title>
     <v-card-subtitle class="text-primaryRed font-italic"
       >{{ event.startDate }} - {{ event.endDate }}</v-card-subtitle
@@ -18,12 +20,12 @@
 </template>
 
 <script setup lang="ts">
-import type Event from '../types/event'
+import { type Event } from '../types/event'
 const props = defineProps<{ event: Event; isTeamAdmin: boolean }>()
 const emit = defineEmits(['edit'])
 
 function openModal() {
-  emit('edit', props.event.id)
+  emit('edit', props.event.eventId)
 }
 </script>
 
