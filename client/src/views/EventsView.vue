@@ -1,19 +1,21 @@
 <template>
-  <v-row class="bg-primaryWhite pl-4 pt-4" align="center" no-gutters>
+  <v-row class="bg-primaryWhite pl-4 pt-6" align="center" no-gutters>
     <v-col>
       <v-text-field
         prepend-inner-icon="mdi-magnify"
         hide-details
+        variant="outlined"
         placeholder="Search Events"
         clearable
         v-model="searchQuery"
       />
     </v-col>
-    <v-col class="justify-center d-flex" cols="2">
+    <v-col cols="2" md="1" justify="center" align="center">
       <v-btn
         v-if="tempIsTeamAdmin"
         size="x-large"
         density="compact"
+        variant="flat"
         icon="mdi-plus"
         class="bg-primaryRed text-primaryWhite"
         @click="isAddingEvent = true"
@@ -114,5 +116,11 @@ function openEditModal(id: number) {
 <style>
 #cards-container > .v-card:nth-child(odd) {
   background-color: #f4f4f4;
+}
+
+.v-field__input {
+  padding-top: 19px;
+  padding-bottom: 0px;
+  margin-top: -19px;
 }
 </style>
