@@ -9,6 +9,7 @@
         :to="item.link"
         class="navbar-link text-primaryWhite mr-8"
         flat
+        :exact-active-class="'active'"
         >{{ item.title }}</router-link
       >
       <v-row class="mr-4">
@@ -135,9 +136,9 @@ const openLoginModal = () => {
 const menu = [
   { icon: 'mdi-card-account-details-outline', title: 'About', link: '/' },
   { icon: 'mdi-chart-bar', title: 'Dashboard', link: '/' },
-  { icon: 'mdi-trophy', title: 'Challenges', link: '/' },
   { icon: 'mdi-account-group', title: 'Team', link: '/teams' },
   { icon: 'mdi-calendar', title: 'Events', link: '/events' },
+  { icon: 'mdi-trophy', title: 'Challenges', link: '/' },
   { icon: 'mdi-star', title: 'Leaderboards', link: '/' }
 ]
 </script>
@@ -166,5 +167,21 @@ const menu = [
   text-decoration: none;
   font-size: 14px;
   font-weight: bold;
+}
+
+.navbar-link:hover,
+.navbar-link.active {
+  position: relative;
+}
+
+.navbar-link:hover::after,
+.navbar-link.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 100%;
+  height: 2px;
+  background-color: red;
 }
 </style>
