@@ -19,7 +19,7 @@ class UserAdmin(admin.ModelAdmin):
 
         super().save_model(request, obj, form, change)
 
-    list_display = ('user_id', 'username', 'email', 'first_name', 'last_name', 'team_signup', 'has_consent', 'is_superuser')
+    list_display = ('id', 'username', 'email', 'first_name', 'last_name', 'team_signup', 'has_consent', 'is_superuser')
 
 
 admin.site.register(User, UserAdmin)
