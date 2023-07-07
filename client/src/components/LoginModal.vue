@@ -5,7 +5,7 @@
           
           <v-row justify="end">
             <v-col cols="auto">
-          <v-btn variant="text" @click="closeModal"><v-icon icon="mdi-close" size="32px"></v-icon></v-btn>
+          <v-btn variant="plain" @click="closeModal"><v-icon icon="mdi-close" size="32px"></v-icon></v-btn>
           </v-col>
           </v-row>
 
@@ -54,7 +54,7 @@
           <v-card-actions class="justify-center">   
             <v-col cols="auto">
                 <v-row align="center" justify="center" class="p-10">
-                  <v-btn variant="text" 
+                  <v-btn variant="flat" 
                   class="bg-primaryRed" 
                   @click="submitForm">Login</v-btn>
                 </v-row>
