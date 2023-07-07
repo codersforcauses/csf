@@ -6,18 +6,6 @@ import snakify, { type Snakify } from 'snakify-ts'
 
 const baseURL = 'http://localhost:8081/api/event'
 
-const convertKeysToCamelCase = <T>(obj: { [key: string]: any }): T => {
-  const newObj: { [key: string]: any } = {}
-  for (const key in obj) {
-    // eslint-disable-next-line no-prototype-builtins
-    if (obj.hasOwnProperty(key)) {
-      const snakeCaseKey = key.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase()
-      newObj[snakeCaseKey] = obj[key]
-    }
-  }
-  return newObj as T
-}
-
 export const useEventStore = defineStore('event', {
   state: () => ({
     events: <Event[]>[]
