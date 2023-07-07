@@ -14,7 +14,7 @@
       >
       <v-row class="mr-4">
         <v-btn
-          class="text-primaryRed bg-transparent border-primaryRed mr-3 pb-1"
+          class="text-primaryWhite bg-transparent mr-3 pb-1"
           size="x-small"
           variant="flat"
           :style="{ fontFamily: 'Hackney', fontSize: '28px' }"
