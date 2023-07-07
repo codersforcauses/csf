@@ -28,7 +28,7 @@
               bg-color="#FFFFFF"
               :rules="[required]"
               v-model="form.email" 
-              label="Email"
+              label="Username"
               required>
             </v-text-field>
               <v-text-field
@@ -93,7 +93,7 @@ const closeModal = () => {
 }
 
 const submitForm = () => {
-  console.log('Email:', form.value.email)
+  console.log('Username:', form.value.email)
   console.log('Password:', form.value.password)
   closeModal()
 }
