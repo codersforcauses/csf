@@ -44,13 +44,13 @@
       class="hidden-md-and-up"
     >
       <template v-slot:activator="{ props }">
-        <v-btn icon v-bind="props" class="hidden-md-and-up pr-3">
+        <v-btn icon v-bind="props" class="hidden-md-and-up">
           <v-icon>mdi-menu</v-icon>
         </v-btn>
       </template>
       <v-card color="black">
         <v-container class="pa-0 ma-0">
-          <v-toolbar dark app color="black" class="hidden-md-and-up sticky-nav">
+          <v-toolbar color="black" class="hidden-md-and-up sticky-nav">
             <v-img
               :src="CSFLogoWhite"
               width="125"
@@ -59,11 +59,12 @@
               max-height="60"
             ></v-img>
             <v-spacer></v-spacer>
-            <v-btn icon @click="dialog = false" class="hidden-md-and-up pr-3">
+            <v-btn icon @click="dialog = false" class="hidden-md-and-up">
               <v-icon>mdi-close</v-icon>
             </v-btn>
           </v-toolbar>
         </v-container>
+
         <v-list class="listItem pa-0 mt-16">
           <v-img
             :src="FooterBanner"
@@ -72,31 +73,43 @@
             class="hidden-md-and-up sticky-nav-img"
             cover
           />
+
           <v-list-item
             v-for="(item, index) in menu"
             :key="index"
             :value="index"
             :to="item.link"
             @click="dialog = false"
+            class="mt-2"
           >
             <template v-slot:prepend>
               <v-icon v-if="item.icon">{{ item.icon }}</v-icon>
             </template>
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>
-          <v-list-item @click="openLoginModal" variant="tonal">
-            <template v-slot:prepend>
-              <v-icon style="color: #fff; opacity: 1" icon="mdi-login"></v-icon>
-            </template>
-            <v-list-item-title>Login</v-list-item-title>
-          </v-list-item>
-          <v-list-item @click="openSignUpModal" variant="tonal">
-            <template v-slot:prepend>
-              <v-icon style="color: #fff; opacity: 1" icon="mdi-pencil-box"></v-icon>
-            </template>
-            <v-list-item-title>Sign Up</v-list-item-title>
-          </v-list-item>
         </v-list>
+        <v-row class="ml-4 mb-6 mr-4" align="end">
+          <v-icon icon="mdi-login" color="text-primaryWhite pb-6" />
+          <v-spacer />
+          <v-btn
+            class="text-primaryRed bg-transparent border-primaryRed mr-3 pb-1"
+            size="large"
+            variant="flat"
+            :style="{ fontFamily: 'Hackney', fontSize: '28px' }"
+            style="letter-spacing: 0.5px"
+            @click="openLoginModal"
+            >LOGIN</v-btn
+          >
+          <v-btn
+            class="bg-primaryRed"
+            size="large"
+            variant="flat"
+            :style="{ fontFamily: 'Hackney', fontSize: '28px' }"
+            style="letter-spacing: 0.5px"
+            @click="openSignUpModal"
+            >SIGNUP</v-btn
+          >
+        </v-row>
       </v-card>
     </v-dialog>
   </v-toolbar>
@@ -182,6 +195,6 @@ const menu = [
   bottom: -5px;
   width: 100%;
   height: 2px;
-  background-color: red;
+  background-color: #ed1c24;
 }
 </style>
