@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 import axios, { type AxiosResponse } from 'axios'
 import type { Event } from '../types/event'
-import camelize from 'camelize-ts'
-import snakify, { type Snakify } from 'snakify-ts'
+//import camelize from 'camelize-ts'
+//import snakify, { type Snakify } from 'snakify-ts'
 
 const baseURL = 'http://localhost:8081/api/event'
 
