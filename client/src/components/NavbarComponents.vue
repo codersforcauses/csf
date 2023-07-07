@@ -12,12 +12,12 @@
         :exact-active-class="'active'"
         >{{ item.title }}</router-link
       >
-      <v-row class="mr-4">
+      <v-row class="mr-5">
         <v-btn
           class="text-primaryWhite bg-transparent mr-3 pb-1"
           size="x-small"
           variant="flat"
-          :style="{ fontFamily: 'Hackney', fontSize: '28px' }"
+          :style="{ fontFamily: 'Hackney', fontSize: '20px' }"
           style="letter-spacing: 0.5px"
           @click="openLoginModal"
           >LOGIN</v-btn
@@ -26,7 +26,7 @@
           class="bg-primaryRed pb-1"
           size="x-small"
           variant="flat"
-          :style="{ fontFamily: 'Hackney', fontSize: '28px' }"
+          :style="{ fontFamily: 'Hackney', fontSize: '20px' }"
           style="letter-spacing: 0.5px"
           @click="openSignUpModal"
           >SIGNUP</v-btn
