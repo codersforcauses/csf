@@ -6,6 +6,18 @@ import snakify, { type Snakify } from 'snakify-ts'
 
 const baseURL = 'http://localhost:8081/api/event'
 
+const convertKeysToCamelCase = <T>(obj: { [key: string]: any }): T => {
+  const newObj: { [key: string]: any } = {}
+  for (const key in obj) {
+    // eslint-disable-next-line no-prototype-builtins
+    if (obj.hasOwnProperty(key)) {
+      const snakeCaseKey = key.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase()
+      newObj[snakeCaseKey] = obj[key]
+    }
+  }
+  return newObj as T
+}
+
 export const useEventStore = defineStore('event', {
   state: () => ({
     events: <Event[]>[]
@@ -26,23 +38,21 @@ export const useEventStore = defineStore('event', {
       const index = this.events.findIndex((e) => e.eventId == event.eventId && !e.isPublic)
 
       if (index > -1) {
-        await axios.put(`${baseURL}/update/${event.eventId}`, snakify(event))
-        console.log('event updated')
-        this.events[index] = event
+        const { status } = await axios.put(`${baseURL}/update/${event.eventId}`, snakify(event))
+        if (status == 200) this.events[index] = event
       }
     },
     async deleteEvent(eventId: Event['eventId']) {
       const index = this.events.findIndex((e) => eventId == e.eventId && !e.isPublic)
 
       if (index > -1) {
-        await axios.delete(`${baseURL}/delete/${eventId}`)
-        console.log('event deleted')
-        this.events.splice(index, 1)
+        const { status } = await axios.delete(`${baseURL}/delete/${eventId}`)
+        if (status == 200) this.events.splice(index, 1)
       }
     },
     async getEvents() {
-      const { data }: AxiosResponse<Snakify<Event>[]> = await axios.get(`${baseURL}/get/`)
-      this.events = camelize(data)
+      const { data, status }: AxiosResponse<Snakify<Event>[]> = await axios.get(`${baseURL}/get/`)
+      if (status == 200) this.events = camelize(data)
     }
   },
   getters: {}
