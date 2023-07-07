@@ -124,7 +124,8 @@ const menu = [
   { icon: 'mdi-trophy', title: 'Challenges', link: '/' },
   { icon: 'mdi-account-group', title: 'Team Page', link: '/teams' },
   { icon: 'mdi-calendar', title: 'Events', link: '/events' },
-  { icon: 'mdi-star', title: 'Leaderboards', link: '/' }
+  { icon: 'mdi-star', title: 'Leaderboards', link: '/' },
+  { icon: 'mdi-calendar', title: 'dashboard', link: '/dashboard' },
 ]
 </script>
 
