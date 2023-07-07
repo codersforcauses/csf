@@ -45,4 +45,3 @@ export const useEventStore = defineStore('event', {
   },
   getters: {}
 })
- 
