@@ -9,7 +9,10 @@
           </v-col>
           </v-row>
 
-          <v-img :src=logo width="100%" cover></v-img>
+          <v-img :src=logo 
+          width="100%" 
+          height="120"
+          contain></v-img>
 
 
           <v-col cols="auto">
@@ -19,7 +22,7 @@
             </v-row>
           </v-col>
 
-          <v-card-text>
+          <v-card-text class="pb-0 mb-0">
             <v-form>
               <v-text-field 
               bg-color="#FFFFFF"
@@ -38,25 +41,28 @@
             </v-text-field>
             </v-form>
           </v-card-text>
-          
-          <v-card-actions>
-              <v-col cols="auto" justify="center">
-                <v-row align="center" justify="center">
-                  <v-btn varient="text" 
-                  color="secondaryBlue" 
-                  style="font-size: 12px">Forgot Password?</v-btn>
-                </v-row>       
 
-                <v-row align="center" justify="center">
+        
+          <v-row align="center" justify="center" >
+                <v-btn 
+                class="pb-15 mt-0"
+                variant="plain" 
+                color="secondaryBlue"
+                style="font-size: 12px">Forgot Password?</v-btn>
+          </v-row>    
+          
+          <v-card-actions class="justify-center">   
+            <v-col cols="auto">
+                <v-row align="center" justify="center" class="p-10">
                   <v-btn variant="text" 
                   class="bg-primaryRed" 
                   @click="submitForm">Login</v-btn>
                 </v-row>
 
                 <v-row align="center" justify="center">
-                  <v-btn varient="text" 
+                  <p>or<v-btn variant="plain" 
                   color="secondaryBlue" 
-                  style="font-size:12px">Register</v-btn>
+                  style="font-size:12px">Register</v-btn></p>
                 </v-row>
               </v-col>
           </v-card-actions>
