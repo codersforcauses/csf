@@ -90,6 +90,8 @@
     </p>
     <v-row justify="center" class="my-7" no-gutters>
       <v-btn
+        href="https://stride-for-education.raisely.com"
+        target="_blank"
         class="bg-primaryRed pb-14 mb-6"
         size="x-large"
         :style="{ fontFamily: 'Hackney', fontSize: '42px' }"
