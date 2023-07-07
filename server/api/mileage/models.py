@@ -2,6 +2,7 @@ from django.db import models
 import datetime
 from ..users.models import User
 
+
 class Mileage(models.Model):
     mileage_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

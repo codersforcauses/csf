@@ -10,6 +10,7 @@ def get_mileage(request, user):
     serializer = MileageSerializer(mileages, many=True)
     return Response(serializer.data)
 
+
 @api_view(['POST'])
 def post_mileage(request):
     serializer = MileageSerializer(data=request.data)
