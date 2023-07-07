@@ -12,12 +12,25 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-    migrations.CreateModel(
-    name='Mileage',
-    fields=[
-    ('mileage_id', models.AutoField(primary_key=True, serialize=False)),
-    ('kilometres', models.IntegerField()),
-    ('date', models.DateField(default=datetime.date.today)),
-    ],
-    ),
+        migrations.CreateModel(
+            name='Mileage',
+            fields=[
+                (
+                    'mileage_id',
+                    models.AutoField(
+                        primary_key=True,
+                        serialize=False
+                    )
+                ),
+                (
+                    'kilometres',
+                    models.IntegerField()
+                ),
+                (
+                    'date',
+                    models.DateField(
+                        default=datetime.date.today)
+                ),
+            ],
+        ),
     ]
