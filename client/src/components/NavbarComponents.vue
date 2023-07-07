@@ -1,14 +1,39 @@
 <template>
-  <v-toolbar dark app color="black" class="hidden-sm-and-down">
-    <v-img :src="CSFLogoWhite" width="125" height="60" max-width="125" max-height="60"></v-img>
+  <v-toolbar dark app color="black" class="hidden-sm-and-down sticky-nav">
+    <v-img :src="CSFLogoWhite" width="125" height="60" max-width="125" max-height="60" />
     <v-spacer></v-spacer>
-    <v-toolbar-items class="hidden-sm-and-down">
-      <v-btn v-for="item in menu" :key="item.title" :to="item.link" flat>{{ item.title }}</v-btn>
-      <v-btn active @click="openLoginModal">LOGIN</v-btn>
-      <v-btn active @click="openSignUpModal">SIGNUP</v-btn>
+    <v-toolbar-items class="hidden-sm-and-down d-flex align-center" align="center">
+      <router-link
+        v-for="item in menu"
+        :key="item.title"
+        :to="item.link"
+        class="navbar-link text-primaryWhite mr-8"
+        flat
+        >{{ item.title }}</router-link
+      >
+      <v-row class="mr-4">
+        <v-btn
+          class="text-primaryRed bg-transparent border-primaryRed mr-3 pb-1"
+          size="x-small"
+          variant="flat"
+          :style="{ fontFamily: 'Hackney', fontSize: '28px' }"
+          style="letter-spacing: 0.5px"
+          @click="openLoginModal"
+          >LOGIN</v-btn
+        >
+        <v-btn
+          class="bg-primaryRed pb-1"
+          size="x-small"
+          variant="flat"
+          :style="{ fontFamily: 'Hackney', fontSize: '28px' }"
+          style="letter-spacing: 0.5px"
+          @click="openSignUpModal"
+          >SIGNUP</v-btn
+        >
+      </v-row>
     </v-toolbar-items>
   </v-toolbar>
-  <v-toolbar dark app color="black" class="hidden-md-and-up">
+  <v-toolbar dark app color="black" class="hidden-md-and-up sticky-nav">
     <v-img :src="CSFLogoWhite" width="125" height="60" max-width="125" max-height="60"></v-img>
     <v-spacer></v-spacer>
     <v-dialog
@@ -24,7 +49,7 @@
       </template>
       <v-card color="black">
         <v-container class="pa-0 ma-0">
-          <v-toolbar dark app color="black" class="hidden-md-and-up">
+          <v-toolbar dark app color="black" class="hidden-md-and-up sticky-nav">
             <v-img
               :src="CSFLogoWhite"
               width="125"
@@ -38,10 +63,14 @@
             </v-btn>
           </v-toolbar>
         </v-container>
-        <v-container class="pa-0">
-          <v-img :src="FooterBanner" width="100%" height="8" class="hidden-md-and-up" cover></v-img>
-        </v-container>
-        <v-list class="listItem pa-0">
+        <v-list class="listItem pa-0 mt-16">
+          <v-img
+            :src="FooterBanner"
+            width="100%"
+            height="6"
+            class="hidden-md-and-up sticky-nav-img"
+            cover
+          />
           <v-list-item
             v-for="(item, index) in menu"
             :key="index"
@@ -70,7 +99,8 @@
       </v-card>
     </v-dialog>
   </v-toolbar>
-  <v-img :src="FooterBanner" width="100%" height="8" cover></v-img>
+
+  <v-img :src="FooterBanner" width="100%" height="8" class="sticky-nav-img" cover />
 
   <SignUpModal
     :dialog-modal="signupModal"
@@ -103,10 +133,10 @@ const openLoginModal = () => {
 }
 
 const menu = [
-  { icon: 'mdi-card-account-details-outline', title: 'About Us', link: '/' },
+  { icon: 'mdi-card-account-details-outline', title: 'About', link: '/' },
   { icon: 'mdi-chart-bar', title: 'Dashboard', link: '/' },
   { icon: 'mdi-trophy', title: 'Challenges', link: '/' },
-  { icon: 'mdi-account-group', title: 'Team Page', link: '/teams' },
+  { icon: 'mdi-account-group', title: 'Team', link: '/teams' },
   { icon: 'mdi-calendar', title: 'Events', link: '/events' },
   { icon: 'mdi-star', title: 'Leaderboards', link: '/' }
 ]
@@ -116,5 +146,25 @@ const menu = [
 .listItem {
   color: white;
   background-color: black;
+}
+
+.sticky-nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+}
+
+.sticky-nav-img {
+  position: fixed;
+  top: 60;
+  width: 100%;
+  z-index: 999;
+}
+
+.navbar-link {
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
 }
 </style>
