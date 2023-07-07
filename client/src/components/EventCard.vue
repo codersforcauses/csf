@@ -7,8 +7,10 @@
       <v-chip
         variant="outlined"
         :class="{ 'text-secondaryGreen': !event.isPublic, 'text-secondaryBlue': event.isPublic }"
-        >{{ !event.isPublic ? 'Private' : 'Official' }}</v-chip
       >
+        {{ !event.isPublic ? 'Private' : 'Official' }}
+      </v-chip>
+      <v-chip v-if="event.isArchived"> Archived </v-chip>
     </v-card-title>
     <v-card-subtitle class="text-primaryRed font-italic"
       >{{ event.startDate }} - {{ event.endDate }}</v-card-subtitle

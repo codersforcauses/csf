@@ -2,18 +2,34 @@
   <div v-if="!isLoading">
     <v-row class="bg-primaryWhite pl-4 pt-4" align="center" no-gutters>
       <v-col>
-        <v-text-field prepend-inner-icon="mdi-magnify" hide-details placeholder="Search Events" clearable
-          v-model="searchQuery" />
+        <v-text-field
+          prepend-inner-icon="mdi-magnify"
+          hide-details
+          placeholder="Search Events"
+          clearable
+          v-model="searchQuery"
+        />
       </v-col>
       <v-col class="justify-center d-flex" cols="2">
-        <v-btn v-if="tempIsTeamAdmin" size="x-large" density="compact" icon="mdi-plus"
-          class="bg-primaryRed text-primaryWhite" @click="isAddingEvent = true">
+        <v-btn
+          v-if="tempIsTeamAdmin"
+          size="x-large"
+          density="compact"
+          icon="mdi-plus"
+          class="bg-primaryRed text-primaryWhite"
+          @click="isAddingEvent = true"
+        >
         </v-btn>
       </v-col>
     </v-row>
     <div id="cards-container" class="bg-primaryWhite pt-4">
-      <EventCard v-for="event in filteredEventsList" :key="event.eventId" :event="event" :isTeamAdmin="tempIsTeamAdmin"
-        @edit="openEditModal" />
+      <EventCard
+        v-for="event in filteredEventsList"
+        :key="event.eventId"
+        :event="event"
+        :isTeamAdmin="tempIsTeamAdmin"
+        @edit="openEditModal"
+      />
     </div>
   </div>
   <EventsModal v-if="isAddingEvent" :type="'Create'" @close="closeModal" v-model="isAddingEvent" />
@@ -28,18 +44,18 @@ import { ref, computed, onMounted } from 'vue'
 import { useEventStore } from '../stores/event'
 
 const eventStore = useEventStore()
-const isLoading = ref<boolean>(true);
-const eventList = ref();
+const isLoading = ref<boolean>(true)
+const eventList = ref()
 
 onMounted(async () => {
   try {
-    await eventStore.getEvents();
-    eventList.value = eventStore.events;
+    await eventStore.getEvents()
+    eventList.value = eventStore.events
   } catch (error) {
     console.log(error)
   }
-  console.log(eventList.value);
-  isLoading.value = false;
+  console.log(eventList.value)
+  isLoading.value = false
 })
 
 const searchQuery = ref<string>('')
