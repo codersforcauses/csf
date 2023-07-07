@@ -6,6 +6,7 @@ import snakify, { type Snakify } from 'snakify-ts'
 
 const baseURL = 'http://localhost:8081/api/event'
 
+
 export const useEventStore = defineStore('event', {
   state: () => ({
     events: <Event[]>[]
