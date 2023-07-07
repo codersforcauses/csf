@@ -5,10 +5,9 @@ from .serializers import MileageSerializer
 
 
 @api_view(['GET'])
-def get_mileage(request, user_id):
-    mileages = Mileage.objects.get(user_id=user_id)
-    serializer = MileageSerializer(mileages)
-    print(serializer.data)
+def get_mileage(request, user):
+    mileages = Mileage.objects.filter(user=user)
+    serializer = MileageSerializer(mileages, many=True)
     return Response(serializer.data)
 
 @api_view(['POST'])
