@@ -10,7 +10,10 @@ def create_event(request):
     serialiser = EventSerialiser(data=request.data)
     if serialiser.is_valid():
         serialiser.save()
-        return Response(serialiser.data)
+        return Response(serialiser.data, status=200)
+    else:
+        # print(serialiser)
+        return Response(serialiser.errors, status=400)
 
 
 @api_view(['GET'])
@@ -31,11 +34,12 @@ def get_events(request):
 @api_view(['PUT'])
 def update_event(request, event_id):
     event = Event.objects.get(event_id=event_id)
+    print(event)
     if event.is_public is False:
         serializer = EventSerialiser(instance=event, data=request.data)
         if serializer.is_valid():
             serializer.save()
-        return Response(serializer.data)
+        return Response(serializer.errors)
     else:
         return Response("Event is not private")
 
