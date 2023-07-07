@@ -36,7 +36,7 @@ export const useUserStore = defineStore('user', {
   async registerUser(obj : object) {
     try {
       await axios
-        .post(`${BASE_URL}/users/register/`, obj)
+        .post(`${BASE_URL}/auth/register/`, obj)
     } catch (error) {
       console.log(error)
     }
