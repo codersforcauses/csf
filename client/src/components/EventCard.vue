@@ -6,9 +6,9 @@
       <v-spacer></v-spacer>
       <v-chip
         variant="outlined"
-        :class="{ 'text-secondaryGreen': !event.isPublic, 'text-secondaryBlue': event.isPublic }"
+       :class="event.isPublic ? 'text-secondaryBlue' : 'text-secondaryGreen'"
       >
-        {{ !event.isPublic ? 'Private' : 'Official' }}
+       {{ event.isPublic ? 'Official' : 'Private' }}
       </v-chip>
       <v-chip v-if="event.isArchived"> Archived </v-chip>
     </v-card-title>
