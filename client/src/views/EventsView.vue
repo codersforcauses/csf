@@ -24,7 +24,7 @@
     <div id="cards-container" class="bg-primaryWhite pt-4">
       <EventCard
         v-for="event in filteredEventsList"
-        :key="event.id"
+        :key="event.eventId"
         :event="event"
         :isTeamAdmin="tempIsTeamAdmin"
         @edit="openEditModal"
