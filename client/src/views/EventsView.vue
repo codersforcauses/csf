@@ -33,7 +33,13 @@
     </div>
   </div>
   <EventsModal v-if="isAddingEvent" :type="'Create'" @close="closeModal" v-model="isAddingEvent" />
-  <EventsModal v-if="isEditingEvent" :type="'Edit'" :event="editingEvent" @close="closeModal" v-model="isEditingEvent" />
+  <EventsModal
+    v-if="isEditingEvent"
+    :type="'Edit'"
+    :event="editingEvent"
+    @close="closeModal"
+    v-model="isEditingEvent"
+  />
 </template>
 
 <script setup lang="ts">
@@ -87,7 +93,7 @@ function openEditModal(id: number) {
 </script>
 
 <style>
-#cards-container>.v-card:nth-child(odd) {
+#cards-container > .v-card:nth-child(odd) {
   background-color: #f4f4f4;
 }
 </style>
