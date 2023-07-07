@@ -5,13 +5,14 @@ from rest_framework.test import APITestCase
 # Create your tests here.
 from .models import Team
 
+
 class TeamTests(APITestCase):
     def setUp(self):
         Team.objects.create(
             name="mockTeam",
             join_code="mockTeam",
         )
-    
+
     def test_create_team(self):
         create_team_name = "testCreateTeam"
         create_team_join_code = "T35T"
@@ -31,12 +32,7 @@ class TeamTests(APITestCase):
     def test_get_team(self):
         existing_team = Team.objects.get()
         response = self.client.get(
-            reverse(
-                "team:get-team",
-                kwargs={
-                    "team_id": existing_team.team_id
-                }
-            )
+            reverse("team:get-team", kwargs={"team_id": existing_team.team_id})
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(existing_team.name, response.data["name"])
@@ -44,11 +40,7 @@ class TeamTests(APITestCase):
 
     def test_get_teams(self):
         all_team = Team.objects.all()
-        response = self.client.get(
-            reverse(
-                "team:get-teams"
-            )
-        )
+        response = self.client.get(reverse("team:get-teams"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data_count = 0
         for x in response.data:
@@ -58,10 +50,8 @@ class TeamTests(APITestCase):
     def test_update_team(self):
         team_before_update = Team.objects.get()
         response = self.client.put(
-            reverse(
-                "team:update-team",
-                kwargs={"team_id": team_before_update.team_id}
-                ),
+            reverse("team:update-team",
+                    kwargs={"team_id": team_before_update.team_id}),
             {
                 "name": "updateTeamNameTest",
                 "join_code": "TEST",
@@ -76,10 +66,8 @@ class TeamTests(APITestCase):
         team_count_before_delete = Team.objects.all().count()
         team_to_delete = Team.objects.get(name="mockTeam")
         response = self.client.delete(
-            reverse(
-                "team:delete-team",
-                kwargs={"team_id": team_to_delete.team_id}
-                ),
+            reverse("team:delete-team",
+                    kwargs={"team_id": team_to_delete.team_id}),
         )
         team_count_after_delete = Team.objects.all().count()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
