@@ -31,6 +31,20 @@ export const useUserStore = defineStore('user', {
         this.authUser = null
         this.authToken = null
       }
+    },
+    async changePassword(newPassword: string, newPasswordConfirmation: string) {
+      await axios
+          .put(`${BASE_URL}/users/change_password/`, {
+            password: newPassword,
+            password_confirmation: newPasswordConfirmation
+          })
+          .then((res) => {
+            if (res.status == 200) {
+              alert("Password successfully changed")
+            } else if (res.status == 400){
+              alert("Passwords did not match")
+            }
+          })
     }
   }
 })
