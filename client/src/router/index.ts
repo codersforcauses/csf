@@ -19,15 +19,15 @@ const router = createRouter({
       component: EventsView
     },
     {
-      path: '/challenge',
-      name: 'challenge',
-      component: ChallengeView
-    },
-    {
       path: '/dashboard',
       name: 'dashboard',
       component: DashboardView
     },
+    {
+      path: '/challenge',
+      name: 'challenge',
+      component: ChallengeView
+    }
   ]
 })
 
