@@ -113,7 +113,7 @@ const menu = [
   { icon: 'mdi-card-account-details-outline', title: 'About Us', link: '/about' },
   { icon: 'mdi-chart-bar', title: 'Dashboard', link: '/' },
   { icon: 'mdi-trophy', title: 'Challenges', link: '/challenge' },
-  { icon: 'mdi-account-group', title: 'Team Page', link: '/' },
+  { icon: 'mdi-account-group', title: 'Team Page', link: '/team' },
   { icon: 'mdi-calendar', title: 'Events', link: '/events' },
   { icon: 'mdi-star', title: 'Leaderboards', link: '/' }
 ]

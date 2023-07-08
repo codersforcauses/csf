@@ -7,5 +7,4 @@
     <RouterLink to="/signup">signup</RouterLink>
     <RouterLink to="/Challenge">Challenge</RouterLink>
   </nav>
-  <p>Test</p>
 </template>
