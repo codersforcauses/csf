@@ -4,7 +4,7 @@
       <div v-if="firstPage">
         <form class="bg-backgroundGrey">
           <v-container class="pa-0">
-            <v-img src="/images/Footer-min.jpeg" width="100%" height="10" cover></v-img>
+            <v-img :src="FooterBanner" width="100%" height="10" cover></v-img>
           </v-container>
           <v-row justify="end">
             <v-col cols="auto">
@@ -150,7 +150,7 @@
                         @click="selectAvatar(avatar.url)"
                         :class="{ 'avatar-selected': avatar.isSelected === true }"
                       >
-                        <v-img :src="`/src/assets/avatars/${avatar.url}`" :alt="avatar.alt"></v-img>
+                        <v-img :src="`/avatars/${avatar.url}`" :alt="avatar.alt"></v-img>
                       </v-avatar>
                     </div>
                   </v-col>
@@ -233,6 +233,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, watchEffect } from 'vue'
+import FooterBanner from '/images/Footer-min.jpeg'
 import { type Signup } from '../types/signup'
 
 defineProps(['dialogModal'])
