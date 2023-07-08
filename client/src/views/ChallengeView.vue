@@ -3,28 +3,31 @@
         <h1 class="text-md-h1 mt-10 mb-12 font-weight-medium" id="title">PICK A CHALLENGE</h1>
 
         <div class="ma-10">
-            <h2 style="margin-bottom: 1vh;" class="text-h6 font-weight-bold">Choose your challenge to complete over the 12 days of the
+            <h2 style="margin-bottom: 1vh;" class="text-h6 font-weight-bold">Choose your challenge to complete over the 12
+                days of the
                 challenge</h2>
             <h2 class="text-h6">(Don't worry if you can't hit your daily target, just do your best!)</h2>
         </div>
     </div>
     <v-sheet class="d-flex flex-wrap justify-center">
-        <v-card class="mx-auto challenge-card pa-5 card-outer" v-bind:style="{ backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.6),rgba(0, 0, 0, 0.6)), url(' + challenge.img + ')' }" theme="dark" v-for="challenge in challenges">
+        <v-card class="mx-auto challenge-card pa-5 card-outer"
+            v-bind:style="{ backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.6),rgba(0, 0, 0, 0.6)), url(' + challenge.img + ')' }"
+            theme="dark" v-for="challenge in challenges">
             <v-card-title class="text-h4 font-weight-medium py-2" id="card-head">
                 {{ challenge.title }}
             </v-card-title>
             <v-card-text class="text-subtitle-1 font-weight-medium py-2">
-                {{challenge.about}}
+                {{ challenge.about }}
             </v-card-text>
             <v-card-actions id="bottom">
                 <v-list-item class="w-100 pa-6">
                     <template v-slot:append>
                         <div>
                             <v-icon class="me-1" icon="mdi-map-marker-distance"></v-icon>
-                            <span class="text-h7 me-2">{{challenge.totalkm + "km"}}</span>
+                            <span class="text-h7 me-2">{{ challenge.totalkm + "km" }}</span>
                             <span class="text-h7 me-1">·</span>
                             <v-icon class="me-1" icon="mdi-calendar"></v-icon>
-                            <span class="text-h7">{{challenge.km + "km per day"}}</span>
+                            <span class="text-h7">{{ challenge.km + "km per day" }}</span>
                         </div>
                     </template>
                 </v-list-item>
