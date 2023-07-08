@@ -54,6 +54,11 @@ const data = {
 };
 
 const options = {
+  plugins: {
+    legend: {
+      display: false,
+    }
+  },
   responsive: true,
   maintainAspectRatio: true,
   tooltips: {
