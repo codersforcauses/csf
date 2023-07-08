@@ -54,8 +54,7 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
     team_signup = models.BooleanField(default=False)  # boolean
     has_consent = models.BooleanField(default=False)  # boolean
-    travel_method = models.CharField(max_length=100, blank=True)
-    subteam_id = models.ForeignKey(SubTeam, null=True, on_delete=models.CASCADE)
+    travel_method = models.CharField(max_length=100, blank=True, choices=[('RUNNING', 'RUNNING'), ('WHEELING', 'WHEELING'), ('WALKING', 'WALKING')])
     team_id = models.ForeignKey(Team, null=True, on_delete=models.CASCADE)
     team_admin = models.BooleanField(default=False)
 
