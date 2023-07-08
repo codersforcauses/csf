@@ -1,4 +1,5 @@
 from django.db import models
+from api.team.models import Team
 
 
 class Event(models.Model):
@@ -9,8 +10,7 @@ class Event(models.Model):
     description = models.CharField(max_length=200)
     is_public = models.BooleanField()
     is_archived = models.BooleanField()
-    # to add in later like chantelle said in issue
-    # team_id =
+    team_id = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return self.name
