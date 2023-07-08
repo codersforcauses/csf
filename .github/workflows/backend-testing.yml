@@ -1,8 +1,7 @@
 name: Backend CI
 
 on:
-  pull_request:
-    types: [opened]
+  push
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -44,6 +43,12 @@ jobs:
       - name: Install dependencies 👨🏻‍💻
         run: poetry install
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        
+      - name: Generate coverage report
+        run: |
+          pip install pytest
+          pip install pytest-cov
+          pytest --cov=./ --cov-report=xml
 
       - name: Run Migrations 🕊️
         run: |
@@ -57,7 +62,7 @@ jobs:
           coverage xml
 
       - name: Upload Coverage ☂️
-        uses: codecov/codecov-action@v3.1.0
+        uses: codecov/codecov-action@v3.1.4
         with:
           flags: backend
           files: ./server/coverage.xml
