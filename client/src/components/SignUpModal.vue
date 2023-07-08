@@ -9,17 +9,14 @@
           <v-row justify="end">
             <v-col cols="auto">
               <v-btn variant="text" @click="closeModal">
-                <v-icon icon="mdi-close" size="32px"></v-icon
-              ></v-btn>
+                <v-icon icon="mdi-close" size="32px"></v-icon></v-btn>
             </v-col>
           </v-row>
           <v-card-title class="d-flex justify-center">
             <v-card flat color="backgroundGrey">
               <v-card-item>
                 <v-card-title class="text-center text-h4 pb-2">Register</v-card-title>
-                <v-card-subtitle class="text-center text-subtitle-1"
-                  >Create an account</v-card-subtitle
-                >
+                <v-card-subtitle class="text-center text-subtitle-1">Create an account</v-card-subtitle>
               </v-card-item>
             </v-card>
           </v-card-title>
@@ -27,60 +24,29 @@
             <v-container>
               <v-row dense>
                 <v-col cols="12">
-                  <v-text-field
-                    bg-color="#FFFFFF"
-                    :rules="[required]"
-                    v-model="state.username"
-                    label="Username"
-                    required
-                  ></v-text-field>
+                  <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.username" label="Username"
+                    required></v-text-field>
                 </v-col>
                 <v-col cols="12">
-                  <v-text-field
-                    bg-color="#FFFFFF"
-                    :rules="[required]"
-                    v-model="state.firstName"
-                    label="First name"
-                    required
-                  ></v-text-field>
+                  <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.firstName" label="First name"
+                    required></v-text-field>
                 </v-col>
                 <v-col cols="12">
-                  <v-text-field
-                    bg-color="#FFFFFF"
-                    :rules="[required]"
-                    v-model="state.lastName"
-                    label="Last name"
-                  ></v-text-field>
+                  <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.lastName"
+                    label="Last name"></v-text-field>
                 </v-col>
 
                 <v-col cols="12">
-                  <v-text-field
-                    bg-color="#FFFFFF"
-                    :rules="[required]"
-                    v-model="state.email"
-                    label="Email"
-                    required
-                  ></v-text-field>
+                  <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.email" label="Email"
+                    required></v-text-field>
                 </v-col>
                 <v-col cols="12">
-                  <v-text-field
-                    bg-color="#FFFFFF"
-                    :rules="[required]"
-                    v-model="state.password"
-                    label="Password"
-                    type="password"
-                    required
-                  ></v-text-field>
+                  <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.password" label="Password"
+                    type="password" required></v-text-field>
                 </v-col>
                 <v-col cols="12">
-                  <v-text-field
-                    bg-color="#FFFFFF"
-                    :rules="[required]"
-                    v-model="state.confirmPassword"
-                    label="Confirm Password"
-                    type="password"
-                    required
-                  ></v-text-field>
+                  <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.confirmPassword"
+                    label="Confirm Password" type="password" required></v-text-field>
                 </v-col>
               </v-row>
             </v-container>
@@ -89,25 +55,16 @@
             <v-container>
               <v-row align="center" justify="center">
                 <v-col cols="auto">
-                  <v-btn
-                    variant="flat"
-                    rounded="lg"
-                    color="primaryRed"
-                    @click="
-                      () => {
-                        firstPage = !firstPage
-                      }
-                    "
-                    >NEXT</v-btn
-                  >
+                  <v-btn variant="flat" rounded="lg" color="primaryRed" @click="() => {
+                    firstPage = !firstPage
+                  }
+                    ">NEXT</v-btn>
                 </v-col>
               </v-row>
               <v-row align="center" justify="center">
                 <v-col cols="auto">
                   <!-- todo add in routing to login modal when its ready -->
-                  <v-btn variant="text" color="secondaryBlue" style="font-size: 12px"
-                    >Already Have an account?</v-btn
-                  >
+                  <v-btn variant="text" color="secondaryBlue" style="font-size: 12px">Already Have an account?</v-btn>
                 </v-col>
               </v-row>
             </v-container>
@@ -122,17 +79,14 @@
           <v-row justify="end">
             <v-col cols="auto">
               <v-btn variant="text" @click="closeModal">
-                <v-icon icon="mdi-close" size="32px"></v-icon
-              ></v-btn>
+                <v-icon icon="mdi-close" size="32px"></v-icon></v-btn>
             </v-col>
           </v-row>
           <v-card-title class="d-flex justify-center">
             <v-card class="" flat color="backgroundGrey">
               <v-card-item>
                 <v-card-title class="text-center text-h4 pb-2">Register</v-card-title>
-                <v-card-subtitle class="text-center text-subtitle-1"
-                  >Create an account</v-card-subtitle
-                >
+                <v-card-subtitle class="text-center text-subtitle-1">Create an account</v-card-subtitle>
               </v-card-item>
             </v-card>
           </v-card-title>
@@ -145,11 +99,8 @@
                 <v-row dense class="px-10">
                   <v-col v-for="avatar in avatarPaths" :key="avatar.url" cols="4">
                     <div class="text-center py-3">
-                      <v-avatar
-                        size="70"
-                        @click="selectAvatar(avatar.url)"
-                        :class="{ 'avatar-selected': avatar.isSelected === true }"
-                      >
+                      <v-avatar size="70" @click="selectAvatar(avatar.url)"
+                        :class="{ 'avatar-selected': avatar.isSelected === true }">
                         <v-img :src="`/src/assets/avatars/${avatar.url}`" :alt="avatar.alt"></v-img>
                       </v-avatar>
                     </div>
@@ -161,20 +112,12 @@
                 <v-row>
                   <v-container class="d-flex justify-space-evenly">
                     <div v-for="method in travelMethod" :key="method.logo" class="text-center">
-                      <v-avatar
-                        size="52px"
-                        variant="text"
-                        :class="{ 'mode-selected': method.isSelected === true }"
-                        ><v-icon
-                          :color="method.isSelected ? 'white' : ''"
-                          size="44px"
-                          :icon="method.logo"
-                          @click="
-                            () => {
-                              selectMode(method.mode)
-                            }
-                          "
-                        ></v-icon>
+                      <v-avatar size="52px" variant="text"
+                        :class="{ 'mode-selected': method.isSelected === true }"><v-icon
+                          :color="method.isSelected ? 'white' : ''" size="44px" :icon="method.logo" @click="() => {
+                            selectMode(method.mode)
+                          }
+                            "></v-icon>
                       </v-avatar>
                       <p>{{ method.mode }}</p>
                     </div>
@@ -182,24 +125,19 @@
                 </v-row>
                 <v-row no-gutters class="px-2 pt-4">
                   <v-col cols="12">
-                    <v-checkbox
-                      density="default"
-                      v-model="state.teamSignup"
-                      label="I am signing up on behalf of a class"
-                    ></v-checkbox>
+                    <v-checkbox density="default" v-model="state.teamSignup"
+                      label="I am signing up on behalf of a class"></v-checkbox>
                   </v-col>
                   <v-col cols="12">
-                    <v-checkbox
-                      density="default"
-                      v-model="state.hasConsent"
-                      label="I give consent for my data to be used by CSF"
-                    ></v-checkbox>
+                    <v-checkbox density="default" v-model="state.hasConsent"
+                      label="I give consent for my data to be used by CSF"></v-checkbox>
                     <p class="text-caption px-4">
                       For more information please view
-                      <span style="text-decoration: underline" class="text-secondaryBlue"
-                        ><a href="https://www.google.com">our privacy statement</a></span
-                      >
+                      <span style="text-decoration: underline" class="text-secondaryBlue"><a
+                          href="https://www.google.com">our privacy statement</a></span>
                     </p>
+                    <p v-if="isError">
+                      {{ errorData }}</p>
                   </v-col>
                 </v-row>
               </v-row>
@@ -210,17 +148,14 @@
               <v-row align="center" justify="center">
                 <v-col cols="auto">
                   <v-btn variant="text" class="mx-2" @click="firstPage = !firstPage">BACK</v-btn>
-                  <v-btn variant="flat" class="mx-2" rounded="lg" color="primaryRed" @click="submit"
-                    >CREATE ACCOUNT</v-btn
-                  >
+                  <v-btn variant="flat" class="mx-2" rounded="lg" color="primaryRed" @click="submit">CREATE
+                    ACCOUNT</v-btn>
                 </v-col>
               </v-row>
               <v-row align="center" justify="center">
                 <v-col cols="auto">
                   <!-- todo add in routing to login modal when its ready -->
-                  <v-btn variant="text" color="secondaryBlue" style="font-size: 12px"
-                    >Already Have an account?</v-btn
-                  >
+                  <v-btn variant="text" color="secondaryBlue" style="font-size: 12px">Already Have an account?</v-btn>
                 </v-col>
               </v-row>
             </v-container>
@@ -236,6 +171,7 @@ import { ref, reactive, watchEffect } from 'vue'
 import { type Signup } from '../types/signup'
 import { useUserStore } from '../stores/user'
 import snakeize from 'snakeize'
+import { type AxiosResponse } from "axios";
 const userStore = useUserStore()
 
 defineProps(['dialogModal'])
@@ -247,6 +183,8 @@ const closeModal = () => {
 const isFullscreen = ref(false)
 const firstPage = ref<boolean>(true)
 const dialog = ref(true)
+const isError = ref<boolean>(false);
+const errorData = ref(null);
 const avatarPaths = ref([
   { url: 'avatar1.jpg', alt: 'avatar1', isSelected: true },
   { url: 'avatar2.jpg', alt: 'avatar2', isSelected: false },
@@ -285,8 +223,8 @@ const submit = async () => {
   delete obj.avatar
   try {
     await userStore.registerUser(obj);
-  } catch (error) {
-    console.log(error);
+  } catch (error: AxiosResponse | any) {
+    await handleError(error.response);
     return;
   }
 }
@@ -309,6 +247,16 @@ const selectMode = (mode: string) => {
 const required = (v: string) => {
   return !!v || 'Field is required'
 }
+
+const handleError = async (error: AxiosResponse) => {
+  if (error.status === 400) {
+    errorData.value = error.data[1];
+    isError.value = true;
+    return;
+  }
+  isError.value = true;
+}
+
 
 watchEffect(async () => {
   const updateFullscreen = async () => {

@@ -1,9 +1,8 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
+import axios, { type AxiosResponse } from 'axios'
 import { useStorage } from '@vueuse/core'
 
 const BASE_URL = 'http://localhost:8081/api'
-
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -33,13 +32,8 @@ export const useUserStore = defineStore('user', {
         this.authToken = null
       }
     },
-  async registerUser(obj : object) {
-    try {
-      await axios
-        .post(`${BASE_URL}/auth/register/`, obj)
-    } catch (error) {
-      console.log(error)
+    async registerUser(obj: object) {
+      await axios.post(`${BASE_URL}/auth/register/`, obj)
     }
-}
-}
+  }
 })
