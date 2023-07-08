@@ -136,8 +136,10 @@
                       <span style="text-decoration: underline" class="text-secondaryBlue"><a
                           href="https://www.google.com">our privacy statement</a></span>
                     </p>
-                    <p v-if="isError">
-                      {{ errorData }}</p>
+                    <div v-if="isError" style="padding-top: 10px;">
+                      <p v-for="item in errorData" :key="item" style="padding-top: 50px;">
+                      {{ item[0] }}</p>
+                      </div>
                   </v-col>
                 </v-row>
               </v-row>
@@ -184,7 +186,7 @@ const isFullscreen = ref(false)
 const firstPage = ref<boolean>(true)
 const dialog = ref(true)
 const isError = ref<boolean>(false);
-const errorData = ref(null);
+const errorData = ref<object>({});
 const avatarPaths = ref([
   { url: 'avatar1.jpg', alt: 'avatar1', isSelected: true },
   { url: 'avatar2.jpg', alt: 'avatar2', isSelected: false },
@@ -227,6 +229,7 @@ const submit = async () => {
     await handleError(error.response);
     return;
   }
+  isError.value = false;
 }
 const selectAvatar = (url: string) => {
   avatarPaths.value.forEach((avatar) => {
