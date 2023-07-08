@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import User
-
+from .serializers import RequestResetPasswordSerializer
 
 @api_view(['PUT'])
 def change_password(request):
@@ -16,11 +16,14 @@ def change_password(request):
     else:
         return Response("Not logged in", 403)
 
-import uuid
-
 @api_view(['POST'])
 def request_reset_password(request):
-    try: user = User.objects.get(email=request.data["email"])
-    except: Response(status=404)
-    user.update(reset_token=uuid.uuid())
+    # try: user = User.objects.get(email=request.data["email"])
+    # except: Response(status=404)
+    # user.update(reset_token=uuid.uuid())
+
+    serializer = RequestResetPasswordSerializer(request.data)
+    if not serializer.is_valid(): return Response(status=404)
+
+
     return Response("OK")
