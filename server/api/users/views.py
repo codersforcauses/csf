@@ -22,8 +22,14 @@ def request_reset_password(request):
     # except: Response(status=404)
     # user.update(reset_token=uuid.uuid())
 
+    print(request.user)
+
     serializer = RequestResetPasswordSerializer(request.data)
-    if not serializer.is_valid(): return Response(status=404)
+    serializer.is_valid(raise_exception=True)
 
 
     return Response("OK")
+
+
+# resetToken
+# newPassword
