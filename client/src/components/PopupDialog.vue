@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useDisplay } from 'vuetify'
+// import { useDisplay } from 'vuetify'
 
 const emit = defineEmits(['update:modelValue', 'handleSubmit'])
 const props = defineProps(['modelValue', 'title', 'text', 'submitText'])
