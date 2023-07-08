@@ -8,14 +8,14 @@
       </v-card-actions>
       <v-card-title class="justify-center text-h4 mb-5">Change Password</v-card-title>
       <v-text-field
-        hide-details
         bg-color="white"
         label="New Password"
         v-model="newPassword"
+        :error-messages="passwordErrors"
+        @focus = "passwordErrors = []"
         class="mx-5 mb-5"
       ></v-text-field>
       <v-text-field
-        hide-details
         bg-color="white"
         label="Confirm New Password"
         v-model="newPasswordConfirmation"
@@ -32,15 +32,26 @@
 import { ref } from 'vue'
 import { useUserStore } from '../stores/user'
 const emit = defineEmits(['close'])
-const newPassword = ref("")
-const newPasswordConfirmation = ref("")
+const newPassword = ref<string>("")
+const newPasswordConfirmation = ref<string>("")
+const passwordErrors = ref<string[]>([])
 const userStore = useUserStore()
 
 async function changePassword() {
-  try {
-    await userStore.changePassword(newPassword.value, newPasswordConfirmation.value);
-  } catch (error) {
-    console.log(error);
+  if (newPassword.value === newPasswordConfirmation.value) {
+    try {
+      let res = await userStore.changePassword(newPassword.value)
+      if (res === "Success") {
+        alert("successfully changed password")
+      } 
+      else if (res === "Invalid") {
+        passwordErrors.value = ["Please choose a stronger password"]
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  } else {
+    passwordErrors.value = ["Passwords must match"]
   }
 }
 

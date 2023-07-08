@@ -11,16 +11,13 @@ def change_password(request):
     # so instead pass the username in the request too
     try:
         user = User.objects.get(username=data["username"]) 
-        if request.data["password"] == request.data["password_confirmation"]: 
-            try:
-                validate_password(request.data["password"])
-                user.set_password(request.data["password"])
-                user.save()
-                return Response("Success")
-            except:
-                return Response("Invalid")
-        else:
-            return Response("Passwords did not match")
+        try:
+            validate_password(request.data["password"])
+            user.set_password(request.data["password"])
+            user.save()
+            return Response("Success")
+        except:
+            return Response("Invalid")
     except:
         return Response("Not logged in", 403)
 
