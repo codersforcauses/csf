@@ -4,7 +4,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./data/db:/var/lib/postgresql/data
-    env_file: .env.prod
+    env_file: .env.dev
     # healthcheck for sever container
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
@@ -16,7 +16,7 @@ services:
     image: ${DOCKERHUB_USERNAME}/csf-prod-server:latest
     container_name: csf_server
     restart: unless-stopped
-    env_file: .env.prod
+    env_file: .env.dev
     ports:
       - 8081:8081
     entrypoint: /entrypoint.sh
@@ -26,7 +26,7 @@ services:
     container_name: csf_client
     restart: unless-stopped
     env_file:
-      - .env.prod
+      - .env.dev
     ports:
       - 8082:8082
 
