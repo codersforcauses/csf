@@ -1,59 +1,63 @@
 <template>
   <v-card variant="flat">
     <v-card-title>Mileage Graph</v-card-title>
-    <VCardActions class="d-flex justify-space-between">
-      <v-btn v-for="option in ['This Week', 'This Month', 'This Year', 'Overall']" rounded="xl" size="small"> {{ option }} </v-btn>
-    </VCardActions>
-    <Bar :data="chartData" /> 
+    <v-card-actions class="d-flex justify-space-between">
+      <v-btn
+        class="text-secondaryGreen"
+        variant="tonal"
+        v-for="option in ['This Week', 'This Month', 'This Year', 'Overall']"
+        :key="option"
+        rounded="xl"
+        size="small"
+      >
+        {{ option }}
+      </v-btn>
+    </v-card-actions>
+    <LineWithLineChart :data="data" :options="options" />
   </v-card>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Bar } from 'vue-chartjs'
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js'
+import type { ChartDataset } from 'chart.js'
+import LineWithLineChart from '../types/LineWithLineChart'
 
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
+const DATA_COUNT = 12
+const labels = []
+for (let i = 0; i < DATA_COUNT; ++i) {
+  labels.push(i.toString())
+}
+const datapoints = [0, 20, 20, 60, 60, 120, 180, 120, 125, 105, 110, 170]
+const data = {
+  labels: labels,
+  datasets: [
+    {
+      label: 'KMs run over time',
+      data: datapoints,
+      borderColor: 'rgb(255, 99, 99)',
+      fill: false,
+      cubicInterpolationMode: 'monotone',
+      tension: 0.4
+    } as ChartDataset<'line', (number | null)[]> // Update the type assertion
+  ]
+};
 
-const props = defineProps({
-  labels: {
-    type: Array,
-    required: true
-  },
-  datasets: {
-    type: Array,
-    required: true
+const options = {
+  responsive: true,
+  maintainAspectRatio: true,
+  tooltips: {
+    intersect: false
   }
-})
-
-const chartData = {
-        labels: props.labels,
-        datasets: props.datasets}
+}
 </script>
-
-<!-- The following is what was initially in dashboard view (filtered to include only the relevant information)-->
-
-<!-- 
-<template>
-  <v-row class="ma-0" align="center">
-        <v-col>
-          <mileage-graph :labels="tempLabels" :datasets="tempDatasets"/>
-        </v-col>
-    </v-row>
-</template>
-
-<script setup lang="ts">
-    import { ref } from "vue"
-    import mileageGraph from "@/components/MileageGraph.vue";
-
-    const tempLabels = ref(["January", "February", "March", "April", "May", "June", "July"])
-    const tempDatasets = ref([
-        {
-            label: 'Yearly Mileage',
-            backgroundColor: '#f87979',
-            data: [40, 39, 10, 40, 39, 80, 40]
-        }
-    ])
-</script> 
--->
