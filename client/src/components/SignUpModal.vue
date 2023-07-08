@@ -302,22 +302,27 @@ const submit = async () => {
   state.avatar = avatar[0].url
   const obj = snakify(state)
   // console.log(obj)
-  delete obj.confirm_password
-  delete obj.avatar
-  Object.assign(errors, initialErrors)
-  try {
-    await userStore.registerUser(obj)
-  } catch (error: AxiosError | any) {
-    console.debug(error)
-    if (error instanceof AxiosError && error.message) {
-      errorMsg.value = error.message
-      if (error.response?.status != 201) {
-        const data = camelize(error.response!.data[1])
-        Object.assign(errors, data)
-        firstPage.value = true
+  if (obj.confirm_password != obj.password) {
+    Object.assign(errors, { confirmPassword: "Passwords don't match" })
+    firstPage.value = true
+  } else {
+    delete obj.confirm_password
+    delete obj.avatar
+    Object.assign(errors, initialErrors)
+    try {
+      await userStore.registerUser(obj)
+    } catch (error: AxiosError | any) {
+      console.debug(error)
+      if (error instanceof AxiosError && error.message) {
+        errorMsg.value = error.message
+        if (error.response?.status != 201) {
+          const data = camelize(error.response!.data[1])
+          Object.assign(errors, data)
+          firstPage.value = true
+        }
+      } else {
+        errorMsg.value = JSON.stringify(error)
       }
-    } else {
-      errorMsg.value = JSON.stringify(error)
     }
   }
 }
