@@ -1,19 +1,19 @@
 <template>
     <div id="header-container" class="text-white">
-        <h1 class="text-md-h1 mt-10 mb-10">Challenges</h1>
+        <h1 class="text-md-h1 mt-10 mb-12 font-weight-medium" id="title">PICK A CHALLENGE</h1>
 
         <div class="ma-10">
-            <h2 style="margin-bottom: 1vh;" class="text-h6">Choose your challenge to complete over the 12 days of the
+            <h2 style="margin-bottom: 1vh;" class="text-h6 font-weight-bold">Choose your challenge to complete over the 12 days of the
                 challenge</h2>
             <h2 class="text-h6">(Don't worry if you can't hit your daily target, just do your best!)</h2>
         </div>
     </div>
     <v-sheet class="d-flex flex-wrap justify-center">
-        <v-card class="mx-auto challenge-card pa-5 card-outer" v-bind:style="{ backgroundImage: 'url(' + challenge.img + ')' }" theme="dark" v-for="challenge in challenges">
-            <v-card-title class="text-lg-h5 py-2">
+        <v-card class="mx-auto challenge-card pa-5 card-outer" v-bind:style="{ backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0),rgba(0, 0, 0, 1)), url(' + challenge.img + ')' }" theme="dark" v-for="challenge in challenges">
+            <v-card-title class="text-h4 font-weight-medium py-2" id="card-head">
                 {{ challenge.title }}
             </v-card-title>
-            <v-card-text class="text-subtitle-1 py-2">
+            <v-card-text class="text-subtitle-1 font-weight-medium py-2">
                 {{challenge.about}}
             </v-card-text>
             <v-card-actions id="bottom">
@@ -21,10 +21,10 @@
                     <template v-slot:append>
                         <div>
                             <v-icon class="me-1" icon="mdi-map-marker-distance"></v-icon>
-                            <span class="subheading me-2">{{challenge.totalkm + "km"}}</span>
-                            <span class="me-1">·</span>
+                            <span class="text-h7 me-2">{{challenge.totalkm + "km"}}</span>
+                            <span class="text-h7 me-1">·</span>
                             <v-icon class="me-1" icon="mdi-calendar"></v-icon>
-                            <span class="subheading">{{challenge.km + "km per day"}}</span>
+                            <span class="text-h7">{{challenge.km + "km per day"}}</span>
                         </div>
                     </template>
                 </v-list-item>
@@ -36,10 +36,10 @@
 
 <script setup lang="ts">
 const challenges = [
-    { title: "WOORABINDA CHALLENGE", img: "https://cdn.vuetifyjs.com/images/cards/docks.jpg", about: "Virtually travel the distance from one end of Woorabinda to the other.", km: "2", totalkm: "24" },
-    { title: "WURRUMIYANGA CHALLENGE", img: "https://cdn.vuetifyjs.com/images/cards/docks.jpg", about: "Virtually travel the distance around Wurrumiyanga.", km: "5", totalkm: "60" },
-    { title: "GALIWIN'KU CHALLENGE", img: "https://cdn.vuetifyjs.com/images/cards/docks.jpg", about: "Virtually travel the the distance around Galiwin’ku.", km: "7", totalkm: "84" },
-    { title: "PALM ISLAND CHALLENGE", img: "https://cdn.vuetifyjs.com/images/cards/docks.jpg", about: "Virtually travel the length of Palm Island.", km: "10", totalkm: "120" }
+    { title: "WOORABINDA CHALLENGE", img: "/images/Woorabinda.jpeg", about: "Virtually travel the distance from one end of Woorabinda to the other.", km: "2", totalkm: "24" },
+    { title: "WURRUMIYANGA CHALLENGE", img: "/images/Wurrumiyanga.jpeg", about: "Virtually travel the distance around Wurrumiyanga.", km: "5", totalkm: "60" },
+    { title: "GALIWIN'KU CHALLENGE", img: "/images/Galiwin_ku.jpeg", about: "Virtually travel the the distance around Galiwin’ku.", km: "7", totalkm: "84" },
+    { title: "PALM ISLAND CHALLENGE", img: "/images/Palm_Island.jpg", about: "Virtually travel the length of Palm Island.", km: "10", totalkm: "120" }
 ]
 
 </script>
@@ -59,6 +59,10 @@ const challenges = [
     }
 }
 
+#title {
+    font-family: 'Hackney' !important;
+}
+
 .challenge-image {
     width: 1000
 }
@@ -66,6 +70,7 @@ const challenges = [
 .challenge-card {
     box-shadow: 0 2px 7px rgb(0 0 0 / 0.1);
     height: 35vh;
+    background-size: cover;
 }
 
 #header-container {
@@ -84,6 +89,7 @@ const challenges = [
 }
 
 #header-contents {
+    font-family: 'Sofia Pro';
     margin: 4vh;
 }
 
@@ -97,8 +103,10 @@ const challenges = [
     bottom: 0;
     right: 0;
     width: 100%;
-    background-color: black;
-    opacity: 80%;
+}
+
+#card-head {
+    font-family: 'Hackney' !important;
 }
 </style>
   
