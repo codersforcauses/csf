@@ -6,24 +6,32 @@
         <v-spacer></v-spacer>
         <v-icon icon="mdi-close" size="x-large" @click="closeModal"></v-icon>
       </v-card-actions>
-      <v-card-title class="justify-center text-h4 mb-5">Change Password</v-card-title>
-      <v-text-field
-        bg-color="white"
-        label="New Password"
-        v-model="newPassword"
-        :error-messages="passwordErrors"
-        @focus = "passwordErrors = []"
-        class="mx-5 mb-5"
-      ></v-text-field>
-      <v-text-field
-        bg-color="white"
-        label="Confirm New Password"
-        v-model="newPasswordConfirmation"
-        class="mx-5 mb-16"
-      ></v-text-field>
-      <v-card-actions class="justify-center mb-4">
-        <v-btn class="bg-primaryRed" @click="changePassword">Change Password</v-btn>
-      </v-card-actions>
+      <div v-if="passwordChanged">
+        <v-card-title class="justify-center text-h4 mb-5">Password Changed</v-card-title>
+        <v-card-text class="text-center">Your password has been changed successfully.</v-card-text>
+      </div>
+      <div v-else>
+        <v-card-title class="justify-center text-h4 mb-5">Change Password</v-card-title>
+          <v-text-field
+            bg-color="white"
+            label="New Password"
+            v-model="newPassword"
+            type="password"
+            :error-messages="passwordErrors"
+            @focus = "passwordErrors = []"
+            class="mx-5 mb-5"
+          ></v-text-field>
+          <v-text-field
+            bg-color="white"
+            label="Confirm New Password"
+            type="password"
+            v-model="newPasswordConfirmation"
+            class="mx-5 mb-16"
+          ></v-text-field>
+          <v-card-actions class="justify-center mb-4">
+            <v-btn class="bg-primaryRed" @click="changePassword">Change Password</v-btn>
+          </v-card-actions>
+      </div>
     </v-card>
   </v-dialog>
 </template>
@@ -35,6 +43,7 @@ const emit = defineEmits(['close'])
 const newPassword = ref<string>("")
 const newPasswordConfirmation = ref<string>("")
 const passwordErrors = ref<string[]>([])
+const passwordChanged = ref(false)
 const userStore = useUserStore()
 
 async function changePassword() {
@@ -42,7 +51,7 @@ async function changePassword() {
     try {
       let res = await userStore.changePassword(newPassword.value)
       if (res === "Success") {
-        alert("successfully changed password")
+        passwordChanged.value = true
       } 
       else if (res === "Invalid") {
         passwordErrors.value = ["Please choose a stronger password"]
