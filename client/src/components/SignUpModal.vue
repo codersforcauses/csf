@@ -150,7 +150,7 @@
                         @click="selectAvatar(avatar.url)"
                         :class="{ 'avatar-selected': avatar.isSelected === true }"
                       >
-                        <v-img :src="`/src/assets/avatars/${avatar.url}`" :alt="avatar.alt"></v-img>
+                        <v-img :src="`/avatars/${avatar.url}`" :alt="avatar.alt"></v-img>
                       </v-avatar>
                     </div>
                   </v-col>
@@ -233,7 +233,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, watchEffect } from 'vue'
-import FooterBanner from '@/assets/images/Footer-min.jpeg'
+import FooterBanner from '/images/Footer-min.jpeg'
 import { type Signup } from '../types/signup'
 
 defineProps(['dialogModal'])

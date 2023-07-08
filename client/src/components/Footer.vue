@@ -135,5 +135,5 @@
 </template>
 
 <script setup lang="ts">
-import FooterBanner from '@/assets/images/Footer-min.jpeg'
+import FooterBanner from '/images/Footer-min.jpeg'
 </script>
