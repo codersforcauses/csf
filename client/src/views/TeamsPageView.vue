@@ -9,9 +9,6 @@ import LoginModal from '../components/LoginModal.vue'
 import CreateOrJoinTeam from '../components/teams/CreateOrJoinTeam.vue'
 import TeamDashboard from '../components/teams/TeamDashboard.vue'
 import { ref, onMounted } from 'vue'
-import { useTeamStore } from '../stores/team'
-
-const teamStore = useTeamStore()
 
 // change these values to show the different modals
 const user_id = ref(true)
