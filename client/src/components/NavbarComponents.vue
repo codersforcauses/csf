@@ -1,7 +1,7 @@
 <template>
   <v-toolbar dark app color="black" class="hidden-sm-and-down sticky-nav">
     <v-btn :width="125" :height="60" :to="homelink" :active="false">
-      <v-img :width="125" :height="60" cover src="../../public/images/CSF_Logo_WHITE.png"></v-img>
+      <v-img :width="125" :height="60" cover src="/images/CSF_Logo_WHITE.png"></v-img>
     </v-btn>
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down d-flex align-center" align="center">
