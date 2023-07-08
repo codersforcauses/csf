@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import NavbarComponents from './components/NavbarComponents.vue'
+import ReloadPWA from "./components/ReloadPWA.vue";
 import { RouterView } from 'vue-router'
 </script>
 
 <template>
+  <ReloadPWA />
   <header>
     <NavbarComponents />
   </header>
@@ -136,3 +138,4 @@ import { RouterView } from 'vue-router'
   font-weight: 100;
 }
 </style>
+
