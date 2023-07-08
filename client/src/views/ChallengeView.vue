@@ -9,7 +9,7 @@
         </div>
     </div>
     <v-sheet class="d-flex flex-wrap justify-center">
-        <v-card class="mx-auto challenge-card pa-5 card-outer" v-bind:style="{ backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0),rgba(0, 0, 0, 1)), url(' + challenge.img + ')' }" theme="dark" v-for="challenge in challenges">
+        <v-card class="mx-auto challenge-card pa-5 card-outer" v-bind:style="{ backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.6),rgba(0, 0, 0, 0.6)), url(' + challenge.img + ')' }" theme="dark" v-for="challenge in challenges">
             <v-card-title class="text-h4 font-weight-medium py-2" id="card-head">
                 {{ challenge.title }}
             </v-card-title>
@@ -36,9 +36,9 @@
 
 <script setup lang="ts">
 const challenges = [
-    { title: "WOORABINDA CHALLENGE", img: "/images/Woorabinda.jpeg", about: "Virtually travel the distance from one end of Woorabinda to the other.", km: "2", totalkm: "24" },
-    { title: "WURRUMIYANGA CHALLENGE", img: "/images/Wurrumiyanga.jpeg", about: "Virtually travel the distance around Wurrumiyanga.", km: "5", totalkm: "60" },
-    { title: "GALIWIN'KU CHALLENGE", img: "/images/Galiwin_ku.jpeg", about: "Virtually travel the the distance around Galiwin’ku.", km: "7", totalkm: "84" },
+    { title: "WOORABINDA CHALLENGE", img: "/images/Woorabinda.jpg", about: "Virtually travel the distance from one end of Woorabinda to the other.", km: "2", totalkm: "24" },
+    { title: "WURRUMIYANGA CHALLENGE", img: "/images/Wurrumiyanga.jpg", about: "Virtually travel the distance around Wurrumiyanga.", km: "5", totalkm: "60" },
+    { title: "GALIWIN'KU CHALLENGE", img: "/images/Galiwin_ku.jpg", about: "Virtually travel the the distance around Galiwin’ku.", km: "7", totalkm: "84" },
     { title: "PALM ISLAND CHALLENGE", img: "/images/Palm_Island.jpg", about: "Virtually travel the length of Palm Island.", km: "10", totalkm: "120" }
 ]
 
@@ -71,6 +71,7 @@ const challenges = [
     box-shadow: 0 2px 7px rgb(0 0 0 / 0.1);
     height: 35vh;
     background-size: cover;
+    background-position: 100%, 0;
 }
 
 #header-container {
