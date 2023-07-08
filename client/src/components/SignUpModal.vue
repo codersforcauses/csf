@@ -135,7 +135,7 @@
                       <span style="text-decoration: underline" class="text-secondaryBlue"><a
                           href="https://www.google.com">our privacy statement</a></span>
                     </p>
-                    <p v-if="isError">{{ errorStatus }}</p>
+                    <p v-if="isError" style="padding-top: 10px;">{{ errorStatus }}</p>
                   </v-col>
                 </v-row>
               </v-row>
