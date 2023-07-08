@@ -92,7 +92,7 @@
           <v-icon icon="mdi-login" color="text-primaryWhite pb-6" />
           <v-spacer />
           <v-btn
-            class="text-primaryRed bg-transparent border-primaryRed mr-3 pb-1"
+            class="text-primaryWhite bg-transparent mr-3 pb-1"
             size="large"
             variant="flat"
             :style="{ fontFamily: 'Hackney', fontSize: '28px' }"
