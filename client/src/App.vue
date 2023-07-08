@@ -4,13 +4,15 @@ import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <header>
-    <NavbarComponents />
-  </header>
+  <NavbarComponents />
   <RouterView />
 </template>
 
 <style>
+body {
+  padding-top: 64px; /* Adjust the value based on the height of your navbar */
+}
+
 @font-face {
   font-family: 'Hackney';
   src: local('Hackney'), url('./assets/fonts/Hackney-Vector.ttf') format('truetype');

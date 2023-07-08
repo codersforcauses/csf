@@ -26,9 +26,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
+import { useUserStore } from '../stores/user'
 
 const { mobile } = useDisplay()
 const dialog = ref(true)
+const userStore = useUserStore()
 
 const form = ref({
   email: '',
@@ -45,6 +47,7 @@ const closeModal = () => {
 const submitForm = () => {
   console.log('Email:', form.value.email)
   console.log('Password:', form.value.password)
+  userStore.loginUser(form.value.email, form.value.password)
   closeModal()
 }
 </script>
