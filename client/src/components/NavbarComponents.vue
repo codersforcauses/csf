@@ -1,6 +1,8 @@
 <template>
   <v-toolbar dark app color="black" class="hidden-sm-and-down sticky-nav">
-    <v-img :src="CSFLogoWhite" width="125" height="60" max-width="125" max-height="60" />
+    <v-btn :width="125" :height="60" :to="homelink" :active="false">
+      <v-img :width="125" :height="60" cover src="../../public/images/CSF_Logo_WHITE.png"></v-img>
+    </v-btn>
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down d-flex align-center" align="center">
       <router-link
@@ -35,7 +37,9 @@
     </v-toolbar-items>
   </v-toolbar>
   <v-toolbar dark app color="black" class="hidden-md-and-up sticky-nav">
-    <v-img :src="CSFLogoWhite" width="125" height="60" max-width="125" max-height="60"></v-img>
+    <v-btn :width="125" :height="60" :to="homelink" :active="false">
+      <v-img :width="125" :height="60" cover src="/images/CSF_Logo_WHITE.png" />
+    </v-btn>
     <v-spacer></v-spacer>
     <v-dialog
       v-model="dialog"
@@ -51,13 +55,9 @@
       <v-card color="black">
         <v-container class="pa-0 ma-0">
           <v-toolbar color="black" class="hidden-md-and-up sticky-nav">
-            <v-img
-              :src="CSFLogoWhite"
-              width="125"
-              height="60"
-              max-width="125"
-              max-height="60"
-            ></v-img>
+            <v-btn :width="125" :height="60" :to="homelink" @click="dialog = false" :active="false">
+              <v-img :width="125" :height="60" cover src="/images/CSF_Logo_WHITE.png" />
+            </v-btn>
             <v-spacer></v-spacer>
             <v-btn icon @click="dialog = false" class="hidden-md-and-up">
               <v-icon>mdi-close</v-icon>
@@ -122,7 +122,7 @@
     @open-signUp-modal="openSignUpModal"
   />
 
-  <LoginModalVue :dialog-modal="loginModal" v-if="loginModal" @open-login-modal="openLoginModal" />
+  <LoginModal :dialog-modal="loginModal" v-if="loginModal" @open-login-modal="openLoginModal" />
 </template>
 
 <script setup lang="ts">
@@ -131,12 +131,14 @@ import { useDisplay } from 'vuetify'
 import SignUpModal from './SignUpModal.vue'
 import FooterBanner from '/images/Footer-min.jpeg'
 import CSFLogoWhite from '/images/CSF_Logo_WHITE.png'
-import LoginModalVue from './LoginModal.vue'
+import LoginModal from './LoginModal.vue'
 
 const { mobile } = useDisplay()
 const dialog = ref<boolean>(false)
 const signupModal = ref<boolean>(false)
 const loginModal = ref<boolean>(false)
+
+let homelink = '/'
 
 const openSignUpModal = () => {
   signupModal.value = !signupModal.value
@@ -151,7 +153,7 @@ const menu = [
   { icon: 'mdi-chart-bar', title: 'Dashboard', link: '/' },
   { icon: 'mdi-account-group', title: 'Team', link: '/teams' },
   { icon: 'mdi-calendar', title: 'Events', link: '/events' },
-  { icon: 'mdi-trophy', title: 'Challenges', link: '/' },
+  { icon: 'mdi-trophy', title: 'Challenges', link: '/challenge' },
   { icon: 'mdi-star', title: 'Leaderboards', link: '/' }
 ]
 </script>
