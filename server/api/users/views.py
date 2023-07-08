@@ -15,3 +15,12 @@ def change_password(request):
             return Response("Passwords did not match", 400)
     else:
         return Response("Not logged in", 403)
+
+import uuid
+
+@api_view(['POST'])
+def request_reset_password(request):
+    try: user = User.objects.get(email=request.data["email"])
+    except: Response(status=404)
+    user.update(reset_token=uuid.uuid())
+    return Response("OK")
