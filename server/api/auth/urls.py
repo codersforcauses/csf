@@ -5,7 +5,6 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView
 )
 
-# from .views import RegistrationView
 from . import views
 
 
