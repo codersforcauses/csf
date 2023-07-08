@@ -91,7 +91,7 @@ function openEditModal(id: number) {
 }
 </script>
 
-<style>
+<style scoped>
 #cards-container > .v-card:nth-child(odd) {
   background-color: #f4f4f4;
 }
