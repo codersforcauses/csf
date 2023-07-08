@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view
 from .models import User
 from django.contrib.auth.password_validation import validate_password
 from .serializers import RequestResetPasswordSerializer
+from django.core.exceptions import ValidationError
 
 @api_view(['PUT'])
 def change_password(request):
@@ -16,8 +17,8 @@ def change_password(request):
             user.set_password(request.data["password"])
             user.save()
             return Response("Success")
-        except:
-            return Response("Invalid")
+        except ValidationError as e:
+            return Response(list(e)[0])
     except:
         return Response("Not logged in", 403)
 

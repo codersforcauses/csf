@@ -53,8 +53,8 @@ async function changePassword() {
       if (res === "Success") {
         passwordChanged.value = true
       } 
-      else if (res === "Invalid") {
-        passwordErrors.value = ["Please choose a stronger password"]
+      else {
+        passwordErrors.value = [res]
       }
     } catch (error) {
       console.log(error);
