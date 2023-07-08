@@ -9,14 +9,17 @@
           <v-row justify="end">
             <v-col cols="auto">
               <v-btn variant="text" @click="closeModal">
-                <v-icon icon="mdi-close" size="32px"></v-icon></v-btn>
+                <v-icon icon="mdi-close" size="32px"></v-icon
+              ></v-btn>
             </v-col>
           </v-row>
           <v-card-title class="d-flex justify-center">
             <v-card flat color="backgroundGrey">
               <v-card-item>
                 <v-card-title class="text-center text-h4 pb-2">Register</v-card-title>
-                <v-card-subtitle class="text-center text-subtitle-1">Create an account</v-card-subtitle>
+                <v-card-subtitle class="text-center text-subtitle-1"
+                  >Create an account</v-card-subtitle
+                >
               </v-card-item>
             </v-card>
           </v-card-title>
@@ -24,29 +27,66 @@
             <v-container>
               <v-row dense>
                 <v-col cols="12">
-                  <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.username" label="Username" :error-messages="errors.username"
-                    required></v-text-field>
+                  <v-text-field
+                    bg-color="#FFFFFF"
+                    :rules="[required]"
+                    v-model="state.username"
+                    label="Username"
+                    :error-messages="errors.username"
+                    required
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="12">
-                  <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.firstName" label="First name" :error-messages="errors.firstName"
-                    required></v-text-field>
+                  <v-text-field
+                    bg-color="#FFFFFF"
+                    :rules="[required]"
+                    v-model="state.firstName"
+                    label="First name"
+                    :error-messages="errors.firstName"
+                    required
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="12">
-                  <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.lastName" :error-messages="errors.lastName"
-                    label="Last name"></v-text-field>
+                  <v-text-field
+                    bg-color="#FFFFFF"
+                    :rules="[required]"
+                    v-model="state.lastName"
+                    :error-messages="errors.lastName"
+                    label="Last name"
+                  ></v-text-field>
                 </v-col>
 
                 <v-col cols="12">
-                  <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.email" label="Email" :error-messages="errors.email"
-                    required></v-text-field>
+                  <v-text-field
+                    bg-color="#FFFFFF"
+                    :rules="[required]"
+                    v-model="state.email"
+                    label="Email"
+                    :error-messages="errors.email"
+                    required
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="12">
-                  <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.password" label="Password" :error-messages="errors.password"
-                    type="password" required></v-text-field>
+                  <v-text-field
+                    bg-color="#FFFFFF"
+                    :rules="[required]"
+                    v-model="state.password"
+                    label="Password"
+                    :error-messages="errors.password"
+                    type="password"
+                    required
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="12">
-                  <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.confirmPassword" :error-messages="errors.confirmPassword"
-                    label="Confirm Password" type="password" required></v-text-field>
+                  <v-text-field
+                    bg-color="#FFFFFF"
+                    :rules="[required]"
+                    v-model="state.confirmPassword"
+                    :error-messages="errors.confirmPassword"
+                    label="Confirm Password"
+                    type="password"
+                    required
+                  ></v-text-field>
                 </v-col>
               </v-row>
             </v-container>
@@ -55,7 +95,16 @@
             <v-container>
               <v-row align="center" justify="center">
                 <v-col cols="auto">
-                  <v-btn variant="flat" rounded="lg" color="primaryRed" @click="() => {firstPage = false}">
+                  <v-btn
+                    variant="flat"
+                    rounded="lg"
+                    color="primaryRed"
+                    @click="
+                      () => {
+                        firstPage = false
+                      }
+                    "
+                  >
                     NEXT
                   </v-btn>
                 </v-col>
@@ -63,7 +112,9 @@
               <v-row align="center" justify="center">
                 <v-col cols="auto">
                   <!-- todo add in routing to login modal when its ready -->
-                  <v-btn variant="text" color="secondaryBlue" style="font-size: 12px">Already Have an account?</v-btn>
+                  <v-btn variant="text" color="secondaryBlue" style="font-size: 12px"
+                    >Already Have an account?</v-btn
+                  >
                 </v-col>
               </v-row>
             </v-container>
@@ -78,14 +129,17 @@
           <v-row justify="end">
             <v-col cols="auto">
               <v-btn variant="text" @click="closeModal">
-                <v-icon icon="mdi-close" size="32px"></v-icon></v-btn>
+                <v-icon icon="mdi-close" size="32px"></v-icon
+              ></v-btn>
             </v-col>
           </v-row>
           <v-card-title class="d-flex justify-center">
             <v-card class="" flat color="backgroundGrey">
               <v-card-item>
                 <v-card-title class="text-center text-h4 pb-2">Register</v-card-title>
-                <v-card-subtitle class="text-center text-subtitle-1">Create an account</v-card-subtitle>
+                <v-card-subtitle class="text-center text-subtitle-1"
+                  >Create an account</v-card-subtitle
+                >
               </v-card-item>
             </v-card>
           </v-card-title>
@@ -98,8 +152,11 @@
                 <v-row dense class="px-10">
                   <v-col v-for="avatar in avatarPaths" :key="avatar.url" cols="4">
                     <div class="text-center py-3">
-                      <v-avatar size="70" @click="selectAvatar(avatar.url)"
-                        :class="{ 'avatar-selected': avatar.isSelected === true }">
+                      <v-avatar
+                        size="70"
+                        @click="selectAvatar(avatar.url)"
+                        :class="{ 'avatar-selected': avatar.isSelected === true }"
+                      >
                         <v-img :src="`/src/assets/avatars/${avatar.url}`" :alt="avatar.alt"></v-img>
                       </v-avatar>
                     </div>
@@ -111,12 +168,20 @@
                 <v-row>
                   <v-container class="d-flex justify-space-evenly">
                     <div v-for="method in travelMethod" :key="method.logo" class="text-center">
-                      <v-avatar size="52px" variant="text"
-                        :class="{ 'mode-selected': method.isSelected === true }"><v-icon
-                          :color="method.isSelected ? 'white' : ''" size="44px" :icon="method.logo" @click="() => {
-                            selectMode(method.mode)
-                          }
-                            "></v-icon>
+                      <v-avatar
+                        size="52px"
+                        variant="text"
+                        :class="{ 'mode-selected': method.isSelected === true }"
+                        ><v-icon
+                          :color="method.isSelected ? 'white' : ''"
+                          size="44px"
+                          :icon="method.logo"
+                          @click="
+                            () => {
+                              selectMode(method.mode)
+                            }
+                          "
+                        ></v-icon>
                       </v-avatar>
                       <p>{{ method.mode }}</p>
                     </div>
@@ -124,21 +189,25 @@
                 </v-row>
                 <v-row no-gutters class="px-2 pt-4">
                   <v-col cols="12">
-                    <v-checkbox density="default" v-model="state.teamSignup"
-                      label="I am signing up on behalf of a class"></v-checkbox>
+                    <v-checkbox
+                      density="default"
+                      v-model="state.teamSignup"
+                      label="I am signing up on behalf of a class"
+                    ></v-checkbox>
                   </v-col>
                   <v-col cols="12">
-                    <v-checkbox density="default" v-model="state.hasConsent"
-                      label="I give consent for my data to be used by CSF"></v-checkbox>
+                    <v-checkbox
+                      density="default"
+                      v-model="state.hasConsent"
+                      label="I give consent for my data to be used by CSF"
+                    ></v-checkbox>
                     <p class="text-caption px-4">
                       For more information please view
-                      <span style="text-decoration: underline" class="text-secondaryBlue"><a
-                          href="https://www.google.com">our privacy statement</a></span>
+                      <span style="text-decoration: underline" class="text-secondaryBlue"
+                        ><a href="https://www.google.com">our privacy statement</a></span
+                      >
                     </p>
-                    <div v-if="isError" class="pt-5 pl-2">
-                      <p v-for="item in errorData" :key="item" class="text-primaryRed py-2">
-                      {{ item[0] }}</p>
-                      </div>
+                    <p v-if="errorMsg" class="pt-5 pl-2" style="color: red">{{ errorMsg }}</p>
                   </v-col>
                 </v-row>
               </v-row>
@@ -149,14 +218,17 @@
               <v-row align="center" justify="center">
                 <v-col cols="auto">
                   <v-btn variant="text" class="mx-2" @click="firstPage = true">BACK</v-btn>
-                  <v-btn variant="flat" class="mx-2" rounded="lg" color="primaryRed" @click="submit">CREATE
-                    ACCOUNT</v-btn>
+                  <v-btn variant="flat" class="mx-2" rounded="lg" color="primaryRed" @click="submit"
+                    >CREATE ACCOUNT</v-btn
+                  >
                 </v-col>
               </v-row>
               <v-row align="center" justify="center">
                 <v-col cols="auto">
                   <!-- todo add in routing to login modal when its ready -->
-                  <v-btn variant="text" color="secondaryBlue" style="font-size: 12px">Already Have an account?</v-btn>
+                  <v-btn variant="text" color="secondaryBlue" style="font-size: 12px"
+                    >Already Have an account?</v-btn
+                  >
                 </v-col>
               </v-row>
             </v-container>
@@ -172,7 +244,7 @@ import { ref, reactive, watchEffect } from 'vue'
 import { type Signup } from '../types/signup'
 import { useUserStore } from '../stores/user'
 import snakify from 'snakify-ts'
-import type { AxiosError, AxiosResponse } from "axios"
+import { AxiosError } from 'axios'
 import camelize from 'camelize-ts'
 const userStore = useUserStore()
 
@@ -185,8 +257,6 @@ const closeModal = () => {
 const isFullscreen = ref(false)
 const firstPage = ref<boolean>(true)
 const dialog = ref(true)
-const isError = ref<boolean>(false);
-const errorStatus = ref(null);
 const avatarPaths = ref([
   { url: 'avatar1.jpg', alt: 'avatar1', isSelected: true },
   { url: 'avatar2.jpg', alt: 'avatar2', isSelected: false },
@@ -214,7 +284,7 @@ const state = reactive<Signup>({
   travelMethod: ''
 })
 
-
+const errorMsg = ref('')
 const initialErrors = {
   username: [],
   firstName: [],
@@ -223,7 +293,7 @@ const initialErrors = {
   password: [],
   confirmPassword: []
 }
-const errors = reactive({...initialErrors})
+const errors = reactive({ ...initialErrors })
 
 const submit = async () => {
   const avatar = avatarPaths.value.filter((avatar) => avatar.isSelected === true)
@@ -235,8 +305,21 @@ const submit = async () => {
   delete obj.confirm_password
   delete obj.avatar
   Object.assign(errors, initialErrors)
-  try { await userStore.registerUser(obj) }
-  catch (error: AxiosError | any) { await handleError(error.response)}
+  try {
+    await userStore.registerUser(obj)
+  } catch (error: AxiosError | any) {
+    console.debug(error)
+    if (error instanceof AxiosError && error.message) {
+      errorMsg.value = error.message
+      if (error.response?.status != 201) {
+        const data = camelize(error.response!.data[1])
+        Object.assign(errors, data)
+        firstPage.value = true
+      }
+    } else {
+      errorMsg.value = JSON.stringify(error)
+    }
+  }
 }
 const selectAvatar = (url: string) => {
   avatarPaths.value.forEach((avatar) => {
@@ -255,18 +338,6 @@ const selectMode = (mode: string) => {
 const required = (v: string) => {
   return !!v || 'Field is required'
 }
-
-const handleError = async (error: AxiosResponse) => {
-  // console.log(error)
-  isError.value = true
-  errorStatus.value = error.statusText
-  if (error.status != 201) {
-    const data = camelize(error.data[1])
-    Object.assign(errors, data)
-    firstPage.value = true
-  }
-}
-
 
 watchEffect(async () => {
   const updateFullscreen = async () => {

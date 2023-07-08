@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import axios, { type AxiosResponse } from 'axios'
+import axios from 'axios'
 import { useStorage } from '@vueuse/core'
 
 const BASE_URL = 'http://localhost:8081/api'
