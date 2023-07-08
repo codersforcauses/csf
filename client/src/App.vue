@@ -10,7 +10,7 @@ import { RouterView } from 'vue-router'
 
 <style>
 body {
-  padding-top: 64px; /* Adjust the value based on the height of your navbar */
+  padding-top: 64px;
 }
 
 @font-face {
