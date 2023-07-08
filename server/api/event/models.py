@@ -10,7 +10,7 @@ class Event(models.Model):
     description = models.CharField(max_length=200)
     is_public = models.BooleanField()
     is_archived = models.BooleanField()
-    team_id = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True)
+    team_id = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return self.name
