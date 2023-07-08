@@ -45,12 +45,6 @@ jobs:
       - name: Install dependencies 👨🏻‍💻
         run: poetry install
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        
-      - name: Generate coverage report
-        run: |
-          pip install pytest
-          pip install pytest-cov
-          pytest --cov=./ --cov-report=xml
 
       - name: Run Migrations 🕊️
         run: |
