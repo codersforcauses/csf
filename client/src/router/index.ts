@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import AboutView from '../views/AboutView.vue'
 import TeamsPageView from '@/views/TeamsPageView.vue'
 import EventsView from '../views/EventsView.vue'
-import DashboardView from '../views/DashboardView.vue'
+import UserSettingsView from '../views/UserSettingsView.vue'
 import ChallengeView from '../views/ChallengeView.vue'
 
 const router = createRouter({
@@ -24,9 +24,9 @@ const router = createRouter({
       component: EventsView
     },
     {
-      path: '/dashboard',
-      name: 'dashboard',
-      component: DashboardView
+      path: '/settings',
+      name: 'settings',
+      component: UserSettingsView
     },
     {
       path: '/challenge',
