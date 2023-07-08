@@ -24,28 +24,28 @@
             <v-container>
               <v-row dense>
                 <v-col cols="12">
-                  <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.username" label="Username"
+                  <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.username" label="Username" :error-messages="errors.username"
                     required></v-text-field>
                 </v-col>
                 <v-col cols="12">
-                  <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.firstName" label="First name"
+                  <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.firstName" label="First name" :error-messages="errors.firstName"
                     required></v-text-field>
                 </v-col>
                 <v-col cols="12">
-                  <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.lastName"
+                  <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.lastName" :error-messages="errors.lastName"
                     label="Last name"></v-text-field>
                 </v-col>
 
                 <v-col cols="12">
-                  <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.email" label="Email"
+                  <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.email" label="Email" :error-messages="errors.email"
                     required></v-text-field>
                 </v-col>
                 <v-col cols="12">
-                  <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.password" label="Password"
+                  <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.password" label="Password" :error-messages="errors.password"
                     type="password" required></v-text-field>
                 </v-col>
                 <v-col cols="12">
-                  <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.confirmPassword"
+                  <v-text-field bg-color="#FFFFFF" :rules="[required]" v-model="state.confirmPassword" :error-messages="errors.confirmPassword"
                     label="Confirm Password" type="password" required></v-text-field>
                 </v-col>
               </v-row>
@@ -55,10 +55,9 @@
             <v-container>
               <v-row align="center" justify="center">
                 <v-col cols="auto">
-                  <v-btn variant="flat" rounded="lg" color="primaryRed" @click="() => {
-                    firstPage = !firstPage
-                  }
-                    ">NEXT</v-btn>
+                  <v-btn variant="flat" rounded="lg" color="primaryRed" @click="() => {firstPage = false}">
+                    NEXT
+                  </v-btn>
                 </v-col>
               </v-row>
               <v-row align="center" justify="center">
@@ -136,8 +135,7 @@
                       <span style="text-decoration: underline" class="text-secondaryBlue"><a
                           href="https://www.google.com">our privacy statement</a></span>
                     </p>
-                    <p v-if="isError">
-                      {{ errorData }}</p>
+                    <p v-if="isError">{{ errorStatus }}</p>
                   </v-col>
                 </v-row>
               </v-row>
@@ -147,7 +145,7 @@
             <v-container>
               <v-row align="center" justify="center">
                 <v-col cols="auto">
-                  <v-btn variant="text" class="mx-2" @click="firstPage = !firstPage">BACK</v-btn>
+                  <v-btn variant="text" class="mx-2" @click="firstPage = true">BACK</v-btn>
                   <v-btn variant="flat" class="mx-2" rounded="lg" color="primaryRed" @click="submit">CREATE
                     ACCOUNT</v-btn>
                 </v-col>
@@ -170,8 +168,9 @@
 import { ref, reactive, watchEffect } from 'vue'
 import { type Signup } from '../types/signup'
 import { useUserStore } from '../stores/user'
-import snakeize from 'snakeize'
-import { type AxiosResponse } from "axios";
+import snakify from 'snakify-ts'
+import type { AxiosError, AxiosResponse } from "axios"
+import camelize from 'camelize-ts'
 const userStore = useUserStore()
 
 defineProps(['dialogModal'])
@@ -184,7 +183,7 @@ const isFullscreen = ref(false)
 const firstPage = ref<boolean>(true)
 const dialog = ref(true)
 const isError = ref<boolean>(false);
-const errorData = ref(null);
+const errorStatus = ref(null);
 const avatarPaths = ref([
   { url: 'avatar1.jpg', alt: 'avatar1', isSelected: true },
   { url: 'avatar2.jpg', alt: 'avatar2', isSelected: false },
@@ -212,34 +211,40 @@ const state = reactive<Signup>({
   travelMethod: ''
 })
 
+
+const initialErrors = {
+  username: [],
+  firstName: [],
+  lastName: [],
+  email: [],
+  password: [],
+  confirmPassword: []
+}
+const errors = reactive({...initialErrors})
+
 const submit = async () => {
   const avatar = avatarPaths.value.filter((avatar) => avatar.isSelected === true)
   const method = travelMethod.value.filter((method) => method.isSelected === true)
   state.travelMethod = method[0].mode
   state.avatar = avatar[0].url
-  const obj = snakeize(state)
-  console.log(obj)
+  const obj = snakify(state)
+  // console.log(obj)
   delete obj.confirm_password
   delete obj.avatar
-  try {
-    await userStore.registerUser(obj);
-  } catch (error: AxiosResponse | any) {
-    await handleError(error.response);
-    return;
-  }
+  Object.assign(errors, initialErrors)
+  try { await userStore.registerUser(obj) }
+  catch (error: AxiosError | any) { await handleError(error.response)}
 }
 const selectAvatar = (url: string) => {
   avatarPaths.value.forEach((avatar) => {
-    if (avatar.url === url) avatar.isSelected = !avatar.isSelected
-    if (avatar.url !== url) avatar.isSelected = false
+    avatar.isSelected = avatar.url === url ? !avatar.isSelected : false
   })
   state.avatar = url
 }
 
 const selectMode = (mode: string) => {
   travelMethod.value.forEach((method) => {
-    if (method.mode === mode) method.isSelected = !method.isSelected
-    if (method.mode !== mode) method.isSelected = false
+    method.isSelected = method.mode === mode ? !method.isSelected : false
   })
   state.travelMethod = mode
 }
@@ -249,12 +254,14 @@ const required = (v: string) => {
 }
 
 const handleError = async (error: AxiosResponse) => {
-  if (error.status === 400) {
-    errorData.value = error.data[1];
-    isError.value = true;
-    return;
+  // console.log(error)
+  isError.value = true
+  errorStatus.value = error.statusText
+  if (error.status != 201) {
+    const data = camelize(error.data[1])
+    Object.assign(errors, data)
+    firstPage.value = true
   }
-  isError.value = true;
 }
 
 
