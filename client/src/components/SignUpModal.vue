@@ -135,7 +135,14 @@
                       <span style="text-decoration: underline" class="text-secondaryBlue"><a
                           href="https://www.google.com">our privacy statement</a></span>
                     </p>
+<<<<<<< HEAD
                     <p v-if="isError" style="padding-top: 10px;">{{ errorStatus }}</p>
+=======
+                    <div v-if="isError" class="pt-5 pl-2">
+                      <p v-for="item in errorData" :key="item" class="text-primaryRed py-2">
+                      {{ item[0] }}</p>
+                      </div>
+>>>>>>> c703cf7 (styling)
                   </v-col>
                 </v-row>
               </v-row>
