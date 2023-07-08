@@ -25,21 +25,19 @@
           <v-form>
             <v-text-field
               bg-color="#FFFFFF"
-              :rules="[required]"
+              :rules="['required']"
               v-model="form.email"
               label="Username"
               required
-            >
-            </v-text-field>
+            />
             <v-text-field
               bg-color="#FFFFFF"
-              :rules="[required]"
+              :rules="['required']"
               v-model="form.password"
               label="Password"
               type="password"
               required
-            >
-            </v-text-field>
+            />
           </v-form>
         </v-card-text>
 
