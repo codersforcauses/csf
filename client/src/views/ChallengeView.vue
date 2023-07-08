@@ -6,7 +6,9 @@
       <h2 style="margin-bottom: 1vh" class="text-subtitle-1 text-md-h6 font-weight-bold">
         Choose your challenge to complete over the 14 days of the challenge
       </h2>
-      <h2 class="text-subtitle-1 text-md-h6">(Don't worry if you can't hit your daily target, just do your best!)</h2>
+      <h2 class="text-subtitle-1 text-md-h6">
+        (Don't worry if you can't hit your daily target, just do your best!)
+      </h2>
     </div>
   </div>
   <v-sheet class="d-flex flex-wrap justify-center ma-5">
@@ -31,7 +33,9 @@
           <template v-slot:append>
             <div>
               <v-icon class="me-1" icon="mdi-map-marker-distance"></v-icon>
-              <span class="text-body-2 text-md-subtitle-1 me-2">{{ challenge.totalkm + 'km' }}</span>
+              <span class="text-body-2 text-md-subtitle-1 me-2">{{
+                challenge.totalkm + 'km'
+              }}</span>
               <span class="text-body-2 text-md-subtitle-1 me-1">·</span>
               <v-icon class="me-1" icon="mdi-calendar"></v-icon>
               <span class="text-body-2 text-md-subtitle-1">{{ challenge.km + 'km per day' }}</span>
