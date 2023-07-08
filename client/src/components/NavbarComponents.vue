@@ -15,7 +15,12 @@
       <v-img :width="125" :height="60" cover src="../../public/images/CSF_Logo_WHITE.png"></v-img>
     </v-btn>
     <v-spacer></v-spacer>
-    <v-dialog v-model="dialog" :fullscreen="mobile" transition="dialog-up-transition" class="hidden-md-and-up">
+    <v-dialog
+      v-model="dialog"
+      :fullscreen="mobile"
+      transition="dialog-up-transition"
+      class="hidden-md-and-up"
+    >
       <template v-slot:activator="{ props }">
         <v-btn icon v-bind="props" class="hidden-md-and-up pr-3">
           <v-icon>mdi-menu</v-icon>
@@ -25,7 +30,12 @@
         <v-container class="pa-0 ma-0">
           <v-toolbar dark app color="black" class="hidden-md-and-up">
             <v-btn :width="125" :height="60" :to="homelink" @click="dialog = false" :active="false">
-              <v-img :width="125" :height="60" cover src="../../public/images/CSF_Logo_WHITE.png"></v-img>
+              <v-img
+                :width="125"
+                :height="60"
+                cover
+                src="../../public/images/CSF_Logo_WHITE.png"
+              ></v-img>
             </v-btn>
             <v-spacer></v-spacer>
             <v-btn icon @click="dialog = false" class="hidden-md-and-up pr-3">
@@ -34,10 +44,22 @@
           </v-toolbar>
         </v-container>
         <v-container class="pa-0">
-          <v-img src="/images/Footer-min.jpeg" width="100%" height="8" class="hidden-md-and-up" cover></v-img>
+          <v-img
+            src="/images/Footer-min.jpeg"
+            width="100%"
+            height="8"
+            class="hidden-md-and-up"
+            cover
+          ></v-img>
         </v-container>
         <v-list class="listItem pa-0">
-          <v-list-item v-for="(item, index) in menu" :key="index" :value="index" :to="item.link" @click="dialog = false">
+          <v-list-item
+            v-for="(item, index) in menu"
+            :key="index"
+            :value="index"
+            :to="item.link"
+            @click="dialog = false"
+          >
             <template v-slot:prepend>
               <v-icon v-if="item.icon">{{ item.icon }}</v-icon>
             </template>
@@ -61,7 +83,11 @@
   </v-toolbar>
   <v-img src="/images/Footer-min.jpeg" width="100%" height="8" cover></v-img>
 
-  <SignUpModal :dialog-modal="signupModal" v-if="signupModal" @open-signUp-modal="openSignUpModal" />
+  <SignUpModal
+    :dialog-modal="signupModal"
+    v-if="signupModal"
+    @open-signUp-modal="openSignUpModal"
+  />
 
   <LoginModalVue :dialog-modal="loginModal" v-if="loginModal" @open-login-modal="openLoginModal" />
 </template>
@@ -86,7 +112,6 @@ const openSignUpModal = () => {
 const openLoginModal = () => {
   loginModal.value = !loginModal.value
 }
-
 
 const menu = [
   { icon: 'mdi-card-account-details-outline', title: 'About Us', link: '/about' },
