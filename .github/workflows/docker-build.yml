@@ -3,6 +3,7 @@ name: Docker Image CI
 on:
   push:
     branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
 
@@ -30,7 +31,7 @@ jobs:
       uses: docker/build-push-action@v4
       with:
         context: .
-        dockerfile: ./docker/server/Dockerfile
+        file: ./docker/server/Dockerfile
         push: true
         tags: ${{ vars.DOCKERHUB_USERNAME}}/csf-prod-server:${{ steps.date.outputs.date }}, ${{ vars.DOCKERHUB_USERNAME }}/csf-prod-server:latest
 
@@ -58,6 +59,6 @@ jobs:
       uses: docker/build-push-action@v4
       with:
         context: .
-        dockerfile: ./docker/client/Dockerfile
+        file: ./docker/client/Dockerfile
         push: true
         tags: ${{ vars.DOCKERHUB_USERNAME}}/csf-prod-client:${{ steps.date.outputs.date }}, ${{ vars.DOCKERHUB_USERNAME }}/csf-prod-client:latest
