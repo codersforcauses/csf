@@ -1,9 +1,6 @@
 <template>
-  <v-row class="ma-0 pl-4 pr-4 pt-4 pb-0" align="center">
-    <v-col>
+  <v-row class="ma-0 pl-4 pr-4 pt-4 pb-0" align="center" justify="center">
       <h1>Welcome back, {{ tempUserFirstName }}!</h1>
-      <!-- <v-divider/> -->
-    </v-col>
   </v-row>
   <v-divider />
   <v-row class="ma-0 pl-4 pr-4 pb-0 pt-0" align="center">
@@ -27,7 +24,6 @@
                 icon="mdi-plus"
                 color="primaryRed"
               ></v-btn>
-              <MileageModal v-model="dialog" />
             </v-col>
           </v-row>
         </v-container>
@@ -38,7 +34,6 @@
   <v-row class="ma-0 px-4 pt-0 pb-0" align="center">
     <v-col>
       <h2>Daily KMs</h2>
-      <MileageGraph />
     </v-col>
   </v-row>
 </template>
@@ -48,7 +43,6 @@ import { ref } from 'vue'
 
 const tempUserFirstName = ref('John')
 const tempUserMileage = ref(100)
-const dialog = ref<boolean>(false)
 </script>
 
 <style scoped></style>
