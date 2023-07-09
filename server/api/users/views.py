@@ -2,25 +2,25 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import User
 from django.contrib.auth.password_validation import validate_password
-from .serializers import RequestResetPasswordSerializer
+from .serializers import ChangePasswordSerializer, RequestResetPasswordSerializer, ResetPasswordSerializer
 from django.core.exceptions import ValidationError
 
-@api_view(['PUT'])
+@api_view(['PATCH'])
 def change_password(request):
-    data = request.data
-    # for some reason request.user doesn't work, it always returns an anonymous user
-    # so instead pass the username in the request too
+    print(request.user)
+    serializer = ChangePasswordSerializer(request.data)
+    serializer.is_valid(raise_exception=True)
+    
+    # try: user = User.objects.get(username=request.data["username"]) 
+    # except: return Response("Not logged in", 403)
+
     try:
-        user = User.objects.get(username=data["username"]) 
-        try:
-            validate_password(request.data["password"])
-            user.set_password(request.data["password"])
-            user.save()
-            return Response("Success")
-        except ValidationError as e:
-            return Response(list(e)[0])
-    except:
-        return Response("Not logged in", 403)
+        validate_password(serializer.data.password)
+        request.user.set_password(serializer.data.password)
+        request.user.save()
+        return Response("Success")
+    except ValidationError as e:
+        return Response(list(e)[0])
 
 @api_view(['POST'])
 def request_reset_password(request):
