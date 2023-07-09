@@ -1,10 +1,8 @@
 <template>
-    <v-row class="ma-0 pl-4 pr-4 pt-4 pb-0 bg-primaryWhite" align="center">
+    <v-row class="ma-0 pl-4 pr-4 pt-4 pb-0" align="center">
         <v-col>
             <h1>Welcome back, {{ tempUserFirstName }}!</h1>
-            <!-- <v-card variant="flat">
-                <v-card-title class="pa-0">Welcome back, {{ tempUserFirstName }}!</v-card-title>
-            </v-card> -->
+            <!-- <v-divider/> -->
         </v-col>
     </v-row>
     <v-divider/>
@@ -23,6 +21,7 @@
                         <v-spacer/>
                         <v-col cols="auto">
                             <v-btn variant="elevated" elevated="2" :ripple="true" icon="mdi-plus" color="primaryRed"></v-btn>
+                            <MileageModal v-model="dialog"/>
                         </v-col>
                     </v-row>
                 </v-container>
@@ -30,33 +29,20 @@
         </v-col>
     </v-row>
     <v-divider/>
-    <v-row class="ma-0" align="center">
+    <v-row class="ma-0 px-4 pt-0 pb-0" align="center">
         <v-col>
-            <v-card variant="flat">
-                <v-card-title>Mileage Graph</v-card-title>
-                <mileage-graph :labels="tempLabels" :datasets="tempDatasets"/>
-            </v-card>
+            <h2>Daily KMs</h2>
+            <MileageGraph/>
         </v-col>
     </v-row>
 </template>
 
 <script setup lang="ts">
     import { ref } from "vue"
-    import MileageGraph from "@/components/MileageGraph.vue";
 
-    // const tempIsLoggedIn = ref(true)
     const tempUserFirstName = ref("John")
     const tempUserMileage = ref(100)
-    const tempLabels = ref(["January", "February", "March", "April", "May", "June", "July"])
-    const tempDatasets = ref([
-        {
-            label: 'Yearly Mileage',
-            backgroundColor: '#f87979',
-            data: [40, 39, 10, 40, 39, 80, 40]
-        }
-    ])
-
-
+    const dialog = ref<boolean>(false)
 </script>
 
 <style scoped></style>
