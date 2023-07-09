@@ -1,5 +1,7 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
+from api.team.models import Team
+from api.subteam.models import SubTeam
 
 
 class UserManager(BaseUserManager):
@@ -53,6 +55,9 @@ class User(AbstractUser):
     team_signup = models.BooleanField(default=False)  # boolean
     has_consent = models.BooleanField(default=False)  # boolean
     travel_method = models.CharField(max_length=100, blank=True)
+    subteam_id = models.ForeignKey(SubTeam, null=True, blank=True, on_delete=models.SET_NULL)
+    team_id = models.ForeignKey(Team, null=True, blank=True, on_delete=models.SET_NULL)
+    team_admin = models.BooleanField(default=False)
 
     objects = UserManager()
 
