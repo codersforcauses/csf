@@ -16,6 +16,7 @@ jobs:
       db:
         image: postgres
         env:
+          POSTGRES_HOST: db
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
           POSTGRES_DB: github-actions
