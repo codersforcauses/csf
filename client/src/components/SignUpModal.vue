@@ -328,4 +328,3 @@ watchEffect(async () => {
   background-color: #345e9e !important;
 }
 </style>
-../types/user
