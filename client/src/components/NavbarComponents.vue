@@ -6,13 +6,23 @@
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down d-flex align-center" align="center">
       <router-link
-        v-for="item in menu"
+        v-for="item in menu.slice(0, -1)"
         :key="item.title"
         :to="item.link"
         class="navbar-link text-primaryWhite mr-8"
         flat
         :exact-active-class="'active'"
         >{{ item.title }}</router-link
+      >
+
+      <a
+        v-for="item in menu.slice(-1)"
+        :key="item.title"
+        :href="item.link"
+        class="navbar-link text-primaryWhite mr-8"
+        flat
+        :exact-active-class="'active'"
+        >{{ item.title }}</a
       >
       <v-row class="mr-5">
         <v-btn
@@ -75,10 +85,23 @@
           />
 
           <v-list-item
-            v-for="(item, index) in menu"
+            v-for="(item, index) in menu.slice(0, -1)"
             :key="index"
             :value="index"
             :to="item.link"
+            @click="dialog = false"
+            class="mt-2"
+          >
+            <template v-slot:prepend>
+              <v-icon v-if="item.icon">{{ item.icon }}</v-icon>
+            </template>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            v-for="(item, index) in menu.slice(-1)"
+            :key="index"
+            :value="index"
+            :href="item.link"
             @click="dialog = false"
             class="mt-2"
           >
