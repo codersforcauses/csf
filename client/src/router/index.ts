@@ -41,8 +41,17 @@ router.beforeEach(async (to, from) => {
   const userStore = useUserStore()
   if (to.path == '/teams' || to.path == '/dashboard') {
     if (userStore.user == null) { 
+      // Cancel navigation if not logged in
       return false
     }
+  }
+})
+
+router.afterEach((to, from, failure) => {
+  if (failure) {
+    // Run event if not logged in
+    console.log("not logged in")
+    // This is where I will make it open login modal
   }
 })
 
