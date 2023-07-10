@@ -35,14 +35,14 @@
         @edit="openEditModal"
       />
       <div v-if="filteredEventsList.length == 0" class="mt-6 mx-3 text-center">
-        <v-icon icon="mdi-calendar-blank" size="x-large"/>
+        <v-icon icon="mdi-calendar-blank" size="x-large" />
         <p class="font-weight-bold text-body-1 mt-3">No current events :(</p>
         <v-btn
           v-if="tempIsTeamAdmin"
           size="x-large"
           class="bg-primaryRed text-primaryWhite mt-3"
           @click="isAddingEvent = true"
-        >ADD EVENT
+          >ADD EVENT
         </v-btn>
       </div>
     </div>
