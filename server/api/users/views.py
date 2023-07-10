@@ -8,7 +8,6 @@ from .serializers import UserSerialiser
 def get_user(request, username):
     user = User.objects.get(username=username)
     serializer = UserSerialiser(user)
-    print(serializer.data)
     return Response(serializer.data)
 
 
