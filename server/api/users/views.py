@@ -9,5 +9,3 @@ def get_user(request, username):
     user = User.objects.get(username=username)
     serializer = UserSerialiser(user)
     return Response(serializer.data)
-
-
