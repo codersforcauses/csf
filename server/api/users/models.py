@@ -3,6 +3,8 @@ from django.db import models
 from api.team.models import Team
 from api.subteam.models import SubTeam
 
+import datetime
+
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
@@ -58,8 +60,8 @@ class User(AbstractUser):
     subteam_id = models.ForeignKey(SubTeam, null=True, blank=True, on_delete=models.SET_NULL)
     team_id = models.ForeignKey(Team, null=True, blank=True, on_delete=models.SET_NULL)
     team_admin = models.BooleanField(default=False)
-    # reset_token = models.CharField(max_length=36, null=True, blank=True)
-    # reset_time
+    reset_token = models.CharField(max_length=36, null=True, blank=True)
+    reset_time = models.DateTimeField(null=True, blank=True)
 
     objects = UserManager()
 

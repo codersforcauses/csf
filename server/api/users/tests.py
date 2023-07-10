@@ -1,17 +1,29 @@
-from django.test import APITestCase
 from django.urls import reverse
+from rest_framework.test import APITestCase
 from .models import User
 
-# Create your tests here.
 class UserTest(APITestCase):
   
     def test_change_password(self):
+        username = "user0"
+        password = "dfjhvb593cdch"
+        new_password = "fkj1191cndcdc"
        
-        self.user = User.objects.create_user(
-            username="username", email="user@user.com", password="pass_word100"
+        user = User.objects.create_user(
+            username=username, 
+            email=f"{username}@csf.com",
+            password=password
         )
-        self.client.login(username=self.user.username, password=self.user.password)
 
-        url = reverse("change-password")
-        response = self.client.patch(url, {"password": "new_pwd"})
+        # test response is 200
+        url = reverse("user:change-password", kwargs={"id": user.id})
+        response = self.client.patch(url, {"password": new_password})
         self.assertEqual(response.status_code, 200)
+
+        # test user has new password
+        user = User.objects.get(id=user.id)
+        self.assertEqual(user.password, new_password)
+
+    def test_request_reset_password(self):
+        pass
+
