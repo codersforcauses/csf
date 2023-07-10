@@ -40,10 +40,8 @@ const router = createRouter({
 router.beforeEach(async (to, from) => {
   const userStore = useUserStore()
   if (to.path == '/teams' || to.path == '/dashboard') {
-    if (userStore.user != null) {
-      console.log("Logged in!")
-    } else {
-      console.log("Not logged in")
+    if (userStore.user == null) { 
+      return false
     }
   }
 })
