@@ -28,7 +28,7 @@
         :event="event"
         :isTeamAdmin="tempIsTeamAdmin"
         @edit="openEditModal"
-        :background-colour="[idx % 2 === 0 ? 'bg-primaryWhite' : 'bg-backgroundGrey']"
+        :background-colour="idx % 2 === 0 ? 'bg-primaryWhite' : 'bg-backgroundGrey'"
       />
     </div>
   </div>

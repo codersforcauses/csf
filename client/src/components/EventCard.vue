@@ -28,7 +28,6 @@
 
 <script setup lang="ts">
 import { type Event } from '../types/event'
-import { ref } from 'vue'
 const props = defineProps<{ event: Event; isTeamAdmin: boolean; backgroundColour: string }>()
 const emit = defineEmits(['edit'])
 
