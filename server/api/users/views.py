@@ -13,14 +13,13 @@ def change_password(request, id):
     serializer = ChangePasswordSerializer(instance=user, data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return Response("Success")
+        return Response()
 
 @api_view(['POST'])
 def request_reset_password(request):
     user = User.objects.get(email=request.data["email"])
-    user.update(reset_token=uuid.uuid(), reset_time=datetime.datetime.now())
-    return Response({ "reset_token": user.reset_token })
-
-
-# resetToken
-# newPassword
+    data = {"reset_token": str(uuid.uuid4()), "reset_time": datetime.datetime.now()}
+    serializer = RequestResetPasswordSerializer(instance=user, data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({"reset_token": data["reset_token"]})

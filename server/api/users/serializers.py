@@ -15,7 +15,9 @@ class RequestResetPasswordSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = [
-            "email"
+            # "email",
+            "reset_token",
+            "reset_time",
         ]
 
 
@@ -24,6 +26,6 @@ class ResetPasswordSerializer(ModelSerializer):
         model = User
         fields = [
             "id",
+            "password",
             "reset_token",
-            "password"
         ]

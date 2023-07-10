@@ -3,27 +3,33 @@ from rest_framework.test import APITestCase
 from .models import User
 
 class UserTest(APITestCase):
-  
-    def test_change_password(self):
-        username = "user0"
-        password = "dfjhvb593cdch"
-        new_password = "fkj1191cndcdc"
+    
+    def setUp(self):
+        self.username = "user0"
+        self.email = f"{self.username}@csf.com"
+        self.password = "dfjhvb593cdch"
+        self.new_password = "fkj1191cndcdc"
        
-        user = User.objects.create_user(
-            username=username, 
-            email=f"{username}@csf.com",
-            password=password
+        self.user = User.objects.create_user(
+            username=self.username, 
+            email=self.email,
+            password=self.password
         )
-
+    
+    def test_change_password(self):
         # test response is 200
-        url = reverse("user:change-password", kwargs={"id": user.id})
-        response = self.client.patch(url, {"password": new_password})
+        url = reverse("user:change-password", kwargs={"id": self.user.id})
+        response = self.client.patch(url, {"password": self.new_password})
         self.assertEqual(response.status_code, 200)
 
         # test user has new password
-        user = User.objects.get(id=user.id)
-        self.assertEqual(user.password, new_password)
+        self.user = User.objects.get(id=self.user.id)
+        self.assertEqual(self.user.password, self.new_password)
 
     def test_request_reset_password(self):
-        pass
+        url = reverse("user:request-reset-password")
+        response = self.client.post(url, {"email": self.email})
+
+        self.assertTrue("reset_token" in response.data)
+        
 
