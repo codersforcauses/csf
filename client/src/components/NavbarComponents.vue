@@ -19,6 +19,7 @@
         v-for="item in menu.slice(-1)"
         :key="item.title"
         :href="item.link"
+        target="_blank"
         class="navbar-link text-primaryWhite mr-8"
         flat
         :exact-active-class="'active'"
@@ -102,6 +103,7 @@
             :key="index"
             :value="index"
             :href="item.link"
+            target="_blank"
             @click="dialog = false"
             class="mt-2"
           >
