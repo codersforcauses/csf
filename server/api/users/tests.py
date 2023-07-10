@@ -2,14 +2,12 @@ from django.urls import reverse
 from rest_framework.test import APITestCase
 from .models import User
 
-import uuid
-
 class UserTest(APITestCase):
   
     def test_change_password(self):
-        username = str(uuid.uuid4())[:20]
-        password = "old_password48537945"
-        new_password = "new_password0347357"
+        username = "user0"
+        password = "dfjhvb593cdch"
+        new_password = "fkj1191cndcdc"
        
         user = User.objects.create_user(
             username=username, 
@@ -18,8 +16,8 @@ class UserTest(APITestCase):
         )
 
         # test response is 200
-        url = reverse("user:change-password")
-        response = self.client.patch(url, {"username": username, "password": new_password})
+        url = reverse("user:change-password", kwargs={"id": user.id})
+        response = self.client.patch(url, {"password": new_password})
         self.assertEqual(response.status_code, 200)
 
         # test user has new password

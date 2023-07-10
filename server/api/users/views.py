@@ -8,9 +8,9 @@ from .serializers import ChangePasswordSerializer, RequestResetPasswordSerialize
 import uuid, datetime
 
 @api_view(['PATCH'])
-def change_password(request):
-    serializer = ChangePasswordSerializer(data=request.data)
-    print(serializer, serializer.is_valid())
+def change_password(request, id):
+    user = User.objects.get(id=id)
+    serializer = ChangePasswordSerializer(instance=user, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response("Success")
@@ -18,7 +18,7 @@ def change_password(request):
 @api_view(['POST'])
 def request_reset_password(request):
     user = User.objects.get(email=request.data["email"])
-    user.update(reset_token=uuid.uuid4(), reset_time=datetime.datetime.now())
+    user.update(reset_token=uuid.uuid(), reset_time=datetime.datetime.now())
     return Response({ "reset_token": user.reset_token })
 
 
