@@ -60,7 +60,6 @@ onMounted(async () => {
   } catch (error) {
     console.log(error)
   }
-  console.log(eventList.value)
   isLoading.value = false
 })
 
