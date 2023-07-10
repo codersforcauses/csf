@@ -29,8 +29,15 @@
         :isTeamAdmin="tempIsTeamAdmin"
         @edit="openEditModal"
       />
+      <p
+        v-if="filteredEventsList.length == 0"
+        class="pt-6 mx-3 text-center font-weight-bold text-body-1"
+      >
+        No current events :(
+      </p>
     </div>
   </div>
+  <p v-else class="pt-6 mx-3">Loading...</p>
   <EventsModal v-if="isAddingEvent" :type="'Create'" @close="closeModal" v-model="isAddingEvent" />
   <EventsModal
     v-if="isEditingEvent"
@@ -49,29 +56,19 @@ import { ref, computed, onMounted } from 'vue'
 import { useEventStore } from '../stores/event'
 
 const eventStore = useEventStore()
-const isLoading = ref<boolean>(true)
-const eventList = ref()
+const isLoading = ref(true)
 
 onMounted(async () => {
-  try {
-    await eventStore.getEvents()
-    eventList.value = eventStore.events
-  } catch (error) {
-    console.log(error)
-  }
-  console.log(eventList.value)
+  await eventStore.getEvents()
   isLoading.value = false
 })
 
-const searchQuery = ref<string>('')
-const filteredEventsList = computed<Event[]>(() => {
-  let query: string = searchQuery.value ? searchQuery.value.toLowerCase() : ''
-  return eventList.value.filter(
-    (e: Event) =>
-      e.name.toLowerCase().includes(query) ||
-      e.description.toLowerCase().includes(searchQuery.value)
+const searchQuery = ref('')
+const filteredEventsList = computed<Event[]>(() =>
+  eventStore.events.filter((e) =>
+    (e.name + e.description).toLowerCase().includes(searchQuery.value)
   )
-})
+)
 const tempIsTeamAdmin = ref<boolean>(true)
 const isAddingEvent = ref<boolean>(false)
 const isEditingEvent = ref<boolean>(false)
@@ -83,7 +80,7 @@ const closeModal = () => {
 }
 
 function openEditModal(id: number) {
-  let foundEvent = eventList.value.find((e: Event) => e.eventId === id)
+  let foundEvent = eventStore.events.find((e) => e.eventId === id)
   if (foundEvent) {
     editingEvent.value = foundEvent
     isEditingEvent.value = true

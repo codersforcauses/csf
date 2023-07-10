@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
 import { useStorage } from '@vueuse/core'
-
-const BASE_URL = 'http://localhost:8081/api'
+import server from '@/utils/server'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -16,8 +14,8 @@ export const useUserStore = defineStore('user', {
   actions: {
     async loginUser(username: string, password: string) {
       try {
-        await axios
-          .post(`${BASE_URL}/auth/token/`, {
+        await server
+          .post('auth/token/', {
             username: username,
             password: password
           })
@@ -33,7 +31,7 @@ export const useUserStore = defineStore('user', {
       }
     },
     async registerUser(obj: object) {
-      await axios.post(`${BASE_URL}/auth/register/`, obj)
+      await server.post('auth/register/', obj)
     }
   }
 })
