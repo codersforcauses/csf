@@ -14,7 +14,7 @@
           </v-col>
         </v-row>
 
-        <v-img :src="logo" width="100%" height="120" contain></v-img>
+        <v-img src="/images/CSF_Logo_RGB.png" width="100%" height="120" contain></v-img>
 
         <v-col cols="auto">
           <v-row justify="center">
@@ -74,7 +74,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
-import logo from '../assets/CSF_Logo_RGB.png'
 
 const { mobile } = useDisplay()
 const dialog = ref(true)
