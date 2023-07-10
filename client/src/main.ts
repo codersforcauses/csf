@@ -22,7 +22,8 @@ const csfCustomTheme: ThemeDefinition = {
     secondaryGreen: 'rgb(0, 157, 79)',
     secondaryBlue: 'rgb(52, 94, 158)',
     secondaryTint: 'rgb(249, 241, 227)',
-    primaryForm: 'rgb(236,236,236)'
+    secondaryGrey: 'rgb(32,32,32)',
+    backgroundGrey: 'rgb(236,236,236)'
   }
 }
 
@@ -30,10 +31,10 @@ const vuetify = createVuetify({
   components,
   directives,
   theme: {
+    defaultTheme: 'csfCustomTheme',
     themes: {
       csfCustomTheme
-    },
-    defaultTheme: 'csfCustomTheme'
+    }
   },
   icons
 })
