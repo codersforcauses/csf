@@ -1,6 +1,11 @@
 <template>
   <div v-if="!isLoading">
-    <v-row class="bg-primaryWhite pt-6 mx-3" align="center" no-gutters>
+    <v-row
+      class="bg-primaryWhite pt-6 mx-3"
+      align="center"
+      no-gutters
+      v-if="filteredEventsList.length != 0"
+    >
       <v-text-field
         prepend-inner-icon="mdi-magnify"
         hide-details
@@ -29,15 +34,22 @@
         :isTeamAdmin="tempIsTeamAdmin"
         @edit="openEditModal"
       />
-      <p
-        v-if="filteredEventsList.length == 0"
-        class="pt-6 mx-3 text-center font-weight-bold text-body-1"
-      >
-        No current events :(
-      </p>
+      <div v-if="filteredEventsList.length == 0" class="mt-6 mx-3 text-center">
+        <v-icon icon="mdi-calendar-blank" size="x-large"/>
+        <p class="font-weight-bold text-body-1 mt-3">No current events :(</p>
+        <v-btn
+          v-if="tempIsTeamAdmin"
+          size="x-large"
+          class="bg-primaryRed text-primaryWhite mt-3"
+          @click="isAddingEvent = true"
+        >ADD EVENT
+        </v-btn>
+      </div>
     </div>
   </div>
-  <p v-else class="pt-6 mx-3">Loading...</p>
+  <div v-else class="w-100 d-inline-block">
+    <v-progress-circular indeterminate color="primaryRed" class="mt-12 mx-auto d-block" />
+  </div>
   <EventsModal v-if="isAddingEvent" :type="'Create'" @close="closeModal" v-model="isAddingEvent" />
   <EventsModal
     v-if="isEditingEvent"
