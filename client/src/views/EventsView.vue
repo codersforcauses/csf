@@ -21,13 +21,14 @@
       >
       </v-btn>
     </v-row>
-    <div id="cards-container" class="bg-primaryWhite pt-4">
+    <div id="cards-container" class="pt-4">
       <EventCard
-        v-for="event in filteredEventsList"
+        v-for="(event, idx) in filteredEventsList"
         :key="event.eventId"
         :event="event"
         :isTeamAdmin="tempIsTeamAdmin"
         @edit="openEditModal"
+        :background-colour="[idx % 2 === 0 ? 'bg-primaryWhite' : 'bg-backgroundGrey']"
       />
     </div>
   </div>
@@ -92,9 +93,9 @@ function openEditModal(id: number) {
 </script>
 
 <style scoped>
-#cards-container > .v-card:nth-child(odd) {
+/* #cards-container > .v-card:nth-child(odd) {
   background-color: #f4f4f4;
-}
+} */
 
 .v-field__input {
   padding-top: 19px;
