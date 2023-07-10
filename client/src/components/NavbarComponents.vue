@@ -16,6 +16,27 @@
       >
       <v-row class="mr-5">
         <v-btn
+          v-if="user"
+          class="text-primaryWhite bg-transparent mr-3 pb-1"
+          size="x-small"
+          variant="flat"
+          :style="{ fontFamily: 'Hackney', fontSize: '20px' }"
+          style="letter-spacing: 0.5px"
+          >{{ user }}</v-btn
+        >
+
+        <v-btn
+          v-if="user"
+          class="bg-primaryRed pb-1"
+          size="x-small"
+          variant="flat"
+          :style="{ fontFamily: 'Hackney', fontSize: '20px' }"
+          style="letter-spacing: 0.5px"
+          @click="logout"
+          >LOGOUT</v-btn
+        >
+        <v-btn
+          v-if="!user"
           class="text-primaryWhite bg-transparent mr-3 pb-1"
           size="x-small"
           variant="flat"
@@ -25,6 +46,7 @@
           >LOGIN</v-btn
         >
         <v-btn
+          v-if="!user"
           class="bg-primaryRed pb-1"
           size="x-small"
           variant="flat"
@@ -92,6 +114,28 @@
           <v-icon icon="mdi-login" color="text-primaryWhite pb-6" />
           <v-spacer />
           <v-btn
+            v-if="user"
+            class="text-primaryWhite bg-transparent mr-3 pb-1"
+            size="large"
+            variant="flat"
+            :style="{ fontFamily: 'Hackney', fontSize: '28px' }"
+            style="letter-spacing: 0.5px"
+            >{{ user }}</v-btn
+          >
+
+          <v-btn
+            v-if="user"
+            class="bg-primaryRed"
+            size="large"
+            variant="flat"
+            :style="{ fontFamily: 'Hackney', fontSize: '28px' }"
+            style="letter-spacing: 0.5px"
+            @click="logout"
+            >LOGOUT</v-btn
+          >
+
+          <v-btn
+            v-if="!user"
             class="text-primaryWhite bg-transparent mr-3 pb-1"
             size="large"
             variant="flat"
@@ -101,6 +145,7 @@
             >LOGIN</v-btn
           >
           <v-btn
+            v-if="!user"
             class="bg-primaryRed"
             size="large"
             variant="flat"
@@ -133,6 +178,13 @@ import FooterBanner from '/images/Footer-min.jpeg'
 import CSFLogoWhite from '/images/CSF_Logo_WHITE.png'
 import LoginModal from './LoginModal.vue'
 
+import { useUserStore } from '@/stores/user'
+import { storeToRefs } from 'pinia'
+
+const userStore = useUserStore()
+
+const { user } = storeToRefs(userStore)
+
 const { mobile } = useDisplay()
 const dialog = ref<boolean>(false)
 const signupModal = ref<boolean>(false)
@@ -146,6 +198,11 @@ const openSignUpModal = () => {
 
 const openLoginModal = () => {
   loginModal.value = !loginModal.value
+  console.log(user.value)
+}
+
+const logout = () => {
+  userStore.logout()
 }
 
 const menu = [
