@@ -50,6 +50,8 @@ jobs:
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
 
       - name: Run Migrations 🕊️
+        env:
+          API_SECRET_KEY: o!v%_v0zjvc5+_)e!r+o!_uefr2a&)lfgv17$ex=a!ei%!y-_o
         run: |
           source .venv/bin/activate
           python manage.py migrate
