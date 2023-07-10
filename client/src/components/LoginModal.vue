@@ -18,8 +18,8 @@
 
         <v-col cols="auto">
           <v-row justify="center">
-            <v-card-title class="text-center text-h4 pb-2">Welcome Back</v-card-title>
-            <v-card-subtitle class="text-center text-subtitle-1"
+            <v-card-title class="text-center text-h4 pb-2 pt-5">Welcome Back</v-card-title>
+            <v-card-subtitle class="text-center text-subtitle-1 pb-5"
               >Login to your existing account</v-card-subtitle
             >
           </v-row>
