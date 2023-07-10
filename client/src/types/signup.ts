@@ -4,8 +4,8 @@ export interface Signup {
   lastName: string
   email: string
   password: string
-  confirmPassword?: string // gonna remove before sending to server
-  avatar?: string // ^^^
+  confirmPassword: string 
+  avatar: string 
   travelMethod: string
   teamSignup: boolean
   hasConsent: boolean
