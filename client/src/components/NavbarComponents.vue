@@ -154,7 +154,8 @@ const menu = [
   { icon: 'mdi-account-group', title: 'Team', link: '/teams' },
   { icon: 'mdi-calendar', title: 'Events', link: '/events' },
   { icon: 'mdi-trophy', title: 'Challenges', link: '/challenge' },
-  { icon: 'mdi-star', title: 'Leaderboards', link: '/' }
+  { icon: 'mdi-star', title: 'Leaderboards', link: '/' },
+  { icon: 'mdi-currency-usd', title: 'Donate', link: 'https://stride-for-education.raisely.com' }
 ]
 </script>
 
