@@ -33,8 +33,9 @@ export const useUserStore = defineStore('user', {
       }
     },
     async changePassword(newPassword: string) {
+      console.log(this.authToken)
       return axios
-          .put(`${BASE_URL}/users/change_password/`, {
+          .patch(`${BASE_URL}/users/change_password/`, {
             username: this.authUser,
             password: newPassword,
           })
@@ -43,6 +44,9 @@ export const useUserStore = defineStore('user', {
               return res.data
             }
           })
+    },
+    async registerUser(obj: object) {
+      await axios.post(`${BASE_URL}/auth/register/`, obj)
     }
   }
 })
