@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useUserStore } from '@/stores/user'
 import AboutView from '../views/AboutView.vue'
 import TeamsPageView from '@/views/TeamsPageView.vue'
 import EventsView from '../views/EventsView.vue'
@@ -34,6 +35,17 @@ const router = createRouter({
       component: ChallengeView
     }
   ]
+})
+
+router.beforeEach(async (to, from) => {
+  const userStore = useUserStore()
+  if (to.path == '/teams' || to.path == '/dashboard') {
+    if (userStore.user != null) {
+      console.log("Logged in!")
+    } else {
+      console.log("Not logged in")
+    }
+  }
 })
 
 export default router
