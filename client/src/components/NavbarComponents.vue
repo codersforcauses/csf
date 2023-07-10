@@ -150,7 +150,7 @@ const openLoginModal = () => {
 
 const menu = [
   { icon: 'mdi-card-account-details-outline', title: 'About', link: '/' },
-  { icon: 'mdi-chart-bar', title: 'Dashboard', link: '/' },
+  { icon: 'mdi-chart-bar', title: 'Dashboard', link: '/dashboard' },
   { icon: 'mdi-account-group', title: 'Team', link: '/teams' },
   { icon: 'mdi-calendar', title: 'Events', link: '/events' },
   { icon: 'mdi-trophy', title: 'Challenges', link: '/challenge' },
