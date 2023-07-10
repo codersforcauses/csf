@@ -130,7 +130,6 @@ import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
 import SignUpModal from './SignUpModal.vue'
 import FooterBanner from '/images/Footer-min.jpeg'
-import CSFLogoWhite from '/images/CSF_Logo_WHITE.png'
 import LoginModal from './LoginModal.vue'
 
 const { mobile } = useDisplay()
