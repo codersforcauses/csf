@@ -22,7 +22,7 @@
           variant="flat"
           :style="{ fontFamily: 'Hackney', fontSize: '20px' }"
           style="letter-spacing: 0.5px"
-          >{{ user }}</v-btn
+          >{{ user.username }}</v-btn
         >
 
         <v-btn
@@ -120,7 +120,7 @@
             variant="flat"
             :style="{ fontFamily: 'Hackney', fontSize: '28px' }"
             style="letter-spacing: 0.5px"
-            >{{ user }}</v-btn
+            >{{ user.username }}</v-btn
           >
 
           <v-btn
@@ -198,7 +198,6 @@ const openSignUpModal = () => {
 
 const openLoginModal = () => {
   loginModal.value = !loginModal.value
-  console.log(user.value)
 }
 
 const logout = () => {

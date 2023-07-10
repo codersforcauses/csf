@@ -46,9 +46,6 @@ const closeModal = () => {
 }
 
 const submitForm = () => {
-  console.log('Email:', form.value.email)
-  console.log('Password:', form.value.password)
-
   userStore.loginUser(form.value.email, form.value.password)
 
   closeModal()

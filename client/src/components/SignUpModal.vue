@@ -234,7 +234,7 @@
 <script setup lang="ts">
 import { ref, reactive, watchEffect } from 'vue'
 import FooterBanner from '/images/Footer-min.jpeg'
-import { type User } from '../types/user'
+import { type Signup } from '../types/user'
 
 defineProps(['dialogModal'])
 const emit = defineEmits(['openSignUpModal'])
@@ -259,7 +259,7 @@ const travelMethod = ref([
   { logo: 'mdi-walk', mode: 'WALKING', isSelected: false }
 ])
 
-const state = reactive<Omit<User, 'id'>>({
+const state = reactive<Signup>({
   username: '',
   firstName: '',
   lastName: '',
