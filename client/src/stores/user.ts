@@ -44,6 +44,9 @@ export const useUserStore = defineStore('user', {
               return res.data
             }
           })
+    },
+    async registerUser(obj: object) {
+      await axios.post(`${BASE_URL}/auth/register/`, obj)
     }
   }
 })
