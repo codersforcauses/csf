@@ -204,7 +204,7 @@
                     <p class="text-caption px-4">
                       For more information please view
                       <span style="text-decoration: underline" class="text-secondaryBlue"
-                        ><a href="https://www.google.com">our privacy statement</a></span
+                        ><a @click="openConsentModal">our privacy statement</a></span
                       >
                     </p>
                     <p v-if="errorMsg" class="pt-5 pl-2" style="color: red">{{ errorMsg }}</p>
@@ -237,12 +237,18 @@
       </div>
     </v-card>
   </v-dialog>
+  <ConsentModal
+    :dialog-modal="consentModal"
+    v-if="consentModal"
+    @open-consent-modal="openConsentModal"
+  />
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, watchEffect } from 'vue'
 import FooterBanner from '/images/Footer-min.jpeg'
 import { type Signup } from '../types/signup'
+import ConsentModal from './ConsentModal.vue'
 import { useUserStore } from '../stores/user'
 import snakify from 'snakify-ts'
 import { AxiosError } from 'axios'
@@ -343,6 +349,11 @@ const selectMode = (mode: string) => {
 
 const required = (v: string) => {
   return !!v || 'Field is required'
+}
+
+const consentModal = ref<boolean>(false)
+const openConsentModal = () => {
+  consentModal.value = !consentModal.value
 }
 
 watchEffect(async () => {
