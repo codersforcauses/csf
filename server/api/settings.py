@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "api.team",
     "api.users",
     "api.event",
+    "api.mileage",
     "api.subteam",
     "rest_framework",
     "rest_framework_simplejwt",
