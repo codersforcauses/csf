@@ -40,15 +40,13 @@ export const useUserStore = defineStore('user', {
       }
     },
     async changePassword(newPassword: string) {
+      let newId = this.user === null ? 0 : this.user.id
       return axios
-        .patch(`${BASE_URL}/user/change_password/`, {
-          username: this.authUser,
+        .patch(`${BASE_URL}/user/change_password/${newId}`, {
           password: newPassword,
         })
         .then((res) => {
-          if (res.status == 200) {
-            return res.data
-          }
+          return res.status, res.data
         })
     },
     async sendResetEmail(email: string) {

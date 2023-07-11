@@ -20,6 +20,8 @@ def change_password(request, id):
     if serializer.is_valid():
         serializer.save()
         return Response()
+    else:
+        return Response(data=serializer.errors, status=400)
 
 @api_view(['POST'])
 def request_reset_password(request):

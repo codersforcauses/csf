@@ -39,28 +39,30 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useUserStore } from '../stores/user'
+import { AxiosError } from 'axios'
+
 const emit = defineEmits(['close'])
 const newPassword = ref<string>("")
 const newPasswordConfirmation = ref<string>("")
-const passwordErrors = ref<string[]>([])
+const passwordErrors = ref<string | string[]>('')
 const passwordChanged = ref(false)
 const userStore = useUserStore()
 
 async function changePassword() {
   if (newPassword.value === newPasswordConfirmation.value) {
     try {
-      let res = await userStore.changePassword(newPassword.value)
-      if (res === "Success") {
+      let status, data = await userStore.changePassword(newPassword.value)
+      console.log(status, data)
+      if (status === 200) {
         passwordChanged.value = true
       } 
-      else {
-        passwordErrors.value = [res]
+    } catch (error: AxiosError | any) {
+      if (error instanceof AxiosError && error.request) {
+        passwordErrors.value = JSON.parse(error.request.response).password
       }
-    } catch (error) {
-      console.log(error);
     }
   } else {
-    passwordErrors.value = ["Passwords must match"]
+    passwordErrors.value = "Passwords must match"
   }
 }
 
