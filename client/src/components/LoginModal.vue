@@ -78,7 +78,6 @@
 import { ref, watchEffect } from 'vue'
 import { useDisplay } from 'vuetify'
 import { useUserStore } from '@/stores/user'
-import { storeToRefs } from 'pinia'
 
 const userStore = useUserStore()
 const dialog = ref(true)
