@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { useStorage } from '@vueuse/core'
+import type { User } from '@/types/user'
+import camelize from 'camelize-ts'
 
 const BASE_URL = 'http://localhost:8081/api'
 
@@ -10,10 +12,15 @@ export const useUserStore = defineStore('user', {
     authToken: useStorage('authToken', null as string | null)
   }),
   getters: {
-    user: (state) => state.authUser,
+    user: (state) => JSON.parse(state.authUser as string) as User,
     token: (state) => JSON.parse(state.authToken as string)
   },
   actions: {
+    logout() {
+      this.authUser = null
+      this.authToken = null
+    },
+
     async loginUser(username: string, password: string) {
       try {
         await axios
@@ -23,7 +30,7 @@ export const useUserStore = defineStore('user', {
           })
           .then((res) => {
             if (res.status == 200) {
-              this.authUser = username
+              this.getUser(username)
               this.authToken = JSON.stringify(res.data)
             }
           })
@@ -32,6 +39,44 @@ export const useUserStore = defineStore('user', {
         this.authToken = null
       }
     },
+
+    async getUser(username: String) {
+      await axios.get(`${BASE_URL}/user/${username}/`).then((res) => {
+        if (res.status == 200) {
+          const data = camelize(res.data) as Object as User
+          const {
+            id,
+            username,
+            firstName,
+            lastName,
+            email,
+            avatar,
+            travelMethod,
+            teamSignup,
+            hasConsent,
+            subteamId,
+            teamId,
+            teamAdmin
+          } = data
+
+          this.authUser = JSON.stringify({
+            id,
+            username,
+            firstName,
+            lastName,
+            email,
+            avatar,
+            travelMethod,
+            teamSignup,
+            hasConsent,
+            subteamId,
+            teamId,
+            teamAdmin
+          })
+        }
+      })
+    },
+
     async registerUser(obj: object) {
       await axios.post(`${BASE_URL}/auth/register/`, obj)
     }

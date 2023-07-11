@@ -74,8 +74,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
+import { useUserStore } from '@/stores/user'
+import { storeToRefs } from 'pinia'
 
 const { mobile } = useDisplay()
+const userStore = useUserStore()
 const dialog = ref(true)
 
 const form = ref({
@@ -91,8 +94,8 @@ const closeModal = () => {
 }
 
 const submitForm = () => {
-  console.log('Username:', form.value.email)
-  console.log('Password:', form.value.password)
+  userStore.loginUser(form.value.email, form.value.password)
+
   closeModal()
 }
 </script>
