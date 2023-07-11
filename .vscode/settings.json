@@ -1,3 +1,9 @@
 {
-  "prettier.tabWidth": 2
+    "prettier.configPath": "client/.prettierrc.json",
+    "eslint.workingDirectories": [
+        "client"
+    ],
+    "flake8.args": [
+        "--config=server/.flake8"
+    ]
 }
