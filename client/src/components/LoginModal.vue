@@ -160,9 +160,10 @@ const submitForm = () => {
 
 function emailUser() {
   console.log(`Emailing ${form.value.email}`)
+  userStore.sendResetEmail(form.value.email)
 }
 
 function submitToken() {
-
+  userStore.submitResetToken(form.value.token)
 }
 </script>

@@ -33,17 +33,38 @@ export const useUserStore = defineStore('user', {
       }
     },
     async changePassword(newPassword: string) {
-      console.log(this.authToken)
       return axios
-          .patch(`${BASE_URL}/users/change_password/`, {
-            username: this.authUser,
-            password: newPassword,
-          })
-          .then((res) => {
-            if (res.status == 200) {
-              return res.data
-            }
-          })
+        .patch(`${BASE_URL}/users/change_password/`, {
+          username: this.authUser,
+          password: newPassword,
+        })
+        .then((res) => {
+          if (res.status == 200) {
+            return res.data
+          }
+        })
+    },
+    async sendResetEmail(email: string) {
+      axios
+        .post(`${BASE_URL}/users/request_reset_password/`, {
+          email: email
+        })
+        .then((res) => {
+          if (res.status == 200) {
+            console.log(res.data);
+          }
+        })
+    },
+    async submitResetToken(token: string) {
+      axios
+        .post(`${BASE_URL}/users/reset_password/`, {
+          reset_token: token
+        })
+        .then((res) => {
+          if (res.status == 200) {
+            console.log(res.data);
+          }
+        })
     },
     async registerUser(obj: object) {
       await axios.post(`${BASE_URL}/auth/register/`, obj)
