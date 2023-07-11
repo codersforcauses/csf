@@ -36,9 +36,10 @@
                     </v-col>
                 </v-row>
             </v-card-text>
-            <v-card-action>
-                <v-btn @click="$emit('update:modelValue', !modelValue)">CLOSE</v-btn>
-            </v-card-action>
+            <v-card-actions>
+                <v-btn @click="$emit('update:modelValue', !modelValue)">CANCEL</v-btn>
+                <v-btn @click="handleSubmit">ADD</v-btn>
+            </v-card-actions>
         </v-card>
     </v-dialog>
 </template>
@@ -61,6 +62,10 @@
             emit('update:modelValue', value)
         }
     })
+
+    const handleSubmit = () => {
+        console.log(distance)
+    }
 </script>
 
 <style scoped>
