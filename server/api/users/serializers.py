@@ -25,7 +25,7 @@ class ResetPasswordSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = [
-            "id",
+            # "id",
             "password",
             "reset_token",
         ]

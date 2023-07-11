@@ -22,4 +22,16 @@ def request_reset_password(request):
     serializer = RequestResetPasswordSerializer(instance=user, data=data)
     if serializer.is_valid():
         serializer.save()
+
+        # should be an empty response and reset_token only sent in email
         return Response({"reset_token": data["reset_token"]})
+    
+@api_view(['POST'])
+def reset_password(request):
+    user = User.objects.get(reset_token=request.data["reset_token"])
+    # reset_time not considered for now
+    data = { "password": request.data["password"], "reset_token": None }
+    serializer = ResetPasswordSerializer(instance=user, data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response()
