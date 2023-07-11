@@ -5,6 +5,7 @@ import TeamsPageView from '@/views/TeamsPageView.vue'
 import EventsView from '../views/EventsView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import ChallengeView from '../views/ChallengeView.vue'
+import { useModalStateStore } from '@/stores/openModal'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,19 +40,14 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
   const userStore = useUserStore()
+  const modalStateStore = useModalStateStore()
+  
   if (to.path == '/teams' || to.path == '/dashboard') {
     if (userStore.user == null) { 
+      modalStateStore.switchState()
       // Cancel navigation if not logged in
       return false
     }
-  }
-})
-
-router.afterEach((to, from, failure) => {
-  if (failure) {
-    // Run event if not logged in
-    console.log("not logged in")
-    // This is where I will make it open login modal
   }
 })
 
