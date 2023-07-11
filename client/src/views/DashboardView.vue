@@ -25,7 +25,7 @@
                 color="primaryRed"
                 @click="dialog = true"
               />
-              <MileageModal v-model="dialog"/>
+              <MileageModal v-model="dialog" />
             </v-col>
           </v-row>
         </v-container>
