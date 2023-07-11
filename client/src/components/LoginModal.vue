@@ -99,7 +99,7 @@
           <v-btn variant="flat" class="bg-primaryRed" @click="emailUser(); page = 3">Send Email</v-btn>
         </v-card-actions>
       </div>
-      <div v-else class="bg-backgroundGrey">
+      <div v-else-if="page === 3" class="bg-backgroundGrey">
         <v-col cols="auto">
           <v-row justify="center"> 
             <v-card-title class="text-center text-h4 pb-2 pt-5">Confirm Your Identity</v-card-title>
@@ -123,6 +123,34 @@
           <v-btn variant="flat" class="mx-2" rounded="lg" color="primaryRed" @click="submitToken">Submit</v-btn>
         </v-card-actions>
       </div>
+      <div v-else class="bg-backgroundGrey">
+        <v-col cols="auto">
+          <v-row justify="center"> 
+            <v-card-title class="text-center text-h4 pb-2 pt-5">Create New Password</v-card-title>
+          </v-row>  
+        </v-col>
+        <v-card-text>
+          <v-text-field class="pb-0 mb-0"
+            bg-color="#FFFFFF"
+            :rules="['required']"
+            v-model="form.newPassword"
+            label="Password"
+            clearable
+            required
+          />
+          <v-text-field class="pb-0 mb-0"
+            bg-color="#FFFFFF"
+            :rules="['required']"
+            v-model="form.confirmPassword"
+            label="Confirm Password"
+            clearable
+            required
+          />
+        </v-card-text>
+        <v-card-actions class="justify-center mb-5">
+          <v-btn variant="flat" class="mx-2" rounded="lg" color="primaryRed" @click="submitNewPassword">Done</v-btn>
+        </v-card-actions>
+      </div>
     </v-card>
   </v-dialog>
 </template>
@@ -135,13 +163,15 @@ import { useUserStore } from '../stores/user'
 const { mobile } = useDisplay()
 const dialog = ref(true)
 const userStore = useUserStore()
-const page = ref<1 | 2 | 3>(1)
+const page = ref<1 | 2 | 3 | 4>(1)
 
 const form = ref({
   username: '',
   password: '',
   email: '',
-  token: ''
+  token: '',
+  newPassword: '',
+  confirmPassword: ''
 })
 
 defineProps(['loginModal'])
@@ -151,19 +181,27 @@ const closeModal = () => {
   emit('openLoginModal', false)
 }
 
-const submitForm = () => {
+const submitForm = async () => {
   console.log('Username:', form.value.username)
   console.log('Password:', form.value.password)
-  userStore.loginUser(form.value.username, form.value.password)
+  await userStore.loginUser(form.value.username, form.value.password)
   closeModal()
 }
 
-function emailUser() {
+async function emailUser() {
   console.log(`Emailing ${form.value.email}`)
-  userStore.sendResetEmail(form.value.email)
+  await userStore.sendResetEmail(form.value.email)
 }
 
-function submitToken() {
-  userStore.submitResetToken(form.value.token)
+async function submitToken() {
+  let res = await userStore.submitResetToken(form.value.token)
+  if (res === "Success") {
+    page.value = 4
+  }
+}
+async function submitNewPassword() {
+  if (form.value.newPassword === form.value.confirmPassword) {
+    await userStore.submitNewPassword(form.value.token, form.value.newPassword)
+  }
 }
 </script>

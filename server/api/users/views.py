@@ -27,6 +27,14 @@ def request_reset_password(request):
         return Response({"reset_token": data["reset_token"]})
     
 @api_view(['POST'])
+def verify_token(request):
+    try:
+        user = User.objects.get(reset_token=request.data["reset_token"])
+        return Response("Success")
+    except:
+        return Response("Invalid")
+    
+@api_view(['POST'])
 def reset_password(request):
     user = User.objects.get(reset_token=request.data["reset_token"])
     # reset_time not considered for now

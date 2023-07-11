@@ -56,9 +56,19 @@ export const useUserStore = defineStore('user', {
         })
     },
     async submitResetToken(token: string) {
-      axios
-        .post(`${BASE_URL}/users/reset_password/`, {
+      return axios
+        .post(`${BASE_URL}/users/verify_token/`, {
           reset_token: token
+        })
+        .then((res) => {
+          return res.data
+        })
+    },
+    async submitNewPassword(token: string, newPassword: string) {
+      return axios
+        .post(`${BASE_URL}/users/reset_password/`, {
+          reset_token: token,
+          password: newPassword
         })
         .then((res) => {
           if (res.status == 200) {
