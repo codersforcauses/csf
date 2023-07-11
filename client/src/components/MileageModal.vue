@@ -1,58 +1,77 @@
 <template>
-    <v-dialog v-model="value" :fullscreen="xs" width="500px">
-        <v-card height="800px">
-            <div style="height:8px">
+    <v-dialog v-model="value" :fullscreen="isFullscreen" width="500px">
+        <v-card height="700px" class="bg-backgroundGrey">
+            <div style="height:10px">
                 <v-img src="/images/Footer-min.jpeg" width="100%" cover />
             </div>
-            <v-card-title class="ma-auto text-h5">Add Mileage</v-card-title>
-            <v-card-text>
-                <v-row>
-                    <v-col>
-                        <v-text-field
-                            type="date"
-                            label="Date"
-                        />
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col>
-                        <v-slider
-                            v-model="distance"
-                            color="green"
-                            :thumb-size="40"
-                            elevation="0"
-                            :step="1"
-                            min="1"
-                            max="100"
-                        />
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col align="center">
-                        <v-chip class="px-6 text-h5 rounded"
-                            color="green"
-                        >{{ distance }}</v-chip>
-                        <p class="text-subtitle-2">KILOMETERS</p>
-                    </v-col>
-                </v-row>
-            </v-card-text>
-            <v-card-actions>
-                <v-btn @click="$emit('update:modelValue', !modelValue)">CANCEL</v-btn>
-                <v-btn @click="handleSubmit">ADD</v-btn>
-            </v-card-actions>
+            <v-spacer/>
+            <v-form v-model="form">
+                <v-container class="px-8">
+                    <v-row align="center">
+                        <v-col>
+                            <v-card-title class="mx-auto text-h5 justify-center">Add Mileage</v-card-title>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-card-text>
+                            <v-row>
+                                <v-col>
+                                    <v-text-field
+                                        type="date"
+                                        label="Date"
+                                        v-model="date"
+                                        bg-color="white"
+                                        :rules="[required]"
+                                    />
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col>
+                                    <v-slider
+                                        v-model="distance"
+                                        color="green"
+                                        :thumb-size="40"
+                                        elevation="0"
+                                        :step="1"
+                                        min="1"
+                                        max="100"
+                                    />
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col align="center">
+                                    <v-chip class="px-6 text-h5 rounded"
+                                        color="green"
+                                    >{{ distance }}</v-chip>
+                                    <p class="text-subtitle-2">KILOMETERS</p>
+                                </v-col>
+                            </v-row>
+                        </v-card-text>
+                    </v-row>
+                </v-container>
+                <v-card-actions class="d-flex justify-center">
+                    <v-btn @click="$emit('update:modelValue', !modelValue)">CANCEL</v-btn>
+                    <v-btn @click="handleSubmit" :disabled="!form" color="primaryRed" variant="elevated">ADD</v-btn>
+                </v-card-actions>
+            </v-form>
+            <v-spacer/>
         </v-card>
     </v-dialog>
 </template>
 
 <script setup lang="ts">
-    import { useDisplay} from 'vuetify'
     import { computed } from 'vue'
-    import { ref } from 'vue'
+    import { ref, watchEffect } from 'vue'
     
-    const { xs } = useDisplay()
+    const isFullscreen = ref(false)
     const props = defineProps(['modelValue'])
     const emit = defineEmits(['update:modelValue', 'handleSubmit'])
     const distance = ref(1)
+    const date = ref('')
+    const form = ref(false)
+    const required = (v: string) => {
+        return !!v || 'Field is required'
+    }
 
     const value = computed({
         get() {
@@ -64,8 +83,28 @@
     })
 
     const handleSubmit = () => {
-        console.log(distance)
+        console.log(date.value)
+        console.log(distance.value)
+        emit('update:modelValue', false)
     }
+
+    // Copied from SignUpModal 
+    watchEffect(async () => {
+        const updateFullscreen = async () => {
+            isFullscreen.value = window.innerWidth <= 500 // Adjust the breakpoint as needed
+        }
+
+        // Initial update
+        await updateFullscreen()
+
+        // Add window resize event listener
+        window.addEventListener('resize', updateFullscreen)
+
+        // Cleanup: Remove window resize event listener
+        return () => {
+            window.removeEventListener('resize', updateFullscreen)
+        }
+    })
 </script>
 
 <style scoped>
