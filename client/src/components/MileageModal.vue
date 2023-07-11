@@ -1,6 +1,6 @@
 <template>
     <v-dialog v-model="value" :fullscreen="isFullscreen" width="500px">
-        <v-card height="700px" class="bg-backgroundGrey">
+        <v-card height="600px" class="bg-backgroundGrey">
             <div style="height:10px">
                 <v-img src="/images/Footer-min.jpeg" width="100%" cover />
             </div>
