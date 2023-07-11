@@ -1,10 +1,9 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
 import { useStorage } from '@vueuse/core'
+import server from '@/utils/server'
 import type { User } from '@/types/user'
 import camelize from 'camelize-ts'
-
-const BASE_URL = 'http://localhost:8081/api'
+import { type Snakify } from 'snakify-ts'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -23,8 +22,8 @@ export const useUserStore = defineStore('user', {
 
     async loginUser(username: string, password: string) {
       try {
-        await axios
-          .post(`${BASE_URL}/auth/token/`, {
+        await server
+          .post('auth/token/', {
             username: username,
             password: password
           })
@@ -81,10 +80,9 @@ export const useUserStore = defineStore('user', {
         })
     },
 
-    async getUser(username: String) {
-      await axios.get(`${BASE_URL}/user/${username}/`).then((res) => {
+    async getUser(username: string) {
+      await server.get(`user/${username}/`).then((res) => {
         if (res.status == 200) {
-          const data = camelize(res.data) as Object as User
           const {
             id,
             username,
@@ -98,7 +96,7 @@ export const useUserStore = defineStore('user', {
             subteamId,
             teamId,
             teamAdmin
-          } = data
+          } = camelize(res.data as Snakify<User>)
 
           this.authUser = JSON.stringify({
             id,
@@ -119,7 +117,7 @@ export const useUserStore = defineStore('user', {
     },
 
     async registerUser(obj: object) {
-      await axios.post(`${BASE_URL}/auth/register/`, obj)
+      await server.post('auth/register/', obj)
     }
   }
 })
