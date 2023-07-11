@@ -88,8 +88,9 @@
         <v-card-text>
           <v-text-field class="pb-0 mb-0"
             bg-color="#FFFFFF"
-            :rules="[required, emailRule]"
             v-model="form.email"
+            :rules="[required]"
+            :error-messages="errors.email"
             label="Email"
             clearable
             required
@@ -191,6 +192,7 @@ const form = ref({
 })
 
 const errors = ref({
+  email: '',
   token: '',
   newPassword: '',
   confirmPassword: '',
@@ -219,7 +221,10 @@ const submitForm = () => {
 async function emailUser() {
   if (isEmail(form.value.email)) {
     await userStore.sendResetEmail(form.value.email)
+    errors.value.email = ''
     page.value = 3;
+  } else {
+    errors.value.email = "Email is invalid"
   }
 }
 
