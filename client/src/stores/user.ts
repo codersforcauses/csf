@@ -44,10 +44,39 @@ export const useUserStore = defineStore('user', {
       await axios.get(`${BASE_URL}/user/${username}/`).then((res) => {
         if (res.status == 200) {
           const data = camelize(res.data) as Object as User
-          this.authUser = JSON.stringify(data)
+          const {
+            id,
+            username,
+            firstName,
+            lastName,
+            email,
+            avatar,
+            travelMethod,
+            teamSignup,
+            hasConsent,
+            subteamId,
+            teamId,
+            teamAdmin
+          } = data
+
+          this.authUser = JSON.stringify({
+            id,
+            username,
+            firstName,
+            lastName,
+            email,
+            avatar,
+            travelMethod,
+            teamSignup,
+            hasConsent,
+            subteamId,
+            teamId,
+            teamAdmin
+          })
         }
       })
     },
+
     async registerUser(obj: object) {
       await axios.post(`${BASE_URL}/auth/register/`, obj)
     }

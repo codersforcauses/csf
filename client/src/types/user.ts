@@ -8,6 +8,9 @@ export interface User {
   travelMethod: string
   teamSignup: boolean
   hasConsent: boolean
+  subteamId?: number
+  teamId?: number
+  teamAdmin?: Boolean
 }
 
 export interface Signup {
