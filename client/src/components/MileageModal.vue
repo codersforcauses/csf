@@ -27,7 +27,7 @@
               </v-row>
               <v-row>
                 <v-col>
-                    <p class="px-2 text-subtitle-2">Distance</p>
+                  <p class="px-2 text-subtitle-2">Distance</p>
                 </v-col>
               </v-row>
               <v-row>
