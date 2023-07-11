@@ -40,8 +40,8 @@ export const useUserStore = defineStore('user', {
     },
     async changePassword(newPassword: string) {
       if (this.user) {
-        return await axios
-        .patch(`${BASE_URL}/user/change_password/${this.user.id}`, {
+        return await server
+        .patch(`user/change_password/${this.user.id}`, {
           password: newPassword,
         }).then((res) => {
           return res.status
@@ -49,20 +49,20 @@ export const useUserStore = defineStore('user', {
       }
     },
     async sendResetEmail(email: string) {
-      return axios
-        .post(`${BASE_URL}/user/request_reset_password/`, {
+      return await server
+        .post('user/request_reset_password/', {
           email: email
         })
         .then((res) => {
-          if (res.status === 200 && res.data !== "unregistered") {
+          if (res.status === 200 && res.data !== 'unregistered') {
             console.log(res.data) // log in place of emailing for now
           }
           return res.status
         })
     },
     async submitResetToken(token: string) {
-      return axios
-        .post(`${BASE_URL}/user/verify_token/`, {
+      return await server
+        .post('user/verify_token/', {
           reset_token: token
         })
         .then((res) => {
@@ -70,8 +70,8 @@ export const useUserStore = defineStore('user', {
         })
     },
     async submitNewPassword(token: string, newPassword: string) {
-      return axios
-        .post(`${BASE_URL}/user/reset_password/`, {
+      return await server
+        .post('user/reset_password/', {
           reset_token: token,
           password: newPassword
         })
