@@ -6,7 +6,7 @@
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down d-flex align-center" align="center">
       <router-link
-        v-for="item in menu"
+        v-for="item in menu.slice(0, -1)"
         :key="item.title"
         :to="item.link"
         class="navbar-link text-primaryWhite mr-8"
@@ -14,8 +14,40 @@
         :exact-active-class="'active'"
         >{{ item.title }}</router-link
       >
+
+      <a
+        v-for="item in menu.slice(-1)"
+        :key="item.title"
+        :href="item.link"
+        target="_blank"
+        class="navbar-link text-primaryWhite mr-8"
+        flat
+        :exact-active-class="'active'"
+        >{{ item.title }}</a
+      >
       <v-row class="mr-5">
         <v-btn
+          v-if="user"
+          class="text-primaryWhite bg-transparent mr-3 pb-1"
+          size="x-small"
+          variant="flat"
+          :style="{ fontFamily: 'Hackney', fontSize: '20px' }"
+          style="letter-spacing: 0.5px"
+          >{{ user.username }}</v-btn
+        >
+
+        <v-btn
+          v-if="user"
+          class="bg-primaryRed pb-1"
+          size="x-small"
+          variant="flat"
+          :style="{ fontFamily: 'Hackney', fontSize: '20px' }"
+          style="letter-spacing: 0.5px"
+          @click="logout"
+          >LOGOUT</v-btn
+        >
+        <v-btn
+          v-if="!user"
           class="text-primaryWhite bg-transparent mr-3 pb-1"
           size="x-small"
           variant="flat"
@@ -25,6 +57,7 @@
           >LOGIN</v-btn
         >
         <v-btn
+          v-if="!user"
           class="bg-primaryRed pb-1"
           size="x-small"
           variant="flat"
@@ -75,10 +108,24 @@
           />
 
           <v-list-item
-            v-for="(item, index) in menu"
+            v-for="(item, index) in menu.slice(0, -1)"
             :key="index"
             :value="index"
             :to="item.link"
+            @click="dialog = false"
+            class="mt-2"
+          >
+            <template v-slot:prepend>
+              <v-icon v-if="item.icon">{{ item.icon }}</v-icon>
+            </template>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            v-for="(item, index) in menu.slice(-1)"
+            :key="index"
+            :value="index"
+            :href="item.link"
+            target="_blank"
             @click="dialog = false"
             class="mt-2"
           >
@@ -92,6 +139,28 @@
           <v-icon icon="mdi-login" color="text-primaryWhite pb-6" />
           <v-spacer />
           <v-btn
+            v-if="user"
+            class="text-primaryWhite bg-transparent mr-3 pb-1"
+            size="large"
+            variant="flat"
+            :style="{ fontFamily: 'Hackney', fontSize: '28px' }"
+            style="letter-spacing: 0.5px"
+            >{{ user.username }}</v-btn
+          >
+
+          <v-btn
+            v-if="user"
+            class="bg-primaryRed"
+            size="large"
+            variant="flat"
+            :style="{ fontFamily: 'Hackney', fontSize: '28px' }"
+            style="letter-spacing: 0.5px"
+            @click="logout"
+            >LOGOUT</v-btn
+          >
+
+          <v-btn
+            v-if="!user"
             class="text-primaryWhite bg-transparent mr-3 pb-1"
             size="large"
             variant="flat"
@@ -101,6 +170,7 @@
             >LOGIN</v-btn
           >
           <v-btn
+            v-if="!user"
             class="bg-primaryRed"
             size="large"
             variant="flat"
@@ -133,6 +203,13 @@ import FooterBanner from '/images/Footer-min.jpeg'
 import CSFLogoWhite from '/images/CSF_Logo_WHITE.png'
 import LoginModal from './LoginModal.vue'
 
+import { useUserStore } from '@/stores/user'
+import { storeToRefs } from 'pinia'
+
+const userStore = useUserStore()
+
+const { user } = storeToRefs(userStore)
+
 const { mobile } = useDisplay()
 const dialog = ref<boolean>(false)
 const signupModal = ref<boolean>(false)
@@ -148,13 +225,18 @@ const openLoginModal = () => {
   loginModal.value = !loginModal.value
 }
 
+const logout = () => {
+  userStore.logout()
+}
+
 const menu = [
   { icon: 'mdi-card-account-details-outline', title: 'About', link: '/' },
   { icon: 'mdi-chart-bar', title: 'Dashboard', link: '/dashboard' },
   { icon: 'mdi-account-group', title: 'Team', link: '/teams' },
   { icon: 'mdi-calendar', title: 'Events', link: '/events' },
   { icon: 'mdi-trophy', title: 'Challenges', link: '/challenge' },
-  { icon: 'mdi-star', title: 'Leaderboards', link: '/' }
+  { icon: 'mdi-star', title: 'Leaderboards', link: '/' },
+  { icon: 'mdi-currency-usd', title: 'Donate', link: 'https://stride-for-education.raisely.com' }
 ]
 </script>
 

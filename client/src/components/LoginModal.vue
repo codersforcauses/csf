@@ -7,7 +7,7 @@
         </v-container>
 
         <v-row justify="end">
-          <v-col v-if="page !== 1" cols="auto">
+          <v-col v-if="page > 1 && page < 4" cols="auto">
             <v-btn variant="plain" @click="page--"
               ><v-icon icon="mdi-arrow-left" size="32px"></v-icon
             ></v-btn>
@@ -37,14 +37,14 @@
             <v-form>
               <v-text-field
                 bg-color="#FFFFFF"
-                :rules="['required']"
+                :rules="[required]"
                 v-model="form.username"
                 label="Username"
                 required
               />
               <v-text-field
                 bg-color="#FFFFFF"
-                :rules="['required']"
+                :rules="[required]"
                 v-model="form.password"
                 label="Password"
                 type="password"
@@ -88,7 +88,7 @@
         <v-card-text>
           <v-text-field class="pb-0 mb-0"
             bg-color="#FFFFFF"
-            :rules="['required']"
+            :rules="[required, emailRule]"
             v-model="form.email"
             label="Email"
             clearable
@@ -96,10 +96,10 @@
           />
         </v-card-text>
         <v-card-actions class="justify-center mb-5">
-          <v-btn variant="flat" class="bg-primaryRed" @click="emailUser(); page = 3">Send Email</v-btn>
+          <v-btn variant="flat" class="bg-primaryRed" @click="emailUser">Send Email</v-btn>
         </v-card-actions>
       </div>
-      <div v-else class="bg-backgroundGrey">
+      <div v-else-if="page === 3" class="bg-backgroundGrey">
         <v-col cols="auto">
           <v-row justify="center"> 
             <v-card-title class="text-center text-h4 pb-2 pt-5">Confirm Your Identity</v-card-title>
@@ -111,7 +111,8 @@
         <v-card-text>
           <v-text-field class="pb-0 mb-0"
             bg-color="#FFFFFF"
-            :rules="['required']"
+            :rules="[required]"
+            :error-messages="errors.token"
             v-model="form.token"
             label="Token"
             clearable
@@ -123,6 +124,48 @@
           <v-btn variant="flat" class="mx-2" rounded="lg" color="primaryRed" @click="submitToken">Submit</v-btn>
         </v-card-actions>
       </div>
+      <div v-else-if="page === 4" class="bg-backgroundGrey">
+        <v-col cols="auto">
+          <v-row justify="center"> 
+            <v-card-title class="text-center text-h4 pb-2 pt-5">Create New Password</v-card-title>
+          </v-row>  
+        </v-col>
+        <v-card-text>
+          <v-text-field class="pb-0 mb-0"
+            bg-color="#FFFFFF"
+            :rules="[required]"
+            :error-messages="errors.newPassword"
+            v-model="form.newPassword"
+            label="Password"
+            type="password"
+            clearable
+            required
+          />
+          <v-text-field class="pb-0 mb-0"
+            bg-color="#FFFFFF"
+            :rules="[required]"
+            :error-messages="errors.confirmPassword"
+            v-model="form.confirmPassword"
+            label="Confirm Password"
+            type="password"
+            clearable
+            required
+          />
+        </v-card-text>
+        <v-card-actions class="justify-center mb-5">
+          <v-btn variant="flat" class="mx-2" rounded="lg" color="primaryRed" @click="submitNewPassword">Done</v-btn>
+        </v-card-actions>
+      </div>
+      <div v-else class="bg-backgroundGrey">
+        <v-col cols="auto">
+          <v-row justify="center"> 
+            <v-card-title class="text-center text-h4 pb-2 pt-5">Success!</v-card-title>
+            <v-card-subtitle class="text-center text-subtitle-2 pb-5">
+              Your password was changed successfully
+            </v-card-subtitle>
+          </v-row>  
+        </v-col>
+      </div>
     </v-card>
   </v-dialog>
 </template>
@@ -130,39 +173,78 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
-import { useUserStore } from '../stores/user'
+import { useUserStore } from '@/stores/user'
+import { storeToRefs } from 'pinia'
 
 const { mobile } = useDisplay()
 const dialog = ref(true)
 const userStore = useUserStore()
-const page = ref<1 | 2 | 3>(1)
+const page = ref<1 | 2 | 3 | 4 | 5>(1)
 
 const form = ref({
   username: '',
   password: '',
   email: '',
-  token: ''
+  token: '',
+  newPassword: '',
+  confirmPassword: ''
+})
+
+const errors = ref({
+  token: '',
+  newPassword: '',
+  confirmPassword: '',
 })
 
 defineProps(['loginModal'])
 const emit = defineEmits(['openLoginModal'])
+
+const required = (v: string) => !!v || 'Field is required'
+const emailRule = (v: string) => isEmail(v) || 'E-mail must be valid'
+
+function isEmail(candidate: string) {
+  return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(candidate)
+}
 
 const closeModal = () => {
   emit('openLoginModal', false)
 }
 
 const submitForm = () => {
-  console.log('Username:', form.value.username)
-  console.log('Password:', form.value.password)
-  userStore.loginUser(form.value.username, form.value.password)
+  userStore.loginUser(form.value.email, form.value.password)
+
   closeModal()
 }
 
-function emailUser() {
-  console.log(`Emailing ${form.value.email}`)
+async function emailUser() {
+  if (isEmail(form.value.email)) {
+    await userStore.sendResetEmail(form.value.email)
+    page.value = 3;
+  }
 }
 
-function submitToken() {
-
+async function submitToken() {
+  let res = await userStore.submitResetToken(form.value.token)
+  if (res === "Success") {
+    errors.value.token = ''
+    page.value = 4
+  } else {
+    errors.value.token = "Invalid token"
+  }
+}
+async function submitNewPassword() {
+  if (form.value.newPassword === form.value.confirmPassword) {
+    errors.value.newPassword = ''
+    errors.value.confirmPassword = ''
+    let res = await userStore.submitNewPassword(form.value.token, form.value.newPassword)
+    if (res === "Success") {
+      page.value = 5
+    } else {
+      errors.value.newPassword = res
+    }
+  } else {
+    errors.value.newPassword = "Passwords do not match"
+    errors.value.confirmPassword = 'Passwords do not match'
+  }
 }
 </script>
