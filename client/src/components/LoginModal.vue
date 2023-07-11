@@ -37,14 +37,14 @@
             <v-form>
               <v-text-field
                 bg-color="#FFFFFF"
-                :rules="['required']"
+                :rules="[required]"
                 v-model="form.username"
                 label="Username"
                 required
               />
               <v-text-field
                 bg-color="#FFFFFF"
-                :rules="['required']"
+                :rules="[required]"
                 v-model="form.password"
                 label="Password"
                 type="password"
@@ -88,15 +88,16 @@
         <v-card-text>
           <v-text-field class="pb-0 mb-0"
             bg-color="#FFFFFF"
-            :rules="['required']"
+            :rules="[required, emailRule]"
             v-model="form.email"
             label="Email"
+            validate-on-blur
             clearable
             required
           />
         </v-card-text>
         <v-card-actions class="justify-center mb-5">
-          <v-btn variant="flat" class="bg-primaryRed" @click="emailUser(); page = 3">Send Email</v-btn>
+          <v-btn variant="flat" class="bg-primaryRed" @click="emailUser">Send Email</v-btn>
         </v-card-actions>
       </div>
       <div v-else-if="page === 3" class="bg-backgroundGrey">
@@ -111,7 +112,8 @@
         <v-card-text>
           <v-text-field class="pb-0 mb-0"
             bg-color="#FFFFFF"
-            :rules="['required']"
+            :rules="[required]"
+            :error-messages="errors.token"
             v-model="form.token"
             label="Token"
             clearable
@@ -132,7 +134,8 @@
         <v-card-text>
           <v-text-field class="pb-0 mb-0"
             bg-color="#FFFFFF"
-            :rules="['required']"
+            :rules="[required]"
+            :error-messages="errors.newPassword"
             v-model="form.newPassword"
             label="Password"
             clearable
@@ -140,7 +143,8 @@
           />
           <v-text-field class="pb-0 mb-0"
             bg-color="#FFFFFF"
-            :rules="['required']"
+            :rules="[required]"
+            :error-messages="errors.confirmPassword"
             v-model="form.confirmPassword"
             label="Confirm Password"
             clearable
@@ -174,8 +178,22 @@ const form = ref({
   confirmPassword: ''
 })
 
+const errors = ref({
+  token: '',
+  newPassword: '',
+  confirmPassword: '',
+})
+
 defineProps(['loginModal'])
 const emit = defineEmits(['openLoginModal'])
+
+const required = (v: string) => !!v || 'Field is required'
+const emailRule = (v: string) => isEmail(v) || 'E-mail must be valid'
+
+function isEmail(candidate: string) {
+  return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(candidate)
+}
+console.log(isEmail(''))
 
 const closeModal = () => {
   emit('openLoginModal', false)
@@ -189,19 +207,29 @@ const submitForm = async () => {
 }
 
 async function emailUser() {
-  console.log(`Emailing ${form.value.email}`)
-  await userStore.sendResetEmail(form.value.email)
+  if (isEmail(form.value.email)) {
+    await userStore.sendResetEmail(form.value.email)
+    page.value = 3;
+  }
 }
 
 async function submitToken() {
   let res = await userStore.submitResetToken(form.value.token)
   if (res === "Success") {
+    errors.value.token = ''
     page.value = 4
+  } else {
+    errors.value.token = "Invalid token"
   }
 }
 async function submitNewPassword() {
   if (form.value.newPassword === form.value.confirmPassword) {
+    errors.value.newPassword = ''
+    errors.value.confirmPassword = ''
     await userStore.submitNewPassword(form.value.token, form.value.newPassword)
+  } else {
+    errors.value.newPassword = "Passwords do not match"
+    errors.value.confirmPassword = 'Passwords do not match'
   }
 }
 </script>
