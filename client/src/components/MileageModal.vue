@@ -27,6 +27,11 @@
               </v-row>
               <v-row>
                 <v-col>
+                    <p class="px-2 text-subtitle-2">Distance</p>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
                   <div v-if="tempIconType === 'running'" class="ma-0 pa-0" id="runner">
                     <v-slider
                       v-model="distance"
