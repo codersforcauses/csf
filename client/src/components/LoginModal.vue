@@ -7,7 +7,7 @@
         </v-container>
 
         <v-row justify="end">
-          <v-col v-if="page !== 1" cols="auto">
+          <v-col v-if="page > 1 && page < 5" cols="auto">
             <v-btn variant="plain" @click="page--"
               ><v-icon icon="mdi-arrow-left" size="32px"></v-icon
             ></v-btn>
@@ -91,7 +91,6 @@
             :rules="[required, emailRule]"
             v-model="form.email"
             label="Email"
-            validate-on-blur
             clearable
             required
           />
@@ -125,7 +124,7 @@
           <v-btn variant="flat" class="mx-2" rounded="lg" color="primaryRed" @click="submitToken">Submit</v-btn>
         </v-card-actions>
       </div>
-      <div v-else class="bg-backgroundGrey">
+      <div v-else-if="page === 4" class="bg-backgroundGrey">
         <v-col cols="auto">
           <v-row justify="center"> 
             <v-card-title class="text-center text-h4 pb-2 pt-5">Create New Password</v-card-title>
@@ -138,6 +137,7 @@
             :error-messages="errors.newPassword"
             v-model="form.newPassword"
             label="Password"
+            type="password"
             clearable
             required
           />
@@ -147,6 +147,7 @@
             :error-messages="errors.confirmPassword"
             v-model="form.confirmPassword"
             label="Confirm Password"
+            type="password"
             clearable
             required
           />
@@ -154,6 +155,16 @@
         <v-card-actions class="justify-center mb-5">
           <v-btn variant="flat" class="mx-2" rounded="lg" color="primaryRed" @click="submitNewPassword">Done</v-btn>
         </v-card-actions>
+      </div>
+      <div v-else class="bg-backgroundGrey">
+        <v-col cols="auto">
+          <v-row justify="center"> 
+            <v-card-title class="text-center text-h4 pb-2 pt-5">Success!</v-card-title>
+            <v-card-subtitle class="text-center text-subtitle-2 pb-5">
+              Your password was changed successfully
+            </v-card-subtitle>
+          </v-row>  
+        </v-col>
       </div>
     </v-card>
   </v-dialog>
@@ -167,7 +178,7 @@ import { useUserStore } from '../stores/user'
 const { mobile } = useDisplay()
 const dialog = ref(true)
 const userStore = useUserStore()
-const page = ref<1 | 2 | 3 | 4>(1)
+const page = ref<1 | 2 | 3 | 4 | 5>(1)
 
 const form = ref({
   username: '',
@@ -193,7 +204,6 @@ const emailRule = (v: string) => isEmail(v) || 'E-mail must be valid'
 function isEmail(candidate: string) {
   return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(candidate)
 }
-console.log(isEmail(''))
 
 const closeModal = () => {
   emit('openLoginModal', false)
@@ -226,7 +236,12 @@ async function submitNewPassword() {
   if (form.value.newPassword === form.value.confirmPassword) {
     errors.value.newPassword = ''
     errors.value.confirmPassword = ''
-    await userStore.submitNewPassword(form.value.token, form.value.newPassword)
+    let res = await userStore.submitNewPassword(form.value.token, form.value.newPassword)
+    if (res === "Success") {
+      page.value = 5
+    } else {
+      errors.value.newPassword = res
+    }
   } else {
     errors.value.newPassword = "Passwords do not match"
     errors.value.confirmPassword = 'Passwords do not match'

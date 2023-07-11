@@ -71,8 +71,10 @@ export const useUserStore = defineStore('user', {
           password: newPassword
         })
         .then((res) => {
-          if (res.status == 200) {
-            console.log(res.data);
+          if (res.data === "Success") {
+            return "Success"
+          } else {
+            return res.data.password[0]
           }
         })
     },

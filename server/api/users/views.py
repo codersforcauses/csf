@@ -42,4 +42,6 @@ def reset_password(request):
     serializer = ResetPasswordSerializer(instance=user, data=data)
     if serializer.is_valid():
         serializer.save()
-        return Response()
+        return Response("Success")
+    else:
+        return Response(serializer.errors)
