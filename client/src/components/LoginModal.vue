@@ -77,7 +77,10 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
 import { useDisplay } from 'vuetify'
+import { useUserStore } from '@/stores/user'
+import { storeToRefs } from 'pinia'
 
+const userStore = useUserStore()
 const dialog = ref(true)
 const isFullscreen = ref(false)
 
@@ -94,8 +97,8 @@ const closeModal = () => {
 }
 
 const submitForm = () => {
-  console.log('Username:', form.value.email)
-  console.log('Password:', form.value.password)
+  userStore.loginUser(form.value.email, form.value.password)
+
   closeModal()
 }
 
