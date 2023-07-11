@@ -35,7 +35,7 @@ def request_reset_password(request):
             # should be an empty response and reset_token only sent in email
             return Response({"reset_token": data["reset_token"]})
     except:
-        return Response(status=400)
+        return Response("unregistered") # not using a different status code here so that it's harder to detect if an email is unregistered
     
 @api_view(['POST'])
 def verify_token(request):
