@@ -5,6 +5,7 @@ from .models import Mileage
 from ..users.models import User
 from .serializers import MileageSerializer
 
+
 class MileageTests(APITestCase):
     def setUp(self):
         self.user = User.objects.create(username='testuser')
