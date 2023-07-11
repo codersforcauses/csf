@@ -7,7 +7,7 @@
         </v-container>
 
         <v-row justify="end">
-          <v-col v-if="page > 1 && page < 5" cols="auto">
+          <v-col v-if="page > 1 && page < 4" cols="auto">
             <v-btn variant="plain" @click="page--"
               ><v-icon icon="mdi-arrow-left" size="32px"></v-icon
             ></v-btn>

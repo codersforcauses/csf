@@ -17,14 +17,17 @@ def change_password(request, id):
 
 @api_view(['POST'])
 def request_reset_password(request):
-    user = User.objects.get(email=request.data["email"])
-    data = {"reset_token": str(uuid.uuid4()), "reset_time": datetime.datetime.now()}
-    serializer = RequestResetPasswordSerializer(instance=user, data=data)
-    if serializer.is_valid():
-        serializer.save()
+    try:
+        user = User.objects.get(email=request.data["email"])
+        data = {"reset_token": str(uuid.uuid4()), "reset_time": datetime.datetime.now()}
+        serializer = RequestResetPasswordSerializer(instance=user, data=data)
+        if serializer.is_valid():
+            serializer.save()
 
-        # should be an empty response and reset_token only sent in email
-        return Response({"reset_token": data["reset_token"]})
+            # should be an empty response and reset_token only sent in email
+            return Response({"reset_token": data["reset_token"]})
+    except:
+        return Response()
     
 @api_view(['POST'])
 def verify_token(request):
