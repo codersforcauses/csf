@@ -13,8 +13,6 @@ import * as icons from 'vuetify/iconsets/mdi-svg'
 import App from './App.vue'
 import router from './router'
 
-const app = createApp(App)
-
 const csfCustomTheme: ThemeDefinition = {
   dark: false,
   colors: {
@@ -41,8 +39,4 @@ const vuetify = createVuetify({
   icons
 })
 
-app.use(createPinia())
-app.use(router)
-app.use(vuetify)
-
-app.mount('#app')
+createApp(App).use(createPinia()).use(router).use(vuetify).mount('#app')
