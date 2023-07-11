@@ -75,7 +75,6 @@
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
 import { useUserStore } from '@/stores/user'
-import { storeToRefs } from 'pinia'
 
 const { mobile } = useDisplay()
 const userStore = useUserStore()

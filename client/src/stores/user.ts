@@ -3,7 +3,7 @@ import { useStorage } from '@vueuse/core'
 import server from '@/utils/server'
 import type { User } from '@/types/user'
 import camelize from 'camelize-ts'
-import { Snakify } from 'snakify-ts'
+import { type Snakify } from 'snakify-ts'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
