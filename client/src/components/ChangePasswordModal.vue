@@ -57,8 +57,8 @@ async function changePassword() {
         passwordChanged.value = true
       } 
     } catch (error: AxiosError | any) {
-      if (error instanceof AxiosError && error.request) {
-        passwordErrors.value = JSON.parse(error.request.response).password
+      if (error instanceof AxiosError && error.response && error.response.status === 400) {
+        passwordErrors.value = error.response.data.password
       }
     }
   } else {
