@@ -4,7 +4,7 @@
       class="bg-primaryWhite pt-6 mx-3"
       align="center"
       no-gutters
-      v-if="filteredEventsList.length != 0"
+      v-if="eventStore.events.length != 0"
     >
       <v-text-field
         prepend-inner-icon="mdi-magnify"
