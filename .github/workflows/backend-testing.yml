@@ -16,7 +16,6 @@ jobs:
       db:
         image: postgres
         env:
-          POSTGRES_HOST: db
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
           POSTGRES_DB: github-actions
@@ -53,7 +52,7 @@ jobs:
       - name: Run Migrations 🕊️
         env:
           API_SECRET_KEY: o!v%_v0zjvc5+_)e!r+o!_uefr2a&)lfgv17$ex=a!ei%!y-_o
-          POSTGRES_HOST: db
+          POSTGRES_HOST: localhost
           POSTGRES_PASSWORD: password
           POSTGRES_PORT: 5432
         run: |
@@ -61,8 +60,14 @@ jobs:
           python manage.py migrate
 
       - name: Run tests 🧪
+        env:
+          API_SECRET_KEY: o!v%_v0zjvc5+_)e!r+o!_uefr2a&)lfgv17$ex=a!ei%!y-_o
+          POSTGRES_HOST: localhost
+          POSTGRES_PASSWORD: password
+          POSTGRES_PORT: 5432
         run: |
           source .venv/bin/activate
+          python3 -m pip install coverage
           coverage run manage.py test
           coverage xml
 
