@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
 import { useStorage } from '@vueuse/core'
-
-const BASE_URL = 'http://localhost:8081/api'
+import server from '@/utils/server'
+import type { User } from '@/types/user'
+import camelize from 'camelize-ts'
+import { type Snakify } from 'snakify-ts'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -10,20 +11,25 @@ export const useUserStore = defineStore('user', {
     authToken: useStorage('authToken', null as string | null)
   }),
   getters: {
-    user: (state) => state.authUser,
+    user: (state) => JSON.parse(state.authUser as string) as User,
     token: (state) => JSON.parse(state.authToken as string)
   },
   actions: {
+    logout() {
+      this.authUser = null
+      this.authToken = null
+    },
+
     async loginUser(username: string, password: string) {
       try {
-        await axios
-          .post(`${BASE_URL}/auth/token/`, {
+        await server
+          .post('auth/token/', {
             username: username,
             password: password
           })
           .then((res) => {
             if (res.status == 200) {
-              this.authUser = username
+              this.getUser(username)
               this.authToken = JSON.stringify(res.data)
             }
           })
@@ -31,6 +37,46 @@ export const useUserStore = defineStore('user', {
         this.authUser = null
         this.authToken = null
       }
+    },
+
+    async getUser(username: string) {
+      await server.get(`user/${username}/`).then((res) => {
+        if (res.status == 200) {
+          const {
+            id,
+            username,
+            firstName,
+            lastName,
+            email,
+            avatar,
+            travelMethod,
+            teamSignup,
+            hasConsent,
+            subteamId,
+            teamId,
+            teamAdmin
+          } = camelize(res.data as Snakify<User>)
+
+          this.authUser = JSON.stringify({
+            id,
+            username,
+            firstName,
+            lastName,
+            email,
+            avatar,
+            travelMethod,
+            teamSignup,
+            hasConsent,
+            subteamId,
+            teamId,
+            teamAdmin
+          })
+        }
+      })
+    },
+
+    async registerUser(obj: object) {
+      await server.post('auth/register/', obj)
     }
   }
 })

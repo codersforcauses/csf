@@ -79,6 +79,14 @@ See [this document](https://docs.google.com/document/d/15tQjiH7VnaAhLnafIznboiti
 
 - Be sure to enable {format on save} on VS Code
 
+#### Using Flake8
+
+To use the Flake8 linter inside the Docker container:
+
+- Run `docker compose up` or `docker compose up -d`
+- Open a new terminal if you used (`docker compose up`) or in the the same terminal if you used (`docker compose up -d`) and type `docker exec -it csf_server /bin/bash`. This will allow you to enter the csf_server Docker container.
+- Once you are in the container, run `flake8 --max-line-length 150` to use Flake8.
+
 ### Naming Conventions
 
 - `.py` files
