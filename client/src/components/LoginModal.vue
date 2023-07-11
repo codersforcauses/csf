@@ -211,7 +211,7 @@ const closeModal = () => {
 }
 
 const submitForm = () => {
-  userStore.loginUser(form.value.email, form.value.password)
+  userStore.loginUser(form.value.username, form.value.password)
 
   closeModal()
 }
