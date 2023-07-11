@@ -27,17 +27,16 @@ class UserTest(APITestCase):
         self.user = User.objects.get(id=self.user.id)
         self.assertEqual(self.user.password, self.new_password)
 
-    def test_request_reset_password(self):
+    def test_reset_password(self):
         url = reverse("user:request-reset-password")
         response = self.client.post(url, {"email": self.email})
 
         # this must change when email implemented
         self.assertTrue("reset_token" in response.data)
-        self.reset_token = response.data["reset_token"]
+        reset_token = response.data["reset_token"]
 
-    def test_reset_password(self):
         url = reverse("user:reset-password")
-        response = self.client.post(url, {"reset_token": self.reset_token, "password": self.newer_password})
+        response = self.client.post(url, {"reset_token": reset_token, "password": self.newer_password})
 
         # test user has new password
         self.user = User.objects.get(id=self.user.id)
