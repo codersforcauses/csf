@@ -51,8 +51,8 @@ const userStore = useUserStore()
 async function changePassword() {
   if (newPassword.value === newPasswordConfirmation.value) {
     try {
-      let status, data = await userStore.changePassword(newPassword.value)
-      console.log(status, data)
+      let status = await userStore.changePassword(newPassword.value)
+      console.log(status)
       if (status === 200) {
         passwordChanged.value = true
       } 

@@ -40,24 +40,25 @@ export const useUserStore = defineStore('user', {
       }
     },
     async changePassword(newPassword: string) {
-      let newId = this.user === null ? 0 : this.user.id
-      return axios
-        .patch(`${BASE_URL}/user/change_password/${newId}`, {
+      if (this.user) {
+        return await axios
+        .patch(`${BASE_URL}/user/change_password/${this.user.id}`, {
           password: newPassword,
+        }).then((res) => {
+          return res.status
         })
-        .then((res) => {
-          return res.status, res.data
-        })
+      }
     },
     async sendResetEmail(email: string) {
-      axios
+      return axios
         .post(`${BASE_URL}/user/request_reset_password/`, {
           email: email
         })
         .then((res) => {
-          if (res.status == 200) {
-            console.log(res.data);
+          if (res.status === 200) {
+            console.log(res.data)
           }
+          return res.status
         })
     },
     async submitResetToken(token: string) {
@@ -66,7 +67,7 @@ export const useUserStore = defineStore('user', {
           reset_token: token
         })
         .then((res) => {
-          return res.data
+          return res.status
         })
     },
     async submitNewPassword(token: string, newPassword: string) {
@@ -76,11 +77,7 @@ export const useUserStore = defineStore('user', {
           password: newPassword
         })
         .then((res) => {
-          if (res.data === "Success") {
-            return "Success"
-          } else {
-            return res.data.password[0]
-          }
+          return res.status
         })
     },
 

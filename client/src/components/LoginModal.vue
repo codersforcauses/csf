@@ -90,6 +90,7 @@
             bg-color="#FFFFFF"
             v-model="form.email"
             :rules="[required]"
+            @focus="errors.email=''"
             :error-messages="errors.email"
             label="Email"
             clearable
@@ -136,6 +137,7 @@
             bg-color="#FFFFFF"
             :rules="[required]"
             :error-messages="errors.newPassword"
+            @focus="errors.newPassword=''"
             v-model="form.newPassword"
             label="Password"
             type="password"
@@ -175,7 +177,7 @@
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
 import { useUserStore } from '@/stores/user'
-import { storeToRefs } from 'pinia'
+import { AxiosError } from 'axios'
 
 const { mobile } = useDisplay()
 const dialog = ref(true)
@@ -220,32 +222,45 @@ const submitForm = () => {
 
 async function emailUser() {
   if (isEmail(form.value.email)) {
-    await userStore.sendResetEmail(form.value.email)
-    errors.value.email = ''
-    page.value = 3;
+    try {
+      if (await userStore.sendResetEmail(form.value.email) === 200){
+        errors.value.email = ''
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    page.value = 3
   } else {
     errors.value.email = "Email is invalid"
   }
 }
 
 async function submitToken() {
-  let res = await userStore.submitResetToken(form.value.token)
-  if (res === "Success") {
-    errors.value.token = ''
-    page.value = 4
-  } else {
-    errors.value.token = "Invalid token"
+  try {
+    let status = await userStore.submitResetToken(form.value.token)
+    if (status === 200) {
+      errors.value.token = ''
+      page.value = 4
+    }
+  } catch (error: AxiosError | any) {
+      if (error instanceof AxiosError && error.response && error.response.status === 400) {
+        errors.value.token = "Invalid token"
+      }
   }
 }
 async function submitNewPassword() {
   if (form.value.newPassword === form.value.confirmPassword) {
-    errors.value.newPassword = ''
-    errors.value.confirmPassword = ''
-    let res = await userStore.submitNewPassword(form.value.token, form.value.newPassword)
-    if (res === "Success") {
-      page.value = 5
-    } else {
-      errors.value.newPassword = res
+    try {
+      let status = await userStore.submitNewPassword(form.value.token, form.value.newPassword)
+      if (status === 200) {
+        errors.value.newPassword = ''
+        errors.value.confirmPassword = ''
+        page.value = 5
+      }
+    } catch (error: AxiosError | any) {
+      if (error instanceof AxiosError && error.response && error.response.status === 400) {
+        errors.value.newPassword = error.response.data.password
+      }
     }
   } else {
     errors.value.newPassword = "Passwords do not match"
