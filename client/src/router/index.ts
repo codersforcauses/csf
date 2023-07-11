@@ -4,7 +4,6 @@ import TeamsPageView from '@/views/TeamsPageView.vue'
 import EventsView from '../views/EventsView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import ChallengeView from '../views/ChallengeView.vue'
-import MileageModalView from '../views/MileageModalView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,11 +32,6 @@ const router = createRouter({
       path: '/challenge',
       name: 'challenge',
       component: ChallengeView
-    },
-    {
-      path: '/mileagemodal',
-      name: 'mileagemodal',
-      component: MileageModalView
     }
   ]
 })
