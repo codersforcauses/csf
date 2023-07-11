@@ -1,8 +1,11 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from django.contrib import admin
+from django.http import HttpResponse
 
 from .models import Event
 from .serializers import EventSerialiser
+import csv
 
 
 @api_view(['POST'])
@@ -52,3 +55,20 @@ def delete_event(request, event_id):
         return Response("Event successfully deleted")
     else:
         return Response("Event is not private")
+
+
+def export_eventcsv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=events.csv'
+
+    events_writer = csv.writer(response)
+
+    events = Event.objects.all()
+
+    events_writer.writerow(['ID', 'Name', 'Start date', 'End date', 'Description', 'Public', 'Archived', 'Team ID'])
+
+    for event in events:
+        events_writer.writerow([event.event_id, event.name, event.start_date, event.end_date, event.description, event.is_public, event.is_archived, event.team_id])
+
+    return response
+
