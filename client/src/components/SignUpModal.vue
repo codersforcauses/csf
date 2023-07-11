@@ -247,7 +247,7 @@
 <script setup lang="ts">
 import { ref, reactive, watchEffect } from 'vue'
 import FooterBanner from '/images/Footer-min.jpeg'
-import { type Signup } from '../types/signup'
+import { type Signup } from '../types/user'
 import ConsentModal from './ConsentModal.vue'
 import { useUserStore } from '../stores/user'
 import snakify from 'snakify-ts'

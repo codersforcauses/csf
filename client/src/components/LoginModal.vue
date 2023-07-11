@@ -173,7 +173,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
-import { useUserStore } from '../stores/user'
+import { useUserStore } from '@/stores/user'
+import { storeToRefs } from 'pinia'
 
 const { mobile } = useDisplay()
 const dialog = ref(true)
@@ -209,10 +210,9 @@ const closeModal = () => {
   emit('openLoginModal', false)
 }
 
-const submitForm = async () => {
-  console.log('Username:', form.value.username)
-  console.log('Password:', form.value.password)
-  await userStore.loginUser(form.value.username, form.value.password)
+const submitForm = () => {
+  userStore.loginUser(form.value.email, form.value.password)
+
   closeModal()
 }
 
