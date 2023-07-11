@@ -21,6 +21,11 @@ class ChangePasswordSerializer(ModelSerializer):
     def validate_password(self, value):
         validate_password(value)
         return value
+    
+    def update(self, instance, validated_data):
+        instance.set_password(validated_data['password'])
+        instance.save()
+        return instance
 
 
 class RequestResetPasswordSerializer(ModelSerializer):
@@ -48,3 +53,8 @@ class ResetPasswordSerializer(ModelSerializer):
     def validate_password(self, value):
         validate_password(value)
         return value
+    
+    def update(self, instance, validated_data):
+        instance.set_password(validated_data['password'])
+        instance.save()
+        return instance
