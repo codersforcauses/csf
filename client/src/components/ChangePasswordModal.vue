@@ -12,25 +12,25 @@
       </div>
       <div v-else>
         <v-card-title class="justify-center text-h4 mb-5">Change Password</v-card-title>
-          <v-text-field
-            bg-color="white"
-            label="New Password"
-            v-model="newPassword"
-            type="password"
-            :error-messages="passwordErrors"
-            @focus = "passwordErrors = []"
-            class="mx-5 mb-5"
-          ></v-text-field>
-          <v-text-field
-            bg-color="white"
-            label="Confirm New Password"
-            type="password"
-            v-model="newPasswordConfirmation"
-            class="mx-5 mb-16"
-          ></v-text-field>
-          <v-card-actions class="justify-center mb-4">
-            <v-btn class="bg-primaryRed" @click="changePassword">Change Password</v-btn>
-          </v-card-actions>
+        <v-text-field
+          bg-color="white"
+          label="New Password"
+          v-model="newPassword"
+          type="password"
+          :error-messages="passwordErrors"
+          @focus="passwordErrors = []"
+          class="mx-5 mb-5"
+        ></v-text-field>
+        <v-text-field
+          bg-color="white"
+          label="Confirm New Password"
+          type="password"
+          v-model="newPasswordConfirmation"
+          class="mx-5 mb-16"
+        ></v-text-field>
+        <v-card-actions class="justify-center mb-4">
+          <v-btn class="bg-primaryRed" @click="changePassword">Change Password</v-btn>
+        </v-card-actions>
       </div>
     </v-card>
   </v-dialog>
@@ -42,8 +42,8 @@ import { useUserStore } from '../stores/user'
 import { AxiosError } from 'axios'
 
 const emit = defineEmits(['close'])
-const newPassword = ref<string>("")
-const newPasswordConfirmation = ref<string>("")
+const newPassword = ref<string>('')
+const newPasswordConfirmation = ref<string>('')
 const passwordErrors = ref<string | string[]>('')
 const passwordChanged = ref(false)
 const userStore = useUserStore()
@@ -54,14 +54,14 @@ async function changePassword() {
       let status = await userStore.changePassword(newPassword.value)
       if (status === 200) {
         passwordChanged.value = true
-      } 
+      }
     } catch (error: AxiosError | any) {
       if (error instanceof AxiosError && error.response && error.response.status === 400) {
         passwordErrors.value = error.response.data.password
       }
     }
   } else {
-    passwordErrors.value = "Passwords must match"
+    passwordErrors.value = 'Passwords must match'
   }
 }
 

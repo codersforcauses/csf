@@ -2,12 +2,16 @@ from rest_framework.serializers import ModelSerializer
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 
+
 class UserSerialiser(ModelSerializer):
+
     class Meta:
         model = get_user_model()
         fields = '__all__'
 
+
 class ChangePasswordSerializer(ModelSerializer):
+
     class Meta:
         model = get_user_model()
         fields = [
@@ -21,7 +25,7 @@ class ChangePasswordSerializer(ModelSerializer):
     def validate_password(self, value):
         validate_password(value)
         return value
-    
+
     def update(self, instance, validated_data):
         instance.set_password(validated_data['password'])
         instance.save()
@@ -29,6 +33,7 @@ class ChangePasswordSerializer(ModelSerializer):
 
 
 class RequestResetPasswordSerializer(ModelSerializer):
+
     class Meta:
         model = get_user_model()
         fields = [
@@ -39,6 +44,7 @@ class RequestResetPasswordSerializer(ModelSerializer):
 
 
 class ResetPasswordSerializer(ModelSerializer):
+
     class Meta:
         model = get_user_model()
         fields = [
@@ -53,7 +59,7 @@ class ResetPasswordSerializer(ModelSerializer):
     def validate_password(self, value):
         validate_password(value)
         return value
-    
+
     def update(self, instance, validated_data):
         instance.set_password(validated_data['password'])
         instance.save()

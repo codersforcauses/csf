@@ -1,6 +1,11 @@
 <template>
   <v-btn class="bg-primaryRed ma-4" @click="showChangePasswordModal = true">Change Password </v-btn>
-  <ChangePasswordModal v-if="showChangePasswordModal" v-model="showChangePasswordModal" @close="showChangePasswordModal = false" @success="passwordChanged"/>
+  <ChangePasswordModal
+    v-if="showChangePasswordModal"
+    v-model="showChangePasswordModal"
+    @close="showChangePasswordModal = false"
+    @success="passwordChanged"
+  />
 </template>
 
 <script setup lang="ts">
@@ -14,5 +19,4 @@ function passwordChanged() {
   showChangePasswordModal.value = false
   showSuccessDialog.value = true
 }
-
 </script>
