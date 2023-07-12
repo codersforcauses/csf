@@ -3,24 +3,24 @@
     <v-card style="height: 100%" class="bg-backgroundGrey">
       <div class="bg-backgroundGrey">
         <v-container class="pa-0">
-          <v-img src="/images/Footer-min.jpeg" width="100%" height="10" cover></v-img>
+          <v-img src="/images/Footer-min.jpeg" width="100%" height="10" cover />
         </v-container>
 
         <v-row justify="end">
           <v-col v-if="page > 1 && page < 4" cols="auto">
-            <v-btn variant="plain" @click="page--"
-              ><v-icon icon="mdi-arrow-left" size="32px"></v-icon
-            ></v-btn>
+            <v-btn variant="plain" @click="page--">
+              <v-icon icon="mdi-arrow-left" size="32px" />
+            </v-btn>
           </v-col>
           <v-spacer />
           <v-col cols="auto">
-            <v-btn variant="plain" @click="closeModal"
-              ><v-icon icon="mdi-close" size="32px"></v-icon
-            ></v-btn>
+            <v-btn variant="plain" @click="closeModal">
+              <v-icon icon="mdi-close" size="32px" />
+            </v-btn>
           </v-col>
         </v-row>
 
-        <v-img src="/images/CSF_Logo_RGB.png" width="100%" height="120" contain></v-img>
+        <v-img src="/images/CSF_Logo_RGB.png" width="100%" height="120" contain />
       </div>
       <div v-if="page === 1">
         <v-col cols="auto">

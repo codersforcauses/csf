@@ -1,10 +1,10 @@
 <template>
   <v-dialog width="400px">
     <v-card class="bg-backgroundGrey">
-      <v-img src="/images/Footer-min.jpeg" width="100%" max-height="16" cover></v-img>
+      <v-img src="/images/Footer-min.jpeg" width="100%" max-height="16" cover />
       <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-icon icon="mdi-close" size="x-large" @click="closeModal"></v-icon>
+        <v-spacer />
+        <v-icon icon="mdi-close" size="x-large" @click="closeModal" />
       </v-card-actions>
       <div v-if="passwordChanged">
         <v-card-title class="justify-center text-h4 mb-5">Password Changed</v-card-title>
@@ -20,14 +20,14 @@
           :error-messages="passwordErrors"
           @focus="passwordErrors = []"
           class="mx-5 mb-5"
-        ></v-text-field>
+        />
         <v-text-field
           bg-color="white"
           label="Confirm New Password"
           type="password"
           v-model="newPasswordConfirmation"
           class="mx-5 mb-16"
-        ></v-text-field>
+        />
         <v-card-actions class="justify-center mb-4">
           <v-btn class="bg-primaryRed" @click="changePassword">Change Password</v-btn>
         </v-card-actions>
