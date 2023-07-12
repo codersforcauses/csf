@@ -51,6 +51,12 @@ def update_team(request, team_id):
 
 @api_view(['DELETE'])
 def delete_team(request, team_id):
-    team = Team.objects.get(team_id=team_id)
-    team.delete()
-    return Response("Team successfully deleted")
+    if (request.user.is_authenticated is False):
+        return Response("User is not authenticated", status=401)
+    else:
+        if (request.user.team_id != team_id and request.user.team_admin is False):
+            return Response("User is not authorised to delete this team", status=403)
+        else:
+            team = Team.objects.get(team_id=team_id)
+            team.delete()
+            return Response("Team successfully deleted")
