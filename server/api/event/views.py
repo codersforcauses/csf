@@ -1,5 +1,7 @@
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view
+
+from django.http import HttpResponse
 
 from .models import Event
 from .serializers import EventSerialiser
@@ -27,13 +29,18 @@ def get_event(request, event_id):
 @api_view(['GET'])
 def get_events(request):
     if request.user.is_authenticated:
-        events = Event.objects.all()
-        serializer = EventSerialiser(events, many=True)
-        return Response(serializer.data)
+        if (request.user.team_id is not None):
+            events = Event.objects.filter(team_id=request.user.team_id)
+            team_serializer = EventSerialiser(events, many=True)
+            return Response(team_serializer.data)
+        else:
+            events = Event.objects.all()
+            serializer = EventSerialiser(events, many=True)
+            return HttpResponse(serializer.data)
     else:
         events = Event.objects.filter(is_public=True)
-        serializer = EventSerialiser(events, many=True)
-        return Response(serializer.data)
+        limited_serializer = EventSerialiser(events, many=True)
+        return Response(limited_serializer.data)
 
 
 @api_view(['PUT'])
