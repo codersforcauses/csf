@@ -4,12 +4,20 @@
       <div style="height: 10px">
         <v-img src="/images/Footer-min.jpeg" width="100%" cover />
       </div>
+      <div class="d-flex justify-end">
+        <v-btn variant="text" @click="$emit('update:modelValue', !modelValue)">
+          <v-icon icon="mdi-close" />
+        </v-btn>
+      </div>
       <v-spacer />
       <v-form v-model="form">
         <v-container class="px-8">
           <v-row align="center">
-            <v-col>
+            <v-col align="center">
               <v-card-title class="mx-auto text-h5 justify-center">Add Mileage</v-card-title>
+              <v-card-subtitle class="mx-auto justify-center"
+                >Let us know how far you travelled today!</v-card-subtitle
+              >
             </v-col>
           </v-row>
           <v-row>
@@ -19,7 +27,7 @@
                   <v-text-field
                     type="date"
                     label="Date"
-                    v-model="date"
+                    v-model="mileage.date"
                     bg-color="white"
                     :rules="[required]"
                   />
@@ -32,9 +40,20 @@
               </v-row>
               <v-row>
                 <v-col>
-                  <div v-if="tempIconType === 'running'" class="ma-0 pa-0" id="runner">
+                  <div v-if="tempIconType === 'RUNNING'" class="ma-0 pa-0" id="runner">
                     <v-slider
-                      v-model="distance"
+                      v-model="mileage.distance"
+                      color="secondaryGreen"
+                      :thumb-size="40"
+                      elevation="0"
+                      :step="1"
+                      min="1"
+                      max="100"
+                    />
+                  </div>
+                  <div v-if="tempIconType === 'WALKING'" id="walker" class="ma-0 pa-0">
+                    <v-slider
+                      v-model="mileage.distance"
                       color="green"
                       :thumb-size="40"
                       elevation="0"
@@ -43,20 +62,9 @@
                       max="100"
                     />
                   </div>
-                  <div v-if="tempIconType === 'walking'" id="walker" class="ma-0 pa-0">
+                  <div v-if="tempIconType === 'WHEELING'" id="wheeler" class="ma-0 pa-0">
                     <v-slider
-                      v-model="distance"
-                      color="green"
-                      :thumb-size="40"
-                      elevation="0"
-                      :step="1"
-                      min="1"
-                      max="100"
-                    />
-                  </div>
-                  <div v-if="tempIconType === 'wheeling'" id="wheeler" class="ma-0 pa-0">
-                    <v-slider
-                      v-model="distance"
+                      v-model="mileage.distance"
                       color="green"
                       :thumb-size="40"
                       elevation="0"
@@ -69,7 +77,7 @@
               </v-row>
               <v-row>
                 <v-col align="center">
-                  <v-chip class="px-6 text-h5 rounded" color="green">{{ distance }}</v-chip>
+                  <v-chip class="px-6 text-h5 rounded" color="green">{{ mileage.distance }}</v-chip>
                   <p class="text-subtitle-2">KILOMETERS</p>
                 </v-col>
               </v-row>
@@ -77,12 +85,12 @@
           </v-row>
         </v-container>
         <v-card-actions class="d-flex justify-center">
-          <v-btn @click="$emit('update:modelValue', !modelValue)">CANCEL</v-btn>
           <v-btn @click="handleSubmit" :disabled="!form" color="primaryRed" variant="elevated"
             >ADD</v-btn
           >
         </v-card-actions>
       </v-form>
+      <v-spacer />
       <v-spacer />
     </v-card>
   </v-dialog>
@@ -95,15 +103,15 @@ import { ref, watchEffect } from 'vue'
 const isFullscreen = ref(false)
 const props = defineProps(['modelValue'])
 const emit = defineEmits(['update:modelValue', 'handleSubmit'])
-const distance = ref(1)
-const date = ref('')
+const initialState = { distance: '', date: '' }
+const mileage = ref(initialState)
 const form = ref(false)
 const required = (v: string) => {
   return !!v || 'Field is required'
 }
 
-// The icon on the slider changes depending on this variable. Current temp options are "running" | "walking" | "wheeling"
-const tempIconType: string = 'running'
+// The icon on the slider changes depending on this variable. Current temp options are "RUNNING" | "WALKING" | "WHEELING"
+const tempIconType: string = 'RUNNING'
 
 const value = computed({
   get() {
@@ -115,8 +123,7 @@ const value = computed({
 })
 
 const handleSubmit = () => {
-  console.log(date.value)
-  console.log(distance.value)
+  console.log(mileage.value)
   emit('update:modelValue', false)
 }
 
