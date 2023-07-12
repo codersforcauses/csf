@@ -167,10 +167,9 @@ REST_FRAMEWORK = {
 # EMAIL
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'mailhog'
-EMAIL_PORT = 1025
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
-EMAIL_USE_TLS = False
-
-EMAIL_ADDRESS_FROM = 'email-tester@test.com'
+EMAIL_HOST=os.environ.get("EMAIL_HOST")
+EMAIL_PORT=int(os.environ.get("EMAIL_PORT"))
+EMAIL_HOST_USER=os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD=os.environ.get("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS=os.environ.get("APP_ENV") == "True"
+EMAIL_ADDRESS_FROM = os.environ.get("EMAIL_ADDRESS_FROM")
