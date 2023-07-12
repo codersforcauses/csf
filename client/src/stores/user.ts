@@ -3,7 +3,7 @@ import { useStorage } from '@vueuse/core'
 import server from '@/utils/server'
 import type { User } from '@/types/user'
 import camelize from 'camelize-ts'
-import { type Snakify } from 'snakify-ts'
+import snakify, { type Snakify } from 'snakify-ts'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -61,19 +61,25 @@ export const useUserStore = defineStore('user', {
     },
     async submitResetToken(token: string) {
       return await server
-        .post('user/verify_token/', {
-          reset_token: token
-        })
+        .post(
+          'user/verify_token/',
+          snakify({
+            resetToken: token
+          })
+        )
         .then((res) => {
           return res.status
         })
     },
     async submitNewPassword(token: string, newPassword: string) {
       return await server
-        .post('user/reset_password/', {
-          reset_token: token,
-          password: newPassword
-        })
+        .post(
+          'user/reset_password/',
+          snakify({
+            resetToken: token,
+            password: newPassword
+          })
+        )
         .then((res) => {
           return res.status
         })

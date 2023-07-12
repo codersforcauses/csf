@@ -2,7 +2,6 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from api.team.models import Team
 from api.subteam.models import SubTeam
-import uuid
 
 
 class UserManager(BaseUserManager):
@@ -60,7 +59,7 @@ class User(AbstractUser):
     subteam_id = models.ForeignKey(SubTeam, null=True, on_delete=models.SET_NULL, blank=True)
     team_id = models.ForeignKey(Team, null=True, on_delete=models.SET_NULL, blank=True)
     team_admin = models.BooleanField(default=False)
-    reset_token = models.CharField(max_length=36, blank=True, default=uuid.uuid4)
+    reset_token = models.CharField(max_length=36, blank=True, null=True)
     reset_time = models.DateTimeField(null=True, blank=True)
 
     objects = UserManager()
