@@ -20,7 +20,7 @@ yarn dev
 
 Install docker on your machine: https://www.docker.com/
 
-Run the Vue and Django server
+Run the Vue and Django server, and also the MailHog email testing tool
 
 ```
 docker compose up
@@ -36,4 +36,10 @@ The Django development server can be viewed on
 
 ```
 http://localhost:8081/
+```
+
+The MailHog server can be viewed on
+
+```
+http://localhost:8025/
 ```
