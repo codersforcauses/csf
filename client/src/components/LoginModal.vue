@@ -38,6 +38,8 @@
               <v-text-field
                 bg-color="#FFFFFF"
                 :rules="[required]"
+                :error-messages="errors.login"
+                @focus="errors.login = ''"
                 v-model="form.username"
                 label="Username"
                 required
@@ -45,6 +47,7 @@
               <v-text-field
                 bg-color="#FFFFFF"
                 :rules="[required]"
+                @focus="errors.login = ''"
                 v-model="form.password"
                 label="Password"
                 type="password"
@@ -55,10 +58,8 @@
 
           <v-row align="center" justify="center">
             <v-btn class="pb-15 mt-0" variant="plain" color="secondaryBlue" style="font-size: 12px" @click="page = 2"
-              >Forgot Password?</v-btn
-            >
+            >Forgot Password?</v-btn>
           </v-row>
-
           <v-card-actions class="justify-center">
             <v-col cols="auto">
               <v-row align="center" justify="center" class="p-10">
@@ -147,7 +148,6 @@
           <v-text-field class="pb-0 mb-0"
             bg-color="#FFFFFF"
             :rules="[required]"
-            :error-messages="errors.confirmPassword"
             v-model="form.confirmPassword"
             label="Confirm Password"
             type="password"
@@ -194,10 +194,10 @@ const form = ref({
 })
 
 const errors = ref({
+  login: '',
   email: '',
   token: '',
   newPassword: '',
-  confirmPassword: '',
 })
 
 defineProps(['loginModal'])
@@ -214,10 +214,14 @@ const closeModal = () => {
   emit('openLoginModal', false)
 }
 
-const submitForm = () => {
-  userStore.loginUser(form.value.username, form.value.password)
-
-  closeModal()
+const submitForm = async() => {
+  if (await userStore.loginUser(form.value.username, form.value.password)) {
+    closeModal()
+  } else {
+    userStore.authToken = null
+    userStore.authUser = null
+    errors.value.login = "Your username or password is incorrect"
+  }
 }
 
 async function emailUser() {
@@ -226,10 +230,9 @@ async function emailUser() {
       if (await userStore.sendResetEmail(form.value.email) === 200){
         errors.value.email = ''
       }
-    } catch (error) {
-      console.log(error)
+    } finally {
+      page.value = 3
     }
-    page.value = 3
   } else {
     errors.value.email = "Email is invalid"
   }
@@ -254,7 +257,6 @@ async function submitNewPassword() {
       let status = await userStore.submitNewPassword(form.value.token, form.value.newPassword)
       if (status === 200) {
         errors.value.newPassword = ''
-        errors.value.confirmPassword = ''
         page.value = 5
       }
     } catch (error: AxiosError | any) {
@@ -264,7 +266,6 @@ async function submitNewPassword() {
     }
   } else {
     errors.value.newPassword = "Passwords do not match"
-    errors.value.confirmPassword = 'Passwords do not match'
   }
 }
 </script>

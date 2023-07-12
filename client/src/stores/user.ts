@@ -21,22 +21,22 @@ export const useUserStore = defineStore('user', {
     },
 
     async loginUser(username: string, password: string) {
-      try {
-        await server
-          .post('auth/token/', {
-            username: username,
-            password: password
-          })
-          .then((res) => {
-            if (res.status == 200) {
-              this.getUser(username)
-              this.authToken = JSON.stringify(res.data)
-            }
-          })
-      } catch (error) {
-        this.authUser = null
+      return await server
+      .post('auth/token/', {
+        username: username,
+        password: password
+      })
+      .then((res) => {
+        if (res.status == 200) {
+          this.getUser(username)
+          this.authToken = JSON.stringify(res.data)
+          return true
+        }
+      }).catch((res) => {
         this.authToken = null
-      }
+        this.authUser = null
+        return false
+      })
     },
     async changePassword(newPassword: string) {
       if (this.user) {
