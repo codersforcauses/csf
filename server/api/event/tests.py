@@ -98,7 +98,7 @@ class EventTests(APITestCase):
             format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data.keys()), 0) # no errors
+        self.assertEqual(len(response.data.keys()), 0)  # no errors
         self.assertEqual(Event.objects.get(event_id=eventBeforeUpdate.event_id).name, "updateEventTestPrivate")
         self.assertEqual(Event.objects.get(event_id=eventBeforeUpdate.event_id).description, "unit test try update")
 
