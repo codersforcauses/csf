@@ -53,8 +53,8 @@ class EventTests(APITestCase):
         self.assertEqual(created_event.start_date, datetime.date.today())
         self.assertEqual(created_event.end_date, datetime.date.today())
         self.assertEqual(created_event.description, created_event_description)
-        self.assertEqual(created_event.is_public, True)
-        self.assertEqual(created_event.is_archived, False)
+        self.assertTrue(created_event.is_public)
+        self.assertFalse(created_event.is_archived)
 
     def test_get_event(self):
         existingTeam = Team.objects.get()
@@ -67,8 +67,8 @@ class EventTests(APITestCase):
         self.assertEqual(one_event.start_date, datetime.date.today())
         self.assertEqual(one_event.end_date, datetime.date.today())
         self.assertEqual(one_event.description, "public event for unit test")
-        self.assertEqual(one_event.is_public, True)
-        self.assertEqual(one_event.is_archived, False)
+        self.assertTrue(one_event.is_public)
+        self.assertFalse(one_event.is_archived)
         self.assertEqual(one_event.team_id, existingTeam)
 
     def test_get_events(self):
@@ -89,13 +89,18 @@ class EventTests(APITestCase):
                 ),
             {
                 "name": "updateEventTestPrivate",
+                "start_date": datetime.date.today(),
+                "end_date": datetime.date.today(),
                 "description": "unit test try update",
+                "is_public": True,
+                "is_archived": False,
             },
             format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["name"], "updateEventTestPrivate")
-        self.assertEqual(response.data["description"], "unit test try update")
+        self.assertEqual(len(response.data.keys()), 0) # no errors
+        self.assertEqual(Event.objects.get(event_id=eventBeforeUpdate.event_id).name, "updateEventTestPrivate")
+        self.assertEqual(Event.objects.get(event_id=eventBeforeUpdate.event_id).description, "unit test try update")
 
     def test_update_public_event(self):
         eventBeforeUpdate = Event.objects.get(name="eventTestPublic")
@@ -106,7 +111,11 @@ class EventTests(APITestCase):
                 ),
             {
                 "name": "updateEventTestPrivate",
+                "start_date": datetime.date.today(),
+                "end_date": datetime.date.today(),
                 "description": "unit test try update",
+                "is_public": True,
+                "is_archived": False,
             },
             format="json",
         )
