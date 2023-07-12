@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { useStorage } from '@vueuse/core'
-import server from '@/common/server'
+import server from '@/utils/server'
 import type { User } from '@/types/user'
 import camelize from 'camelize-ts'
 import { type Snakify } from 'snakify-ts'
