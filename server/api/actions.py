@@ -13,6 +13,7 @@ def export2csv(modeladmin: ModelAdmin, request: HttpRequest, queryset: QuerySet)
     )
 
     writer = csv.writer(response)
-    writer.writerow(f.name for f in modeladmin.model._meta.fields)
-    writer.writerows(queryset.values_list())
+    fields = [f.name for f in modeladmin.model._meta.fields if f.name != "password"]
+    writer.writerow(fields)
+    writer.writerows(queryset.values_list(*fields))
     return response
