@@ -1,6 +1,11 @@
 <template>
   <div v-if="!isLoading">
-    <v-row class="bg-primaryWhite pt-6 mx-3" align="center" no-gutters>
+    <v-row
+      class="bg-primaryWhite pt-6 mx-3"
+      align="center"
+      no-gutters
+      v-if="eventStore.events.length != 0"
+    >
       <v-text-field
         prepend-inner-icon="mdi-magnify"
         hide-details
@@ -21,15 +26,30 @@
       >
       </v-btn>
     </v-row>
-    <div id="cards-container" class="bg-primaryWhite pt-4">
+    <div id="cards-container" class="pt-4">
       <EventCard
-        v-for="event in filteredEventsList"
+        v-for="(event, idx) in filteredEventsList"
         :key="event.eventId"
         :event="event"
         :isTeamAdmin="tempIsTeamAdmin"
         @edit="openEditModal"
+        :background-colour="idx % 2 === 0 ? 'bg-primaryWhite' : 'bg-backgroundGrey'"
       />
+      <div v-if="filteredEventsList.length == 0" class="mt-6 mx-3 text-center">
+        <v-icon icon="mdi-calendar-blank" size="x-large" />
+        <p class="font-weight-bold text-body-1 mt-3">No current events :(</p>
+        <v-btn
+          v-if="tempIsTeamAdmin"
+          size="x-large"
+          class="bg-primaryRed text-primaryWhite mt-3"
+          @click="isAddingEvent = true"
+          >ADD EVENT
+        </v-btn>
+      </div>
     </div>
+  </div>
+  <div v-else class="w-100 d-inline-block">
+    <v-progress-circular indeterminate color="primaryRed" class="mt-12 mx-auto d-block" />
   </div>
   <EventsModal v-if="isAddingEvent" :type="'Create'" @close="closeModal" v-model="isAddingEvent" />
   <EventsModal
@@ -49,29 +69,19 @@ import { ref, computed, onMounted } from 'vue'
 import { useEventStore } from '../stores/event'
 
 const eventStore = useEventStore()
-const isLoading = ref<boolean>(true)
-const eventList = ref()
+const isLoading = ref(true)
 
 onMounted(async () => {
-  try {
-    await eventStore.getEvents()
-    eventList.value = eventStore.events
-  } catch (error) {
-    console.log(error)
-  }
-  console.log(eventList.value)
+  await eventStore.getEvents()
   isLoading.value = false
 })
 
-const searchQuery = ref<string>('')
-const filteredEventsList = computed<Event[]>(() => {
-  let query: string = searchQuery.value ? searchQuery.value.toLowerCase() : ''
-  return eventList.value.filter(
-    (e: Event) =>
-      e.name.toLowerCase().includes(query) ||
-      e.description.toLowerCase().includes(searchQuery.value)
+const searchQuery = ref('')
+const filteredEventsList = computed<Event[]>(() =>
+  eventStore.events.filter((e) =>
+    (e.name + e.description).toLowerCase().includes(searchQuery.value)
   )
-})
+)
 const tempIsTeamAdmin = ref<boolean>(true)
 const isAddingEvent = ref<boolean>(false)
 const isEditingEvent = ref<boolean>(false)
@@ -83,7 +93,7 @@ const closeModal = () => {
 }
 
 function openEditModal(id: number) {
-  let foundEvent = eventList.value.find((e: Event) => e.eventId === id)
+  let foundEvent = eventStore.events.find((e) => e.eventId === id)
   if (foundEvent) {
     editingEvent.value = foundEvent
     isEditingEvent.value = true
@@ -92,9 +102,9 @@ function openEditModal(id: number) {
 </script>
 
 <style scoped>
-#cards-container > .v-card:nth-child(odd) {
+/* #cards-container > .v-card:nth-child(odd) {
   background-color: #f4f4f4;
-}
+} */
 
 .v-field__input {
   padding-top: 19px;
