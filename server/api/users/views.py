@@ -56,24 +56,30 @@ def request_reset_password(request):
 
 @api_view(['POST'])
 def verify_token(request):
-    try:
-        User.objects.get(reset_token=request.data["reset_token"])
-        return Response("Success")
-    except User.DoesNotExist:
+    if request.data["reset_token"] != "":
+        try:
+            User.objects.get(reset_token=request.data["reset_token"])
+            return Response("Success")
+        except User.DoesNotExist:
+            return Response(status=400)
+    else:
         return Response(status=400)
 
 
 @api_view(['POST'])
 def reset_password(request):
-    user = User.objects.get(reset_token=request.data["reset_token"])
-    # reset_time not considered for now
-    data = {"password": request.data["password"], "reset_token": None}
-    serializer = ResetPasswordSerializer(instance=user, data=data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response()
+    if request.data["reset_token"] != "":
+        user = User.objects.get(reset_token=request.data["reset_token"])
+        # reset_time not considered for now
+        data = {"password": request.data["password"], "reset_token": ""}
+        serializer = ResetPasswordSerializer(instance=user, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response()
+        else:
+            return Response(serializer.errors, status=400)
     else:
-        return Response(serializer.errors, status=400)
+        return Response(status=400)
 
 
 def make_reset_email_message(email, token):
