@@ -8,7 +8,7 @@ from .serializers import MileageSerializer
 def get_mileage(request, user):
     if (request.user.is_authenticated is False):
         return Response("User not authenticated", status=401)
-    else: 
+    else:
         mileages = Mileage.objects.filter(user=user)
         serializer = MileageSerializer(mileages, many=True)
         return Response(serializer.data)
