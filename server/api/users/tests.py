@@ -37,7 +37,11 @@ class UserTest(APITestCase):
         # test an email with the subject 'Reset Password' was sent
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, 'Reset Password')
-        token_from_mail = mail.outbox[0].body[317:317+36]
+
+        # find the token sent in the email in a not particularly robust way
+        token_from_mail_start = mail.outbox[0].body.find("\n\n")
+        token_from_mail_end = mail.outbox[0].body.find("\n\n", token_from_mail_start+1)
+        token_from_mail = mail.outbox[0].body[token_from_mail_start+2:token_from_mail_end]
 
         # check the emailed token is considered valid, giving a 200 status code
         url = reverse("user:verify-token")

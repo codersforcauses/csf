@@ -4,6 +4,7 @@ from .models import User
 from .serializers import ChangePasswordSerializer, RequestResetPasswordSerializer, ResetPasswordSerializer, UserSerialiser
 from django.core.mail import send_mail
 from django.conf import settings
+from django.template.loader import render_to_string
 
 
 import uuid
@@ -43,12 +44,14 @@ def request_reset_password(request):
     serializer = RequestResetPasswordSerializer(instance=user, data=data)
     if serializer.is_valid():
         serializer.save()
+        html_content = render_to_string('reset_password.html', {'token': user.reset_token, 'email': user.email})
         send_mail(
             subject="Reset Password",
             message=make_reset_email_message(user.email, user.reset_token),
             from_email=settings.EMAIL_ADDRESS_FROM,
             recipient_list=[user.email],
             fail_silently=False,
+            html_message=html_content
         )
 
     return Response()
