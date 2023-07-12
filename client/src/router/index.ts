@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import AboutView from '../views/AboutView.vue'
 import TeamsPageView from '@/views/TeamsPageView.vue'
 import EventsView from '../views/EventsView.vue'
+import UserSettingsView from '../views/UserSettingsView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import ChallengeView from '../views/ChallengeView.vue'
 
@@ -22,6 +23,11 @@ const router = createRouter({
       path: '/events',
       name: 'events',
       component: EventsView
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: UserSettingsView
     },
     {
       path: '/dashboard',
