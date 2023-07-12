@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import type { Event } from '../types/event'
 import camelize from 'camelize-ts'
 import snakify, { type Snakify } from 'snakify-ts'
-import server from '@/utils/server'
+import server from '@/common/server'
 
 export const useEventStore = defineStore('event', {
   state: () => ({
