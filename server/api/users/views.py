@@ -78,8 +78,8 @@ def reset_password(request):
 
 def make_reset_email_message(email, token):
     return ("We have received a request to reset the password" 
-    f"for the Community Spirit Foundation account associated with {email}."
-    "No changes have been made to your account yet. "
-    "If you did make this request, you should see a field in which to enter a token."
+    f"for the Community Spirit Foundation account associated with {email}. "
+    "No changes have been made to your account yet.\n"
+    "If you did make this request, you should see a field in which to enter a token. "
     f"Paste the following token into the field to reset your password:\n\n{token}\n\n"
     "If you did not request a new password, please ignore this email.")
