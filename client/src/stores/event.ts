@@ -3,6 +3,7 @@ import type { Event } from '../types/event'
 import camelize from 'camelize-ts'
 import snakify, { type Snakify } from 'snakify-ts'
 import server from '@/utils/server'
+import { useUserStore } from './user'
 
 export const useEventStore = defineStore('event', {
   state: () => ({
@@ -37,7 +38,14 @@ export const useEventStore = defineStore('event', {
       }
     },
     async getEvents() {
-      const { data, status } = await server.get('event/get/')
+      const userStore =  useUserStore()
+    
+      const { data, status } = await server.get('event/get/', {
+        headers: {
+          Authorization: "Bearer " + userStore.token.access
+        }
+      })
+
       if (status == 200) this.events = camelize(data as Snakify<Event>[])
     }
   },

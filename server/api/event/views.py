@@ -1,5 +1,5 @@
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 
 from .models import Event
 from .serializers import EventSerialiser
@@ -26,9 +26,14 @@ def get_event(request, event_id):
 
 @api_view(['GET'])
 def get_events(request):
-    events = Event.objects.all()
-    serializer = EventSerialiser(events, many=True)
-    return Response(serializer.data)
+    if request.user.is_authenticated:
+        events = Event.objects.all()
+        serializer = EventSerialiser(events, many=True)
+        return Response(serializer.data)
+    else:
+        events = Event.objects.filter(is_public=True)
+        serializer = EventSerialiser(events, many=True)
+        return Response(serializer.data)
 
 
 @api_view(['PUT'])
