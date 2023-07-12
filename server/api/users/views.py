@@ -2,8 +2,10 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import User
 from .serializers import ChangePasswordSerializer, RequestResetPasswordSerializer, ResetPasswordSerializer, UserSerialiser
-# from django.contrib.auth.password_validation import validate_password
-# from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
+from django.conf import settings
+
+
 
 import uuid
 import datetime
@@ -42,6 +44,13 @@ def request_reset_password(request):
     serializer = RequestResetPasswordSerializer(instance=user, data=data)
     if serializer.is_valid():
         serializer.save()
+        send_mail(
+            subject="Reset Password",
+            message=make_reset_email_message(user.email, user.reset_token),
+            from_email=settings.EMAIL_ADDRESS_FROM,
+            recipient_list=[user.email],
+            fail_silently=False,
+        )
 
     return Response()
 
@@ -66,3 +75,11 @@ def reset_password(request):
         return Response()
     else:
         return Response(serializer.errors, status=400)
+
+def make_reset_email_message(email, token):
+    return ("We have received a request to reset the password" 
+    f"for the Community Spirit Foundation account associated with {email}."
+    "No changes have been made to your account yet. "
+    "If you did make this request, you should see a field in which to enter a token."
+    f"Paste the following token into the field to reset your password:\n\n{token}\n\n"
+    "If you did not request a new password, please ignore this email.")

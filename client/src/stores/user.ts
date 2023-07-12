@@ -54,9 +54,6 @@ export const useUserStore = defineStore('user', {
           email: email
         })
         .then((res) => {
-          if (res.status === 200 && res.data !== 'unregistered') {
-            console.log(res.data) // log in place of emailing for now
-          }
           return res.status
         })
     },
