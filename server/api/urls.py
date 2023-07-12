@@ -16,6 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from .actions import export2csv
+
+admin.site.add_action(export2csv, "csv_export_selected")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
