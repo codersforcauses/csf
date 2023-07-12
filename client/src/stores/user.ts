@@ -1,10 +1,9 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
 import { useStorage } from '@vueuse/core'
+import server from '@/utils/server'
 import type { User } from '@/types/user'
 import camelize from 'camelize-ts'
-
-const BASE_URL = 'http://localhost:8081/api'
+import { type Snakify } from 'snakify-ts'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -22,27 +21,27 @@ export const useUserStore = defineStore('user', {
     },
 
     async loginUser(username: string, password: string) {
-      try {
-        await axios
-          .post(`${BASE_URL}/auth/token/`, {
-            username: username,
-            password: password
-          })
-          .then((res) => {
-            if (res.status == 200) {
-              this.getUser(username)
-              this.authToken = JSON.stringify(res.data)
-            }
-          })
-      } catch (error) {
-        this.authUser = null
+      return await server
+      .post('auth/token/', {
+        username: username,
+        password: password
+      })
+      .then((res) => {
+        if (res.status == 200) {
+          this.getUser(username)
+          this.authToken = JSON.stringify(res.data)
+          return true
+        }
+      }).catch((res) => {
         this.authToken = null
-      }
+        this.authUser = null
+        return false
+      })
     },
     async changePassword(newPassword: string) {
       if (this.user) {
-        return await axios
-        .patch(`${BASE_URL}/user/change_password/${this.user.id}`, {
+        return await server
+        .patch(`user/change_password/${this.user.id}`, {
           password: newPassword,
         }).then((res) => {
           return res.status
@@ -50,20 +49,20 @@ export const useUserStore = defineStore('user', {
       }
     },
     async sendResetEmail(email: string) {
-      return axios
-        .post(`${BASE_URL}/user/request_reset_password/`, {
+      return await server
+        .post('user/request_reset_password/', {
           email: email
         })
         .then((res) => {
-          if (res.status === 200) {
-            console.log(res.data)
+          if (res.status === 200 && res.data !== 'unregistered') {
+            console.log(res.data) // log in place of emailing for now
           }
           return res.status
         })
     },
     async submitResetToken(token: string) {
-      return axios
-        .post(`${BASE_URL}/user/verify_token/`, {
+      return await server
+        .post('user/verify_token/', {
           reset_token: token
         })
         .then((res) => {
@@ -71,8 +70,8 @@ export const useUserStore = defineStore('user', {
         })
     },
     async submitNewPassword(token: string, newPassword: string) {
-      return axios
-        .post(`${BASE_URL}/user/reset_password/`, {
+      return await server
+        .post('user/reset_password/', {
           reset_token: token,
           password: newPassword
         })
@@ -81,10 +80,9 @@ export const useUserStore = defineStore('user', {
         })
     },
 
-    async getUser(username: String) {
-      await axios.get(`${BASE_URL}/user/${username}/`).then((res) => {
+    async getUser(username: string) {
+      await server.get(`user/${username}/`).then((res) => {
         if (res.status == 200) {
-          const data = camelize(res.data) as Object as User
           const {
             id,
             username,
@@ -98,7 +96,7 @@ export const useUserStore = defineStore('user', {
             subteamId,
             teamId,
             teamAdmin
-          } = data
+          } = camelize(res.data as Snakify<User>)
 
           this.authUser = JSON.stringify({
             id,
@@ -119,7 +117,7 @@ export const useUserStore = defineStore('user', {
     },
 
     async registerUser(obj: object) {
-      await axios.post(`${BASE_URL}/auth/register/`, obj)
+      await server.post('auth/register/', obj)
     }
   }
 })
