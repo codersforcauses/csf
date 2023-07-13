@@ -1,9 +1,8 @@
 name: Backend CI
 
 on:
-  push:
-    branches:
-      - i52-continuous_integration_backend_automated_testing
+  pull_request:
+    types: opened
 jobs:
   build:
     runs-on: ubuntu-latest
