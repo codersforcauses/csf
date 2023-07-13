@@ -58,3 +58,12 @@ class UserTest(APITestCase):
         # test user has new password
         self.user = User.objects.get(id=self.user.id)
         self.assertEqual(self.user.check_password(self.newer_password), True)
+
+    def test_get_user(self):
+        url = reverse("user:get-user", kwargs={"username": self.username})
+        response = self.client.get(url)
+        user_to_match = User.objects.get(username=self.username)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["username"], user_to_match.username)
+        self.assertEqual(response.data["email"], user_to_match.email)
+        self.assertEqual(response.data["password"], user_to_match.password)
