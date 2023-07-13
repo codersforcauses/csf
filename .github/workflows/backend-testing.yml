@@ -54,6 +54,7 @@ jobs:
           POSTGRES_HOST: localhost
           POSTGRES_PASSWORD: password
           POSTGRES_PORT: 5432
+          EMAIL_PORT: 1025
         run: |
           source .venv/bin/activate
           python manage.py migrate
@@ -64,6 +65,7 @@ jobs:
           POSTGRES_HOST: localhost
           POSTGRES_PASSWORD: password
           POSTGRES_PORT: 5432
+          EMAIL_PORT: 1025
         run: |
           source .venv/bin/activate
           python3 -m pip install coverage
