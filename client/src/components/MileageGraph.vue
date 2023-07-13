@@ -1,5 +1,5 @@
 <template>
-  <v-card variant="flat" class="chart-container">
+  <v-card variant="flat">
     <v-card-actions class="d-flex justify-space-between">
       <v-btn
         class="text-secondaryGreen"
@@ -35,7 +35,7 @@ import type Mileage from '../types/mileage'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend) // creating instance of chart
 
-const tempData = [
+const tempData = ref<Mileage[]>([
   { mileage_id: 1, user_id: 1, kilometers: 10, date: '2023-06-01' },
   { mileage_id: 2, user_id: 1, kilometers: 20, date: '2023-06-02' },
   { mileage_id: 3, user_id: 1, kilometers: 50, date: '2023-06-03' },
@@ -64,39 +64,65 @@ const tempData = [
   { mileage_id: 26, user_id: 1, kilometers: 10, date: '2023-06-26' },
   { mileage_id: 27, user_id: 1, kilometers: 20, date: '2023-06-27' },
   { mileage_id: 28, user_id: 1, kilometers: 30, date: '2023-06-28' },
-  { mileage_id: 29, user_id: 1, kilometers: 40, date: '2023-06-29' },
+  { mileage_id: 29, user_id: 1, kilometers: 20, date: '2023-06-29' },
   { mileage_id: 30, user_id: 1, kilometers: 50, date: '2023-06-30' },
   { mileage_id: 31, user_id: 1, kilometers: 60, date: '2023-07-01' },
-  { mileage_id: 32, user_id: 1, kilometers: 70, date: '2023-07-02' },
+  { mileage_id: 32, user_id: 1, kilometers: 50, date: '2023-07-02' },
   { mileage_id: 33, user_id: 1, kilometers: 80, date: '2023-07-03' },
-  { mileage_id: 34, user_id: 1, kilometers: 90, date: '2023-07-04' },
-  { mileage_id: 35, user_id: 1, kilometers: 100, date: '2023-07-05' },
-  { mileage_id: 36, user_id: 1, kilometers: 110, date: '2023-07-06' },
-  { mileage_id: 37, user_id: 1, kilometers: 120, date: '2023-07-07' },
-  { mileage_id: 38, user_id: 1, kilometers: 130, date: '2023-07-08' }
-]
+  { mileage_id: 34, user_id: 1, kilometers: 30, date: '2023-07-04' },
+  { mileage_id: 35, user_id: 1, kilometers: 10, date: '2023-07-05' },
+  { mileage_id: 36, user_id: 1, kilometers: 14, date: '2023-07-06' },
+  { mileage_id: 37, user_id: 1, kilometers: 20, date: '2023-07-07' },
+  { mileage_id: 38, user_id: 1, kilometers: 13, date: '2023-07-08' }
+])
 
 const filteredData = ref<Mileage[]>()
 
-const filterData = (duration: string) => {
-  let minDate = new Date()
+function filterData(duration: string) {
+  let minDate
+  const currentDate = new Date()
 
-  if (duration === 'This Week') minDate.setDate(minDate.getDate() - 7)
-  if (duration === 'This Month') minDate.setDate(minDate.getDate() - 30)
-  if (duration === 'This Year') minDate.setDate(minDate.getDate() - 365)
-  if (duration === 'Overall') minDate.setDate(minDate.getDate() - 3650) // change this
+  if (duration === 'This Week') {
+    minDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 7)
+  } else if (duration === 'This Month') {
+    minDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate())
+  } else if (duration === 'This Year') {
+    minDate = new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), currentDate.getDate())
+  } else {
+    minDate = tempData.value.reduce((min, obj) => {
+      const currentDate = new Date(obj.date)
+      return currentDate < min ? currentDate : min
+    }, new Date())
+  }
 
-  filteredData.value = tempData.filter((data) => data.date >= minDate.toISOString().split('T')[0])
+  filteredData.value = []
+  while (currentDate >= minDate) {
+    const dateString = currentDate.toISOString().split('T')[0]
+    const matchingData = tempData.value.find((obj) => obj.date === dateString)
+
+    filteredData.value?.unshift({
+      mileage_id: matchingData ? matchingData.mileage_id : -1,
+      user_id: matchingData ? matchingData.user_id : -1,
+      kilometers: matchingData ? matchingData.kilometers : 0,
+      date: dateString
+    })
+    console.log(filteredData.value)
+    currentDate.setDate(currentDate.getDate() - 1)
+  }
 }
 
 filterData('This Week')
 
+const labels = computed(() => filteredData.value?.map((data) => data.date))
+const data = computed(() => filteredData.value?.map((data) => data.kilometers))
+
 const graphData = computed(() => {
+  console.log(labels.value, data.value)
   return {
-    labels: filteredData.value?.map((data) => data.date),
+    labels: labels.value,
     datasets: [
       {
-        data: filteredData.value?.map((data) => data.kilometers),
+        data: data.value,
         borderColor: 'rgb(255, 99, 99)',
         fill: false,
         cubicInterpolationMode: 'monotone',
