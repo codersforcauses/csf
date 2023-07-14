@@ -27,7 +27,10 @@ def get_mileage(request, user):
 
 @api_view(['POST'])
 def post_mileage(request):
-    user = User.objects.get(id=request.data['user'])
+    try:
+        user = User.objects.get(id=request.data['user'])
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     # start challenge for User if not already started
     challenge_start_date = user.challenge_start_date or datetime.date.today()
@@ -37,7 +40,7 @@ def post_mileage(request):
         challenge_start_date = datetime.date.today()
 
     user_data = {
-        'id': request.data['user'],
+        'id': user.id,
         'challenge_start_date': challenge_start_date
     }
 
