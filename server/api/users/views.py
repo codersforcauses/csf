@@ -92,3 +92,18 @@ def make_reset_email_message(email, token):
             "If you did make this request, you should see a field in which to enter a token. "
             f"Paste the following token into the field to reset your password:\n\n{token}\n\n"
             "If you did not request a new password, please ignore this email.")
+
+
+@api_view(['PATCH'])
+def join_team(request):
+    user = User.objects.get(username=request.data.user_id)
+    team = Team.objects.get(join_code=request.data.join_code)
+
+    data = { team.team_id, request.data.teamAdmin}
+    
+    user_serializer = UserSerialiser(instance=user, data=data)
+    team_serializer = TeamSerialiser(instance=team)
+
+    if user_serializer.is_valid() and team_serializer.is_valid():
+        # user_serializer.save()
+        return Response(team_serializer.data)

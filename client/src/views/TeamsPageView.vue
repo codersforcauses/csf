@@ -1,6 +1,6 @@
 <template>
-  <TeamDashboard v-if="user_id && team_id" />
-  <CreateOrJoinTeam v-else-if="user_id && !team_id" />
+  <TeamDashboard v-if="user && user.teamId" />
+  <CreateOrJoinTeam v-else-if="user && !user.teamId" />
   <LoginModal v-else />
 </template>
 
@@ -10,9 +10,12 @@ import CreateOrJoinTeam from '../components/teams/CreateOrJoinTeam.vue'
 import TeamDashboard from '../components/teams/TeamDashboard.vue'
 import { ref, onMounted } from 'vue'
 
-// change these values to show the different modals
-const user_id = ref(true)
-const team_id = ref(true)
+import { useUserStore } from '@/stores/user'
+import { storeToRefs } from 'pinia'
+
+const userStore = useUserStore()
+
+const { user } = storeToRefs(userStore)
 
 onMounted(async () => {})
 </script>
