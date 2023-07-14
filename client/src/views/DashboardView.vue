@@ -46,7 +46,7 @@
       <v-row dense>
         <v-col>
           <div class="progress-bar rounded-lg">
-            <div :class="`rounded-lg ${challenge.colour}`" :style="`width: ${100*distanceTravelled/challenge.length}%`"></div>
+            <div :class="`rounded-lg ${challenge.colour}`" :style="`width: ${calcWidth(distanceTravelled,challenge.length)}%`"></div>
           </div>
         </v-col>
         <v-col cols="3" sm="2" lg="1">
@@ -62,6 +62,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import MileageModal from '../components/MileageModal.vue'
+import { useUserStore } from '@/stores/user'
+import { useMileageStore } from '@/stores/mileage'
+import { onMounted } from 'vue';
+
+const userStore = useUserStore()
+const mileageStore = useMileageStore()
 
 const tempUserFirstName = ref('John')
 const tempUserMileage = ref(100)
@@ -72,7 +78,27 @@ const challenges = ref([
   {name: "GALIWIN'KU", length: 84, colour: "bg-primaryRed"},
   {name: "PALM ISLAND", length: 120, colour: "bg-primaryBlack"}
 ])
-const distanceTravelled = ref(20.0)
+const distanceTravelled = ref(0)
+
+function calcWidth(travelDist: number, totalDist: number) {
+  return Math.min(100*travelDist/totalDist, 100)
+}
+
+async function getRecentMileage() {
+  if (userStore.authUser) {
+    let userId = userStore.user.id
+    await mileageStore.getRecentMileage(userId)
+    if (mileageStore.recentMileage) {
+      let arr = mileageStore.recentMileage
+      return arr.reduce((acc, curr) => acc + curr.kilometres, 0)
+    }
+  }
+  return 0;
+}
+onMounted(async () => {
+  distanceTravelled.value = await getRecentMileage()
+})
+
 </script>
 
 <style scoped>
