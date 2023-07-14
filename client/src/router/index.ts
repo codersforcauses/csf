@@ -2,14 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router'
 import AboutView from '../views/AboutView.vue'
 import TeamsPageView from '@/views/TeamsPageView.vue'
 import EventsView from '../views/EventsView.vue'
-<<<<<<< HEAD
-import DashboardView from '../views/DashboardView.vue'
-=======
 import UserSettingsView from '../views/UserSettingsView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import ChallengeView from '../views/ChallengeView.vue'
 import { capitalize } from 'vue'
->>>>>>> main
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,11 +26,6 @@ const router = createRouter({
       component: EventsView
     },
     {
-<<<<<<< HEAD
-      path: '/dashboard',
-      name: 'dashboard',
-      component: DashboardView
-=======
       path: '/settings',
       name: 'settings',
       component: UserSettingsView
@@ -48,7 +39,6 @@ const router = createRouter({
       path: '/challenges',
       name: 'challenges',
       component: ChallengeView
->>>>>>> main
     }
   ]
 })

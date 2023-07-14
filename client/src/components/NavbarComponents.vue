@@ -233,14 +233,9 @@ const menu = [
   { icon: 'mdi-chart-bar', title: 'Dashboard', link: '/dashboard' },
   { icon: 'mdi-account-group', title: 'Team', link: '/team' },
   { icon: 'mdi-calendar', title: 'Events', link: '/events' },
-<<<<<<< HEAD
-  { icon: 'mdi-star', title: 'Leaderboards', link: '/' },
-  { icon: 'mdi-calendar', title: 'dashboard', link: '/dashboard' },
-=======
   { icon: 'mdi-trophy', title: 'Challenges', link: '/challenges' },
   { icon: 'mdi-star', title: 'Leaderboards', link: '/' },
   { icon: 'mdi-currency-usd', title: 'Donate', link: 'https://stride-for-education.raisely.com' }
->>>>>>> main
 ]
 </script>
 
