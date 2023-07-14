@@ -44,7 +44,7 @@ class MileageTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         twos_days_time = datetime.date.today() + datetime.timedelta(days=2)
-        data = {'user': self.user.id, 'kilometres': 20, 'date': twos_days_time} 
+        data = {'user': self.user.id, 'kilometres': 20, 'date': twos_days_time}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -62,7 +62,7 @@ class MileageTests(APITestCase):
         self.user = User.objects.get(id=self.user.id)
         self.assertEqual(self.user.challenge_start_date, datetime.date.today())
 
-    def get_challenge_mileages(self):
+    def test_get_challenge_mileages(self):
         url = reverse('mileage:post-mileage')
 
         # start challenge period
@@ -76,9 +76,9 @@ class MileageTests(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        # test only get mileages within challenge period
+        # test only get mileages within challenge period if challenge param in query
         url = reverse('mileage:get-mileage', args=[self.user.id])
-        response = self.client.get(url)
+        response = self.client.get(url, {'challenge': True})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.assertEqual(len(response.data), 2)
