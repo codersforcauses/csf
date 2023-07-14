@@ -35,9 +35,28 @@
   <v-divider />
   <v-row class="ma-0 px-4 pt-0 pb-0" align="center">
     <v-col>
-      <h2>Daily KMs</h2>
+      <h1>Daily KMs</h1>
     </v-col>
   </v-row>
+  <v-divider />
+  <div class="px-4">
+    <h1>Challenges</h1>
+    <div v-for="challenge in challenges" class="my-4">
+      <h3> {{ challenge.name }}</h3>
+      <v-row dense>
+        <v-col>
+          <div class="progress-bar rounded-lg">
+            <div :class="`rounded-lg ${challenge.colour}`" :style="`width: ${100*distanceTravelled/challenge.length}%`"></div>
+          </div>
+        </v-col>
+        <v-col cols="3" sm="2" lg="1">
+          <div :class="`length-label rounded-lg ${challenge.colour}`">
+            <h3 class="primaryWhite text-center">{{ challenge.length + "KM" }}</h3>
+          </div>
+        </v-col>
+      </v-row>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -47,6 +66,21 @@ import MileageModal from '../components/MileageModal.vue'
 const tempUserFirstName = ref('John')
 const tempUserMileage = ref(100)
 const dialog = ref(false)
+const challenges = ref([
+  {name: "WOORABINDA", length: 24, colour: "bg-secondaryGreen"},
+  {name: "WURRUMIYANGA", length: 60, colour: "bg-secondaryBlue"},
+  {name: "GALIWIN'KU", length: 84, colour: "bg-primaryRed"},
+  {name: "PALM ISLAND", length: 120, colour: "bg-primaryBlack"}
+])
+const distanceTravelled = ref(20.0)
 </script>
 
-<style scoped></style>
+<style scoped>
+  .progress-bar {
+    background-color: #e2e2e2;
+  }
+
+  .progress-bar > div, .length-label {
+    height: 30px;
+  }
+</style>
