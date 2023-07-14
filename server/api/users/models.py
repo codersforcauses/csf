@@ -48,16 +48,19 @@ class UserManager(BaseUserManager):
 
 class User(AbstractUser):
     id = models.AutoField(primary_key=True)  # primary key
-    username = models.CharField(max_length=20, unique=True)
+    username = models.CharField(max_length=200, unique=True)
     first_name = models.CharField(max_length=100, blank=True)
     last_name = models.CharField(max_length=100, blank=True)
+    password = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
     team_signup = models.BooleanField(default=False)  # boolean
     has_consent = models.BooleanField(default=False)  # boolean
-    travel_method = models.CharField(max_length=100, blank=True)
-    subteam_id = models.ForeignKey(SubTeam, null=True, on_delete=models.CASCADE)
-    team_id = models.ForeignKey(Team, null=True, on_delete=models.CASCADE)
+    travel_method = models.CharField(max_length=100, blank=True, choices=[('RUNNING', 'RUNNING'), ('WHEELING', 'WHEELING'), ('WALKING', 'WALKING')])
+    subteam_id = models.ForeignKey(SubTeam, null=True, on_delete=models.SET_NULL, blank=True)
+    team_id = models.ForeignKey(Team, null=True, on_delete=models.SET_NULL, blank=True)
     team_admin = models.BooleanField(default=False)
+    reset_token = models.CharField(max_length=36, blank=True)
+    reset_time = models.DateTimeField(null=True, blank=True)
 
     objects = UserManager()
 

@@ -1,130 +1,123 @@
+<script setup lang="ts">
+import { ref, watchEffect } from 'vue'
+import { type Event } from '../types/event'
+import { useEventStore } from '../stores/event'
+import ConfirmButton from '@/components/ConfirmButton.vue'
+
+const props = defineProps<{ type: 'Create' | 'Edit'; event?: Event }>()
+const emit = defineEmits(['close'])
+const eventStore = useEventStore()
+
+const name = ref(props.event?.name ?? '')
+const startDate = ref(props.event?.startDate ?? '')
+const endDate = ref(props.event?.endDate ?? '')
+const description = ref(props.event?.description ?? '')
+const isPublic = ref(props.event?.isPublic ?? false)
+const isFullscreen = ref(false)
+
+const refs = () => ({
+  name: name.value,
+  startDate: startDate.value,
+  endDate: endDate.value,
+  description: description.value,
+  isPublic: isPublic.value
+})
+
+const addEvent = () => eventStore.createEvent(refs()).then(closeModal).catch(console.log)
+
+const editEvent = () => {
+  if (props.event)
+    return eventStore
+      .editEvent({
+        ...props.event,
+        ...refs()
+      })
+      .then(closeModal)
+      .catch(console.log)
+}
+
+const archiveEvent = () => {
+  if (props.event)
+    return eventStore
+      .editEvent({
+        ...props.event,
+        ...refs(),
+        isArchived: true
+      })
+      .then(closeModal)
+      .catch(console.log)
+}
+
+const deleteEvent = () => {
+  if (props.event)
+    return eventStore.deleteEvent(props.event.eventId).then(closeModal).catch(console.log)
+}
+
+const closeModal = () => emit('close')
+
+watchEffect(async () => {
+  const updateFullscreen = async () => {
+    isFullscreen.value = window.innerWidth <= 500
+  }
+
+  await updateFullscreen()
+
+  window.addEventListener('resize', updateFullscreen)
+  return () => {
+    window.removeEventListener('resize', updateFullscreen)
+  }
+})
+</script>
+
 <template>
-  <v-dialog fullscreen>
+  <v-dialog :fullscreen="isFullscreen" max-width="500px" max-height="100vh">
     <v-card class="bg-backgroundGrey">
-      <v-img src="/images/Footer-min.jpeg" width="100%" max-height="16" cover></v-img>
+      <v-img src="/images/Footer-min.jpeg" width="100%" max-height="16" cover />
       <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-icon icon="mdi-close" size="x-large" @click="closeModal"></v-icon>
+        <v-spacer />
+        <v-icon icon="mdi-close" size="x-large" @click="closeModal" />
       </v-card-actions>
-      <v-card-title class="justify-center text-h4 mb-5">{{
-        type === 'Create' ? 'Create Event' : 'Edit Event'
-      }}</v-card-title>
-      <v-text-field
-        hide-details
-        bg-color="white"
-        label="Event Name"
-        v-model="name"
-        class="mx-5"
-      ></v-text-field>
-      <v-text-field
-        hide-details
-        bg-color="white"
-        label="Start Date"
-        type="date"
-        v-model="startDate"
-        class="mx-5"
-      ></v-text-field>
-      <v-text-field
-        hide-details
-        bg-color="white"
-        label="End Date"
-        type="date"
-        v-model="endDate"
-        class="mx-5"
-      ></v-text-field>
-      <v-textarea
-        hide-details
-        bg-color="white"
-        label="Description"
-        v-model="description"
-        class="mx-5"
-      ></v-textarea>
-      <v-card-actions v-if="type === 'Edit'" class="justify-center mb-4">
-        <v-btn variant="outlined" class="text-secondaryBlue mr-16" @click="archiveEvent"
-          >ARCHIVE</v-btn
-        >
-        <v-btn class="bg-primaryRed ml-16" @click="displayConfirmEdit = true">
-          <PopupDialog
-            v-model="displayConfirmEdit"
-            :title="confirmEditTitle"
-            :text="confirmEditText"
-            :submit-text="submitEditEvent"
-            @handle-submit="editEvent"
+      <v-card-title class="justify-center text-h4 mb-6">{{ `${type} Event` }}</v-card-title>
+      <form class="pb-0 mb-0 mx-8">
+        <v-text-field bg-color="white" label="Event Name" v-model="name" class="mx-5" />
+        <v-text-field
+          bg-color="white"
+          label="Start Date"
+          type="date"
+          v-model="startDate"
+          class="mx-5"
+        />
+        <v-text-field
+          bg-color="white"
+          label="End Date"
+          type="date"
+          v-model="endDate"
+          class="mx-5"
+        />
+        <v-textarea bg-color="white" label="Description" v-model="description" class="mx-5" />
+        <v-card-actions v-if="type === 'Edit'" class="justify-center mb-4">
+          <v-btn variant="outlined" class="text-secondaryBlue mr-16" @click="archiveEvent"
+            >ARCHIVE</v-btn
+          >
+          <ConfirmButton
+            :action="'edit'"
+            :object="'event'"
+            :use-done-for-button="true"
+            @handle-confirm="editEvent"
           />
-          DONE</v-btn
-        >
-      </v-card-actions>
-      <v-card-actions v-else class="justify-center mb-4">
-        <v-btn class="bg-primaryRed" @click="displayConfirmAdd = true">
-          <PopupDialog
-            v-model="displayConfirmAdd"
-            :title="confirmAddTitle"
-            :text="confirmAddText"
-            :submit-text="submitAddEvent"
-            @handle-submit="addEvent"
+          <v-btn variant="outlined" class="text-primaryRed ml-16" @click="deleteEvent"
+            >DELETE</v-btn
+          >
+        </v-card-actions>
+        <v-card-actions v-else class="justify-center mb-4">
+          <ConfirmButton
+            :action="'create'"
+            :object="'event'"
+            :use-done-for-button="true"
+            @handle-confirm="addEvent"
           />
-          DONE</v-btn
-        >
-      </v-card-actions>
+        </v-card-actions>
+      </form>
     </v-card>
   </v-dialog>
 </template>
-
-<script setup lang="ts">
-import { ref } from 'vue'
-import type Event from '../types/event'
-const props = defineProps<{ type: 'Create' | 'Edit'; event?: Event }>()
-const emit = defineEmits(['close'])
-
-const name = ref(props.event ? props.event.name : '')
-const startDate = ref(props.event ? props.event.startDate : '')
-const endDate = ref(props.event ? props.event.endDate : '')
-const description = ref(props.event ? props.event.description : '')
-
-import PopupDialog from './PopupDialog.vue'
-const displayConfirmAdd = ref(false)
-const confirmAddTitle = ref('Confirm create event')
-const confirmAddText = ref('Are you sure you wish to create this event?')
-const submitAddEvent = ref('Create')
-
-const displayConfirmEdit = ref(false)
-const confirmEditTitle = ref('Confirm event change')
-const confirmEditText = ref('Are you sure you wish to edit this event?')
-const submitEditEvent = ref('Edit')
-
-function addEvent() {
-  console.log(
-    'Contact backend to add the event',
-    name.value,
-    startDate.value,
-    endDate.value,
-    description.value
-  )
-  closeModal()
-}
-
-function editEvent() {
-  if (props.event) {
-    console.log(
-      'Contact backend to edit the event',
-      props.event.id,
-      name.value,
-      startDate.value,
-      endDate.value,
-      description.value
-    )
-  }
-  closeModal()
-}
-
-function archiveEvent() {
-  if (props.event) {
-    console.log('Contact backend to archive the event', props.event.id)
-  }
-  closeModal()
-}
-
-function closeModal() {
-  emit('close')
-}
-</script>
