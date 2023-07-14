@@ -21,7 +21,7 @@ export const useMileageStore = defineStore('recentMileage', {
         })
         .then((res) => {
           if (res.status == 200) {
-            this.recentMileageS = JSON.stringify(res.data)
+            this.recentMileageS = JSON.stringify(camelize(res.data))
           }
         })
       }
