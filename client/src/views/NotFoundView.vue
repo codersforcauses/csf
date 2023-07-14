@@ -5,7 +5,6 @@
     <p class="pb-5 pb-md-7">The page you're looking for does not exist.</p>
     <v-btn
       href="/"
-      target="_blank"
       class="text-primaryWhite bg-primaryRed mr-3 pb-1"
       size="large"
       :style="{ fontFamily: 'Hackney', fontSize: '28px' }"
