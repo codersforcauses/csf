@@ -11,7 +11,7 @@ def export2csv(modeladmin: ModelAdmin, request: HttpRequest, queryset: QuerySet)
 
     response = HttpResponse(
         content_type="text/csv",
-        headers={"Content-Disposition": 'attachment; filename="events.csv"'},
+        headers={"Content-Disposition": f'attachment; filename="{modeladmin.model._meta.model_name}s.csv"'},
     )
 
     writer = csv.writer(response)
@@ -23,3 +23,4 @@ def export2csv(modeladmin: ModelAdmin, request: HttpRequest, queryset: QuerySet)
         queryset = queryset.filter(user__has_consent=True)
     writer.writerows(queryset.values_list(*fields))
     return response
+
