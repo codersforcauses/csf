@@ -85,12 +85,14 @@
 
       <!-- Sub-teams -->
       <v-row align="start" class="my-2">
-        <v-col id="pointer-cursor" @click="isSubTeamsVisible = !isSubTeamsVisible">
+        <v-col id="pointer-cursor">
           <h2>Sub-Teams</h2>
-          <p v-if="isSubTeamsVisible">Leave this for now</p>
+          <!--<p v-if="isSubTeamsVisible">Leave this for now</p>-->
+          <SubTeams v-if="isSubTeamsVisible" />
         </v-col>
+
         <v-col align="end" class="px-3">
-          <v-icon icon="mdi mdi-plus" size="45px" class="px-6" id="pointer-cursor" />
+          <!--<v-icon icon="mdi mdi-plus" size="45px" class="px-6" id="pointer-cursor" />-->
           <v-icon
             v-if="isSubTeamsVisible"
             icon="mdi mdi-chevron-down"
@@ -104,7 +106,7 @@
             @click="isSubTeamsVisible = !isSubTeamsVisible"
             size="50px"
             id="pointer-cursor"
-          />
+          />      
         </v-col>
       </v-row>
       <v-divider />
@@ -140,6 +142,8 @@
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
 import EditTeamInfo from './EditTeamInfo.vue'
+import SubTeams from './SubTeams.vue';
+
 const { mobile } = useDisplay()
 
 const user = {
