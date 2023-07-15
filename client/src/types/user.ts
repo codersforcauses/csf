@@ -25,3 +25,8 @@ export interface Signup {
   teamSignup: boolean
   hasConsent: boolean
 }
+
+export interface Tokens  {
+  access: string
+  refresh: string
+}

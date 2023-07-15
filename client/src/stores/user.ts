@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
 import { useStorage } from '@vueuse/core'
 import server from '@/utils/server'
-import type { User } from '@/types/user'
+import type { User, Tokens } from '@/types/user'
 import camelize from 'camelize-ts'
 import snakify, { type Snakify } from 'snakify-ts'
+import { type AxiosRequestConfig } from 'axios'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -12,7 +13,7 @@ export const useUserStore = defineStore('user', {
   }),
   getters: {
     user: (state) => JSON.parse(state.authUser as string) as User,
-    token: (state) => JSON.parse(state.authToken as string)
+    token: (state) => JSON.parse(state.authToken as string) as Tokens
   },
   actions: {
     logout() {
@@ -123,6 +124,26 @@ export const useUserStore = defineStore('user', {
 
     async registerUser(obj: object) {
       await server.post('auth/register/', obj)
+    },
+
+    async verifyToken(token: string) {
+
+      const data = JSON.parse(this.authToken?.toString() as string)
+
+      const headers: AxiosRequestConfig['headers'] = {
+        refresh: token
+      }
+
+      await server
+        .post('auth/refresh/', headers)
+        .then((res) => {
+          data.access = res.data.access
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+
+      this.authToken = JSON.stringify(data);
     }
   }
 })
