@@ -18,19 +18,16 @@ export default defineComponent({
   name: 'ReloadPWA',
   setup() {
     const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW()
-    const close = async () => {
+    const close1 = async () => {
       offlineReady.value = false
       needRefresh.value = false
     }
-    return { offlineReady, needRefresh, updateServiceWorker, close }
+    return { offlineReady, needRefresh, updateServiceWorker, close1 }
   },
   methods: {
     async close() {
       this.offlineReady.value = false
       this.needRefresh.value = false
-    },
-    async updateServiceWorker() {
-      await updateServiceWorker()
     }
   }
 })
