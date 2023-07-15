@@ -7,9 +7,15 @@
         class="bg-primaryRed text-primaryWhite" @click="isAddingEvent = true">
       </v-btn>
     </v-row>
-    <div id="cards-container" class="bg-primaryWhite pt-4">
-      <EventCard v-for="event in filteredEventsList" :key="event.eventId" :event="event" :isTeamAdmin="tempIsTeamAdmin"
-        @edit="openEditModal" />
+    <div id="cards-container" class="pt-4">
+      <EventCard
+        v-for="(event, idx) in filteredEventsList"
+        :key="event.eventId"
+        :event="event"
+        :isTeamAdmin="tempIsTeamAdmin"
+        @edit="openEditModal"
+        :background-colour="idx % 2 === 0 ? 'bg-primaryWhite' : 'bg-backgroundGrey'"
+      />
       <div v-if="filteredEventsList.length == 0" class="mt-6 mx-3 text-center">
         <v-icon icon="mdi-calendar-blank" size="x-large" />
         <p class="font-weight-bold text-body-1 mt-3">No current events :(</p>
@@ -71,9 +77,9 @@ function openEditModal(id: number) {
 </script>
 
 <style scoped>
-#cards-container>.v-card:nth-child(odd) {
+/* #cards-container > .v-card:nth-child(odd) {
   background-color: #f4f4f4;
-}
+} */
 
 .v-field__input {
   padding-top: 19px;

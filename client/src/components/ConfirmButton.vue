@@ -1,15 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import PopupDialog from './PopupDialog.vue'
+import { capitalize } from 'vue'
 
 const emit = defineEmits(['handleConfirm'])
 const props = defineProps<{ action: string; object: string; useDoneForButton?: boolean }>()
-
-const capitalize = (words: string) =>
-  words
-    .split(' ')
-    .map((word) => word[0].toUpperCase() + word.substring(1))
-    .join(' ')
 
 const display = ref(false)
 </script>

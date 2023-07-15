@@ -21,7 +21,6 @@ def create_team(request):
 def get_team(request, team_id):
     team = Team.objects.get(team_id=team_id)
     serializer = TeamSerialiser(team)
-    print(serializer.data)
     return Response(serializer.data)
 
 

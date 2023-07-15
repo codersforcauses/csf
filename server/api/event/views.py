@@ -22,7 +22,6 @@ def create_event(request):
 def get_event(request, event_id):
     event = Event.objects.get(event_id=event_id)
     serializer = EventSerialiser(event)
-    print(serializer.data)
     return Response(serializer.data)
 
 
