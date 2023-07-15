@@ -1,16 +1,22 @@
 import { defineStore } from 'pinia'
 
 export const useModalStateStore = defineStore('modalState', {
-  state: () => {
-    return { modalState: false }
-  },
+  state: () => ({ modalState: false, destination: '/', redirectOnLogin: false}),
   getters: {
-    state: (state: { modalState: boolean }) => state.modalState,
+    getState: (state: { modalState: boolean }) => state.modalState,
+    getDestination: (state: {destination: string}) => state.destination,
+    getRedirectOnLogin: (state: {redirectOnLogin: boolean}) => state.redirectOnLogin,
   },
   actions: {
     switchState() {
       this.modalState = !this.modalState
     },
+    changeDestination(path: string) {
+        this.destination = path
+    },
+    switchRedirect() {
+        this.redirectOnLogin = !this.redirectOnLogin
+    }
   },
 })
 

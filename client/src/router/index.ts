@@ -52,7 +52,9 @@ router.beforeEach(async (to, from) => {
   
   if (to.path == '/team' || to.path == '/dashboard') {
     if (userStore.user == null) { 
+      modalStateStore.changeDestination(to.path)
       modalStateStore.switchState()
+      modalStateStore.switchRedirect()
       // Cancel navigation if not logged in
       return false
     }

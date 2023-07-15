@@ -199,6 +199,9 @@ import { AxiosError } from 'axios'
 import { useModalStateStore } from '@/stores/openModal'
 const { mobile } = useDisplay()
 
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
 const ModalStateStore = useModalStateStore()
 
 const dialog = ref(true)
