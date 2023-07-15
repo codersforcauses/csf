@@ -289,3 +289,5 @@ dist
 
 # misc
 .DS_Store
+
+opt/
