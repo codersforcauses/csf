@@ -38,21 +38,4 @@ services:
     volumes:
       - ./client:/app
 
-  nginx:
-    image: nginx
-    container_name: csf_nginx
-    restart: unless-stopped
-    ports:
-      - 80:80
-    volumes:
-      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
-    depends_on:
-      - server
 
-  watchtower:
-    image: containrrr/watchtower
-    container_name: csf_watchtower
-    restart: unless-stopped
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    command: --interval 30
