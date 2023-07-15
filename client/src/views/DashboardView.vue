@@ -1,6 +1,9 @@
 <template>
   <v-row class="ma-0 pl-4 pr-4 pt-4 pb-0" align="center" justify="center">
-    <h1>Welcome back, {{ tempUserFirstName }}!</h1>
+      <v-spacer />
+      <h1 class="text-center">Welcome back, {{ tempUserFirstName }}!</h1>
+      <v-spacer/>
+      <v-btn size="small" icon="mdi-cog" variant="text" href="/settings"/>
   </v-row>
   <v-divider />
   <v-row class="ma-0 pl-4 pr-4 pb-0 pt-0" align="center">
