@@ -30,7 +30,7 @@
     />
   </v-row>
 
-  <v-table fixed-header>
+  <v-table fixed-header class="mx-4">
     <thead>
       <tr>
         <th class="text-left">Rank</th>
