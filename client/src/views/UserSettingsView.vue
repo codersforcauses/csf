@@ -85,32 +85,37 @@ import { type UserSettings } from '../types/user'
 const userStore = useUserStore()
 
 const state = reactive<UserSettings>({
-  username: '',
-  firstName: '',
-  lastName: '',
-  email: '',
-  avatar: '',
-  travelMethod: ''
+  username: userStore.user.username,
+  firstName: userStore.user.firstName,
+  lastName: userStore.user.lastName,
+  email: userStore.user.email,
+  avatar: userStore.user.avatar,
+  travelMethod: userStore.user.travelMethod
 })
 
-const avatarPaths = ref([
-  { url: 'avatar1.jpg', alt: 'avatar1', isSelected: true },
-  { url: 'avatar2.jpg', alt: 'avatar2', isSelected: false },
-  { url: 'avatar3.jpg', alt: 'avatar3', isSelected: false },
-  { url: 'avatar4.jpg', alt: 'avatar4', isSelected: false },
-  { url: 'avatar5.jpg', alt: 'avatar5', isSelected: false },
-  { url: 'avatar6.jpg', alt: 'avatar6', isSelected: false }
-])
+const avatarPaths = ref(
+  Array(6).map((i, e) => {
+    return {
+      url: `avatar${i + 1}.jpg`,
+      alt: `avatar${i + 1}`,
+      isSelected: state.avatar === i + 1
+    }
+  })
+)
 
 const travelMethod = ref([
-  { logo: 'mdi-run-fast', mode: 'RUNNING', isSelected: true },
-  { logo: 'mdi-wheelchair-accessibility', mode: 'WHEELING', isSelected: false },
-  { logo: 'mdi-walk', mode: 'WALKING', isSelected: false }
+  { logo: 'mdi-run-fast', mode: 'RUNNING', isSelected: state.travelMethod === 'RUNNING' },
+  {
+    logo: 'mdi-wheelchair-accessibility',
+    mode: 'WHEELING',
+    isSelected: state.travelMethod === 'WHEELING'
+  },
+  { logo: 'mdi-walk', mode: 'WALKING', isSelected: state.travelMethod === 'WALKING' }
 ])
 
 const selectAvatar = (url: string) => {
   avatarPaths.value.forEach((avatar) => {
-    avatar.isSelected = avatar.url === url ? !avatar.isSelected : false
+    avatar.isSelected = avatar.url === url // ? !avatar.isSelected : false
   })
   state.avatar = url
 }
