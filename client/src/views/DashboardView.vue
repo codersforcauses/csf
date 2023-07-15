@@ -99,9 +99,8 @@ async function getRecentMileage() {
       } 
       return 0
     })
-  } else {
-    return 0
   }
+  return 0
 }
 onMounted(async () => {
     distanceTravelled.value = await getRecentMileage()
