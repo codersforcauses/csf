@@ -23,4 +23,3 @@ def export2csv(modeladmin: ModelAdmin, request: HttpRequest, queryset: QuerySet)
         queryset = queryset.filter(user__has_consent=True)
     writer.writerows(queryset.values_list(*fields))
     return response
-
