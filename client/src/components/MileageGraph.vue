@@ -182,10 +182,6 @@ const options = {
     x: {
       grid: {
         display: false
-      },
-      title: {
-        display: true,
-        text: 'Date'
       }
     },
     y: {
