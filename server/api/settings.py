@@ -83,7 +83,7 @@ ROOT_URLCONF = "api.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, 'templates')],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -148,7 +148,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = "static/"
+############################
+# Django Static Files Config
+############################
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # <- '/' directory
+
+STATIC_URL = "/static/"
+
+# STATIC_ROOT is where the static files get copied to when "collectstatic" is run.
+STATIC_ROOT = os.path.join(PROJECT_ROOT, "static_files")
+
+# This is where to _find_ static files when 'collectstatic' is run.
+# These files are then copied to the STATIC_ROOT location.
+STATICFILES_DIRS = (os.path.join(PROJECT_ROOT, "static"),)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -163,3 +175,13 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
+
+# EMAIL
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.environ.get("EMAIL_HOST")
+EMAIL_PORT = int(os.environ.get("EMAIL_PORT"))
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = os.environ.get("APP_ENV") == "True"
+EMAIL_ADDRESS_FROM = os.environ.get("EMAIL_ADDRESS_FROM")

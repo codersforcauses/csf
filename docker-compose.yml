@@ -7,18 +7,22 @@ services:
     env_file: .env.dev
     # healthcheck for sever container
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
       interval: 3s
       timeout: 3s
       retries: 5
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    restart: always
+    ports:
+      - 1025:1025
+      - 8025:8025
 
   server:
     build:
       context: .
       dockerfile: ./docker/server/Dockerfile
-    depends_on:
-      db:
-        condition: service_healthy
     container_name: csf_server
     restart: unless-stopped
     env_file: .env.dev
@@ -40,3 +44,15 @@ services:
       - 8082:8082
     volumes:
       - ./client:/app
+
+  docs:
+    build:
+      context: .
+      dockerfile: docker/docs/Dockerfile
+    container_name: csf_docs
+    restart: unless-stopped
+    env_file: .env.dev
+    ports:
+      - 8000:8000
+    volumes:
+      - ./documentation:/documentation
