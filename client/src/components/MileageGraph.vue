@@ -2,7 +2,7 @@
   <v-card variant="flat">
     <v-card-actions class="d-flex justify-space-between">
       <v-btn
-        class="text-secondaryGreen"
+        :class="activeButton === range ? 'bg-green' : 'text-green'"
         variant="tonal"
         v-for="range in ['This Week', 'This Month', 'This Year', 'Overall']"
         :key="range"
@@ -80,8 +80,10 @@ const tempData = ref<Mileage[]>([
 const filteredData = ref<Mileage[]>()
 const labels = computed(() => filteredData.value?.map((data) => data.date))
 const data = computed(() => filteredData.value?.map((data) => data.kilometers))
+const activeButton = ref('This Week')
 
 function filterData(range: string) {
+  activeButton.value = range
   let minDate
   const currentDate = new Date()
 
