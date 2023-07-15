@@ -25,3 +25,12 @@ export interface Signup {
   teamSignup: boolean
   hasConsent: boolean
 }
+
+export interface UserSettings {
+  username: string
+  firstName: string
+  lastName: string
+  email: string
+  avatar: string
+  travelMethod: string
+}
