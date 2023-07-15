@@ -41,7 +41,7 @@
   <v-divider />
   <div class="px-4">
     <h1>Challenges</h1>
-    <div v-for="challenge in challenges" :key="challenge.name"  class="my-4">
+    <div v-for="challenge in challenges" :key="challenge.name" class="my-4">
       <h3>{{ challenge.name }}</h3>
       <v-row dense>
         <v-col>
