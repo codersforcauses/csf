@@ -2,6 +2,12 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import SubTeam
 from .serializers import SubTeamSerialiser
+from ..users.models import User
+from ..users.serializers import UserSerialiser
+
+from django.http import HttpResponse
+
+# from django.db.models import Q
 
 
 @api_view(['POST'])
@@ -33,3 +39,10 @@ def delete_subteam(request, subteam_id):
     subteam = SubTeam.objects.get(subteam_id=subteam_id)
     subteam.delete()
     return Response("SubTeeam successfully deleted")
+
+
+@api_view(['GET'])
+def get_subteam_users(request, subteam_id):
+    users = User.objects.filter(subteam_id=subteam_id)
+    serialiser = UserSerialiser(users, many=True)
+    return Response(serialiser.data, status=200)
