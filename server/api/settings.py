@@ -149,7 +149,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = "static/"
+############################
+# Django Static Files Config
+############################
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # <- '/' directory
+
+STATIC_URL = "/static/"
+
+# STATIC_ROOT is where the static files get copied to when "collectstatic" is run.
+STATIC_ROOT = os.path.join(PROJECT_ROOT, "static_files")
+
+# This is where to _find_ static files when 'collectstatic' is run.
+# These files are then copied to the STATIC_ROOT location.
+STATICFILES_DIRS = (os.path.join(PROJECT_ROOT, "static"),)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
