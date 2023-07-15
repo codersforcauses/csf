@@ -213,6 +213,7 @@ import PopupDialog from './PopupDialog.vue'
 
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
+import router from '@/router'
 
 const userStore = useUserStore()
 
@@ -240,6 +241,7 @@ const openPopupDialog = () => {
 
 const logout = () => {
   userStore.logout()
+  router.push(homelink)
 }
 
 const menu = [
