@@ -18,8 +18,10 @@ def get_mileage(request, user):
     if 'challenge' in request.GET:
         user = User.objects.get(id=user)
 
-        # end challenge period if days are up
-        if user.challenge_start_date != None and (datetime.date.today() - user.challenge_start_date).days > CHALLENGE_LENGTH:
+        if user.challenge_start_date is None:
+            mileages = []
+        # end challenge period if days are up 
+        elif (datetime.date.today() - user.challenge_start_date).days > CHALLENGE_LENGTH:
             user_serializer = UserSerializer(instance=user, data={'challenge_start_date': None})
             if user_serializer.is_valid():
                 user_serializer.save()
