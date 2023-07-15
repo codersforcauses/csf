@@ -124,7 +124,7 @@
       <div v-if="!firstPage">
         <form style="bottom: auto" class="bg-backgroundGrey" @submit.prevent="">
           <v-container class="pa-0">
-            <v-img src="/images/Footer-min.jpeg" width="auto" height="10" cover></v-img>
+            <v-img src='../../public/images/Footer-min.webp' width="auto" height="10" cover></v-img>
           </v-container>
           <v-row justify="end">
             <v-col cols="auto">
@@ -157,7 +157,7 @@
                         @click="selectAvatar(avatar.url)"
                         :class="{ 'avatar-selected': avatar.isSelected === true }"
                       >
-                        <v-img :src="`/avatars/${avatar.url}`" :alt="avatar.alt"></v-img>
+                        <v-img :src="`../../public/avatars/${avatar.url}`" :alt="avatar.alt"></v-img>
                       </v-avatar>
                     </div>
                   </v-col>
@@ -246,7 +246,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, watchEffect } from 'vue'
-import FooterBanner from '/images/Footer-min.jpeg'
+import FooterBanner from '../../public/images/Footer-min.webp'
 import { type Signup } from '../types/user'
 import ConsentModal from './ConsentModal.vue'
 import { useUserStore } from '../stores/user'
@@ -265,12 +265,12 @@ const isFullscreen = ref(false)
 const firstPage = ref<boolean>(true)
 const dialog = ref(true)
 const avatarPaths = ref([
-  { url: 'avatar1.jpg', alt: 'avatar1', isSelected: true },
-  { url: 'avatar2.jpg', alt: 'avatar2', isSelected: false },
-  { url: 'avatar3.jpg', alt: 'avatar3', isSelected: false },
-  { url: 'avatar4.jpg', alt: 'avatar4', isSelected: false },
-  { url: 'avatar5.jpg', alt: 'avatar5', isSelected: false },
-  { url: 'avatar6.jpg', alt: 'avatar6', isSelected: false }
+  { url: 'avatar1.webp', alt: 'avatar1', isSelected: true },
+  { url: 'avatar2.webp', alt: 'avatar2', isSelected: false },
+  { url: 'avatar3.webp', alt: 'avatar3', isSelected: false },
+  { url: 'avatar4.webp', alt: 'avatar4', isSelected: false },
+  { url: 'avatar5.webp', alt: 'avatar5', isSelected: false },
+  { url: 'avatar6.webp', alt: 'avatar6', isSelected: false }
 ])
 const travelMethod = ref([
   { logo: 'mdi-run-fast', mode: 'RUNNING', isSelected: true },
