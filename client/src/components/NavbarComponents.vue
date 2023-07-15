@@ -204,6 +204,7 @@ import LoginModal from './LoginModal.vue'
 
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
 
 import { useModalStateStore } from '@/stores/openModal'
 const ModalStateStore = useModalStateStore()
@@ -215,6 +216,7 @@ const { user } = storeToRefs(userStore)
 const { mobile } = useDisplay()
 const dialog = ref<boolean>(false)
 const signupModal = ref<boolean>(false)
+const router = useRouter()
 
 
 let homelink = '/'
@@ -228,7 +230,10 @@ const openLoginModal = () => {
 }
 
 const logout = () => {
+
+  router.push('/')
   userStore.logout()
+  
 }
 
 const menu = [
