@@ -5,6 +5,7 @@ import EventsView from '../views/EventsView.vue'
 import UserSettingsView from '../views/UserSettingsView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import ChallengeView from '../views/ChallengeView.vue'
+import LeaderboardView from '../views/LeaderboardView.vue'
 import { capitalize } from 'vue'
 
 const router = createRouter({
@@ -39,6 +40,11 @@ const router = createRouter({
       path: '/challenges',
       name: 'challenges',
       component: ChallengeView
+    },
+    {
+      path: '/leaderboards',
+      name: 'leaderboards',
+      component: LeaderboardView
     }
   ]
 })
