@@ -1,18 +1,20 @@
 <template>
-  <div class="header">
-    <h1 class="text-center text-secondaryTint">Leaderboards</h1>
-  </div>
-  <v-row class="ma-0 justify-center">
-    <v-chip
-      :color="activeButton === board ? 'secondaryBlue' : ''"
-      v-for="board in ['Individual', 'Teams']"
-      :key="board"
-      rounded="xl"
-      @click="activeButton = board"
-      >{{ board }}</v-chip
-    >
-  </v-row>
-  <v-row class="ma-0 pa-4">
+    <div class="header">
+        <h1 class="text-center text-secondaryTint">Leaderboards</h1>
+    </div>
+    <v-row class="ma-0 pt-4" justify="space-evenly">
+        <v-btn
+            variant="flat"
+            density="compact"
+            width="120px"
+            :color="activeButton === board ? 'rgb(52, 94, 158, 0.3)' : ''"
+            :class="activeButton === board ? 'text-secondaryBlue' : 'black'"
+            v-for="board in ['Individual', 'Teams']"
+            :key="board"
+            rounded="xl"
+            @click="activeButton = board">{{ board }}</v-btn>
+    </v-row>
+    <v-row class="ma-0 pa-4">
     <v-text-field
       prepend-inner-icon="mdi-magnify"
       hide-details
