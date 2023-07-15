@@ -91,6 +91,7 @@ export const useTeamStore = defineStore('team', {
             teamId: null,
             teamAdmin: false
           })
+          this.currentTeam = null
         }
       })
     }
