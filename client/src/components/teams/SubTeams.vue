@@ -83,6 +83,12 @@
           </v-card-text>
           <v-card-actions class="justify-end">
               <v-btn color="primary" variant="flat" @click="saveTeam">Save</v-btn>
+              <ConfirmButton
+            :action="'Save'"
+            :object="'team'"
+            :use-done-for-button="true"
+            @handle-confirm="saveTeam"
+          />
               <v-btn color="primary" variant="flat" @click="showConfirmationDialog">Delete Subteam</v-btn>
           </v-card-actions>
       </v-card>
@@ -95,10 +101,10 @@
           Are you sure you want to remove this team member?
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" text @click="cancelRemoveMemberConfirmation">
+          <v-btn color="primary" @click="cancelRemoveMemberConfirmation">
             Cancel
           </v-btn>
-          <v-btn color="error" text @click="confirmRemoveMember(member.id)">
+          <v-btn color="error" @click="confirmRemoveMember">
             Confirm
           </v-btn>
         </v-card-actions>
@@ -113,8 +119,8 @@
         <v-card-text>Are you sure you want to delete the subteam?</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="cancelDeletion">Cancel</v-btn>
-          <v-btn color="error" text @click="confirmDeletion">Delete</v-btn>
+          <v-btn color="primary" @click="cancelDeletion">Cancel</v-btn>
+          <v-btn color="error" @click="confirmDeletion">Delete</v-btn>
         </v-card-actions>
       </v-card>
   </v-dialog>
@@ -123,6 +129,7 @@
 
 <script setup lang="ts">
 import { ref, watch, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from 'vue';
+import ConfirmButton from '@/components/ConfirmButton.vue'
 defineProps(['isSubTeamsVisible'])
 
 //dummy data
@@ -228,18 +235,27 @@ const openDialog = (teamId) => {
   data.selectedId = teamId
 }
 const addSubTeam = () => {
-
+  if(data.newSubTeamName === ''){return} 
   data.subteams.push({
       teamName: data.newSubTeamName,
-      teamId: "1",
+      teamId: randomString(32),
       totalKM: "0KM",
-      members: [
-      ]
-  })
-
+      members: []
+})
 
 }
+  const randomString=(len) =>{
+   len = len || 32;
+   var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+  var maxPos = $chars.length;
+   var pwd = '';
+   for (let i = 0; i < len; i++) {
+   pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+ }
+  return pwd;
+ }
 const removeMember = (memberId) => {
+  console.log(memberId);
   //    update selectedteam
   data.selectedTeam.members = data.selectedTeam.members.filter((item) => item.id !== memberId)
 }
@@ -254,6 +270,7 @@ const addMember = () => {
 }
 const saveTeam = () => {
   // copy selectedteam to subteams
+  alert('save')
   data.subteams = data.subteams.map((item) => {
       if (item.teamId === data.selectedId) {
           return data.selectedTeam
@@ -290,12 +307,13 @@ const removeMemberConfirmationDialog = ref(false);
 
 const showRemoveMemberConfirmation = (memberId) => {
  removeMemberConfirmationDialog.value = memberId;
+ console.log(memberId)
 }
 const cancelRemoveMemberConfirmation = () => {
   removeMemberConfirmationDialog.value = false;
 }
-const confirmRemoveMember = (memberId) => {
-  removeMember(memberId);
+const confirmRemoveMember = () => {
+  removeMember(removeMemberConfirmationDialog.value);
   cancelRemoveMemberConfirmation();
 }
 
