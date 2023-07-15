@@ -15,8 +15,9 @@ def export2csv(modeladmin: ModelAdmin, request: HttpRequest, queryset: QuerySet)
     )
 
     writer = csv.writer(response)
-    replacements = {'team_id': 'team_id_name'}
-    fields = [replacements.get(f.name, f.name) for f in modeladmin.model._meta.fields if f.name not in ['password', 'is_superuser', 'is_staff', 'is_active']]
+    replacements = {'team_id': 'team_id__name', 'user': 'user__frist_name'}
+    fields = [replacements.get(f.name, f.name) for f in modeladmin.model._meta.fields if f.name not in ['password', 'is_superuser',
+                                                                                                        'is_staff', 'is_active']]
 
     writer.writerow(fields)
     if modeladmin.model == User:
