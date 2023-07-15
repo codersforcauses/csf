@@ -7,7 +7,6 @@ from django.conf import settings
 from django.template.loader import render_to_string
 
 from ..team.models import Team
-from ..team.serializers import TeamSerialiser
 
 
 import uuid
@@ -102,11 +101,11 @@ def join_team(request, id):
     user = User.objects.get(id=id)
     team = Team.objects.get(join_code=request.data['join_code'])
 
-    data = { 
-        'team_id': team.team_id, 
+    data = {
+        'team_id': team.team_id,
         'team_admin': request.data['team_admin']
     }
-    
+
     user_serializer = JoinTeamSerializer(instance=user, data=data)
 
     if user_serializer.is_valid():
@@ -120,11 +119,11 @@ def join_team(request, id):
 def remove_team(request, id):
     user = User.objects.get(id=id)
 
-    data = { 
-        'team_id': None, 
+    data = {
+        'team_id': None,
         'team_admin': False
     }
-    
+
     user_serializer = JoinTeamSerializer(instance=user, data=data)
 
     if user_serializer.is_valid():

@@ -9,6 +9,7 @@ class UserSerialiser(ModelSerializer):
         model = get_user_model()
         fields = '__all__'
 
+
 class JoinTeamSerializer(ModelSerializer):
 
     class Meta:
