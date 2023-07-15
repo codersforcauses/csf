@@ -1,7 +1,7 @@
 <template>
   <v-toolbar dark app color="black" class="hidden-sm-and-down sticky-nav">
     <v-btn :width="125" :height="60" :to="homelink" :active="false">
-      <v-img :width="125" :height="60" cover src="/images/CSF_Logo_WHITE.png"></v-img>
+      <v-img :width="125" :height="60" cover src="../../dist/images/CSF_Logo_WHITE.png"></v-img>
     </v-btn>
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down d-flex align-center" align="center">
@@ -71,7 +71,7 @@
   </v-toolbar>
   <v-toolbar dark app color="black" class="hidden-md-and-up sticky-nav">
     <v-btn :width="125" :height="60" :to="homelink" :active="false">
-      <v-img :width="125" :height="60" cover src="/images/CSF_Logo_WHITE.png" />
+      <v-img :width="125" :height="60" cover src="../../dist/images/CSF_Logo_WHITE.png" />
     </v-btn>
     <v-spacer></v-spacer>
     <v-dialog
@@ -89,7 +89,7 @@
         <v-container class="pa-0 ma-0">
           <v-toolbar color="black" class="hidden-md-and-up sticky-nav">
             <v-btn :width="125" :height="60" :to="homelink" @click="dialog = false" :active="false">
-              <v-img :width="125" :height="60" cover src="/images/CSF_Logo_WHITE.png" />
+              <v-img :width="125" :height="60" cover src="../../dist/images/CSF_Logo_WHITE.png" />
             </v-btn>
             <v-spacer></v-spacer>
             <v-btn icon @click="dialog = false" class="hidden-md-and-up">
@@ -199,7 +199,7 @@
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
 import SignUpModal from './SignUpModal.vue'
-import FooterBanner from '/images/Footer-min.jpeg'
+import FooterBanner from '../../dist/images/Footer-min.jpeg'
 import LoginModal from './LoginModal.vue'
 
 import { useUserStore } from '@/stores/user'

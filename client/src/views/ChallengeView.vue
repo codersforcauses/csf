@@ -51,28 +51,28 @@
 const challenges = [
   {
     title: 'WOORABINDA CHALLENGE',
-    img: '/images/Woorabinda.jpg',
+    img: 'dist/images/Woorabinda.jpg',
     about: 'Virtually travel the distance from one end of Woorabinda to the other.',
     km: '2',
     totalkm: '24'
   },
   {
     title: 'WURRUMIYANGA CHALLENGE',
-    img: '/images/Wurrumiyanga.jpg',
+    img: 'dist/images/Wurrumiyanga.jpg',
     about: 'Virtually travel the distance around Wurrumiyanga.',
     km: '5',
     totalkm: '60'
   },
   {
     title: "GALIWIN'KU CHALLENGE",
-    img: '/images/Galiwin_ku.jpg',
+    img: 'dist/images/Galiwin_ku.jpg',
     about: 'Virtually travel the the distance around Galiwin’ku.',
     km: '7',
     totalkm: '84'
   },
   {
     title: 'PALM ISLAND CHALLENGE',
-    img: '/images/Palm_Island.jpg',
+    img: 'dist/images/Palm_Island.jpg',
     about: 'Virtually travel the length of Palm Island.',
     km: '10',
     totalkm: '120'
