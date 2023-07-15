@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import User
-from .serializers import ChangePasswordSerializer, RequestResetPasswordSerializer, ResetPasswordSerializer, UserSerialiser
+from .serializers import ChangeDetailsSerializer, ChangePasswordSerializer, RequestResetPasswordSerializer, ResetPasswordSerializer, UserSerialiser
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
@@ -17,6 +17,19 @@ def get_user(request, username):
     serializer = UserSerialiser(user)
     return Response(serializer.data)
 
+
+@api_view(['PATCH'])
+def change_details(request, id):
+    try:
+        user = User.objects.get(id=id)
+    except User.DoesNotExist:
+        return Response(status=400)
+    serializer = ChangeDetailsSerializer(instance=user, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response()
+    else:
+        return Response(data=serializer.errors, status=400)
 
 @api_view(['PATCH'])
 def change_password(request, id):

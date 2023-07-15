@@ -12,6 +12,9 @@ class UserTest(APITestCase):
         self.new_password = "fkj1191cndcdc"
         self.newer_password = "dc3002jnvbicbcw"
         self.fake_token = "!@#$%^&*"
+        self.new_username="user1"
+        self.new_avatar=6
+        self.bad_new_email="fhushfw@sfd"
 
         self.user = User.objects.create_user(
             username=self.username,
@@ -28,6 +31,24 @@ class UserTest(APITestCase):
         # test user has new password
         self.user = User.objects.get(id=self.user.id)
         self.assertEqual(self.user.check_password(self.new_password), True)
+
+    def test_change_details(self):
+        url = reverse("user:change-details", kwargs={"id": self.user.id})
+        response = self.client.patch(url, 
+                                     {"username": self.new_username, 
+                                      "email": self.email, 
+                                      "avatar": self.new_avatar})
+        self.user = User.objects.get(id=self.user.id)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.user.username, self.new_username)
+        self.assertEqual(self.user.avatar, self.new_avatar)
+        response = self.client.patch(url, 
+                                     {"username": self.username, 
+                                      "email": self.bad_new_email})
+        self.assertEqual(response.status_code, 400)
+
+        # check that the was an error about an invalid email
+        self.assertTrue("email" in response.data)
 
     def test_reset_password(self):
         url = reverse("user:request-reset-password")

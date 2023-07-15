@@ -10,6 +10,20 @@ class UserSerialiser(ModelSerializer):
         fields = '__all__'
 
 
+class ChangeDetailsSerializer(ModelSerializer):   
+
+    class Meta:
+        model = get_user_model()
+        fields = [
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "avatar",
+            "travel_method"
+        ] 
+
+
 class ChangePasswordSerializer(ModelSerializer):
 
     class Meta:
