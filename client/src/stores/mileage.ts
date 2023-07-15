@@ -12,7 +12,18 @@ export const useMileageStore = defineStore('recentMileage', {
         recentMileage: (state) => JSON.parse(state.recentMileageS) as Mileage[]
     },
     actions: {
-      async getRecentMileage(userId: number) {
+        async postMileage(userId: number, kilometres: number, date: string) {
+            await server
+            .post('mileage/post_mileage/', {
+                user: userId,
+                kilometres: kilometres,
+                date: date
+            }).then((res) => {
+                this.getRecentMileage(userId)
+            })
+        },
+
+        async getRecentMileage(userId: number) {
         await server
         .get(`mileage/get_mileage/${userId}`, {
             params: {

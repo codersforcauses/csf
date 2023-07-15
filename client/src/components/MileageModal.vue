@@ -102,9 +102,11 @@
 import { computed } from 'vue'
 import { ref, watchEffect } from 'vue'
 import { useUserStore } from '../stores/user'
+import { useMileageStore } from '@/stores/mileage'
 import server from '@/utils/server'
 
 const userStore = useUserStore()
+const mileageStore = useMileageStore()
 
 const isFullscreen = ref(false)
 const props = defineProps(['modelValue'])
@@ -132,7 +134,7 @@ const value = computed({
 const handleSubmit = () => {
   const user = userStore.user.id
   // server.post('post_mileage/', {"user": user, "kilometers": mileage.value.distance, "date": mileage.value.date})
-  server.post('mileage/post_mileage/', { user, ...mileage.value })
+  mileageStore.postMileage(user, parseFloat(mileage.value.kilometres), mileage.value.date)
   emit('update:modelValue', false)
 }
 
