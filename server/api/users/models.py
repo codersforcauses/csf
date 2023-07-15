@@ -59,6 +59,8 @@ class User(AbstractUser):
     subteam_id = models.ForeignKey(SubTeam, null=True, on_delete=models.SET_NULL, blank=True)
     team_id = models.ForeignKey(Team, null=True, on_delete=models.SET_NULL, blank=True)
     team_admin = models.BooleanField(default=False)
+    reset_token = models.CharField(max_length=36, blank=True)
+    reset_time = models.DateTimeField(null=True, blank=True)
 
     objects = UserManager()
 

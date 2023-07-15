@@ -19,7 +19,6 @@ def create_event(request):
 def get_event(request, event_id):
     event = Event.objects.get(event_id=event_id)
     serializer = EventSerialiser(event)
-    print(serializer.data)
     return Response(serializer.data)
 
 
@@ -33,7 +32,6 @@ def get_events(request):
 @api_view(["PUT"])
 def update_event(request, event_id):
     event = Event.objects.get(event_id=event_id)
-    print(event)
     if event.is_public is False:
         serializer = EventSerialiser(instance=event, data=request.data)
         if serializer.is_valid():

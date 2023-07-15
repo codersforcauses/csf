@@ -17,7 +17,7 @@ class JWTTestCase(TestCase):
         self.user.is_active = active
         self.user.save()
 
-        return self.client.post(reverse("jwt_token"), {"username": TEST_USERNAME, "password": passwd or TEST_PASSWORD}, format="json")
+        return self.client.post(reverse("auth:jwt_token"), {"username": TEST_USERNAME, "password": passwd or TEST_PASSWORD}, format="json")
 
     def test_jwt_token_with_inactive_user(self):
         resp = self._token(active=False)
@@ -36,16 +36,16 @@ class JWTTestCase(TestCase):
 
     def test_jwt_refresh(self):
         token = self._token().data["refresh"]
-        resp = self.client.post(reverse("jwt_refresh"), {"refresh": token}, format="json")
+        resp = self.client.post(reverse("auth:jwt_refresh"), {"refresh": token}, format="json")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
     def test_jwt_verify(self):
         token = self._token().data["access"]
-        resp = self.client.post(reverse("jwt_verify"), {"token": token}, format="json")
+        resp = self.client.post(reverse("auth:jwt_verify"), {"token": token}, format="json")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
     def test_jwt_verify_with_invalid_token(self):
         token = self._token().data["access"]
         token = token[:50] + chr(ord(token[50])+1) + token[51:]  # increment 50th character to make invalid
-        resp = self.client.post(reverse("jwt_verify"), {"token": token}, format="json")
+        resp = self.client.post(reverse("auth:jwt_verify"), {"token": token}, format="json")
         self.assertEqual(resp.status_code, status.HTTP_401_UNAUTHORIZED)
