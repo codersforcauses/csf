@@ -196,9 +196,15 @@ import { ref, watchEffect } from 'vue'
 import { useDisplay } from 'vuetify'
 import { useUserStore } from '@/stores/user'
 import { AxiosError } from 'axios'
-
+import { useModalStateStore } from '@/stores/openModal'
 const { mobile } = useDisplay()
+
+const ModalStateStore = useModalStateStore()
+
 const dialog = ref(true)
+
+console.log(dialog.value)
+
 const userStore = useUserStore()
 const page = ref<1 | 2 | 3 | 4 | 5>(1)
 const isFullscreen = ref(false)

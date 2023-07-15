@@ -192,7 +192,7 @@
     @open-signUp-modal="openSignUpModal"
   />
 
-  <LoginModal :dialog-modal="loginModal" v-if="loginModal" @open-login-modal="openLoginModal" />
+  <LoginModal :dialog-modal="ModalStateStore.state" v-if="ModalStateStore.state" @open-login-modal="openLoginModal" />
 </template>
 
 <script setup lang="ts">
@@ -205,6 +205,9 @@ import LoginModal from './LoginModal.vue'
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
 
+import { useModalStateStore } from '@/stores/openModal'
+const ModalStateStore = useModalStateStore()
+
 const userStore = useUserStore()
 
 const { user } = storeToRefs(userStore)
@@ -212,7 +215,7 @@ const { user } = storeToRefs(userStore)
 const { mobile } = useDisplay()
 const dialog = ref<boolean>(false)
 const signupModal = ref<boolean>(false)
-const loginModal = ref<boolean>(false)
+
 
 let homelink = '/'
 
@@ -221,7 +224,7 @@ const openSignUpModal = () => {
 }
 
 const openLoginModal = () => {
-  loginModal.value = !loginModal.value
+  ModalStateStore.switchState()
 }
 
 const logout = () => {

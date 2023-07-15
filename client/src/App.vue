@@ -1,22 +1,6 @@
 <script setup lang="ts">
 import NavbarComponents from './components/NavbarComponents.vue'
 import { RouterView } from 'vue-router'
-import { watch } from 'vue'
-import { useModalStateStore } from '@/stores/openModal'
-
-const ModalStateStore = useModalStateStore()
-
-watch(
-  () => ModalStateStore.modalState,
-  () => {
-    if (ModalStateStore.modalState == true) {
-      console.log("ModalState switched to " + ModalStateStore.modalState)
-      console.log("Modal would open here")
-      ModalStateStore.switchState()
-      console.log("ModalState switched to " + ModalStateStore.modalState)
-    }
-  }
-)
 
 </script>
 
