@@ -46,12 +46,11 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from) => {
-
   const userStore = useUserStore()
   const modalStateStore = useModalStateStore()
-  
+
   if (to.path == '/team' || to.path == '/dashboard') {
-    if (userStore.user == null) { 
+    if (userStore.user == null) {
       modalStateStore.switchState()
       // Cancel navigation if not logged in
       return false
@@ -61,7 +60,9 @@ router.beforeEach(async (to, from) => {
 
 router.afterEach((to, from, failure) => {
   if (!failure) {
-    document.title = (to.path != '/' && typeof to.name == 'string' ? capitalize(to.name) + ' - ' : '') + 'Stride For Education' 
+    document.title =
+      (to.path != '/' && typeof to.name == 'string' ? capitalize(to.name) + ' - ' : '') +
+      'Stride For Education'
   }
 })
 

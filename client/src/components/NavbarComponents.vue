@@ -192,7 +192,11 @@
     @open-signUp-modal="openSignUpModal"
   />
 
-  <LoginModal :dialog-modal="ModalStateStore.getState" v-if="ModalStateStore.getState" @open-login-modal="openLoginModal" />
+  <LoginModal
+    :dialog-modal="ModalStateStore.getState"
+    v-if="ModalStateStore.getState"
+    @open-login-modal="openLoginModal"
+  />
 </template>
 
 <script setup lang="ts">
@@ -218,7 +222,6 @@ const dialog = ref<boolean>(false)
 const signupModal = ref<boolean>(false)
 const router = useRouter()
 
-
 let homelink = '/'
 
 const openSignUpModal = () => {
@@ -232,7 +235,6 @@ const openLoginModal = () => {
 const logout = () => {
   router.push('/')
   userStore.logout()
-  
 }
 
 const menu = [
