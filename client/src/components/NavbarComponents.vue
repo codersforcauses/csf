@@ -43,7 +43,7 @@
           variant="flat"
           :style="{ fontFamily: 'Hackney', fontSize: '20px' }"
           style="letter-spacing: 0.5px"
-          @click="logout"
+          @click="openPopupDialog"
           >LOGOUT</v-btn
         >
         <v-btn
@@ -160,7 +160,7 @@
             variant="flat"
             :style="{ fontFamily: 'Hackney', fontSize: '28px' }"
             style="letter-spacing: 0.5px"
-            @click="logout"
+            @click="openPopupDialog"
             >LOGOUT</v-btn
           >
 
@@ -198,6 +198,14 @@
   />
 
   <LoginModal :dialog-modal="loginModal" v-if="loginModal" @open-login-modal="openLoginModal" />
+
+  <PopupDialog
+    v-model="openConfirmLogoutDialogueBox"
+    title="Confirm Logout"
+    text="Are you sure you want to logout of your account?"
+    submitText="Logout"
+    @handle-submit="logout"
+  />
 </template>
 
 <script setup lang="ts">
@@ -206,9 +214,11 @@ import { useDisplay } from 'vuetify'
 import SignUpModal from './SignUpModal.vue'
 import FooterBanner from '../../public/images/Footer-min.webp'
 import LoginModal from './LoginModal.vue'
+import PopupDialog from './PopupDialog.vue'
 
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
+import router from '@/router'
 
 const userStore = useUserStore()
 
@@ -218,6 +228,7 @@ const { mobile } = useDisplay()
 const dialog = ref<boolean>(false)
 const signupModal = ref<boolean>(false)
 const loginModal = ref<boolean>(false)
+const openConfirmLogoutDialogueBox = ref<boolean>(false)
 
 let homelink = '/'
 
@@ -229,8 +240,13 @@ const openLoginModal = () => {
   loginModal.value = !loginModal.value
 }
 
+const openPopupDialog = () => {
+  openConfirmLogoutDialogueBox.value = true
+}
+
 const logout = () => {
   userStore.logout()
+  router.push(homelink)
 }
 
 const menu = [
