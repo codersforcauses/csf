@@ -94,6 +94,19 @@ export const useTeamStore = defineStore('team', {
           this.currentTeam = null
         }
       })
+    },
+
+    async removeTeam() {
+      await axios.patch(`${BASE_URL}/user/remove/${this.user.id}/`).then((res) => {
+        if (res.status == 200) {
+          this.authUser = JSON.stringify({
+            ...this.user,
+            teamId: null,
+            teamAdmin: false
+          })
+          this.currentTeam = null
+        }
+      })
     }
   }
 })

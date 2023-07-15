@@ -134,7 +134,7 @@
     <v-btn size="large" color="red white--text" v-if="user.teamAdmin" @click="deleteTeam">
       Delete Team
     </v-btn>
-    <v-btn size="large" color="red white--text" v-else>Leave Team</v-btn>
+    <v-btn size="large" color="red white--text" v-else @click="removeTeam">Leave Team</v-btn>
   </v-row>
 </template>
 
@@ -150,6 +150,9 @@ const { user } = storeToRefs(teamStore)
 
 const deleteTeam = () => {
   teamStore.deleteTeam()
+}
+const removeTeam = () => {
+  teamStore.removeTeam()
 }
 
 const teamData = {

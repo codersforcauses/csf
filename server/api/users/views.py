@@ -114,3 +114,21 @@ def join_team(request, id):
         return Response(user_serializer.data)
     else:
         return Response(user_serializer.errors, status=400)
+
+
+@api_view(['PATCH'])
+def remove_team(request, id):
+    user = User.objects.get(id=id)
+
+    data = { 
+        'team_id': None, 
+        'team_admin': False
+    }
+    
+    user_serializer = JoinTeamSerializer(instance=user, data=data)
+
+    if user_serializer.is_valid():
+        user_serializer.save()
+        return Response(user_serializer.data)
+    else:
+        return Response(user_serializer.errors, status=400)
