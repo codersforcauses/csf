@@ -1,6 +1,6 @@
 <template>
   <v-row class="ma-0 pl-4 pr-4 pt-4 pb-0" align="center" justify="center">
-    <h1>Welcome back, {{ tempUserFirstName }}!</h1>
+    <h1>Welcome back, {{ UserFirstName }}</h1>
   </v-row>
   <v-divider />
   <v-row class="ma-0 pl-4 pr-4 pb-0 pt-0" align="center">
@@ -9,7 +9,7 @@
         <v-container class="pa-0" fluid>
           <v-row class="ma-0">
             <v-col cols="auto" class="pl-0 pr-0">
-              <v-icon icon="mdi-run-fast" size="52" />
+              <v-icon :icon="method" size="52"></v-icon>
             </v-col>
             <v-col>
               <v-chip color="green" class="rounded text-h5">{{ tempUserMileage }} KM</v-chip>
@@ -23,9 +23,7 @@
                 :ripple="true"
                 icon="mdi-plus"
                 color="primaryRed"
-                @click="dialog = true"
-              />
-              <MileageModal v-model="dialog" />
+              ></v-btn>
             </v-col>
           </v-row>
         </v-container>
@@ -41,12 +39,32 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import MileageModal from '../components/MileageModal.vue'
+import { useUserStore } from '@/stores/user';
+import { METHODS } from 'http';
 
-const tempUserFirstName = ref('John')
+const userStore = useUserStore();
+const method = ref();
+const travelMethod = userStore.user.travelMethod
+
+
+switch (travelMethod){
+  case "RUNNING":
+    method.value = 'mdi-run-fast'
+    break
+  case "WHEELING":
+    method.value = 'mdi-wheelchair-accessibility'
+    break
+  case "WALKING":
+    method.value = 'mdi-walk'
+    break
+
+}
+
+const UserFirstName = ref(userStore.user.firstName)
+console.log(UserFirstName)
+
 const tempUserMileage = ref(100)
-const dialog = ref(false)
 </script>
-
 <style scoped></style>
