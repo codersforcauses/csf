@@ -25,7 +25,6 @@
     other participants. Compare your progress with other users, teams, or even your own teammates,
     and let the friendly competition inspire you to reach new levels of achievement.
   </p>
-  <!-- <v-img :src="StrideForEducationGif" width="100%"></v-img> -->
   <v-img :src="StrideForEducationGifWebp" width="100%"></v-img>
   <p class="pa-8">
     Every step you take as part of this challenge is one step further in Community Spirit
