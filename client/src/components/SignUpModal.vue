@@ -124,7 +124,7 @@
       <div v-if="!firstPage">
         <form style="bottom: auto" class="bg-backgroundGrey" @submit.prevent="">
           <v-container class="pa-0">
-            <v-img src='../../public/images/Footer-min.webp' width="auto" height="10" cover></v-img>
+            <v-img src="../../public/images/Footer-min.webp" width="auto" height="10" cover></v-img>
           </v-container>
           <v-row justify="end">
             <v-col cols="auto">
@@ -157,7 +157,10 @@
                         @click="selectAvatar(avatar.url)"
                         :class="{ 'avatar-selected': avatar.isSelected === true }"
                       >
-                        <v-img :src="`../../public/avatars/${avatar.url}`" :alt="avatar.alt"></v-img>
+                        <v-img
+                          :src="`../../public/avatars/${avatar.url}`"
+                          :alt="avatar.alt"
+                        ></v-img>
                       </v-avatar>
                     </div>
                   </v-col>

@@ -2,7 +2,7 @@
   <v-dialog v-model="value" :fullscreen="isFullscreen" width="500px">
     <v-card height="600px" class="bg-backgroundGrey">
       <div style="height: 10px">
-        <v-img src='../../public/images/Footer-min.webp' width="100%" cover />
+        <v-img src="../../public/images/Footer-min.webp" width="100%" cover />
       </div>
       <div class="d-flex justify-end">
         <v-btn variant="text" @click="$emit('update:modelValue', !modelValue)">

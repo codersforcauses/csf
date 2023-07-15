@@ -89,7 +89,12 @@
         <v-container class="pa-0 ma-0">
           <v-toolbar color="black" class="hidden-md-and-up sticky-nav">
             <v-btn :width="125" :height="60" :to="homelink" @click="dialog = false" :active="false">
-              <v-img :width="125" :height="60" cover src="../../public/images/CSF_Logo_WHITE.webp" />
+              <v-img
+                :width="125"
+                :height="60"
+                cover
+                src="../../public/images/CSF_Logo_WHITE.webp"
+              />
             </v-btn>
             <v-spacer></v-spacer>
             <v-btn icon @click="dialog = false" class="hidden-md-and-up">
