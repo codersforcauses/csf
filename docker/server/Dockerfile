@@ -8,7 +8,7 @@ COPY ./server ./
 
 RUN poetry config virtualenvs.create false
 
-RUN poetry install
+RUN poetry install --no-dev
 
 COPY ./docker/server/entrypoint.sh /entrypoint.sh
 
