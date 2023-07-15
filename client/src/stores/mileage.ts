@@ -6,11 +6,8 @@ import camelize from 'camelize-ts'
 
 export const useMileageStore = defineStore('recentMileage', {
   state: () => ({
-    recentMileageS: useStorage('recentMileage', '[]' as string)
+    recentMileage: useStorage('recentMileage', [] as Mileage[])
   }),
-  getters: {
-    recentMileage: (state) => JSON.parse(state.recentMileageS) as Mileage[]
-  },
   actions: {
     async postMileage(userId: number, kilometres: number, date: string) {
       await server
@@ -33,7 +30,7 @@ export const useMileageStore = defineStore('recentMileage', {
         })
         .then((res) => {
           if (res.status == 200) {
-            this.recentMileageS = JSON.stringify(camelize(res.data))
+            this.recentMileage = camelize(res.data) as Mileage[]
           }
         })
     }
