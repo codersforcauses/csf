@@ -77,7 +77,9 @@
               </v-row>
               <v-row>
                 <v-col align="center">
-                  <v-chip class="px-6 text-h5 rounded" color="green">{{ mileage.kilometres }}</v-chip>
+                  <v-chip class="px-6 text-h5 rounded" color="green">{{
+                    mileage.kilometres
+                  }}</v-chip>
                   <p class="text-subtitle-2">KILOMETERS</p>
                 </v-col>
               </v-row>
@@ -108,7 +110,7 @@ const isFullscreen = ref(false)
 const props = defineProps(['modelValue'])
 const emit = defineEmits(['update:modelValue', 'handleSubmit'])
 
-const mileage = ref({kilometres: '', date: ''})
+const mileage = ref({ kilometres: '', date: '' })
 
 const form = ref(false)
 const required = (v: string) => {
@@ -130,7 +132,7 @@ const value = computed({
 const handleSubmit = () => {
   const user = userStore.user.id
   // server.post('post_mileage/', {"user": user, "kilometers": mileage.value.distance, "date": mileage.value.date})
-  server.post('mileage/post_mileage/', {user, ...mileage.value})
+  server.post('mileage/post_mileage/', { user, ...mileage.value })
   emit('update:modelValue', false)
 }
 
