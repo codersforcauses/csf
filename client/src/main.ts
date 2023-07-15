@@ -13,8 +13,6 @@ import * as icons from 'vuetify/iconsets/mdi-svg'
 import App from './App.vue'
 import router from './router'
 
-const app = createApp(App)
-
 const csfCustomTheme: ThemeDefinition = {
   dark: false,
   colors: {
@@ -24,6 +22,7 @@ const csfCustomTheme: ThemeDefinition = {
     secondaryGreen: 'rgb(0, 157, 79)',
     secondaryBlue: 'rgb(52, 94, 158)',
     secondaryTint: 'rgb(249, 241, 227)',
+    secondaryGrey: 'rgb(32,32,32)',
     backgroundGrey: 'rgb(236,236,236)'
   }
 }
@@ -32,16 +31,12 @@ const vuetify = createVuetify({
   components,
   directives,
   theme: {
+    defaultTheme: 'csfCustomTheme',
     themes: {
       csfCustomTheme
-    },
-    defaultTheme: 'csfCustomTheme'
+    }
   },
   icons
 })
 
-app.use(createPinia())
-app.use(router)
-app.use(vuetify)
-
-app.mount('#app')
+createApp(App).use(createPinia()).use(router).use(vuetify).mount('#app')
