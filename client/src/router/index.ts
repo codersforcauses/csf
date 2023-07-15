@@ -47,8 +47,6 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
 
-  document.title = (to.path != '/' && typeof to.name == 'string' ? capitalize(to.name) + ' - ' : '') + 'Stride For Education'
-
   const userStore = useUserStore()
   const modalStateStore = useModalStateStore()
   
@@ -58,6 +56,12 @@ router.beforeEach(async (to, from) => {
       // Cancel navigation if not logged in
       return false
     }
+  }
+})
+
+router.afterEach((to, from, failure) => {
+  if (!failure) {
+    document.title = (to.path != '/' && typeof to.name == 'string' ? capitalize(to.name) + ' - ' : '') + 'Stride For Education' 
   }
 })
 
