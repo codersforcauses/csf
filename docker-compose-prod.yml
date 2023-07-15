@@ -35,7 +35,7 @@ services:
       - 443:8000
       - 8000:8000
     volumes:
-      - ./docker/backend/nginx/custom.conf:/etc/nginx/conf.d/default.conf
+      - ./docker/nginx/custom.conf:/etc/nginx/conf.d/default.conf
       - ./opt/static_files:/opt/static_files
     depends_on:
       - server
