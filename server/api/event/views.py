@@ -1,6 +1,8 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
+from django.db.models import Q
+
 from .models import Event
 from .serializers import EventSerialiser
 
@@ -29,7 +31,7 @@ def get_event(request, event_id):
 def get_events(request):
     if request.user.is_authenticated is True:
         if (request.user.team_id is not None):
-            events = Event.objects.filter(team_id=request.user.team_id)
+            events = Event.objects.filter(Q(is_public=True) | Q(team_id=request.user.team_id))
             team_serializer = EventSerialiser(events, many=True)
             return Response(team_serializer.data)
         else:
