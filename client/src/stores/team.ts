@@ -40,7 +40,6 @@ export const useTeamStore = defineStore('team', {
     },
 
     async createTeam(data: Omit<Team, 'teamId' | 'joinCode'>) {
-      console.log(snakify(data))
       await axios.post(`${BASE_URL}/team/`, snakify(data)).then((res) => {
         if (res.status == 200) {
           const data = camelize(res.data) as Object as Team
@@ -52,9 +51,10 @@ export const useTeamStore = defineStore('team', {
     },
 
     async editTeam(data: Partial<Team>) {
-      await axios.patch(`${BASE_URL}/team/`, snakify(data)).then((res) => {
+      await axios.patch(`${BASE_URL}/team/edit/${this.team.teamId}/`, snakify(data)).then((res) => {
         if (res.status == 200) {
-          this.currentTeam = JSON.stringify(res.data)
+          const data = camelize(res.data) as Object as Team
+          this.currentTeam = JSON.stringify(data)
         }
       })
     },
@@ -71,7 +71,6 @@ export const useTeamStore = defineStore('team', {
         .then((res) => {
           if (res.status == 200) {
             const data = camelize(res.data) as Object as User
-            console.log(data)
             const { teamId, teamAdmin } = camelize(res.data as Snakify<Partial<User>>)
             this.authUser = JSON.stringify({
               ...this.user,

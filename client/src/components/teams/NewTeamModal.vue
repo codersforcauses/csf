@@ -51,11 +51,6 @@ const form = ref({
 // formValidation = check if team name already exists
 
 const submitForm = () => {
-  console.log('Team Name:', form.value.name)
-  console.log('Team Bio:', form.value.bio)
-  console.log('Team_id:', 'unique id_1')
-  console.log('Join Code:', 'unique id_2')
-
   teamStore.createTeam({ ...form.value })
 }
 

@@ -139,15 +139,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useDisplay } from 'vuetify'
 import EditTeamInfo from './EditTeamInfo.vue'
 const { mobile } = useDisplay()
 import { useTeamStore } from '@/stores/team'
 import { storeToRefs } from 'pinia'
 const teamStore = useTeamStore()
-const { user } = storeToRefs(teamStore)
+const { team, user } = storeToRefs(teamStore)
 
+onMounted(async () => {
+  if (user.value.teamId) await teamStore.getTeam(user.value.teamId)
+})
 const deleteTeam = () => {
   teamStore.deleteTeam()
 }
@@ -155,15 +158,24 @@ const removeTeam = () => {
   teamStore.removeTeam()
 }
 
-const teamData = {
-  team_name: 'CFC Runners',
+const teamData = ref({
+  team_name: team.value ? team.value.name : '',
   total_kilometres: 990,
-  invite_code: 'AHGQ234JHGW',
-  bio: 'This is our great team bio for our team CFC Runners',
+  invite_code: team.value ? team.value.joinCode : '',
+  bio: team.value ? team.value.bio : '',
   daily_kms: [],
   sub_teams: [],
   leaderboard: []
-}
+})
+
+watch(team, (newTeam) => {
+  // Update the teamData when the team value changes
+  if (newTeam) {
+    teamData.value.team_name = newTeam.name
+    teamData.value.bio = newTeam.bio
+    teamData.value.invite_code = newTeam.joinCode
+  }
+})
 
 const isBioVisible = ref(false)
 const isDailyKmsVisible = ref(false)
@@ -173,7 +185,7 @@ const isLeaderboardVisible = ref(false)
 const copyHoverText = ref('Copy to Clipboard')
 
 const copyInviteCode = () => {
-  navigator.clipboard.writeText(teamData.invite_code)
+  navigator.clipboard.writeText(teamData.value.invite_code)
   copyHoverText.value = 'Copied!'
 
   setTimeout(() => {
