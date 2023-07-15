@@ -25,7 +25,7 @@
                 color="primaryRed"
                 @click="dialog = true"
               />
-              <MileageModal v-model="dialog" />
+              <MileageModal v-model="dialog" @handle-submit="updateChallengeProgress" />
             </v-col>
           </v-row>
         </v-container>
@@ -87,19 +87,25 @@ function calcWidth(travelDist: number, totalDist: number) {
   return Math.min((100 * travelDist) / totalDist, 100)
 }
 
-async function getRecentMileage() {
-  if (userStore.authUser) {
-    let userId = userStore.user.id
-    await mileageStore.getRecentMileage(userId)
-    if (mileageStore.recentMileage) {
-      let arr = mileageStore.recentMileage
+function getRecentMileage() {
+  if (userStore.user) {
+    let arr = mileageStore.recentMileage
+    if (arr) {
       return arr.reduce((a, b) => a + b.kilometres, 0)
     }
   }
-  return 0;
+  return 0
 }
+
+function updateChallengeProgress() {
+  distanceTravelled.value = getRecentMileage()
+}
+
 onMounted(async () => {
-  distanceTravelled.value = await getRecentMileage()
+  if (userStore.user) {
+    await mileageStore.getRecentMileage(userStore.user.id)
+    updateChallengeProgress()
+  }
 })
 </script>
 

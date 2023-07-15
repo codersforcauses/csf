@@ -103,7 +103,6 @@ import { computed } from 'vue'
 import { ref, watchEffect } from 'vue'
 import { useUserStore } from '../stores/user'
 import { useMileageStore } from '@/stores/mileage'
-import server from '@/utils/server'
 
 const userStore = useUserStore()
 const mileageStore = useMileageStore()
@@ -131,11 +130,12 @@ const value = computed({
   }
 })
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
   const user = userStore.user.id
   // server.post('post_mileage/', {"user": user, "kilometers": mileage.value.distance, "date": mileage.value.date})
-  mileageStore.postMileage(user, parseFloat(mileage.value.kilometres), mileage.value.date)
+  await mileageStore.postMileage(user, parseFloat(mileage.value.kilometres), mileage.value.date)
   emit('update:modelValue', false)
+  emit('handleSubmit')
 }
 
 // Copied from SignUpModal
