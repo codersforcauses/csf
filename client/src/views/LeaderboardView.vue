@@ -1,6 +1,6 @@
 <template>
     <div class="header">
-        <h1 class="text-center text-secondaryTint">Leaderboards</h1>
+        <h1 class="text-center text-secondaryTint font-weight-medium text-md-h1" id="title">Leaderboards</h1>
     </div>
     <v-row class="ma-0 pt-4" justify="space-evenly">
         <v-btn
@@ -38,5 +38,10 @@ const searchQuery = ref('')
 .header {
   background-image: url('/images/Footer-min.jpeg');
   background-size: cover;
+  font-family: Hackney!important;
+}
+
+#title {
+    font-family: Hackney!important;
 }
 </style>
