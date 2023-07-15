@@ -198,7 +198,6 @@ import { AxiosError } from 'axios'
 
 const dialog = ref(true)
 
-
 const userStore = useUserStore()
 const page = ref<1 | 2 | 3 | 4 | 5>(1)
 const isFullscreen = ref(false)
