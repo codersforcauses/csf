@@ -66,12 +66,11 @@
 import { ref } from 'vue'
 import MileageModal from '../components/MileageModal.vue'
 import { useUserStore } from '@/stores/user'
-import server from '@/utils/server'
+import { useMileageStore } from '@/stores/mileage'
 import { onMounted } from 'vue'
-import camelize from 'camelize-ts'
-import type { Mileage } from '@/types/mileage'
 
 const userStore = useUserStore()
+const mileageStore = useMileageStore()
 
 const tempUserFirstName = ref('John')
 const tempUserMileage = ref(100)
@@ -91,21 +90,13 @@ function calcWidth(travelDist: number, totalDist: number) {
 async function getRecentMileage() {
   if (userStore.authUser) {
     let userId = userStore.user.id
-    return await server
-      .get(`mileage/get_mileage/${userId}`, {
-        params: {
-          challenge: true
-        }
-      })
-      .then((res) => {
-        if (res.status == 200) {
-          let recentMileage = camelize(res.data) as Mileage[]
-          return recentMileage.reduce((a, b) => a + b.kilometres, 0)
-        }
-        return 0
-      })
+    await mileageStore.getRecentMileage(userId)
+    if (mileageStore.recentMileage) {
+      let arr = mileageStore.recentMileage
+      return arr.reduce((a, b) => a + b.kilometres, 0)
+    }
   }
-  return 0
+  return 0;
 }
 onMounted(async () => {
   distanceTravelled.value = await getRecentMileage()
