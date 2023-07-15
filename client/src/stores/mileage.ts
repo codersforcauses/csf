@@ -4,7 +4,7 @@ import server from '@/utils/server'
 import type { Mileage } from '@/types/mileage'
 import camelize from 'camelize-ts'
 
-export const useMileageStore = defineStore('recentMileage', {
+export const useMileageStore = defineStore('mileage', {
   state: () => ({
     recentMileage: useStorage('recentMileage', [] as Mileage[])
   }),
