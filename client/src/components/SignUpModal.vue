@@ -4,7 +4,7 @@
       <div v-if="firstPage">
         <form class="bg-backgroundGrey">
           <v-container class="pa-0">
-            <v-img src="/images/Footer-min.jpeg" width="100%" height="10" cover></v-img>
+            <v-img :src="FooterBanner" width="100%" height="10" cover></v-img>
           </v-container>
           <v-row justify="end">
             <v-col cols="auto">
@@ -32,6 +32,7 @@
                     :rules="[required]"
                     v-model="state.username"
                     label="Username"
+                    :error-messages="errors.username"
                     required
                   ></v-text-field>
                 </v-col>
@@ -41,6 +42,7 @@
                     :rules="[required]"
                     v-model="state.firstName"
                     label="First name"
+                    :error-messages="errors.firstName"
                     required
                   ></v-text-field>
                 </v-col>
@@ -49,6 +51,7 @@
                     bg-color="#FFFFFF"
                     :rules="[required]"
                     v-model="state.lastName"
+                    :error-messages="errors.lastName"
                     label="Last name"
                   ></v-text-field>
                 </v-col>
@@ -59,6 +62,7 @@
                     :rules="[required]"
                     v-model="state.email"
                     label="Email"
+                    :error-messages="errors.email"
                     required
                   ></v-text-field>
                 </v-col>
@@ -68,6 +72,7 @@
                     :rules="[required]"
                     v-model="state.password"
                     label="Password"
+                    :error-messages="errors.password"
                     type="password"
                     required
                   ></v-text-field>
@@ -77,6 +82,7 @@
                     bg-color="#FFFFFF"
                     :rules="[required]"
                     v-model="state.confirmPassword"
+                    :error-messages="errors.confirmPassword"
                     label="Confirm Password"
                     type="password"
                     required
@@ -95,11 +101,12 @@
                     color="primaryRed"
                     @click="
                       () => {
-                        firstPage = !firstPage
+                        firstPage = false
                       }
                     "
-                    >NEXT</v-btn
                   >
+                    NEXT
+                  </v-btn>
                 </v-col>
               </v-row>
               <v-row align="center" justify="center">
@@ -150,7 +157,7 @@
                         @click="selectAvatar(avatar.url)"
                         :class="{ 'avatar-selected': avatar.isSelected === true }"
                       >
-                        <v-img :src="`/src/assets/avatars/${avatar.url}`" :alt="avatar.alt"></v-img>
+                        <v-img :src="`/avatars/${avatar.url}`" :alt="avatar.alt"></v-img>
                       </v-avatar>
                     </div>
                   </v-col>
@@ -197,9 +204,10 @@
                     <p class="text-caption px-4">
                       For more information please view
                       <span style="text-decoration: underline" class="text-secondaryBlue"
-                        ><a href="https://www.google.com">our privacy statement</a></span
+                        ><a @click="openConsentModal">our privacy statement</a></span
                       >
                     </p>
+                    <p v-if="errorMsg" class="pt-5 pl-2" style="color: red">{{ errorMsg }}</p>
                   </v-col>
                 </v-row>
               </v-row>
@@ -209,7 +217,7 @@
             <v-container>
               <v-row align="center" justify="center">
                 <v-col cols="auto">
-                  <v-btn variant="text" class="mx-2" @click="firstPage = !firstPage">BACK</v-btn>
+                  <v-btn variant="text" class="mx-2" @click="firstPage = true">BACK</v-btn>
                   <v-btn variant="flat" class="mx-2" rounded="lg" color="primaryRed" @click="submit"
                     >CREATE ACCOUNT</v-btn
                   >
@@ -229,11 +237,23 @@
       </div>
     </v-card>
   </v-dialog>
+  <ConsentModal
+    :dialog-modal="consentModal"
+    v-if="consentModal"
+    @open-consent-modal="openConsentModal"
+  />
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, watchEffect } from 'vue'
-import { type Signup } from '../types/signup'
+import FooterBanner from '/images/Footer-min.jpeg'
+import { type Signup } from '../types/user'
+import ConsentModal from './ConsentModal.vue'
+import { useUserStore } from '../stores/user'
+import snakify from 'snakify-ts'
+import { AxiosError } from 'axios'
+import camelize from 'camelize-ts'
+const userStore = useUserStore()
 
 defineProps(['dialogModal'])
 const emit = defineEmits(['openSignUpModal'])
@@ -271,33 +291,68 @@ const state = reactive<Signup>({
   travelMethod: ''
 })
 
+const errorMsg = ref('')
+const initialErrors = {
+  username: [],
+  firstName: [],
+  lastName: [],
+  email: [],
+  password: [],
+  confirmPassword: []
+}
+const errors = reactive({ ...initialErrors })
+
 const submit = async () => {
-  // need this here as default values sorta mess stuff up but it works
   const avatar = avatarPaths.value.filter((avatar) => avatar.isSelected === true)
   const method = travelMethod.value.filter((method) => method.isSelected === true)
   state.travelMethod = method[0].mode
   state.avatar = avatar[0].url
-  console.log(state)
+  const obj = snakify(state)
+  if (obj.confirm_password != obj.password) {
+    Object.assign(errors, { confirmPassword: "Passwords don't match" })
+    firstPage.value = true
+  } else {
+    delete obj.confirm_password
+    delete obj.avatar
+    Object.assign(errors, initialErrors)
+    try {
+      await userStore.registerUser(obj)
+    } catch (error: AxiosError | any) {
+      console.debug(error)
+      if (error instanceof AxiosError && error.message) {
+        errorMsg.value = error.message
+        if (error.response?.status != 201) {
+          const data = camelize(error.response!.data[1])
+          Object.assign(errors, data)
+          firstPage.value = true
+        }
+      } else {
+        errorMsg.value = JSON.stringify(error)
+      }
+    }
+  }
 }
-
 const selectAvatar = (url: string) => {
   avatarPaths.value.forEach((avatar) => {
-    if (avatar.url === url) avatar.isSelected = !avatar.isSelected
-    if (avatar.url !== url) avatar.isSelected = false
+    avatar.isSelected = avatar.url === url ? !avatar.isSelected : false
   })
   state.avatar = url
 }
 
 const selectMode = (mode: string) => {
   travelMethod.value.forEach((method) => {
-    if (method.mode === mode) method.isSelected = !method.isSelected
-    if (method.mode !== mode) method.isSelected = false
+    method.isSelected = method.mode === mode ? !method.isSelected : false
   })
   state.travelMethod = mode
 }
 
 const required = (v: string) => {
   return !!v || 'Field is required'
+}
+
+const consentModal = ref<boolean>(false)
+const openConsentModal = () => {
+  consentModal.value = !consentModal.value
 }
 
 watchEffect(async () => {

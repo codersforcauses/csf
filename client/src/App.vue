@@ -6,13 +6,15 @@ import { RouterView } from 'vue-router'
 
 <template>
   <ReloadPWA />
-  <header>
-    <NavbarComponents />
-  </header>
+  <NavbarComponents />
   <RouterView />
 </template>
 
 <style>
+body {
+  padding-top: 64px;
+}
+
 @font-face {
   font-family: 'Hackney';
   src: local('Hackney'), url('./assets/fonts/Hackney-Vector.ttf') format('truetype');

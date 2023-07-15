@@ -3,6 +3,7 @@
     v-if="user.is_admin"
     icon="mdi mdi-pencil"
     size="32px"
+    color="black"
     @click="editTeamInfoDialog = true"
   />
   <v-dialog v-model="editTeamInfoDialog" width="auto">
