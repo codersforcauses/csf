@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# Wait until Database is available before continuing
+printf "\n" && echo "Checking Database is up"
+# using psql
+while ! pg_isready -q -h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER
+do
+  echo "$(date) - waiting for database to start"
+  sleep 1
+done
+
+>&2 echo "Postgres is up - continuing"
+
 echo "Applying database migrations"
 python manage.py migrate --noinput
 
@@ -30,7 +41,7 @@ fi
 if [ "${APP_ENV^^}" = "PRODUCTION" ]; then
 
     # Run Gunicorn / Django
-    printf "\n" && echo " Running Gunicorn / Django" | boxes -d shell -p a1l2
+    printf "\n" && echo " Running Gunicorn / Django"
     echo "Running: gunicorn api.wsgi -b 0.0.0.0:8081 --workers=6 --keep-alive 20 --log-file=- --log-level debug --access-logfile=/var/log/accesslogs/gunicorn --capture-output --timeout 50"
     gunicorn api.wsgi -b 0.0.0.0:8081 --workers=6 --keep-alive 20 --log-file=- --log-level debug --access-logfile=/var/log/accesslogs/gunicorn --capture-output --timeout 50
 fi
