@@ -3,8 +3,10 @@ import { useUserStore } from '@/stores/user'
 import AboutView from '../views/AboutView.vue'
 import TeamsPageView from '@/views/TeamsPageView.vue'
 import EventsView from '../views/EventsView.vue'
+import UserSettingsView from '../views/UserSettingsView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import ChallengeView from '../views/ChallengeView.vue'
+import { capitalize } from 'vue'
 import { useModalStateStore } from '@/stores/openModal'
 
 const router = createRouter({
@@ -16,8 +18,8 @@ const router = createRouter({
       component: AboutView
     },
     {
-      path: '/teams',
-      name: 'teams',
+      path: '/team',
+      name: 'team',
       component: TeamsPageView
     },
     {
@@ -26,23 +28,31 @@ const router = createRouter({
       component: EventsView
     },
     {
+      path: '/settings',
+      name: 'settings',
+      component: UserSettingsView
+    },
+    {
       path: '/dashboard',
       name: 'dashboard',
       component: DashboardView
     },
     {
-      path: '/challenge',
-      name: 'challenge',
+      path: '/challenges',
+      name: 'challenges',
       component: ChallengeView
     }
   ]
 })
 
 router.beforeEach(async (to, from) => {
+
+  document.title = (to.path != '/' && typeof to.name == 'string' ? capitalize(to.name) + ' - ' : '') + 'Stride For Education'
+
   const userStore = useUserStore()
   const modalStateStore = useModalStateStore()
   
-  if (to.path == '/teams' || to.path == '/dashboard') {
+  if (to.path == '/team' || to.path == '/dashboard') {
     if (userStore.user == null) { 
       modalStateStore.switchState()
       // Cancel navigation if not logged in

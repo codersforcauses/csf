@@ -308,7 +308,6 @@ const submit = async () => {
   state.travelMethod = method[0].mode
   state.avatar = avatar[0].url
   const obj = snakify(state)
-  // console.log(obj)
   if (obj.confirm_password != obj.password) {
     Object.assign(errors, { confirmPassword: "Passwords don't match" })
     firstPage.value = true

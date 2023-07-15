@@ -23,7 +23,9 @@
                 :ripple="true"
                 icon="mdi-plus"
                 color="primaryRed"
-              ></v-btn>
+                @click="dialog = true"
+              />
+              <MileageModal v-model="dialog" />
             </v-col>
           </v-row>
         </v-container>
@@ -40,9 +42,11 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import MileageModal from '../components/MileageModal.vue'
 
 const tempUserFirstName = ref('John')
 const tempUserMileage = ref(100)
+const dialog = ref(false)
 </script>
 
 <style scoped></style>

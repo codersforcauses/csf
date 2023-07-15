@@ -7,15 +7,15 @@
         </v-card-title>
         <v-card-text>
           <p class="text--primary" align="justify">
-            The primary purpose for which your Personal Information is collected for this event is
+            The primary purpose for which your Personal Information is collected for all events is
             so that it can be disclosed to the Community Spirit Foundation for the purpose of:
           </p>
           <p class="text--primary" align="justify">
-            (i) conducting, administering and evaluating the 'Stride For Education' event;
+            (i) conducting, administering and evaluating the 'Stride For Education' events;
           </p>
           <p class="text--primary" align="justify">
             (ii) providing individuals with services, promotional material and other information in
-            relation to the 'Stride For Education' virtual event; and
+            relation to the 'Stride For Education' virtual events; and
           </p>
           <p class="text--primary" align="justify">
             (iii) direct marketing by the Community Spirit Foundation.

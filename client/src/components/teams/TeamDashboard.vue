@@ -14,7 +14,7 @@
       <v-row align="center" class="my-2">
         <v-icon class="mdi mdi-run-fast ml-3" size="50px" />
         <v-col>
-          <h2 class="text-secondaryGreen">{{ teamData.total_kilometres }} KM</h2>
+          <v-chip color="green" class="rounded text-h5">{{ teamData.total_kilometres }} KM</v-chip>
           <h3>TOTAL</h3>
         </v-col>
       </v-row>
@@ -174,6 +174,12 @@ const copyInviteCode = () => {
 </script>
 
 <style scoped>
+h1,
+h2,
+.v-icon {
+  color: black;
+}
+
 .totalKms {
   font-size: 1.5rem;
 }
