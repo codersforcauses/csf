@@ -8,5 +8,5 @@ urlpatterns = [
     path("verify_token/", views.verify_token, name="verify-token"),
     path("reset_password/", views.reset_password, name="reset-password"),
     path("<str:username>/", views.get_user, name="get-user"),
-    path("join/", views.join_team, name="join-team")
+    path("join/<int:id>/", views.join_team, name="join-team")
 ]

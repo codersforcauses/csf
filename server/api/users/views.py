@@ -1,10 +1,13 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import User
-from .serializers import ChangePasswordSerializer, RequestResetPasswordSerializer, ResetPasswordSerializer, UserSerialiser
+from .serializers import ChangePasswordSerializer, RequestResetPasswordSerializer, ResetPasswordSerializer, UserSerialiser, JoinTeamSerializer
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
+
+from ..team.models import Team
+from ..team.serializers import TeamSerialiser
 
 
 import uuid
@@ -95,15 +98,19 @@ def make_reset_email_message(email, token):
 
 
 @api_view(['PATCH'])
-def join_team(request):
-    user = User.objects.get(username=request.data.user_id)
-    team = Team.objects.get(join_code=request.data.join_code)
+def join_team(request, id):
+    user = User.objects.get(id=id)
+    team = Team.objects.get(join_code=request.data['join_code'])
 
-    data = { team.team_id, request.data.teamAdmin}
+    data = { 
+        'team_id': team.team_id, 
+        'team_admin': request.data['team_admin']
+    }
     
-    user_serializer = UserSerialiser(instance=user, data=data)
-    team_serializer = TeamSerialiser(instance=team)
+    user_serializer = JoinTeamSerializer(instance=user, data=data)
 
-    if user_serializer.is_valid() and team_serializer.is_valid():
-        # user_serializer.save()
-        return Response(team_serializer.data)
+    if user_serializer.is_valid():
+        user_serializer.save()
+        return Response(user_serializer.data)
+    else:
+        return Response(user_serializer.errors, status=400)

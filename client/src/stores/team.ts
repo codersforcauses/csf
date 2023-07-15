@@ -21,7 +21,7 @@ export const useTeamStore = defineStore('team', {
 
   actions: {
     async getTeams() {
-      const teams = await axios.get(`${BASE_URL}/team/`).then((res) => {
+      const teams = await axios.get(`${BASE_URL}/team/all/`).then((res) => {
         if (res.status == 200) {
           return res.data
         }
@@ -33,7 +33,8 @@ export const useTeamStore = defineStore('team', {
     async getTeam(teamId: Number) {
       await axios.get(`${BASE_URL}/team/${teamId}/`).then((res) => {
         if (res.status == 200) {
-          this.currentTeam = JSON.stringify(res.data)
+          const data = camelize(res.data) as Object as Team
+          this.currentTeam = JSON.stringify(data)
         }
       })
     },
@@ -42,9 +43,10 @@ export const useTeamStore = defineStore('team', {
       console.log(snakify(data))
       await axios.post(`${BASE_URL}/team/`, snakify(data)).then((res) => {
         if (res.status == 200) {
-          this.currentTeam = JSON.stringify(res.data)
+          const data = camelize(res.data) as Object as Team
 
-          this.joinTeam(this.user.id, this.team.joinCode, true)
+          this.currentTeam = JSON.stringify(data)
+          this.joinTeam(this.user.id, data.joinCode, true)
         }
       })
     },
@@ -58,22 +60,37 @@ export const useTeamStore = defineStore('team', {
     },
 
     async joinTeam(userId: Number, joinCode: String, teamAdmin: Boolean = false) {
-      const data = {
-        userId,
-        joinCode,
-        teamAdmin
-      }
-      await axios.patch(`${BASE_URL}/user/join/`, snakify(data)).then((res) => {
-        if (res.status == 200) {
-          this.currentTeam = JSON.stringify(res.data)
-        }
-      })
+      await axios
+        .patch(
+          `${BASE_URL}/user/join/${userId}/`,
+          snakify({
+            joinCode,
+            teamAdmin
+          })
+        )
+        .then((res) => {
+          if (res.status == 200) {
+            const data = camelize(res.data) as Object as User
+            console.log(data)
+            const { teamId, teamAdmin } = camelize(res.data as Snakify<Partial<User>>)
+            this.authUser = JSON.stringify({
+              ...this.user,
+              teamId,
+              teamAdmin
+            })
+            this.getTeam(teamId as Number)
+          }
+        })
     },
 
-    async removeTeam(teamId: Number) {
-      await axios.delete(`${BASE_URL}/team/${teamId}`).then((res) => {
+    async deleteTeam() {
+      await axios.delete(`${BASE_URL}/team/delete/${this.user.teamId}/`).then((res) => {
         if (res.status == 200) {
-          this.currentTeam = JSON.stringify(res.data)
+          this.authUser = JSON.stringify({
+            ...this.user,
+            teamId: null,
+            teamAdmin: false
+          })
         }
       })
     }

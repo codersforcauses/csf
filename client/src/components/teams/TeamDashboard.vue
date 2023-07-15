@@ -131,7 +131,9 @@
 
   <!-- Leave/Delete Team -->
   <v-row justify="center">
-    <v-btn size="large" color="red white--text" v-if="user.is_admin"> Delete Team </v-btn>
+    <v-btn size="large" color="red white--text" v-if="user.is_admin" @click="delete_team">
+      Delete Team
+    </v-btn>
     <v-btn size="large" color="red white--text" v-else>Leave Team</v-btn>
   </v-row>
 </template>
@@ -141,9 +143,15 @@ import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
 import EditTeamInfo from './EditTeamInfo.vue'
 const { mobile } = useDisplay()
+import { useTeamStore } from '@/stores/team'
+const teamStore = useTeamStore()
 
 const user = {
   is_admin: true
+}
+
+const delete_team = () => {
+  teamStore.deleteTeam()
 }
 
 const teamData = {
