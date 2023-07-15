@@ -29,6 +29,8 @@
                     label="Date"
                     v-model="mileage.date"
                     bg-color="white"
+                    :max="maxDate"
+                    :min="minDate"
                     :rules="[required]"
                   />
                 </v-col>
@@ -111,7 +113,11 @@ const isFullscreen = ref(false)
 const props = defineProps(['modelValue'])
 const emit = defineEmits(['update:modelValue', 'handleSubmit'])
 
-const mileage = ref({ kilometres: '', date: '' })
+const mileage = ref({ kilometres: '1', date: '' })
+
+const maxDate = ref('')
+const minDate = ref('')
+setMinAndMaxDate()
 
 const form = ref(false)
 const required = (v: string) => {
@@ -132,10 +138,18 @@ const value = computed({
 
 const handleSubmit = async () => {
   const user = userStore.user.id
-  // server.post('post_mileage/', {"user": user, "kilometers": mileage.value.distance, "date": mileage.value.date})
   await mileageStore.postMileage(user, parseFloat(mileage.value.kilometres), mileage.value.date)
   emit('update:modelValue', false)
   emit('handleSubmit')
+}
+
+function setMinAndMaxDate() {
+  let now = new Date()
+  // need to shift, since toJSON() will get the UTC time
+  let nowShifted = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+  maxDate.value = nowShifted.toJSON().slice(0, 10)
+  nowShifted.setDate(nowShifted.getDate() - 30)
+  minDate.value = nowShifted.toJSON().slice(0, 10)
 }
 
 // Copied from SignUpModal
