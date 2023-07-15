@@ -83,12 +83,6 @@
           </v-card-text>
           <v-card-actions class="justify-end">
               <v-btn color="primary" variant="flat" @click="saveTeam">Save</v-btn>
-              <ConfirmButton
-            :action="'Save'"
-            :object="'team'"
-            :use-done-for-button="true"
-            @handle-confirm="saveTeam"
-          />
               <v-btn color="primary" variant="flat" @click="showConfirmationDialog">Delete Subteam</v-btn>
           </v-card-actions>
       </v-card>
@@ -265,12 +259,12 @@ const addMember = () => {
       //    update selectedteam
       data.selectedTeam.members.push(data.selectedMember)
       //    update allmembers
-      data.selectedMember = null
+    //   data.selectedMember = null
   }
 }
 const saveTeam = () => {
   // copy selectedteam to subteams
-  alert('save')
+   
   data.subteams = data.subteams.map((item) => {
       if (item.teamId === data.selectedId) {
           return data.selectedTeam
