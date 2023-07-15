@@ -193,11 +193,9 @@
 
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
-import { useDisplay } from 'vuetify'
 import { useUserStore } from '@/stores/user'
 import { AxiosError } from 'axios'
 
-const { mobile } = useDisplay()
 const dialog = ref(true)
 const userStore = useUserStore()
 const page = ref<1 | 2 | 3 | 4 | 5>(1)
