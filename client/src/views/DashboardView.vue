@@ -42,16 +42,19 @@
   <div class="px-4">
     <h1>Challenges</h1>
     <div v-for="challenge in challenges" class="my-4">
-      <h3> {{ challenge.name }}</h3>
+      <h3>{{ challenge.name }}</h3>
       <v-row dense>
         <v-col>
           <div class="progress-bar rounded-lg">
-            <div :class="`rounded-lg ${challenge.colour}`" :style="`width: ${calcWidth(distanceTravelled,challenge.length)}%`"></div>
+            <div
+              :class="`rounded-lg ${challenge.colour}`"
+              :style="`width: ${calcWidth(distanceTravelled, challenge.length)}%`"
+            ></div>
           </div>
         </v-col>
         <v-col cols="3" sm="2" lg="1">
           <div :class="`length-label rounded-lg ${challenge.colour}`">
-            <h3 class="primaryWhite text-center">{{ challenge.length + "KM" }}</h3>
+            <h3 class="primaryWhite text-center">{{ challenge.length + 'KM' }}</h3>
           </div>
         </v-col>
       </v-row>
@@ -74,46 +77,48 @@ const tempUserFirstName = ref('John')
 const tempUserMileage = ref(100)
 const dialog = ref(false)
 const challenges = ref([
-  {name: "WOORABINDA", length: 24, colour: "bg-secondaryGreen"},
-  {name: "WURRUMIYANGA", length: 60, colour: "bg-secondaryBlue"},
-  {name: "GALIWIN'KU", length: 84, colour: "bg-primaryRed"},
-  {name: "PALM ISLAND", length: 120, colour: "bg-primaryBlack"}
+  { name: 'WOORABINDA', length: 24, colour: 'bg-secondaryGreen' },
+  { name: 'WURRUMIYANGA', length: 60, colour: 'bg-secondaryBlue' },
+  { name: "GALIWIN'KU", length: 84, colour: 'bg-primaryRed' },
+  { name: 'PALM ISLAND', length: 120, colour: 'bg-primaryBlack' }
 ])
 const distanceTravelled = ref(0)
 
 function calcWidth(travelDist: number, totalDist: number) {
-  return Math.min(100*travelDist/totalDist, 100)
+  return Math.min((100 * travelDist) / totalDist, 100)
 }
 
 async function getRecentMileage() {
   if (userStore.authUser) {
     let userId = userStore.user.id
-    return await server.get(`mileage/get_mileage/${userId}`, {
-      params: {
-        challenge: true
-      }
-    }).then((res) => {
-      if (res.status == 200) {
-        let recentMileage = camelize(res.data) as Mileage[]
-        return recentMileage.reduce((a, b) => a + b.kilometres, 0)
-      } 
-      return 0
-    })
+    return await server
+      .get(`mileage/get_mileage/${userId}`, {
+        params: {
+          challenge: true
+        }
+      })
+      .then((res) => {
+        if (res.status == 200) {
+          let recentMileage = camelize(res.data) as Mileage[]
+          return recentMileage.reduce((a, b) => a + b.kilometres, 0)
+        }
+        return 0
+      })
   }
   return 0
 }
 onMounted(async () => {
-    distanceTravelled.value = await getRecentMileage()
+  distanceTravelled.value = await getRecentMileage()
 })
-
 </script>
 
 <style scoped>
-  .progress-bar {
-    background-color: #e2e2e2;
-  }
+.progress-bar {
+  background-color: #e2e2e2;
+}
 
-  .progress-bar > div, .length-label {
-    height: 30px;
-  }
+.progress-bar > div,
+.length-label {
+  height: 30px;
+}
 </style>
