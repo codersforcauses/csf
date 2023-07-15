@@ -1,5 +1,5 @@
 <template>
-  <v-img :src="CSFBanner" width="100%"></v-img>
+  <v-img :src="CSFBannerWebp" width="100%"></v-img>
   <v-row class="pt-8 px-8 bg-secondaryGrey" no-gutters justify="center">
     <h2 class="text-secondaryTint text-center">
       <span class="font-weight-bold">Education changes lives:</span>
@@ -12,7 +12,7 @@
       d="m0 64 60 10.7c60 10.3 180 32.3 300 48 120 16.3 240 26.3 360 16C840 128 960 96 1080 85.3c120-10.3 240-.3 300 5.4l60 5.3V0H0Z"
     />
   </svg>
-  <v-img :src="StrideForEducationRBGLogo" class="px-8 mt-n8 mb-8 w-100" />
+  <v-img :src="StrideForEducationRBGLogoWebp" class="px-8 mt-n8 mb-8 w-100" />
   <v-divider class="mx-4" />
   <p class="pa-8">
     Community Spirit Foundation is running Stride For Education – a challenge designed to motivate
@@ -25,7 +25,8 @@
     other participants. Compare your progress with other users, teams, or even your own teammates,
     and let the friendly competition inspire you to reach new levels of achievement.
   </p>
-  <v-img :src="StrideForEducationGif" width="100%"></v-img>
+  <!-- <v-img :src="StrideForEducationGif" width="100%"></v-img> -->
+  <v-img :src="StrideForEducationGifWebp" width="100%"></v-img>
   <p class="pa-8">
     Every step you take as part of this challenge is one step further in Community Spirit
     Foundation's journey of helping to support First Nations young people to realise their potential
@@ -101,7 +102,7 @@
       </v-btn>
     </v-row>
   </v-row>
-  <v-img :src="thankYou" width="100%"></v-img>
+  <v-img :src="thankYouWebp" width="100%"></v-img>
   <v-row class="ma-8" no-gutters>
     <p>
       The Community Spirit Foundation acknowledges and pays our respects to the past, present and
@@ -123,10 +124,10 @@ import Footer from '@/components/Footer.vue'
 import { ref } from 'vue'
 import SignUpModal from '@/components/SignUpModal.vue'
 import studentsLearning from '/images/students_learning.webp'
-import thankYou from '/images/thank_you.jpg'
-import StrideForEducationGif from '/gif/Stride_1.gif'
-import CSFBanner from '/images/CSF_Banner.jpg'
-import StrideForEducationRBGLogo from '/images/SFE_RGB_Logo.png'
+import thankYouWebp from '@/assets/images/thank_you.webp'
+import StrideForEducationGifWebp from '@/assets/gif/Stride_1Webp.webp'
+import CSFBannerWebp from '@/assets/images/CSF_Banner.webp'
+import StrideForEducationRBGLogoWebp from '@/assets/images/SFE_RGB_Logo.webp'
 
 const signupModal = ref<boolean>(false)
 const openSignUpModal = () => {
