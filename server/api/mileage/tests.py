@@ -96,6 +96,13 @@ class MileageTests(APITestCase):
 
     @freeze_time(datetime.date.today() + datetime.timedelta(days=15))
     def _test_rollover_challenge(self):
+
+        # get mileages after challenge period has ended
+        url = reverse('mileage:get-mileage', args=[self.user.id])
+        response = self.client.get(url, {'challenge': True})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 0)
+
         url = reverse('mileage:post-mileage')
         data = {'user': self.user.id, 'kilometres': 5.5}
         response = self.client.post(url, data, format='json')

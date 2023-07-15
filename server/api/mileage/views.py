@@ -14,12 +14,22 @@ CHALLENGE_LENGTH = 14  # days
 def get_mileage(request, user):
     mileages = Mileage.objects.filter(user=user)
 
-    if 'challenge' in request.GET:  # only get mileages within current challenge period
+    # only get mileages within current challenge period
+    if 'challenge' in request.GET:
         user = User.objects.get(id=user)
-        mileages = filter(
-            lambda m: user.challenge_start_date and m.date >= user.challenge_start_date,
-            mileages
-        )
+
+        # end challenge period if days are up
+        if (datetime.date.today() - user.challenge_start_date).days > CHALLENGE_LENGTH:
+            user_serializer = UserSerializer(instance=user, data={'challenge_start_date': None})
+            if user_serializer.is_valid():
+                user_serializer.save()
+            mileages = []
+
+        else:
+            mileages = filter(
+                lambda m: user.challenge_start_date and m.date >= user.challenge_start_date,
+                mileages
+            )
 
     serializer = MileageSerializer(mileages, many=True)
     return Response(serializer.data)
