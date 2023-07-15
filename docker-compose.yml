@@ -23,9 +23,6 @@ services:
     build:
       context: .
       dockerfile: ./docker/server/Dockerfile
-    depends_on:
-      db:
-        condition: service_healthy
     container_name: csf_server
     restart: unless-stopped
     env_file: .env.dev
