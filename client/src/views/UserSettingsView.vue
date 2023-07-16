@@ -60,7 +60,7 @@
       </v-container>
     </v-row>
     <v-row>
-      <v-btn class="bg-primaryRed ma-4" @click="null">Update </v-btn>
+      <v-btn class="bg-primaryRed ma-4" @click="changeDetails">Update </v-btn>
     </v-row>
     <v-row>
       <v-btn class="bg-primaryRed ma-4" @click="showChangePasswordModal = true"
@@ -81,6 +81,7 @@ import ChangePasswordModal from '../components/ChangePasswordModal.vue'
 import { ref, reactive } from 'vue'
 import { useUserStore } from '../stores/user'
 import { type UserSettings } from '../types/user'
+import { AxiosError } from 'axios'
 
 const userStore = useUserStore()
 
@@ -91,6 +92,15 @@ const state = reactive<UserSettings>({
   email: userStore.user.email,
   avatar: userStore.user.avatar,
   travelMethod: userStore.user.travelMethod
+})
+
+const errors = reactive({
+  username: '',
+  firstName: '',
+  lastName: '',
+  email: '',
+  avatar: '',
+  travelMethod: ''
 })
 
 const avatarPaths = ref(
@@ -129,6 +139,23 @@ const selectMode = (mode: string) => {
 
 const showChangePasswordModal = ref(false)
 const showSuccessDialog = ref(false)
+
+async function changeDetails() { 
+  try {
+    let newUsername = state.username
+    console.log(state)
+    let status = await userStore.changeDetails(state)
+    if (status === 200) {
+      // update the user details in the store
+      userStore.getUser(newUsername)
+      alert("details successfully changed")
+    }
+  } catch (error: AxiosError | any) {
+    if (error instanceof AxiosError && error.response && error.response.status === 400) {
+      console.log(error.response.data)
+    }
+  }
+}
 
 function passwordChanged() {
   showChangePasswordModal.value = false

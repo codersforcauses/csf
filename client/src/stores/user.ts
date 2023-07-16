@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { useStorage } from '@vueuse/core'
 import server from '@/utils/server'
-import type { User } from '@/types/user'
+import type { User, UserSettings } from '@/types/user'
 import camelize from 'camelize-ts'
 import snakify, { type Snakify } from 'snakify-ts'
 
@@ -49,6 +49,13 @@ export const useUserStore = defineStore('user', {
             return res.status
           })
       }
+    },
+    async changeDetails(newDetails: UserSettings) {
+      return await server
+          .patch(`user/change_details/${this.user.id}`, snakify(newDetails))
+          .then((res) => {
+            return res.status
+          })
     },
     async sendResetEmail(email: string) {
       return await server
