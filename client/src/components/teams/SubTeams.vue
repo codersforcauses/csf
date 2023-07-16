@@ -115,19 +115,18 @@
             </v-list-item-content>
             <v-divider class="mt-4" color="info"></v-divider>
           </v-list-item>
-        </v-list>        
+        </v-list>
+        <!--Buttons-->       
+        <div class="w-100 d-flex justify-center">
+          <v-btn color="success" class="mr-8" variant="flat" @click="saveTeam">Save</v-btn>
+          <ConfirmButton
+            :action="'delete'"
+            :object="'subteam'"
+            :use-done-for-button="false"
+            @handle-confirm="removeSubTeam"
+          /> 
+        </div> 
       </v-card-text>
-
-      <!--Action Buttons-->
-      <v-card-actions class="justify-center">
-        <v-btn color="success" variant="flat" @click="saveTeam">Save</v-btn>
-        <ConfirmButton
-          :action="'delete'"
-          :object="'subteam'"
-          :use-done-for-button="false"
-          @handle-confirm="removeSubTeam"
-        />
-      </v-card-actions>
     </v-card>
 </v-dialog>
 
@@ -209,16 +208,19 @@ const data = reactive({
 
   allMembers: [
       {
+          id: '111',
           firstname: "Ned",
           lastname: "A",
           avatar: "https://cdn.vuetifyjs.com/images/john.png",
       },
       {
+          id: '131',
           firstname: "Ned",
           lastname: "B",
           avatar: "https://cdn.vuetifyjs.com/images/john.png",
       },
       {
+          id: '141',
           firstname: "Ned",
           lastname: "C",
           avatar: "https://cdn.vuetifyjs.com/images/john.png",
@@ -261,14 +263,14 @@ const addSubTeam = () => {
 
 }
   const randomString=(len:number) =>{
-   len = len || 32;
-   var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
-  var maxPos = $chars.length;
-   var pwd = '';
-   for (let i = 0; i < len; i++) {
-   pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
- }
-  return pwd;
+    len = len || 32;
+    var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+    var maxPos = $chars.length;
+    var pwd = '';
+    for (let i = 0; i < len; i++) {
+      pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+    }
+      return pwd;
  }
 const removeMember = (memberId:string|number) => {
   data.selectedTeam.members = data.selectedTeam.members.filter((item) => item.id !== memberId)
