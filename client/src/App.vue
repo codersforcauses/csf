@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import NavbarComponents from './components/NavbarComponents.vue'
+import ReloadPWA from './components/ReloadPWA.vue'
 import { RouterView } from 'vue-router'
 </script>
 
 <template>
+  <ReloadPWA />
   <NavbarComponents />
   <RouterView />
 </template>
