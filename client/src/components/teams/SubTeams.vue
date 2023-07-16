@@ -101,7 +101,7 @@
           dense
           @update:modelValue="addMember"
         >
-          <template v-slot:selection="{ item, index }">
+          <template v-slot:selection="{ item }">
             <v-list-item
               v-bind="item"
               :title="item.raw.firstname + ' ' + item.raw.lastname"
