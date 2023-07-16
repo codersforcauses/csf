@@ -157,10 +157,7 @@
                         @click="selectAvatar(avatar.url)"
                         :class="{ 'avatar-selected': avatar.isSelected === true }"
                       >
-                        <v-img
-                          :src="`/avatars/${avatar.url}`"
-                          :alt="avatar.alt"
-                        ></v-img>
+                        <v-img :src="`/avatars/${avatar.url}`" :alt="avatar.alt"></v-img>
                       </v-avatar>
                     </div>
                   </v-col>
