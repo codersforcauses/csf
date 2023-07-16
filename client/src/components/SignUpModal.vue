@@ -321,6 +321,7 @@ const submit = async () => {
     Object.assign(errors, initialErrors)
     try {
       await userStore.registerUser(obj)
+      modalStore.login()
     } catch (error: AxiosError | any) {
       console.debug(error)
       if (error instanceof AxiosError && error.message) {
