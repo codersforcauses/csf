@@ -8,5 +8,8 @@ urlpatterns = [
     path("verify_token/", views.verify_token, name="verify-token"),
     path("reset_password/", views.reset_password, name="reset-password"),
     path("change_details/<int:id>", views.change_details, name="change-details"),
-    path("<str:username>/", views.get_user, name="get-user")
+    path("<str:username>/", views.get_user, name="get-user"),
+    path("join/<int:id>/", views.join_team, name="join-team"),
+    path("remove/<int:id>/", views.remove_team, name="remove-team"),
+
 ]

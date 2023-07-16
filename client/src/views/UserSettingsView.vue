@@ -94,11 +94,11 @@ const state = reactive<UserSettings>({
 })
 
 const avatarPaths = ref(
-  Array(6).map((i, e) => {
+  Array(6).fill(0).map((e, i) => {
     return {
       url: `avatar${i + 1}.jpg`,
       alt: `avatar${i + 1}`,
-      isSelected: state.avatar === i + 1
+      isSelected: state.avatar === (i + 1).toString()
     }
   })
 )

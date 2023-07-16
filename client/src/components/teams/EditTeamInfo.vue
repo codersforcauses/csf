@@ -1,6 +1,6 @@
 <template>
   <v-icon
-    v-if="user.is_admin"
+    v-if="user.teamAdmin"
     icon="mdi mdi-pencil"
     size="32px"
     color="black"
@@ -21,17 +21,17 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useTeamStore } from '@/stores/team'
+import { storeToRefs } from 'pinia'
+const teamStore = useTeamStore()
+const { user, team } = storeToRefs(teamStore)
 
 const editTeamInfoDialog = ref(false)
-const newBioText = ref('')
-const newTeamName = ref('')
+const newBioText = ref(team.value ? team.value.bio : '')
+const newTeamName = ref(team.value ? team.value.name : '')
 
-const editTeamInfo = () => {
-  console.log('Bio: ' + newBioText.value)
-  console.log('Team Name: ' + newTeamName.value)
-}
-
-const user = {
-  is_admin: true
+const editTeamInfo = async () => {
+  teamStore.editTeam({ name: newTeamName.value, bio: newBioText.value })
+  editTeamInfoDialog.value = false
 }
 </script>

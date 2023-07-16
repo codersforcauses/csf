@@ -1,10 +1,12 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import User
-from .serializers import ChangeDetailsSerializer, ChangePasswordSerializer, RequestResetPasswordSerializer, ResetPasswordSerializer, UserSerialiser
+from .serializers import ChangeDetailsSerializer, ChangePasswordSerializer, RequestResetPasswordSerializer, ResetPasswordSerializer, UserSerialiser, JoinTeamSerializer
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
+
+from ..team.models import Team
 
 
 import uuid
@@ -105,3 +107,40 @@ def make_reset_email_message(email, token):
             "If you did make this request, you should see a field in which to enter a token. "
             f"Paste the following token into the field to reset your password:\n\n{token}\n\n"
             "If you did not request a new password, please ignore this email.")
+
+
+@api_view(['PATCH'])
+def join_team(request, id):
+    user = User.objects.get(id=id)
+    team = Team.objects.get(join_code=request.data['join_code'])
+
+    data = {
+        'team_id': team.team_id,
+        'team_admin': request.data['team_admin']
+    }
+
+    user_serializer = JoinTeamSerializer(instance=user, data=data)
+
+    if user_serializer.is_valid():
+        user_serializer.save()
+        return Response(user_serializer.data)
+    else:
+        return Response(user_serializer.errors, status=400)
+
+
+@api_view(['PATCH'])
+def remove_team(request, id):
+    user = User.objects.get(id=id)
+
+    data = {
+        'team_id': None,
+        'team_admin': False
+    }
+
+    user_serializer = JoinTeamSerializer(instance=user, data=data)
+
+    if user_serializer.is_valid():
+        user_serializer.save()
+        return Response(user_serializer.data)
+    else:
+        return Response(user_serializer.errors, status=400)

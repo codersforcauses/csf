@@ -26,8 +26,9 @@ def get_teams(request):
     return Response(serializer.data)
 
 
-@api_view(['PUT'])
+@api_view(['PATCH'])
 def update_team(request, team_id):
+    # replace data with current team data
     team = Team.objects.get(team_id=team_id)
     serializer = TeamSerialiser(instance=team, data=request.data)
     if serializer.is_valid():

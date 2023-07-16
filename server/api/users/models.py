@@ -63,6 +63,7 @@ class User(AbstractUser):
     team_admin = models.BooleanField(default=False)
     reset_token = models.CharField(max_length=36, blank=True)
     reset_time = models.DateTimeField(null=True, blank=True)
+    challenge_start_date = models.DateField(null=True, blank=True)
 
     objects = UserManager()
 
