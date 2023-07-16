@@ -2,6 +2,7 @@ from django.http import HttpResponse, HttpRequest
 from django.contrib.admin import ModelAdmin, action
 from django.db.models.query import QuerySet
 from .users.models import User
+from .team.models import Team
 from .mileage.models import Mileage
 
 
@@ -15,8 +16,11 @@ def export2csv(modeladmin: ModelAdmin, request: HttpRequest, queryset: QuerySet)
     )
 
     writer = csv.writer(response)
-    replacements = {'team_id': 'team_id__name', 'user': 'user__first_name'}
-    fields = [replacements.get(f.name, f.name) for f in modeladmin.model._meta.fields if f.name not in ['password', 'is_superuser',
+    if modeladmin.model == Team:
+        fields = [f.name for f in modeladmin.model._meta.fields]
+    else:
+        replacements = {'team_id': 'team_id__name', 'user': 'user__first_name'}
+        fields = [replacements.get(f.name, f.name) for f in modeladmin.model._meta.fields if f.name not in ['password', 'is_superuser',
                                                                                                         'is_staff', 'is_active']]
 
     writer.writerow(fields)
