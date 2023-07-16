@@ -229,7 +229,7 @@ const errors = ref({
   token: '',
   newPassword: ''
 })
-console.log('test')
+
 const required = (v: string) => !!v || 'Field is required'
 
 const isEmail = (candidate: string) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(candidate)
