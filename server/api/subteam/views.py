@@ -5,9 +5,7 @@ from .serializers import SubTeamSerialiser
 from ..users.models import User
 from ..users.serializers import UserSerialiser
 
-from django.http import HttpResponse
-
-# from django.db.models import Q
+from django.db.models import Q
 
 
 @api_view(['POST'])
@@ -43,6 +41,9 @@ def delete_subteam(request, subteam_id):
 
 @api_view(['GET'])
 def get_subteam_users(request, subteam_id):
-    users = User.objects.filter(subteam_id=subteam_id)
-    serialiser = UserSerialiser(users, many=True)
-    return Response(serialiser.data, status=200)
+    if request.user.is_authenticated is False:
+        return Response("User not authenticated", status=403)
+    else:
+        users = User.objects.filter(Q(subteam_id=subteam_id) & Q(team_id=request.user.team_id))
+        serialiser = UserSerialiser(users, many=True)
+        return Response(serialiser.data, status=200)
