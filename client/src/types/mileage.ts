@@ -1,6 +1,6 @@
-export interface Mileage {
+export default interface Mileage {
   mileageId: number
-  user: string
+  userId: number
   kilometres: number
   date: string
 }
