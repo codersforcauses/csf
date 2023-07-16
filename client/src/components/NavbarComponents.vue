@@ -192,8 +192,11 @@
     @open-signUp-modal="openSignUpModal"
   />
 
-  <LoginModal :dialog-modal="loginModal" v-if="loginModal" @open-login-modal="openLoginModal" />
-
+  <LoginModal
+    :dialog-modal="ModalStateStore.getState"
+    v-if="ModalStateStore.getState"
+    @open-login-modal="openLoginModal"
+  />
   <PopupDialog
     v-model="openConfirmLogoutDialogueBox"
     title="Confirm Logout"
@@ -213,7 +216,13 @@ import PopupDialog from './PopupDialog.vue'
 
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
-import router from '@/router'
+
+import { useRouter } from 'vue-router'
+
+import { useModalStateStore } from '@/stores/openModal'
+const ModalStateStore = useModalStateStore()
+
+const router = useRouter()
 
 const userStore = useUserStore()
 
@@ -222,7 +231,6 @@ const { user } = storeToRefs(userStore)
 const { mobile } = useDisplay()
 const dialog = ref<boolean>(false)
 const signupModal = ref<boolean>(false)
-const loginModal = ref<boolean>(false)
 const openConfirmLogoutDialogueBox = ref<boolean>(false)
 
 let homelink = '/'
@@ -232,7 +240,7 @@ const openSignUpModal = () => {
 }
 
 const openLoginModal = () => {
-  loginModal.value = !loginModal.value
+  ModalStateStore.switchState()
 }
 
 const openPopupDialog = () => {
@@ -240,6 +248,7 @@ const openPopupDialog = () => {
 }
 
 const logout = () => {
+  router.push('/')
   userStore.logout()
   router.push(homelink)
 }
