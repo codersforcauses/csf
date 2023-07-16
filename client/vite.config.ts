@@ -20,18 +20,18 @@ export default defineConfig({
     includeAssets: ["/favicon.png"],
     strategies: "injectManifest",
     manifest: {
-      name: "CSF",
-      short_name: "CSF",
+      name: "Stride For Education",
+      short_name: "Stride For Education",
       theme_color: "#ffffff",
       start_url: "/",
       display: "standalone",
       background_color: "#ffffff",
       icons: [
-        {
-          src: "public/images/CSF_Logo_WHITE.png",
-          sizes: "192x192",
-          type: "image/png",
-        },
+        // {
+        //   src: "public/images/CSF_Logo_WHITE.png",
+        //   sizes: "192x192",
+        //   type: "image/png",
+        // },
         // {
         //   src: "/icon-512.png",
         //   sizes: "512x512",
@@ -43,12 +43,30 @@ export default defineConfig({
         //   type: "image/png",
         //   purpose: "any maskable",
         // },
+        // {
+        //   src: "public/images/CSF_Logo_WHITE.png",
+        //   sizes: "512x512",
+        //   type: "image/png",
+        //   purpose: "any maskable",
+        // },
         {
-          src: "public/images/CSF_Logo_WHITE.png",
-          sizes: "512x512",
+          src: "images/CSF_144px.png",
+          sizes: "144x144",
           type: "image/png",
-          purpose: "any maskable",
         },
+        {
+          src: "images/CSF_144px.png",
+          sizes: "144x144",
+          type: "image/png",
+          purpose: "maskable",
+        },
+        {
+          src: "images/CSF_Logo_WHITE.png",
+          sizes: "842x425",
+          type: "image/png",
+          purpose: "maskable"
+        },
+        
       ],
     },
   })
