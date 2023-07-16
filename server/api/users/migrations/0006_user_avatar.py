@@ -14,6 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='user',
             name='avatar',
-            field=models.IntegerField(default=1, validators=[django.core.validators.MaxValueValidator(6), django.core.validators.MinValueValidator(1)]),
+            field=models.IntegerField(default=1,
+                                      validators=[django.core.validators.MaxValueValidator(6), django.core.validators.MinValueValidator(1)]),
         ),
     ]

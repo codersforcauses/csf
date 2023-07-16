@@ -12,9 +12,9 @@ class UserTest(APITestCase):
         self.new_password = "fkj1191cndcdc"
         self.newer_password = "dc3002jnvbicbcw"
         self.fake_token = "!@#$%^&*"
-        self.new_username="user1"
-        self.new_avatar='avatar6.jpg'
-        self.bad_new_email="fhushfw@sfd"
+        self.new_username = "user1"
+        self.new_avatar = 'avatar6.jpg'
+        self.bad_new_email = "fhushfw@sfd"
 
         self.user = User.objects.create_user(
             username=self.username,
@@ -34,16 +34,16 @@ class UserTest(APITestCase):
 
     def test_change_details(self):
         url = reverse("user:change-details", kwargs={"id": self.user.id})
-        response = self.client.patch(url, 
-                                     {"username": self.new_username, 
-                                      "email": self.email, 
+        response = self.client.patch(url,
+                                     {"username": self.new_username,
+                                      "email": self.email,
                                       "avatar": self.new_avatar})
         self.user = User.objects.get(id=self.user.id)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(self.user.username, self.new_username)
         self.assertEqual(self.user.avatar, self.new_avatar)
-        response = self.client.patch(url, 
-                                     {"username": self.username, 
+        response = self.client.patch(url,
+                                     {"username": self.username,
                                       "email": self.bad_new_email})
         self.assertEqual(response.status_code, 400)
 

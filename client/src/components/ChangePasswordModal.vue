@@ -46,11 +46,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive} from 'vue'
+import { ref, reactive } from 'vue'
 import { useUserStore } from '../stores/user'
 import { AxiosError } from 'axios'
 import type { ChangePasswordError } from '../types/user'
-import camelize from 'camelize-ts';
+import camelize from 'camelize-ts'
 
 const emit = defineEmits(['close'])
 const state = reactive({
@@ -60,7 +60,7 @@ const state = reactive({
 })
 const errors = reactive({
   oldPassword: '',
-  newPassword: '',
+  newPassword: ''
 })
 
 const passwordChanged = ref(false)
@@ -71,8 +71,7 @@ async function changePassword() {
     errors.oldPassword = 'You must enter your old password'
   } else if (state.newPassword !== state.newPasswordConfirmation) {
     errors.newPassword = 'Passwords must match'
-  }
-  else {
+  } else {
     try {
       let status = await userStore.changePassword(state.oldPassword, state.newPassword)
       if (status === 200) {

@@ -10,7 +10,7 @@ class UserSerialiser(ModelSerializer):
         fields = '__all__'
 
 
-class ChangeDetailsSerializer(ModelSerializer):   
+class ChangeDetailsSerializer(ModelSerializer):
 
     class Meta:
         model = get_user_model()
@@ -21,9 +21,9 @@ class ChangeDetailsSerializer(ModelSerializer):
             "email",
             "avatar",
             "travel_method"
-        ] 
+        ]
 
-        
+
 class JoinTeamSerializer(ModelSerializer):
 
     class Meta:

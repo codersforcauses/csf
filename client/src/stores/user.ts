@@ -42,10 +42,13 @@ export const useUserStore = defineStore('user', {
     async changePassword(oldPassword: string, newPassword: string) {
       if (this.user) {
         return await server
-          .patch(`user/change_password/${this.user.id}`, snakify({
-            oldPassword: oldPassword,
-            password: newPassword
-          }))
+          .patch(
+            `user/change_password/${this.user.id}`,
+            snakify({
+              oldPassword: oldPassword,
+              password: newPassword
+            })
+          )
           .then((res) => {
             return res.status
           })
@@ -53,10 +56,10 @@ export const useUserStore = defineStore('user', {
     },
     async changeDetails(newDetails: UserSettings) {
       return await server
-          .patch(`user/change_details/${this.user.id}`, snakify(newDetails))
-          .then((res) => {
-            return res.status
-          })
+        .patch(`user/change_details/${this.user.id}`, snakify(newDetails))
+        .then((res) => {
+          return res.status
+        })
     },
     async sendResetEmail(email: string) {
       return await server

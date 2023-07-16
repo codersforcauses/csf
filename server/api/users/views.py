@@ -1,7 +1,8 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import User
-from .serializers import ChangeDetailsSerializer, ChangePasswordSerializer, RequestResetPasswordSerializer, ResetPasswordSerializer, UserSerialiser, JoinTeamSerializer
+from .serializers import (ChangeDetailsSerializer, ChangePasswordSerializer, RequestResetPasswordSerializer, ResetPasswordSerializer,
+                          UserSerialiser, JoinTeamSerializer)
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
@@ -33,6 +34,7 @@ def change_details(request, id):
         return Response()
     else:
         return Response(data=serializer.errors, status=400)
+
 
 @api_view(['PATCH'])
 def change_password(request, id):

@@ -5,20 +5,28 @@
     </v-row>
     <v-row dense>
       <v-col cols="12">
-        <v-text-field bg-color="#FFFFFF" v-model="state.username" label="Username" :error-messages="errors.username" @focus="errors.username = ''"/>
-      </v-col>
-      <v-col cols="12">
         <v-text-field
           bg-color="#FFFFFF"
-          v-model="state.firstName"
-          label="First name"
+          v-model="state.username"
+          label="Username"
+          :error-messages="errors.username"
+          @focus="errors.username = ''"
         />
+      </v-col>
+      <v-col cols="12">
+        <v-text-field bg-color="#FFFFFF" v-model="state.firstName" label="First name" />
       </v-col>
       <v-col cols="12">
         <v-text-field bg-color="#FFFFFF" v-model="state.lastName" label="Last name" />
       </v-col>
       <v-col cols="12">
-        <v-text-field bg-color="#FFFFFF" v-model="state.email" :error-messages="errors.email" @focus="errors.email = ''" label="Email" />
+        <v-text-field
+          bg-color="#FFFFFF"
+          v-model="state.email"
+          :error-messages="errors.email"
+          @focus="errors.email = ''"
+          label="Email"
+        />
       </v-col>
     </v-row>
     <v-col cols="12">
@@ -71,11 +79,11 @@
     </v-row>
   </v-container>
   <ChangePasswordModal
-        v-if="showChangePasswordModal"
-        v-model="showChangePasswordModal"
-        @close="showChangePasswordModal = false"
-        @success="passwordChanged"
-      />
+    v-if="showChangePasswordModal"
+    v-model="showChangePasswordModal"
+    @close="showChangePasswordModal = false"
+    @success="passwordChanged"
+  />
 </template>
 
 <script setup lang="ts">
@@ -99,17 +107,19 @@ const state = reactive<UserSettings>({
 
 const errors = ref({
   username: '',
-  email: '',
+  email: ''
 })
 
 const avatarPaths = ref(
-  Array(6).fill(0).map((e, i) => {
-    return {
-      url: `avatar${i + 1}.jpg`,
-      alt: `avatar${i + 1}`,
-      isSelected: state.avatar === `avatar${i + 1}.jpg`
-    }
-  })
+  Array(6)
+    .fill(0)
+    .map((e, i) => {
+      return {
+        url: `avatar${i + 1}.jpg`,
+        alt: `avatar${i + 1}`,
+        isSelected: state.avatar === `avatar${i + 1}.jpg`
+      }
+    })
 )
 
 const travelMethod = ref([
@@ -139,7 +149,7 @@ const selectMode = (mode: string) => {
 const showChangePasswordModal = ref(false)
 const showSuccessDialog = ref(false)
 
-async function changeDetails() { 
+async function changeDetails() {
   try {
     let newUsername = state.username
     let status = await userStore.changeDetails(state)
@@ -147,7 +157,7 @@ async function changeDetails() {
       // update the user details in the store
       userStore.getUser(newUsername)
       // TODO: replace this with a proper dialog/alert
-      alert("details successfully changed")
+      alert('details successfully changed')
     }
   } catch (error: AxiosError | any) {
     if (error instanceof AxiosError && error.response && error.response.status === 400) {
