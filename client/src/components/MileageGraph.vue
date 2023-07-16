@@ -37,49 +37,49 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 // DATA FILTERING AND COMPUTED PROPERTIES
 const tempData = ref<Mileage[]>([
-  { mileageId: 1, userId: 1, kilometers: 10, date: '2023-06-01' },
-  { mileageId: 2, userId: 1, kilometers: 20, date: '2023-06-02' },
-  { mileageId: 3, userId: 1, kilometers: 50, date: '2023-06-03' },
-  { mileageId: 4, userId: 1, kilometers: 60, date: '2023-06-04' },
-  { mileageId: 5, userId: 1, kilometers: 30, date: '2023-06-05' },
-  { mileageId: 6, userId: 1, kilometers: 40, date: '2023-06-06' },
-  { mileageId: 7, userId: 1, kilometers: 10, date: '2023-06-07' },
-  { mileageId: 8, userId: 1, kilometers: 2, date: '2023-06-08' },
-  { mileageId: 9, userId: 1, kilometers: 10, date: '2023-06-09' },
-  { mileageId: 10, userId: 1, kilometers: 20, date: '2023-06-10' },
-  { mileageId: 11, userId: 1, kilometers: 30, date: '2023-06-11' },
-  { mileageId: 12, userId: 1, kilometers: 54, date: '2023-06-12' },
-  { mileageId: 13, userId: 1, kilometers: 12, date: '2023-06-13' },
-  { mileageId: 14, userId: 1, kilometers: 31, date: '2023-06-14' },
-  { mileageId: 15, userId: 1, kilometers: 30, date: '2023-06-15' },
-  { mileageId: 16, userId: 1, kilometers: 10, date: '2023-06-16' },
-  { mileageId: 17, userId: 1, kilometers: 70, date: '2023-06-17' },
-  { mileageId: 18, userId: 1, kilometers: 10, date: '2023-06-18' },
-  { mileageId: 19, userId: 1, kilometers: 5, date: '2023-06-19' },
-  { mileageId: 20, userId: 1, kilometers: 10, date: '2023-06-20' },
-  { mileageId: 21, userId: 1, kilometers: 20, date: '2023-06-21' },
-  { mileageId: 22, userId: 1, kilometers: 32, date: '2023-06-22' },
-  { mileageId: 23, userId: 1, kilometers: 10, date: '2023-06-23' },
-  { mileageId: 24, userId: 1, kilometers: 5, date: '2023-06-24' },
-  { mileageId: 25, userId: 1, kilometers: 15, date: '2023-06-25' },
-  { mileageId: 26, userId: 1, kilometers: 10, date: '2023-06-26' },
-  { mileageId: 27, userId: 1, kilometers: 20, date: '2023-06-27' },
-  { mileageId: 28, userId: 1, kilometers: 30, date: '2023-06-28' },
-  { mileageId: 29, userId: 1, kilometers: 20, date: '2023-06-29' },
-  { mileageId: 30, userId: 1, kilometers: 50, date: '2023-06-30' },
-  { mileageId: 31, userId: 1, kilometers: 60, date: '2023-07-01' },
-  { mileageId: 32, userId: 1, kilometers: 50, date: '2023-07-02' },
-  { mileageId: 33, userId: 1, kilometers: 80, date: '2023-07-03' },
-  { mileageId: 34, userId: 1, kilometers: 30, date: '2023-07-04' },
-  { mileageId: 35, userId: 1, kilometers: 10, date: '2023-07-05' },
-  { mileageId: 36, userId: 1, kilometers: 14, date: '2023-07-06' },
-  { mileageId: 37, userId: 1, kilometers: 20, date: '2023-07-07' },
-  { mileageId: 38, userId: 1, kilometers: 13, date: '2023-07-08' }
+  { mileageId: 1, userId: 1, kilometres: 10, date: '2023-06-01' },
+  { mileageId: 2, userId: 1, kilometres: 20, date: '2023-06-02' },
+  { mileageId: 3, userId: 1, kilometres: 50, date: '2023-06-03' },
+  { mileageId: 4, userId: 1, kilometres: 60, date: '2023-06-04' },
+  { mileageId: 5, userId: 1, kilometres: 30, date: '2023-06-05' },
+  { mileageId: 6, userId: 1, kilometres: 40, date: '2023-06-06' },
+  { mileageId: 7, userId: 1, kilometres: 10, date: '2023-06-07' },
+  { mileageId: 8, userId: 1, kilometres: 2, date: '2023-06-08' },
+  { mileageId: 9, userId: 1, kilometres: 10, date: '2023-06-09' },
+  { mileageId: 10, userId: 1, kilometres: 20, date: '2023-06-10' },
+  { mileageId: 11, userId: 1, kilometres: 30, date: '2023-06-11' },
+  { mileageId: 12, userId: 1, kilometres: 54, date: '2023-06-12' },
+  { mileageId: 13, userId: 1, kilometres: 12, date: '2023-06-13' },
+  { mileageId: 14, userId: 1, kilometres: 31, date: '2023-06-14' },
+  { mileageId: 15, userId: 1, kilometres: 30, date: '2023-06-15' },
+  { mileageId: 16, userId: 1, kilometres: 10, date: '2023-06-16' },
+  { mileageId: 17, userId: 1, kilometres: 70, date: '2023-06-17' },
+  { mileageId: 18, userId: 1, kilometres: 10, date: '2023-06-18' },
+  { mileageId: 19, userId: 1, kilometres: 5, date: '2023-06-19' },
+  { mileageId: 20, userId: 1, kilometres: 10, date: '2023-06-20' },
+  { mileageId: 21, userId: 1, kilometres: 20, date: '2023-06-21' },
+  { mileageId: 22, userId: 1, kilometres: 32, date: '2023-06-22' },
+  { mileageId: 23, userId: 1, kilometres: 10, date: '2023-06-23' },
+  { mileageId: 24, userId: 1, kilometres: 5, date: '2023-06-24' },
+  { mileageId: 25, userId: 1, kilometres: 15, date: '2023-06-25' },
+  { mileageId: 26, userId: 1, kilometres: 10, date: '2023-06-26' },
+  { mileageId: 27, userId: 1, kilometres: 20, date: '2023-06-27' },
+  { mileageId: 28, userId: 1, kilometres: 30, date: '2023-06-28' },
+  { mileageId: 29, userId: 1, kilometres: 20, date: '2023-06-29' },
+  { mileageId: 30, userId: 1, kilometres: 50, date: '2023-06-30' },
+  { mileageId: 31, userId: 1, kilometres: 60, date: '2023-07-01' },
+  { mileageId: 32, userId: 1, kilometres: 50, date: '2023-07-02' },
+  { mileageId: 33, userId: 1, kilometres: 80, date: '2023-07-03' },
+  { mileageId: 34, userId: 1, kilometres: 30, date: '2023-07-04' },
+  { mileageId: 35, userId: 1, kilometres: 10, date: '2023-07-05' },
+  { mileageId: 36, userId: 1, kilometres: 14, date: '2023-07-06' },
+  { mileageId: 37, userId: 1, kilometres: 20, date: '2023-07-07' },
+  { mileageId: 38, userId: 1, kilometres: 13, date: '2023-07-08' }
 ])
 
 const filteredData = ref<Mileage[]>()
 const labels = computed(() => filteredData.value?.map((data) => data.date))
-const data = computed(() => filteredData.value?.map((data) => data.kilometers))
+const data = computed(() => filteredData.value?.map((data) => data.kilometres))
 const activeButton = ref('This Week')
 
 function filterData(range: string) {
@@ -143,7 +143,7 @@ function filterData(range: string) {
     filteredData.value?.unshift({
       mileageId: matchingData ? matchingData.mileageId : -1,
       userId: matchingData ? matchingData.userId : -1,
-      kilometers: matchingData ? matchingData.kilometers : 0,
+      kilometres: matchingData ? matchingData.kilometres : 0,
       date: datalabel ? datalabel : dateString
     })
     currentDate.setDate(currentDate.getDate() - 1)
