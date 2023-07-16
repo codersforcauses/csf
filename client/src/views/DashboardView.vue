@@ -44,7 +44,6 @@
 import { ref, onMounted } from 'vue'
 import MileageModal from '../components/MileageModal.vue'
 import { useUserStore } from '@/stores/user';
-import { storeToRefs } from 'pinia'
 import { METHODS } from 'http';
 
 
