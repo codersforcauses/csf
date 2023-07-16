@@ -5,6 +5,7 @@ from .serializers import ChangeDetailsSerializer, ChangePasswordSerializer, Requ
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
+from django.contrib.auth.hashers import check_password
 
 from ..team.models import Team
 
@@ -39,6 +40,8 @@ def change_password(request, id):
         user = User.objects.get(id=id)
     except User.DoesNotExist:
         return Response(status=400)
+    if not check_password(request.data["old_password"], user.password):
+        return Response(data={"old_password": "Incorrect password"}, status=400)
 
     serializer = ChangePasswordSerializer(instance=user, data=request.data)
     if serializer.is_valid():

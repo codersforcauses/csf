@@ -39,12 +39,13 @@ export const useUserStore = defineStore('user', {
           return false
         })
     },
-    async changePassword(newPassword: string) {
+    async changePassword(oldPassword: string, newPassword: string) {
       if (this.user) {
         return await server
-          .patch(`user/change_password/${this.user.id}`, {
+          .patch(`user/change_password/${this.user.id}`, snakify({
+            oldPassword: oldPassword,
             password: newPassword
-          })
+          }))
           .then((res) => {
             return res.status
           })

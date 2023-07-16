@@ -34,3 +34,8 @@ export interface UserSettings {
   avatar: string
   travelMethod: string
 }
+
+export interface ChangePasswordError {
+  oldPassword?: string
+  password?: string
+}
