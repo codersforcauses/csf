@@ -6,6 +6,7 @@ class Team(models.Model):
     team_id = models.AutoField(primary_key=True)
     name = models.CharField(unique=True, max_length=254)
     join_code = models.CharField(unique=True, default=None)
+    bio = models.TextField(default="")
 
     def __str__(self):
         return f"{self.name} - {self.join_code}"
