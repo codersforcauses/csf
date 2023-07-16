@@ -33,6 +33,7 @@
           variant="flat"
           :style="{ fontFamily: 'Hackney', fontSize: '20px' }"
           style="letter-spacing: 0.5px"
+          to="/settings"
           >{{ user.username }}</v-btn
         >
 
@@ -145,6 +146,8 @@
             variant="flat"
             :style="{ fontFamily: 'Hackney', fontSize: '28px' }"
             style="letter-spacing: 0.5px"
+            @click="dialog = false"
+            to="/settings"
             >{{ user.username }}</v-btn
           >
 

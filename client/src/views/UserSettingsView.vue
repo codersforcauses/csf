@@ -1,5 +1,8 @@
 <template>
   <v-container>
+    <v-row class="ma-0 pl-4 pr-4 pt-4 pb-0" align="center" justify="center">
+      <h1 class="text-center">Settings</h1>
+    </v-row>
     <v-row dense>
       <v-col cols="12">
         <v-text-field bg-color="#FFFFFF" v-model="state.username" label="Username" :error-messages="errors.username" @focus="errors.username = ''"/>
@@ -9,7 +12,7 @@
           bg-color="#FFFFFF"
           v-model="state.firstName"
           label="First name"
-        ></v-text-field>
+        />
       </v-col>
       <v-col cols="12">
         <v-text-field bg-color="#FFFFFF" v-model="state.lastName" label="Last name" />
@@ -19,7 +22,7 @@
       </v-col>
     </v-row>
     <v-col cols="12">
-      <p>Select an Avatar</p>
+      <p>Change Avatar</p>
     </v-col>
     <v-row dense class="px-10">
       <v-col v-for="avatar in avatarPaths" :key="avatar.url" cols="4">
@@ -35,7 +38,7 @@
       </v-col>
     </v-row>
     <v-col cols="12">
-      <p class="pt-5">Select main method of travel</p>
+      <p class="pt-5">Change main method of travel</p>
     </v-col>
     <v-row>
       <v-container class="d-flex justify-space-evenly">
@@ -53,7 +56,7 @@
                   selectMode(method.mode)
                 }
               "
-            ></v-icon>
+            />
           </v-avatar>
           <p>{{ method.mode }}</p>
         </div>
