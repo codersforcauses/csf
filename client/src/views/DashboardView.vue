@@ -91,7 +91,7 @@ function getRecentMileage() {
   if (userStore.user) {
     let arr = mileageStore.recentMileage
     if (arr) {
-      return arr.reduce((a, b) => a + b.kilometres, 0)
+      return arr.reduce((a, b) => a + b.kilometers, 0)
     }
   }
   return 0
