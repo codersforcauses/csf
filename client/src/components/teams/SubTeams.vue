@@ -236,19 +236,19 @@ const data = reactive({
 
   allMembers: [
     {
-      id: '111',
+      id: 111,
       firstname: 'Ned',
       lastname: 'A',
       avatar: 'https://cdn.vuetifyjs.com/images/john.png'
     },
     {
-      id: '131',
+      id: 131,
       firstname: 'Ned',
       lastname: 'B',
       avatar: 'https://cdn.vuetifyjs.com/images/john.png'
     },
     {
-      id: '141',
+      id: 141,
       firstname: 'Ned',
       lastname: 'C',
       avatar: 'https://cdn.vuetifyjs.com/images/john.png'
@@ -303,12 +303,20 @@ const randomString = (len: number) => {
   }
   return pwd
 }
-const removeMember = (memberId: string | number) => {
+const removeMember = (memberId: number) => {
+  // Find the member that was removed
+  const foundMember = data.selectedTeam.members.filter((item) => item.id === memberId)[0]
+  // Add them to the all members list
+  data.allMembers.push(foundMember)
   data.selectedTeam.members = data.selectedTeam.members.filter((item) => item.id !== memberId)
 }
 const addMember = () => {
   if (data.selectedMember) {
     data.selectedTeam.members.push(data.selectedMember)
+    // Removing that member from the select members drop down list
+    data.allMembers = data.allMembers.filter((member) => member !== data.selectedMember)
+    // Setting selected member to null
+    data.selectedMember = null
   }
 }
 const saveTeam = () => {
