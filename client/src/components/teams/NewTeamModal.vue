@@ -37,6 +37,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
+import { useTeamStore } from '@/stores/team'
+
+const teamStore = useTeamStore()
 
 const { mobile } = useDisplay()
 const dialog = ref(false)
@@ -48,10 +51,7 @@ const form = ref({
 // formValidation = check if team name already exists
 
 const submitForm = () => {
-  console.log('Team Name:', form.value.name)
-  console.log('Team Bio:', form.value.bio)
-  console.log('Team_id:', 'unique id_1')
-  console.log('Join Code:', 'unique id_2')
+  teamStore.createTeam({ ...form.value })
 }
 
 const closeDialog = () => {
