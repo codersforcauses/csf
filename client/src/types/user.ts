@@ -35,6 +35,11 @@ export interface UserSettings {
   travelMethod: string
 }
 
+export interface ChangeDetailsError {
+  username?: string
+  email?: string
+}
+
 export interface ChangePasswordError {
   oldPassword?: string
   password?: string

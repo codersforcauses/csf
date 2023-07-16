@@ -64,26 +64,25 @@
     </v-row>
     <v-row>
       <v-btn class="bg-primaryRed ma-4" @click="changeDetails">Update </v-btn>
-    </v-row>
-    <v-row>
+      <v-spacer />
       <v-btn class="bg-primaryRed ma-4" @click="showChangePasswordModal = true"
         >Change Password
       </v-btn>
-      <ChangePasswordModal
+    </v-row>
+  </v-container>
+  <ChangePasswordModal
         v-if="showChangePasswordModal"
         v-model="showChangePasswordModal"
         @close="showChangePasswordModal = false"
         @success="passwordChanged"
       />
-    </v-row>
-  </v-container>
 </template>
 
 <script setup lang="ts">
 import ChangePasswordModal from '../components/ChangePasswordModal.vue'
 import { ref, reactive } from 'vue'
 import { useUserStore } from '../stores/user'
-import { type UserSettings } from '../types/user'
+import { type UserSettings, type ChangeDetailsError } from '../types/user'
 import { AxiosError } from 'axios'
 import camelize from 'camelize-ts'
 
@@ -147,11 +146,12 @@ async function changeDetails() {
     if (status === 200) {
       // update the user details in the store
       userStore.getUser(newUsername)
+      // TODO: replace this with a proper dialog/alert
       alert("details successfully changed")
     }
   } catch (error: AxiosError | any) {
     if (error instanceof AxiosError && error.response && error.response.status === 400) {
-      let newErrors = camelize(error.response.data) as Partial<UserSettings>
+      let newErrors = camelize(error.response.data) as ChangeDetailsError
       if (newErrors.email) {
         errors.value.email = newErrors.email
       }
