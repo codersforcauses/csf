@@ -49,7 +49,7 @@ import { METHODS } from 'http';
 
 const userStore = useUserStore()
 const method = ref()
-const travelMethod : string = ref()
+const travelMethod = ref()
 const loading = ref(true)
 const user = ref()
 const firstName = ref()
@@ -57,9 +57,8 @@ const firstName = ref()
 onMounted(async ()  => {
   try {
     user.value = userStore.user
-    travelMethod.value = user.value.travelMethod
     firstName.value = user.value.firstName
-    await getIconName(travelMethod.value)
+    await getIconName(user.value.travelMethod)
 
   } catch (error){
     console.log(error)
@@ -67,8 +66,8 @@ onMounted(async ()  => {
   loading.value=false
 })
 
-const getIconName= async(travelMethod) =>{
-  switch (travelMethod){
+const getIconName= async(medium : any) =>{
+  switch (medium){
     case "RUNNING":
       method.value = 'mdi-run-fast'
       break
