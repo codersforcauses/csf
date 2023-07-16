@@ -1,129 +1,146 @@
 <template>
-  <v-list class="my-list" v-model:opened="data.open">
-      <v-row no-gutters>
-          <v-col cols="10">
-              <v-text-field variant="outlined" v-model="data.newSubTeamName" label="Add subteam"></v-text-field>
-          </v-col>
-          <v-col cols="2">
-              <v-icon @click="addSubTeam" icon="mdi mdi-plus" size="45px" class="px-6" id="pointer-cursor" />
-          </v-col>
-          <v-col cols="12">
-              <v-list-group value="Users">
-                  <template v-for="team in data.subteams" :key="team.teamName">
-                      <v-list-group sub-group no-action :value="team.teamName">
-                          <template v-slot:activator="{ props }">
-                              <v-list-item class="abc" v-bind="props"
-                                  prepend-avatar="https://cdn.vuetifyjs.com/images/john.png">
-                                  <v-list-item-content>
-                                      <div class="d-flex">
-                                          {{ team.teamName }}
-                                          <span class=" ml-auto text-no-wrap   bg-secondary">
-                                              {{ team.totalKM }}
-                                          </span>
-
-                                          <v-icon class=" ml-5" icon="mdi mdi-pencil" @click="openDialog(team.teamId)"
-                                              size="16px" id="pointer-cursor" />
-
-                                      </div>
-                                  </v-list-item-content>
-                              </v-list-item>
-                          </template>
-                          <v-list-item v-for="member in team.members" :key="member.firstname" :value="member.firstname"
-                              :title="member.firstname + ' ' + member.lastname">
-                              <template v-slot:title="{ title }">
-                                  <v-list-item prepend-avatar="https://cdn.vuetifyjs.com/images/john.png">
-                                      <v-list-item-content> {{ title }}</v-list-item-content>
-                                  </v-list-item>
-                              </template>
-                          </v-list-item>
-                      </v-list-group>
-                      <v-divider></v-divider>
-                  </template>
-              </v-list-group>
-          </v-col>
+  <!--Display Subteams-->
+  <v-row no-gutters>
+    <v-col cols="12">
+      <v-row justify="space-between" no-gutters>
+        <v-col cols="10">
+          <v-text-field :rules="[data.rules.required]" variant="outlined" v-model="data.newSubTeamName"
+            label="Add subteam" />
+        </v-col>
+        <v-col cols="2">
+          <v-icon class="float-right" @click="addSubTeam" icon="mdi mdi-plus" size="48px" />
+        </v-col>
       </v-row>
-  </v-list>
+    </v-col>
 
+    <v-col cols="12">
+      <v-list   v-model:opened="data.open">
 
+        <v-list-group  value="Users">
+          <template v-for="team in data.subteams" :key="team.teamName">
+            <v-list-group sub-group no-action :value="team.teamName">
+              <template v-slot:activator="{ props }">
+                <!--avatar-->
+                <v-list-item v-bind="props">
+                  <v-list-item-content>
+                    <!--team name-->
+                    <div class="d-flex align-center">
+                      {{ team.teamName }}
+                      <span class=" km-text rounded-lg ml-auto text-no-wrap pa-1 bg-success ">
+                        {{ team.totalKM }}
+                      </span>
+
+                      <v-icon class=" ml-5" icon="mdi mdi-pencil" @click="openEditSubteamDialog(team.teamId)" size="16px"
+                        id="pointer-cursor" />
+
+                    </div>
+                  </v-list-item-content>
+                </v-list-item>
+              </template>
+              <v-list-item v-for="member in team.members" :key="member.firstname" :value="member.firstname"
+                :title="member.firstname + ' ' + member.lastname">
+                <template v-slot:title="{ title }">
+                  <v-list-item :prepend-avatar="member.avatar">
+                    <v-list-item-content> {{ title }}</v-list-item-content>
+                  </v-list-item>
+                </template>
+              </v-list-item>
+            </v-list-group>
+            <v-divider></v-divider>
+          </template>
+        </v-list-group>
+      </v-list>
+    </v-col>
+  </v-row>
+
+  <!--Edit Subteam-->
   <v-dialog v-model="data.dialog" fullscreen transition="dialog-bottom-transition">
-
-      <v-card>
-          <v-card-text>
-              <div class="text-h3">{{ data.selectedTeam?.teamName }} <v-btn variant="text" icon="mdi mdi-window-close"
-                      @click="data.dialog = false"> </v-btn>
-              </div>
-              <div class="text-h4">{{ data.selectedTeam?.totalKM }}</div>
-              <div class="text-h4">Members</div>
-
-              <!-- allmembers -->
-              <v-select :items="data.allMembers" label="Add new member" v-model="data.selectedMember" variant="underlined"
-                  clearable dense @update:modelValue="addMember">
-                  <template v-slot:selection="{ props, item }">
-                      <v-list-item v-bind="props" :title="item.raw.firstname + ' ' + item.raw.lastname"></v-list-item>
-                  </template>
-                  <template v-slot:item="{ props, item }">
-                      <v-list-item v-bind="props" prepend-avatar="https://cdn.vuetifyjs.com/images/john.png"
-                          :title="item.raw.firstname + ' ' + item.raw.lastname"></v-list-item>
-                  </template>
-              </v-select>
-
-              <!-- member list -->
-              <v-list>
-                  <v-list-item-group color="primary">
-                      <v-list-item v-for="(member, index) in data.selectedTeam?.members" :key="index">
-                          <v-list-item-content> {{ member.firstname + ' ' + member.lastname
-                          }}
-                              <v-icon icon="mdi mdi-window-close" size="16px" id="pointer-cursor"
-                                  @click="showRemoveMemberConfirmation(member.id)" />
-                          </v-list-item-content>
-                      </v-list-item>
-                  </v-list-item-group>
-              </v-list>
-
-          </v-card-text>
-          <v-card-actions class="justify-end">
-              <v-btn color="primary" variant="flat" @click="saveTeam">Save</v-btn>
-              <v-btn color="primary" variant="flat" @click="showConfirmationDialog">Delete Subteam</v-btn>
-          </v-card-actions>
-      </v-card>
-  </v-dialog>
-
-  <v-dialog v-model="removeMemberConfirmationDialog" max-width="500px">
-      <v-card>
-        <v-card-title class="headline">Remove team member</v-card-title>
-        <v-card-text>
-          Are you sure you want to remove this team member?
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="primary" @click="cancelRemoveMemberConfirmation">
-            Cancel
-          </v-btn>
-          <v-btn color="error" @click="confirmRemoveMember">
-            Confirm
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <v-img src="/images/Footer-min.jpeg" width="100%" max-height="32" cover />
+    <v-card>
+      <v-card-text>
+        <!--Subteam Name-->
+        <v-btn class="ma-0 pa-0 float-right " variant="text" icon="mdi mdi-window-close" @click="data.dialog = false" />
+        <div class="font-weight-bold  my-6  text-h4">Edit Subteam</div>
+        <div class=" w-100 d-flex flex-column text-center align-center justify-center">
+          <v-text-field variant="solo" v-model="data.selectedTeam.teamName" :rules="[data.rules.required]"
+            label="Edit subteam name" required dense class="text-h3 w-75 py-3 custom-text-field" />
+        </div>
+        <v-divider class="my-4" color="info"></v-divider>
 
 
 
-  <v-dialog v-model="confirmationDialog" max-width="500px">
-      <v-card>
-        <v-card-title class="headline">Confirmation</v-card-title>
-        <v-card-text>Are you sure you want to delete the subteam?</v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="primary" @click="cancelDeletion">Cancel</v-btn>
-          <v-btn color="error" @click="confirmDeletion">Delete</v-btn>
-        </v-card-actions>
-      </v-card>
-  </v-dialog>
+        <!--Members-->
+        <div class="font-weight-bold my-6  text-h4">Members</div>
+        
+        <!--Add New Member-->
+        <v-select :items="data.allMembers" label="Select member" v-model="data.selectedMember" dense
+          @update:modelValue="addMember">
+          <template v-slot:selection="{ props, item }">
+            <v-list-item v-bind="props" :title="item.raw.firstname + ' ' + item.raw.lastname"></v-list-item>
+          </template>
+          <template v-slot:item="{ props, item }">
+            <v-list-item v-bind="props" prepend-avatar="https://cdn.vuetifyjs.com/images/john.png"
+              :title="item.raw.firstname + ' ' + item.raw.lastname" />
+            <v-divider color="info"></v-divider>
+          </template>
+        </v-select>
+
+        <!--Member List-->
+        <v-list>
+          <v-list-item v-for="(member, index) in data.selectedTeam?.members" :key="index">
+            <v-list-item-content>
+              <v-avatar>
+                <img :src= member.avatar alt="Avatar" class="custom-avatar">
+              </v-avatar>
+              <span class="ml-3 font-weight-bold">
+                {{
+                  member.firstname + ' ' + member.lastname
+                }}
+              </span>
+              <!--remove member icon-->
+              <v-icon
+                  class="float-right"
+                  icon="mdi mdi-window-close"
+                  size="24px"
+                  id="pointer-cursor"
+                  @click="display = true"
+                />
+                <PopupDialog
+                  v-model="display"
+                  :title="'Remove Team Member'"
+                  :text="`Are you sure you wish to remove this member?`"
+                  :submit-text="'Confirm'"
+                  @handle-submit="removeMember(member.id)"
+                />
+            </v-list-item-content>
+            <v-divider class="mt-4" color="info"></v-divider>
+          </v-list-item>
+        </v-list>        
+      </v-card-text>
+
+      <!--Action Buttons-->
+      <v-card-actions class="justify-center">
+        <v-btn color="success" variant="flat" @click="saveTeam">Save</v-btn>
+        <ConfirmButton
+          :action="'delete'"
+          :object="'subteam'"
+          :use-done-for-button="false"
+          @handle-confirm="removeSubTeam"
+        />
+      </v-card-actions>
+    </v-card>
+</v-dialog>
 
 </template>
 
 <script setup lang="ts">
-import { ref, watch, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from 'vue';
+import { ref, reactive, toRefs} from 'vue';
+
 import ConfirmButton from '@/components/ConfirmButton.vue'
+import PopupDialog from '@/components/PopupDialog.vue'
+
+//import { type Subteam } from '../types/subteam.ts'
+
 defineProps(['isSubTeamsVisible'])
 
 //dummy data
@@ -133,9 +150,12 @@ const data = reactive({
   dialog: false,
   i: "1",
   selectedMember: null,
+  rules: {
+    required: (value: string) => !!value || 'Field is required',
+  },
   subteams: [
       {
-          teamName: 'team1',
+          teamName: 'Team1',
           teamId: '1',
           totalKM: "60KM",
           members: [
@@ -143,44 +163,44 @@ const data = reactive({
                   id: 2,
                   firstname: "Tom",
                   lastname: "A",
-                  avatar: "https://cdn.vuetifyjs.com/images/john.png",
+                  avatar: "src/assets/Avatars/avatar4.jpg",
               },
               {
                   id: 3,
                   firstname: "Tom",
                   lastname: "B",
-                  avatar: "https://cdn.vuetifyjs.com/images/john.png",
+                  avatar: "src/assets/Avatars/avatar5.jpg",
               },
               {
                   id: 4,
                   firstname: "Tom",
                   lastname: "C",
-                  avatar: "https://cdn.vuetifyjs.com/images/john.png",
+                  avatar: "src/assets/Avatars/avatar6.jpg",
               },
           ]
       },
       {
-          teamName: 'team2',
+          teamName: 'Team2',
           teamId: '2',
-          totalKM: "160KM",
+          totalKM: "120KM",
           members: [
               {
                   id: 11,
                   firstname: "John",
                   lastname: "A",
-                  avatar: "https://cdn.vuetifyjs.com/images/john.png",
+                  avatar: "src/assets/Avatars/avatar1.jpg",
               },
               {
                   id: 12,
                   firstname: "John",
                   lastname: "B",
-                  avatar: "https://cdn.vuetifyjs.com/images/john.png",
+                  avatar: "src/assets/Avatars/avatar2.jpg",
               },
               {
                   id: 13,
                   firstname: "John",
                   lastname: "C",
-                  avatar: "https://cdn.vuetifyjs.com/images/john.png",
+                  avatar: "src/assets/Avatars/avatar3.jpg",
               },
           ]
       },
@@ -211,23 +231,25 @@ const data = reactive({
       members: [
           {
               id: 13,
-              firstname: "Tom2133",
-              lastname: "To213m3",
+              firstname: "Tom",
+              lastname: "T",
               avatar: "https://cdn.vuetifyjs.com/images/john.png",
           },
       ]
   },
   selectedId: '',
-
+  updatedTeamName: '',
 })
 
 data.subteams.find((item) => item.teamId === data.selectedId)
 
-const openDialog = (teamId) => {
+const openEditSubteamDialog = (teamId: string) => {
   data.dialog = true
-  data.selectedTeam = ref(Object.assign({}, data.subteams.find((item) => item.teamId === teamId)))
+  data.selectedMember = null
+  data.selectedTeam = reactive(JSON.parse(JSON.stringify(data.subteams.find((item) => item.teamId === teamId))))
   data.selectedId = teamId
 }
+
 const addSubTeam = () => {
   if(data.newSubTeamName === ''){return} 
   data.subteams.push({
@@ -238,7 +260,7 @@ const addSubTeam = () => {
 })
 
 }
-  const randomString=(len) =>{
+  const randomString=(len:number) =>{
    len = len || 32;
    var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
   var maxPos = $chars.length;
@@ -248,23 +270,19 @@ const addSubTeam = () => {
  }
   return pwd;
  }
-const removeMember = (memberId) => {
-  console.log(memberId);
-  //    update selectedteam
+const removeMember = (memberId:string|number) => {
   data.selectedTeam.members = data.selectedTeam.members.filter((item) => item.id !== memberId)
 }
 const addMember = () => {
 
   if (data.selectedMember) {
-      //    update selectedteam
-      data.selectedTeam.members.push(data.selectedMember)
-      //    update allmembers
-    //   data.selectedMember = null
+    data.selectedTeam.members.push(data.selectedMember)
   }
 }
 const saveTeam = () => {
-  // copy selectedteam to subteams
-   
+  if (data.selectedTeam.teamName === '') {
+    return
+  } 
   data.subteams = data.subteams.map((item) => {
       if (item.teamId === data.selectedId) {
           return data.selectedTeam
@@ -283,59 +301,26 @@ defineExpose({
   ...toRefs(data)
 })
 
-const confirmationDialog = ref(false);
-const showConfirmationDialog = () => {
-  confirmationDialog.value = true;
-};
-
-const cancelDeletion = () => {
-  confirmationDialog.value = false;
-};
-
-const confirmDeletion = () => {
-  removeSubTeam();
-  confirmationDialog.value = false;
-};
-
-const removeMemberConfirmationDialog = ref(false);
-
-const showRemoveMemberConfirmation = (memberId) => {
- removeMemberConfirmationDialog.value = memberId;
- console.log(memberId)
-}
-const cancelRemoveMemberConfirmation = () => {
-  removeMemberConfirmationDialog.value = false;
-}
-const confirmRemoveMember = () => {
-  removeMember(removeMemberConfirmationDialog.value);
-  cancelRemoveMemberConfirmation();
-}
-
-
+const display = ref(false)
 </script>
-<style scoped  >
+
+
+<style scoped>
 .v-list-item {
   padding: 4px 10px !important;
 }
 
-.my-list {
-  width: 100%;
-  max-width: 700px;
+.custom-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
 
+.km-text {
+  color: #8c8c8c;
+}
+
+.v-input.custom-text-field input {
+  font-size: 48px !important;
 }
 </style>
-
-<!-- export interface User {
-id: Number
-username: string
-firstName: string
-lastName: string
-email: string
-avatar: string
-travelMethod: string
-teamSignup: boolean
-hasConsent: boolean
-subteamId?: number
-teamId?: number
-teamAdmin?: Boolean
-} -->
