@@ -23,11 +23,17 @@
     </v-container>
     <v-row justify="center">
       <v-col cols="8">
-        <v-text-field id="teamCodeId" class="rounded-t-sm" bg-color="white" label="Team Code" />
+        <v-text-field
+          id="teamCodeId"
+          class="rounded-t-sm"
+          bg-color="white"
+          label="Team Code"
+          v-model="joinCode"
+        />
       </v-col>
     </v-row>
     <v-row justify="center" class="mt-6 mb-2">
-      <v-btn size="large" color="black white--text">Join Team</v-btn>
+      <v-btn size="large" color="black white--text" @click="joinTeam">Join Team</v-btn>
     </v-row>
     <p>Get the join code from your team leader</p>
   </section>
@@ -36,6 +42,18 @@
 <script setup lang="ts">
 import { useDisplay } from 'vuetify'
 import NewTeamModal from '@/components/teams/NewTeamModal.vue'
+import { ref } from 'vue'
+import { useTeamStore } from '@/stores/team'
+import { storeToRefs } from 'pinia'
+const teamStore = useTeamStore()
+
+const { user } = storeToRefs(teamStore)
+
+const joinCode = ref('')
+
+const joinTeam = () => {
+  teamStore.joinTeam(user.value.id, joinCode.value)
+}
 
 const { mobile } = useDisplay()
 </script>
