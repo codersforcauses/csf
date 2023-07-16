@@ -66,17 +66,12 @@
       <v-divider></v-divider>
 
       <!-- Daily Kilometres -->
-      <v-row
-        align="start"
-        @click="isDailyKmsVisible = !isDailyKmsVisible"
-        id="pointer-cursor"
-        class="my-2"
-      >
+      <v-row align="start" id="pointer-cursor" class="my-2">
         <v-col>
           <h2>Daily KMs</h2>
-          <p v-if="isDailyKmsVisible">daily Km's chart goes here</p>
+          <MileageGraph v-if="isDailyKmsVisible" />
         </v-col>
-        <v-col align="end" class="px-3">
+        <v-col align="end" class="px-3" @click="isDailyKmsVisible = !isDailyKmsVisible">
           <v-icon v-if="isDailyKmsVisible" icon="mdi mdi-chevron-down" size="50px" />
           <v-icon v-else icon="mdi mdi-chevron-right" size="50px" />
         </v-col>
@@ -142,6 +137,7 @@
 import { onMounted, ref, watch } from 'vue'
 import { useDisplay } from 'vuetify'
 import EditTeamInfo from './EditTeamInfo.vue'
+import MileageGraph from '../MileageGraph.vue'
 const { mobile } = useDisplay()
 import { useTeamStore } from '@/stores/team'
 import { storeToRefs } from 'pinia'
