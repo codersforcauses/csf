@@ -62,9 +62,8 @@ switch (travelMethod){
 
 }
 
-const UserFirstName = ref(userStore.user.firstName)
-console.log(UserFirstName)
-
+const UserFirstName = (userStore.user.firstName)
+console.log(useUserStore.user.firstName)
 const tempUserMileage = ref(100)
 </script>
 <style scoped></style>
