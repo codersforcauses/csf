@@ -1,6 +1,7 @@
 <template>
+  <div v-if="!loading">
   <v-row class="ma-0 pl-4 pr-4 pt-4 pb-0" align="center" justify="center">
-    <h1>Welcome back, {{ UserFirstName }}</h1>
+    <h1>Welcome back, {{ firstName }}</h1>
   </v-row>
   <v-divider />
   <v-row class="ma-0 pl-4 pr-4 pb-0 pt-0" align="center">
@@ -36,34 +37,52 @@
       <h2>Daily KMs</h2>
     </v-col>
   </v-row>
+</div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import MileageModal from '../components/MileageModal.vue'
 import { useUserStore } from '@/stores/user';
+import { storeToRefs } from 'pinia'
 import { METHODS } from 'http';
 
-const userStore = useUserStore();
-const method = ref();
-const travelMethod = userStore.user.travelMethod
+
+const userStore = useUserStore()
+const method = ref()
+const travelMethod = ref()
+const loading = ref(true)
+const user = ref()
+const firstName = ref()
+
+onMounted(async ()  => {
+  try {
+    user.value = userStore.user
+    travelMethod.value = user.value.travelMethod
+    firstName.value = user.value.firstName
+    await getIconName(travelMethod.value)
+
+  } catch (error){
+    console.log(error)
+  }
+  loading.value=false
+})
+
+const getIconName= async(travelMethod) =>{
+  switch (travelMethod){
+    case "RUNNING":
+      method.value = 'mdi-run-fast'
+      break
+    case "WHEELING":
+      method.value = 'mdi-wheelchair-accessibility'
+      break
+    case "WALKING":
+      method.value = 'mdi-walk'
+      break
+}}
 
 
-switch (travelMethod){
-  case "RUNNING":
-    method.value = 'mdi-run-fast'
-    break
-  case "WHEELING":
-    method.value = 'mdi-wheelchair-accessibility'
-    break
-  case "WALKING":
-    method.value = 'mdi-walk'
-    break
 
-}
-
-const UserFirstName = (userStore.user.firstName)
-console.log(useUserStore.user.firstName)
 const tempUserMileage = ref(100)
 </script>
 <style scoped></style>
