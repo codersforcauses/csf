@@ -26,10 +26,6 @@ class LineWithLineController extends LineController {
   }
 }
 
-
-const LineWithLineChart = createTypedChart(
-  'line-with-line' as 'line',
-  LineWithLineController
-)
+const LineWithLineChart = createTypedChart('line-with-line' as 'line', LineWithLineController)
 
 export default LineWithLineChart
