@@ -2,7 +2,7 @@
   <v-container>
     <v-row dense>
       <v-col cols="12">
-        <v-text-field bg-color="#FFFFFF" v-model="state.username" label="Username"></v-text-field>
+        <v-text-field bg-color="#FFFFFF" v-model="state.username" label="Username" :error-messages="errors.username" />
       </v-col>
       <v-col cols="12">
         <v-text-field
@@ -12,10 +12,10 @@
         ></v-text-field>
       </v-col>
       <v-col cols="12">
-        <v-text-field bg-color="#FFFFFF" v-model="state.lastName" label="Last name"></v-text-field>
+        <v-text-field bg-color="#FFFFFF" v-model="state.lastName" label="Last name" />
       </v-col>
       <v-col cols="12">
-        <v-text-field bg-color="#FFFFFF" v-model="state.email" label="Email"></v-text-field>
+        <v-text-field bg-color="#FFFFFF" v-model="state.email" :error-messages="errors.email" label="Email" />
       </v-col>
     </v-row>
     <v-col cols="12">
@@ -29,7 +29,7 @@
             @click="selectAvatar(avatar.url)"
             :class="{ 'avatar-selected': avatar.isSelected === true }"
           >
-            <v-img :src="`/avatars/${avatar.url}`" :alt="avatar.alt"></v-img>
+            <v-img :src="`/avatars/${avatar.url}`" :alt="avatar.alt" />
           </v-avatar>
         </div>
       </v-col>
@@ -82,6 +82,7 @@ import { ref, reactive } from 'vue'
 import { useUserStore } from '../stores/user'
 import { type UserSettings } from '../types/user'
 import { AxiosError } from 'axios'
+import camelize from 'camelize-ts'
 
 const userStore = useUserStore()
 
@@ -94,13 +95,9 @@ const state = reactive<UserSettings>({
   travelMethod: userStore.user.travelMethod
 })
 
-const errors = reactive({
+const errors = ref({
   username: '',
-  firstName: '',
-  lastName: '',
   email: '',
-  avatar: '',
-  travelMethod: ''
 })
 
 const avatarPaths = ref(
@@ -152,7 +149,13 @@ async function changeDetails() {
     }
   } catch (error: AxiosError | any) {
     if (error instanceof AxiosError && error.response && error.response.status === 400) {
-      console.log(error.response.data)
+      let newErrors = camelize(error.response.data) as Partial<UserSettings>
+      if (newErrors.email) {
+        errors.value.email = newErrors.email
+      }
+      if (newErrors.username) {
+        errors.value.username = newErrors.username
+      }
     }
   }
 }
