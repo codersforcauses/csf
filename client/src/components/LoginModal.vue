@@ -3,7 +3,7 @@
     <v-card class="bg-backgroundGrey" align="center" justify="center">
       <div class="bg-backgroundGrey">
         <v-container class="pa-0">
-          <v-img src="../../public/images/Footer-min.webp" width="100%" height="10" cover />
+          <v-img src="/images/Footer-min.webp" width="100%" height="10" cover />
         </v-container>
 
         <v-row justify="end">
@@ -20,7 +20,7 @@
           </v-col>
         </v-row>
 
-        <v-img src="../../public/images/CSF_Logo_RGB.webp" width="100%" height="120" contain />
+        <v-img src="/images/CSF_Logo_RGB.webp" width="100%" height="120" contain />
       </div>
       <div v-if="page === 1">
         <v-col cols="auto" class="my-4">

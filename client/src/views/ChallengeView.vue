@@ -51,28 +51,28 @@
 const challenges = [
   {
     title: 'WOORABINDA CHALLENGE',
-    img: '../../public/images/Woorabinda.webp',
+    img: '/images/Woorabinda.webp',
     about: 'Virtually travel the distance from one end of Woorabinda to the other.',
     km: '2',
     totalkm: '24'
   },
   {
     title: 'WURRUMIYANGA CHALLENGE',
-    img: '../../public/images/Wurrumiyanga.webp',
+    img: '/images/Wurrumiyanga.webp',
     about: 'Virtually travel the distance around Wurrumiyanga.',
     km: '5',
     totalkm: '60'
   },
   {
     title: "GALIWIN'KU CHALLENGE",
-    img: '../../public/images/Galiwin_ku.webp',
+    img: '/images/Galiwin_ku.webp',
     about: 'Virtually travel the the distance around Galiwin’ku.',
     km: '7',
     totalkm: '84'
   },
   {
     title: 'PALM ISLAND CHALLENGE',
-    img: '../../public/images/Palm_Island.webp',
+    img: '/images/Palm_Island.webp',
     about: 'Virtually travel the length of Palm Island.',
     km: '10',
     totalkm: '120'
@@ -115,7 +115,7 @@ const challenges = [
 #header-container {
   text-align: center;
   background-color: #f9f1e3;
-  background-image: url('../../public/images/Footer-min.webp');
+  background-image: url('/images/Footer-min.webp');
   background-repeat: repeat;
   background-size: cover;
 }

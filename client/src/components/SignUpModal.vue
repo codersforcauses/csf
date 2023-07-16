@@ -124,7 +124,7 @@
       <div v-if="!firstPage">
         <form style="bottom: auto" class="bg-backgroundGrey" @submit.prevent="">
           <v-container class="pa-0">
-            <v-img src="../../public/images/Footer-min.webp" width="auto" height="10" cover></v-img>
+            <v-img src="/images/Footer-min.webp" width="auto" height="10" cover></v-img>
           </v-container>
           <v-row justify="end">
             <v-col cols="auto">
@@ -158,7 +158,7 @@
                         :class="{ 'avatar-selected': avatar.isSelected === true }"
                       >
                         <v-img
-                          :src="`../../public/avatars/${avatar.url}`"
+                          :src="`/avatars/${avatar.url}`"
                           :alt="avatar.alt"
                         ></v-img>
                       </v-avatar>
@@ -249,7 +249,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, watchEffect } from 'vue'
-import FooterBanner from '../../public/images/Footer-min.webp'
+import FooterBanner from '/images/Footer-min.webp'
 import { type Signup } from '../types/user'
 import ConsentModal from './ConsentModal.vue'
 import { useUserStore } from '../stores/user'

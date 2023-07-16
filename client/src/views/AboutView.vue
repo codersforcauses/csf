@@ -122,11 +122,11 @@
 import Footer from '@/components/Footer.vue'
 import { ref } from 'vue'
 import SignUpModal from '@/components/SignUpModal.vue'
-import studentsLearning from '../../public/images/students_learning.webp'
-import thankYou from '../../public/images/thank_you.webp'
-import StrideForEducationGifWebp from '../../public/gif/Stride_1Webp.webp'
-import CSFBanner from '../../public/images/CSF_Banner.webp'
-import StrideForEducationRBGLogoWebp from '../../public/images/SFE_RGB_Logo.webp'
+import studentsLearning from '/images/students_learning.webp'
+import thankYou from '/images/thank_you.webp'
+import StrideForEducationGifWebp from '/gif/Stride_1Webp.webp'
+import CSFBanner from '/images/CSF_Banner.webp'
+import StrideForEducationRBGLogoWebp from '/images/SFE_RGB_Logo.webp'
 
 const signupModal = ref<boolean>(false)
 const openSignUpModal = () => {

@@ -1,7 +1,7 @@
 <template>
   <v-toolbar dark app color="black" class="hidden-sm-and-down sticky-nav">
     <v-btn :width="125" :height="60" :to="homelink" :active="false">
-      <v-img :width="125" :height="60" cover src="../../public/images/CSF_Logo_WHITE.webp"></v-img>
+      <v-img :width="125" :height="60" cover src="/images/CSF_Logo_WHITE.webp"></v-img>
     </v-btn>
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down d-flex align-center" align="center">
@@ -71,7 +71,7 @@
   </v-toolbar>
   <v-toolbar dark app color="black" class="hidden-md-and-up sticky-nav">
     <v-btn :width="125" :height="60" :to="homelink" :active="false">
-      <v-img :width="125" :height="60" cover src="../../public/images/CSF_Logo_WHITE.webp" />
+      <v-img :width="125" :height="60" cover src="/images/CSF_Logo_WHITE.webp" />
     </v-btn>
     <v-spacer></v-spacer>
     <v-dialog
@@ -93,7 +93,7 @@
                 :width="125"
                 :height="60"
                 cover
-                src="../../public/images/CSF_Logo_WHITE.webp"
+                src="/images/CSF_Logo_WHITE.webp"
               />
             </v-btn>
             <v-spacer></v-spacer>
@@ -212,7 +212,7 @@
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
 import SignUpModal from './SignUpModal.vue'
-import FooterBanner from '../../public/images/Footer-min.webp'
+import FooterBanner from '/images/Footer-min.webp'
 import LoginModal from './LoginModal.vue'
 import PopupDialog from './PopupDialog.vue'
 

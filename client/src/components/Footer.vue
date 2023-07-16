@@ -70,5 +70,5 @@
 </template>
 
 <script setup lang="ts">
-import FooterBanner from '../../public/images/Footer-min.webp'
+import FooterBanner from '/images/Footer-min.webp'
 </script>

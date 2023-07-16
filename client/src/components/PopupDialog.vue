@@ -19,7 +19,7 @@ const value = computed({
   <v-dialog v-model="value" max-width="912px">
     <v-card class="d-flex flex-column">
       <div style="height: 8px">
-        <v-img src="../../public/images/Footer-min.webp" width="100%" cover />
+        <v-img src="/images/Footer-min.webp" width="100%" cover />
       </div>
       <v-card-item>
         <v-card-title>{{ title }}</v-card-title>
