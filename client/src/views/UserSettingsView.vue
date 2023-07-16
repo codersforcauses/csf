@@ -2,7 +2,7 @@
   <v-container>
     <v-row dense>
       <v-col cols="12">
-        <v-text-field bg-color="#FFFFFF" v-model="state.username" label="Username" :error-messages="errors.username" />
+        <v-text-field bg-color="#FFFFFF" v-model="state.username" label="Username" :error-messages="errors.username" @focus="errors.username = ''"/>
       </v-col>
       <v-col cols="12">
         <v-text-field
@@ -15,7 +15,7 @@
         <v-text-field bg-color="#FFFFFF" v-model="state.lastName" label="Last name" />
       </v-col>
       <v-col cols="12">
-        <v-text-field bg-color="#FFFFFF" v-model="state.email" :error-messages="errors.email" label="Email" />
+        <v-text-field bg-color="#FFFFFF" v-model="state.email" :error-messages="errors.email" @focus="errors.email = ''" label="Email" />
       </v-col>
     </v-row>
     <v-col cols="12">
@@ -105,7 +105,7 @@ const avatarPaths = ref(
     return {
       url: `avatar${i + 1}.jpg`,
       alt: `avatar${i + 1}`,
-      isSelected: state.avatar === (i + 1).toString()
+      isSelected: state.avatar === `avatar${i + 1}.jpg`
     }
   })
 )
@@ -140,7 +140,6 @@ const showSuccessDialog = ref(false)
 async function changeDetails() { 
   try {
     let newUsername = state.username
-    console.log(state)
     let status = await userStore.changeDetails(state)
     if (status === 200) {
       // update the user details in the store
@@ -165,3 +164,12 @@ function passwordChanged() {
   showSuccessDialog.value = true
 }
 </script>
+<style scoped>
+.avatar-selected {
+  border: 6px solid #345e9e !important;
+}
+
+.mode-selected {
+  background-color: #345e9e !important;
+}
+</style>
