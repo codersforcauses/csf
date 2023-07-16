@@ -49,7 +49,7 @@ import { METHODS } from 'http';
 
 const userStore = useUserStore()
 const method = ref()
-const travelMethod = ref()
+const travelMethod : string = ref()
 const loading = ref(true)
 const user = ref()
 const firstName = ref()
