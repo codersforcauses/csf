@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" :fullscreen="mobile" max-width="960px">
+  <v-dialog v-model="dialog" :fullscreen="isFullscreen" max-width="500px" max-height="100vh">
     <template v-slot:activator="{ props }">
       <v-btn size="large" color="red white--text" v-bind="props">New Team</v-btn>
     </template>
@@ -11,7 +11,7 @@
       </v-card-actions>
       <v-card-title class="justify-center text-h4 mb-6">Create Team</v-card-title>
       <form class="pb-0 mb-0 mx-8">
-        <v-text-field bg-color="white" label="Event Name" v-model="form.name" class="mx-5" />
+        <v-text-field bg-color="white" label="Team Name" v-model="form.name" class="mx-5" />
         <v-textarea bg-color="white" label="Bio" v-model="form.bio" class="mx-5" />
         <v-card-actions class="justify-center mb-4">
             <v-btn
@@ -27,13 +27,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useDisplay } from 'vuetify'
+import { ref, watchEffect } from 'vue'
 import { useTeamStore } from '@/stores/team'
 
 const teamStore = useTeamStore()
 
-const { mobile } = useDisplay()
+const isFullscreen = ref(false)
+
 const dialog = ref(false)
 const form = ref({
   name: '',
@@ -51,4 +51,17 @@ const closeDialog = () => {
   form.value.name = ''
   form.value.bio = ''
 }
+
+watchEffect(async () => {
+  const updateFullscreen = async () => {
+    isFullscreen.value = window.innerWidth <= 500
+  }
+
+  await updateFullscreen()
+
+  window.addEventListener('resize', updateFullscreen)
+  return () => {
+    window.removeEventListener('resize', updateFullscreen)
+  }
+})
 </script>
