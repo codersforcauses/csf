@@ -1,6 +1,6 @@
 <template>
   <section>
-    <v-dialog v-model="dialog" :fullscreen="mobile" max-width="960px">
+    <v-dialog v-model="dialog" :fullscreen="mobile" max-width="500px">
       <template v-slot:activator="{ props }">
         <v-btn size="large" color="red white--text" v-bind="props">New Team</v-btn>
       </template>

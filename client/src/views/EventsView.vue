@@ -1,6 +1,6 @@
 <template>
-  <div v-if="!isLoading">
-    <v-row
+  <div class="container" v-if="!isLoading">
+    <v-row 
       class="bg-primaryWhite pt-6 mx-3"
       align="center"
       no-gutters
@@ -110,5 +110,12 @@ function openEditModal(id: number) {
   padding-top: 19px;
   padding-bottom: 0px;
   margin-top: -19px;
+}
+
+@media (min-width: 960px) {
+  .container {
+    margin-left: 15px; 
+    margin-right: 15px; 
+  }
 }
 </style>
