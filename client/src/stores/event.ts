@@ -19,9 +19,9 @@ export const useEventStore = defineStore('event', {
         teamId: null // temp
       })
       const headers: AxiosRequestConfig['headers'] = {
-          Authorization: 'Bearer ' + userStore.token?.access
+        Authorization: 'Bearer ' + userStore.token?.access
       }
-      
+
       const { data, status } = await server.post('event/create/', modifiedData, headers)
       if (status == 200) this.events.push(camelize(data as Snakify<Event>))
     },
@@ -29,18 +29,22 @@ export const useEventStore = defineStore('event', {
       const userStore = useUserStore()
 
       const index = this.events.findIndex((e) => e.eventId == event.eventId && !e.isPublic)
-      const headers: AxiosRequestConfig['headers']  = {
+      const headers: AxiosRequestConfig['headers'] = {
         Authorization: 'Bearer ' + userStore.token?.access
       }
       if (index > -1) {
-        const { status } = await server.put(`event/update/${event.eventId}`, snakify(event), headers)
+        const { status } = await server.put(
+          `event/update/${event.eventId}`,
+          snakify(event),
+          headers
+        )
         if (status == 200) this.events[index] = event
       }
     },
     async deleteEvent(eventId: Event['eventId']) {
       const userStore = useUserStore()
 
-      const headers: AxiosRequestConfig['headers']  = {
+      const headers: AxiosRequestConfig['headers'] = {
         Authorization: 'Bearer ' + userStore.token?.access
       }
 
@@ -57,7 +61,7 @@ export const useEventStore = defineStore('event', {
       const headers: AxiosRequestConfig['headers'] = {
         Authorization: 'Bearer ' + userStore.token?.access
       }
-      
+
       const { data, status } = await server.get('event/get/', headers)
 
       if (status == 200) this.events = camelize(data as Snakify<Event>[])

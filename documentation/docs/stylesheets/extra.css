@@ -2,7 +2,7 @@
   --md-primary-fg-color: #ed1c24;
 }
 
-[data-md-color-scheme='slate'] {
+[data-md-color-scheme="slate"] {
   --md-hue: 0;
 }
 

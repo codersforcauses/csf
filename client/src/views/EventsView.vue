@@ -51,7 +51,13 @@
     <v-progress-circular indeterminate color="primaryRed" class="mt-12 mx-auto d-block" />
   </div>
   <EventsModal v-if="isAddingEvent" :type="'Create'" @close="closeModal" v-model="isAddingEvent" />
-  <EventsModal v-if="isEditingEvent" :type="'Edit'" :event="editingEvent" @close="closeModal" v-model="isEditingEvent" />
+  <EventsModal
+    v-if="isEditingEvent"
+    :type="'Edit'"
+    :event="editingEvent"
+    @close="closeModal"
+    v-model="isEditingEvent"
+  />
 </template>
 
 <script setup lang="ts">
