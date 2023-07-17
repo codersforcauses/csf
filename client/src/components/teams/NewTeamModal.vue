@@ -1,4 +1,4 @@
-
+<template>
   <v-dialog v-model="dialog" :fullscreen="isFullscreen" max-width="500px" max-height="100vh">
     <template v-slot:activator="{ props: dialog }">
       <v-btn size="large" color="red white--text" v-bind="dialog">New Team</v-btn>
