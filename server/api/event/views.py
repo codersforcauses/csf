@@ -21,13 +21,6 @@ def create_event(request):
 
 
 @api_view(["GET"])
-def get_event(request, event_id):
-    event = Event.objects.get(event_id=event_id)
-    serializer = EventSerialiser(event)
-    return Response(serializer.data)
-
-
-@api_view(["GET"])
 def get_events(request):
     if request.user.is_authenticated is True:
         if (request.user.team_id is not None):
