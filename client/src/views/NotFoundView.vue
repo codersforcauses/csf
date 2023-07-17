@@ -13,9 +13,12 @@
       Return Home
     </v-btn>
   </div>
+  <v-img :src="NotFoundFooter" width="100%" id="footer"></v-img>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import NotFoundFooter from '/images/404-footer.png'
+</script>
 
 <style scoped>
 #title {
@@ -23,4 +26,9 @@
   font-size: 7em;
   color: black;
 }
+
+/* #footer {
+  position: fixed;
+  bottom: 0;
+} */
 </style>
