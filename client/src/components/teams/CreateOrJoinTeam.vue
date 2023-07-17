@@ -1,6 +1,6 @@
 <template>
-  <section :fullscreen="mobile" class="vertical-align" align="center">
-    <v-row justify="center" class="ma-8">
+  <section :fullscreen="mobile" class="vertical-align pa-1" align="center">
+    <v-row justify="center" class="ma-10">
       <h2>You are not currently part of a team</h2>
     </v-row>
     <NewTeamModal />
@@ -32,7 +32,7 @@
         />
       </v-col>
     </v-row>
-    <v-row justify="center" class="mt-6 mb-2">
+    <v-row justify="center" class="mt-6 mb-5">
       <v-btn size="large" color="black white--text" @click="joinTeam">Join Team</v-btn>
     </v-row>
     <p>Get the join code from your team leader</p>
