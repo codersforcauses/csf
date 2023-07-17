@@ -1,37 +1,47 @@
 import { defineStore } from 'pinia'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
-export const useModalStore = defineStore('modalState', {
-  state: () => ({
-    _status: 'closed' as 'closed' | 'register' | 'login',
-    fields: { username: '', password: '' }
-  }),
-  getters: {
-    isRegister: (state) => state._status === 'register',
-    isLogin: (state) => state._status === 'login',
-    isOpen: (state) => state._status !== 'closed',
-    computedFields: (state) => ({
-      username: computed({
-        get: () => state.fields.username,
-        set: (v) => (state.fields.username = v)
-      }),
-      password: computed({
-        get: () => state.fields.password,
-        set: (v) => (state.fields.password = v)
-      })
-    })
-  },
-  actions: {
-    register() {
-      this._status = 'register'
-    },
-    login() {
-      this._status = 'login'
-    },
-    close() {
-      this._status = 'closed'
-      this.fields.username = ''
-      this.fields.password = ''
-    }
+// export const useModalStore = defineStore('modalState', {
+//   state: () => ({
+//     status: ,
+//     username: '',
+//     password: '',
+//   }),
+//   actions: {
+//     register() {
+//       this.status = 'register'
+//     },
+//     login() {
+//       this.status = 'login'
+//     },
+//     close() {
+//       this.status = 'closed'
+//     }
+//   }
+// })
+
+export const useModalStore = defineStore('modalState', () => {
+  const status = ref<'closed' | 'login' | 'register'>('closed')
+  const username = ref('')
+  const password = ref('')
+
+  const register = () => (status.value = 'register')
+  const login = () => (status.value = 'login')
+  const close = () => {
+    status.value = 'closed'
+    username.value = ''
+    password.value = ''
   }
+
+  const isRegister = computed({
+    get: () => status.value === 'register',
+    set: (v) => (v ? register() : close())
+  })
+  const isLogin = computed({
+    get: () => status.value === 'login',
+    set: (v) => (v ? login() : close())
+  })
+  const isOpen = computed(() => status.value !== 'closed')
+
+  return { username, password, register, login, close, isRegister, isLogin, isOpen }
 })
