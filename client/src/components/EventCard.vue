@@ -4,7 +4,7 @@
       <span class="font-weight-bold">{{ event.name }}</span>
       <v-spacer />
       <v-icon
-        v-if="isTeamAdmin && !event.isPublic"
+        v-if="user?.teamAdmin && !event.isPublic"
         icon="mdi-pencil"
         @click="openModal"
         size="24"
@@ -27,9 +27,13 @@
 </template>
 
 <script setup lang="ts">
+import { useUserStore } from '@/stores/user'
 import { type Event } from '../types/event'
-const props = defineProps<{ event: Event; isTeamAdmin: boolean; backgroundColour: string }>()
+import { storeToRefs } from 'pinia'
+const props = defineProps<{ event: Event; backgroundColour: string }>()
 const emit = defineEmits(['edit'])
+
+const { user } = storeToRefs(useUserStore())
 
 function openModal() {
   emit('edit', props.event.eventId)

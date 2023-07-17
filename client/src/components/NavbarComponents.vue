@@ -33,6 +33,7 @@
           variant="flat"
           :style="{ fontFamily: 'Hackney', fontSize: '20px' }"
           style="letter-spacing: 0.5px"
+          to="/settings"
           >{{ user.username }}</v-btn
         >
 
@@ -53,7 +54,7 @@
           variant="flat"
           :style="{ fontFamily: 'Hackney', fontSize: '20px' }"
           style="letter-spacing: 0.5px"
-          @click="openLoginModal"
+          @click="modalStore.login"
           >LOGIN</v-btn
         >
         <v-btn
@@ -63,7 +64,7 @@
           variant="flat"
           :style="{ fontFamily: 'Hackney', fontSize: '20px' }"
           style="letter-spacing: 0.5px"
-          @click="openSignUpModal"
+          @click="modalStore.register"
           >SIGNUP</v-btn
         >
       </v-row>
@@ -145,6 +146,8 @@
             variant="flat"
             :style="{ fontFamily: 'Hackney', fontSize: '28px' }"
             style="letter-spacing: 0.5px"
+            @click="dialog = false"
+            to="/settings"
             >{{ user.username }}</v-btn
           >
 
@@ -166,7 +169,7 @@
             variant="flat"
             :style="{ fontFamily: 'Hackney', fontSize: '28px' }"
             style="letter-spacing: 0.5px"
-            @click="openLoginModal"
+            @click="modalStore.login"
             >LOGIN</v-btn
           >
           <v-btn
@@ -176,7 +179,7 @@
             variant="flat"
             :style="{ fontFamily: 'Hackney', fontSize: '28px' }"
             style="letter-spacing: 0.5px"
-            @click="openSignUpModal"
+            @click="modalStore.register"
             >SIGNUP</v-btn
           >
         </v-row>
@@ -186,17 +189,9 @@
 
   <v-img :src="FooterBanner" width="100%" height="8" class="sticky-nav-img" cover />
 
-  <SignUpModal
-    :dialog-modal="signupModal"
-    v-if="signupModal"
-    @open-signUp-modal="openSignUpModal"
-  />
+  <SignUpModal v-if="modalStore.isRegister" />
 
-  <LoginModal
-    :dialog-modal="ModalStateStore.getState"
-    v-if="ModalStateStore.getState"
-    @open-login-modal="openLoginModal"
-  />
+  <LoginModal v-if="modalStore.isLogin" />
   <PopupDialog
     v-model="openConfirmLogoutDialogueBox"
     title="Confirm Logout"
@@ -218,30 +213,20 @@ import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
 
 import { useRouter } from 'vue-router'
-
-import { useModalStateStore } from '@/stores/openModal'
-const ModalStateStore = useModalStateStore()
+import { useModalStore } from '@/stores/modal'
 
 const router = useRouter()
 
 const userStore = useUserStore()
+const modalStore = useModalStore()
 
 const { user } = storeToRefs(userStore)
 
 const { mobile } = useDisplay()
 const dialog = ref<boolean>(false)
-const signupModal = ref<boolean>(false)
 const openConfirmLogoutDialogueBox = ref<boolean>(false)
 
 let homelink = '/'
-
-const openSignUpModal = () => {
-  signupModal.value = !signupModal.value
-}
-
-const openLoginModal = () => {
-  ModalStateStore.switchState()
-}
 
 const openPopupDialog = () => {
   openConfirmLogoutDialogueBox.value = true
@@ -306,3 +291,4 @@ const menu = [
   background-color: #ed1c24;
 }
 </style>
+@/stores/modal

@@ -1,27 +1,20 @@
 <template>
-  <section :fullscreen="mobile" class="vertical-align" align="center">
-    <v-row justify="center" class="ma-8">
-      <h2>You are not currently part of a team</h2>
+  <section :fullscreen="mobile" class="vertical-align pa-1" align="center">
+    <v-row justify="center" class="ma-10">
+      <h2 style="text-align: center">You are not currently part of a team</h2>
     </v-row>
-    <NewTeamModal />
+    <v-row justify="center" class="ma-10">
+      <NewTeamModal />
+    </v-row>
+
     <v-container>
-      <v-col cols="12" sm="6" offset-sm="3">
-        <v-row align="center" class="ma-0" no-gutters>
-          <v-col>
-            <v-divider thickness="2" />
-          </v-col>
-
-          <v-col cols="2">
-            <h2>OR</h2>
-          </v-col>
-
-          <v-col>
-            <v-divider thickness="2" />
-          </v-col>
-        </v-row>
-      </v-col>
+      <v-sheet class="ma-0 d-flex justify-center align-center">
+        <v-divider thickness="2" length="15vw" />
+        <h2 class="ml-8 mr-8">OR</h2>
+        <v-divider thickness="2" length="15vw" />
+      </v-sheet>
     </v-container>
-    <v-row justify="center">
+    <v-row justify="center" class="mt-5">
       <v-col cols="8">
         <v-text-field
           id="teamCodeId"
@@ -32,10 +25,12 @@
         />
       </v-col>
     </v-row>
-    <v-row justify="center" class="mt-6 mb-2">
+    <v-row justify="center" class="mt-6 mb-5">
       <v-btn size="large" color="black white--text" @click="joinTeam">Join Team</v-btn>
     </v-row>
-    <p>Get the join code from your team leader</p>
+    <v-row justify="center" class="mt-5 mb-5">
+      <p>Get the join code from your team leader</p>
+    </v-row>
   </section>
 </template>
 
