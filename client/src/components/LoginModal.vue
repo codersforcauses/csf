@@ -19,7 +19,7 @@
           </v-col>
           <v-spacer />
           <v-col cols="auto">
-            <v-btn variant="plain" @click="close">
+            <v-btn variant="plain" @click="modalStore.close">
               <v-icon icon="mdi-close" size="32px" />
             </v-btn>
           </v-col>
@@ -212,13 +212,12 @@ const modalStore = useModalStore()
 const page = ref<1 | 2 | 3 | 4 | 5>(1)
 const isFullscreen = ref(false)
 
-const initialForm = ref({
+const form = ref({
   email: '',
   token: '',
   newPassword: '',
   confirmPassword: ''
 })
-const form = ref({ ...initialForm.value })
 
 const errors = ref({
   login: '',
@@ -229,12 +228,6 @@ const errors = ref({
 const required = (v: string) => !!v || 'Field is required'
 
 const isEmail = (candidate: string) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(candidate)
-
-function close() {
-  Object.assign(form, initialForm)
-  page.value = 1
-  modalStore.close()
-}
 
 const submitForm = async () => {
   if (await userStore.loginUser(modalStore.username, modalStore.password)) modalStore.close()
