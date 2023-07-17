@@ -7,7 +7,7 @@ from .models import Event
 from .serializers import EventSerialiser
 
 
-@api_view(['POST'])
+@api_view(["POST"])
 def create_event(request):
     if request.user.is_authenticated is False:
         return Response("User not authenticated", status=401)
@@ -20,14 +20,14 @@ def create_event(request):
             return Response(serialiser.errors, status=400)
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 def get_event(request, event_id):
     event = Event.objects.get(event_id=event_id)
     serializer = EventSerialiser(event)
     return Response(serializer.data)
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 def get_events(request):
     if request.user.is_authenticated is True:
         if (request.user.team_id is not None):
@@ -44,7 +44,7 @@ def get_events(request):
         return Response(limited_serializer.data)
 
 
-@api_view(['PUT'])
+@api_view(["PUT"])
 def update_event(request, event_id):
     if request.user.is_authenticated is False:
         return Response("User not authenticated", status=401)
@@ -65,7 +65,7 @@ def update_event(request, event_id):
                 return Response("User is not authorised to update this event", status=401)
 
 
-@api_view(['DELETE'])
+@api_view(["DELETE"])
 def delete_event(request, event_id):
     if request.user.is_authenticated is False:
         return Response("User not authenticated", status=401)

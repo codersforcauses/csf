@@ -31,21 +31,14 @@ def get_teams(request):
     return Response(serializer.data)
 
 
-@api_view(['PUT'])
+@api_view(['PATCH'])
 def update_team(request, team_id):
-    if (request.user.is_authenticated is False):
-        return Response("User is not authenticated", status=401)
-    else:
-        if (request.user.team_id != team_id and request.user.team_admin is False):
-            return Response("User is not authorised to edit this team", status=403)
-        else:
-            team = Team.objects.get(team_id=team_id)
-            serializer = TeamSerialiser(instance=team, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data)
-            else:
-                return Response(serializer.errors, status=400)
+    # replace data with current team data
+    team = Team.objects.get(team_id=team_id)
+    serializer = TeamSerialiser(instance=team, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
 
 
 @api_view(['DELETE'])
