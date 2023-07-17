@@ -25,3 +25,24 @@ export interface Signup {
   teamSignup: boolean
   hasConsent: boolean
 }
+
+export interface UserSettings {
+  username: string
+  firstName: string
+  lastName: string
+  email: string
+  avatar: string
+  travelMethod: string
+}
+
+export interface ChangeDetailsError {
+  username?: string | string[]
+  email?: string | string[]
+  firstName?: string | string[]
+  lastName?: string | string[]
+}
+
+export interface ChangePasswordError {
+  oldPassword?: string
+  password?: string
+}

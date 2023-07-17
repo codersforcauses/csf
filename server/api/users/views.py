@@ -1,10 +1,12 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import User
-from .serializers import ChangePasswordSerializer, RequestResetPasswordSerializer, ResetPasswordSerializer, UserSerialiser, JoinTeamSerializer
+from .serializers import (ChangeDetailsSerializer, ChangePasswordSerializer, RequestResetPasswordSerializer, ResetPasswordSerializer,
+                          UserSerialiser, JoinTeamSerializer)
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
+from django.contrib.auth.hashers import check_password
 
 from ..team.models import Team
 
@@ -21,11 +23,27 @@ def get_user(request, username):
 
 
 @api_view(['PATCH'])
+def change_details(request, id):
+    try:
+        user = User.objects.get(id=id)
+    except User.DoesNotExist:
+        return Response(status=400)
+    serializer = ChangeDetailsSerializer(instance=user, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response()
+    else:
+        return Response(data=serializer.errors, status=400)
+
+
+@api_view(['PATCH'])
 def change_password(request, id):
     try:
         user = User.objects.get(id=id)
     except User.DoesNotExist:
         return Response(status=400)
+    if not check_password(request.data["old_password"], user.password):
+        return Response(data={"old_password": "Incorrect password"}, status=400)
 
     serializer = ChangePasswordSerializer(instance=user, data=request.data)
     if serializer.is_valid():

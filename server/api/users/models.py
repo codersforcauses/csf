@@ -56,6 +56,7 @@ class User(AbstractUser):
     team_signup = models.BooleanField(default=False)  # boolean
     has_consent = models.BooleanField(default=False)  # boolean
     travel_method = models.CharField(max_length=100, blank=True, choices=[('RUNNING', 'RUNNING'), ('WHEELING', 'WHEELING'), ('WALKING', 'WALKING')])
+    avatar = models.CharField(max_length=100, default="avatar1.jpg")
     subteam_id = models.ForeignKey(SubTeam, null=True, on_delete=models.SET_NULL, blank=True)
     team_id = models.ForeignKey(Team, null=True, on_delete=models.SET_NULL, blank=True)
     team_admin = models.BooleanField(default=False)
