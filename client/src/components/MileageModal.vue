@@ -42,7 +42,11 @@
               </v-row>
               <v-row>
                 <v-col>
-                  <div v-if="tempIconType === 'RUNNING'" class="ma-0 pa-0" id="runner">
+                  <div
+                    v-if="userStore.user!.travelMethod === 'RUNNING'"
+                    class="ma-0 pa-0"
+                    id="runner"
+                  >
                     <v-slider
                       v-model="mileage.kilometres"
                       color="secondaryGreen"
@@ -53,7 +57,11 @@
                       max="100"
                     />
                   </div>
-                  <div v-if="tempIconType === 'WALKING'" id="walker" class="ma-0 pa-0">
+                  <div
+                    v-if="userStore.user!.travelMethod === 'WALKING'"
+                    id="walker"
+                    class="ma-0 pa-0"
+                  >
                     <v-slider
                       v-model="mileage.kilometres"
                       color="green"
@@ -64,7 +72,11 @@
                       max="100"
                     />
                   </div>
-                  <div v-if="tempIconType === 'WHEELING'" id="wheeler" class="ma-0 pa-0">
+                  <div
+                    v-if="userStore.user!.travelMethod === 'WHEELING'"
+                    id="wheeler"
+                    class="ma-0 pa-0"
+                  >
                     <v-slider
                       v-model="mileage.kilometres"
                       color="green"
@@ -124,9 +136,6 @@ const required = (v: string) => {
   return !!v || 'Field is required'
 }
 
-// The icon on the slider changes depending on this variable. Current temp options are "RUNNING" | "WALKING" | "WHEELING"
-const tempIconType: string = 'RUNNING'
-
 const value = computed({
   get() {
     return props.modelValue
@@ -137,7 +146,7 @@ const value = computed({
 })
 
 const handleSubmit = async () => {
-  const user = userStore.user.id
+  const user = userStore.user!.id
   await mileageStore.postMileage(user, parseFloat(mileage.value.kilometres), mileage.value.date)
   emit('update:modelValue', false)
   emit('handleSubmit')

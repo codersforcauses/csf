@@ -11,8 +11,8 @@ export const useUserStore = defineStore('user', {
     authToken: useStorage('authToken', null as string | null)
   }),
   getters: {
-    user: (state) => JSON.parse(state.authUser as string) as User,
-    token: (state) => JSON.parse(state.authToken as string)
+    user: (state) => (state.authUser ? (JSON.parse(state.authUser) as User) : null),
+    token: (state) => (state.authToken ? JSON.parse(state.authToken) : null)
   },
   actions: {
     logout() {
@@ -56,7 +56,7 @@ export const useUserStore = defineStore('user', {
     },
     async changeDetails(newDetails: UserSettings) {
       return await server
-        .patch(`user/change_details/${this.user.id}`, snakify(newDetails))
+        .patch(`user/change_details/${this.user!.id}`, snakify(newDetails))
         .then((res) => {
           return res.status
         })

@@ -64,10 +64,10 @@ def request_reset_password(request):
     serializer = RequestResetPasswordSerializer(instance=user, data=data)
     if serializer.is_valid():
         serializer.save()
-        html_content = render_to_string('reset_password.html', {'token': user.reset_token, 'email': user.email})
+        html_content = render_to_string('reset_password.html', {'token': user.reset_token, 'username': user.username, 'email': user.email})
         send_mail(
             subject="Reset Password",
-            message=make_reset_email_message(user.email, user.reset_token),
+            message=make_reset_email_message(user.email, user.username, user.reset_token),
             from_email=settings.EMAIL_ADDRESS_FROM,
             recipient_list=[user.email],
             fail_silently=False,
@@ -105,8 +105,8 @@ def reset_password(request):
         return Response(status=400)
 
 
-def make_reset_email_message(email, token):
-    return ("We have received a request to reset the password "
+def make_reset_email_message(email, username, token):
+    return (f"Hi {username},\nWe have received a request to reset the password "
             f"for the Community Spirit Foundation account associated with {email}. "
             "No changes have been made to your account yet.\n"
             "If you did make this request, you should see a field in which to enter a token. "
