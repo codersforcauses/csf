@@ -20,7 +20,7 @@
           </v-col>
           <v-spacer />
           <v-col cols="auto">
-            <v-btn variant="plain" @click="modalStore.close">
+            <v-btn variant="plain" @click="resetState(); modalStore.close()">
               <v-icon icon="mdi-close" size="32px" />
             </v-btn>
           </v-col>
@@ -215,13 +215,14 @@ const modalStore = useModalStore()
 const page = ref<1 | 2 | 3 | 4 | 5>(1)
 const isFullscreen = ref(false)
 
-const form = ref({
+const initialForm = ref({
   ...modalStore.computedFields,
   email: '',
   token: '',
   newPassword: '',
   confirmPassword: ''
 })
+const form = ref({...initialForm.value})
 
 const errors = ref({
   login: '',
@@ -229,10 +230,14 @@ const errors = ref({
   token: '',
   newPassword: ''
 })
-
 const required = (v: string) => !!v || 'Field is required'
 
 const isEmail = (candidate: string) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(candidate)
+
+function resetState() {
+  Object.assign(form, initialForm)
+  page.value = 1
+}
 
 const submitForm = async () => {
   if (await userStore.loginUser(form.value.username, form.value.password)) modalStore.close()
@@ -301,4 +306,3 @@ watchEffect(async () => {
   }
 })
 </script>
-@/stores/modal
