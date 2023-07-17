@@ -53,9 +53,9 @@ def update_event(request, event_id):
                         serializer.save()
                     return Response(serializer.errors, status=400)
                 else:
-                    return Response("Event is not private", status=401)
+                    return Response("Event is not private", status=403)
             else:
-                return Response("User is not authorised to update this event", status=401)
+                return Response("User is not authorised to update this event", status=403)
 
 
 @api_view(["DELETE"])
@@ -70,8 +70,8 @@ def delete_event(request, event_id):
             if request.user.team_id == event.team_id:
                 if event.is_public is False:
                     event.delete()
-                    return Response("Event successfully deleted")
+                    return Response("Event successfully deleted", status=200)
                 else:
-                    return Response("Event is not private")
+                    return Response("Event is not private", status=403)
             else:
                 return Response("User is not authorised to update this event", status=401)
