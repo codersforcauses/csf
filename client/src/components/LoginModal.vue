@@ -20,13 +20,7 @@
           </v-col>
           <v-spacer />
           <v-col cols="auto">
-            <v-btn
-              variant="plain"
-              @click="
-                resetState(),
-                modalStore.close()
-              "
-            >
+            <v-btn variant="plain" @click="close">
               <v-icon icon="mdi-close" size="32px" />
             </v-btn>
           </v-col>
@@ -240,9 +234,10 @@ const required = (v: string) => !!v || 'Field is required'
 
 const isEmail = (candidate: string) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(candidate)
 
-function resetState() {
+function close() {
   Object.assign(form, initialForm)
   page.value = 1
+  modalStore.close()
 }
 
 const submitForm = async () => {
