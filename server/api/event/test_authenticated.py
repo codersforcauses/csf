@@ -8,6 +8,7 @@ from api.users.models import User
 import datetime
 
 
+
 class EventTests(APITestCase):
     def setUp(self):
         createTeam = Team.objects.create(
