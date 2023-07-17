@@ -1,12 +1,10 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
 import snakify, { type Snakify } from 'snakify-ts'
 import type { Team } from '@/types/team'
 import { useStorage } from '@vueuse/core'
 import camelize from 'camelize-ts'
 import type { User } from '@/types/user'
-
-const BASE_URL = 'http://localhost:8081/api'
+import server from '@/utils/server'
 
 export const useTeamStore = defineStore('team', {
   state: () => ({
@@ -21,7 +19,7 @@ export const useTeamStore = defineStore('team', {
 
   actions: {
     async getTeams() {
-      const teams = await axios.get(`${BASE_URL}/team/all/`).then((res) => {
+      const teams = await server.get('team/all/').then((res) => {
         if (res.status == 200) {
           return res.data
         }
@@ -31,7 +29,7 @@ export const useTeamStore = defineStore('team', {
     },
 
     async getTeam(teamId: Number) {
-      await axios.get(`${BASE_URL}/team/${teamId}/`).then((res) => {
+      await server.get(`team/${teamId}/`).then((res) => {
         if (res.status == 200) {
           const data = camelize(res.data) as Object as Team
           this.currentTeam = JSON.stringify(data)
@@ -40,7 +38,7 @@ export const useTeamStore = defineStore('team', {
     },
 
     async createTeam(data: Omit<Team, 'teamId' | 'joinCode'>) {
-      await axios.post(`${BASE_URL}/team/`, snakify(data)).then((res) => {
+      await server.post('team/', snakify(data)).then((res) => {
         if (res.status == 200) {
           const data = camelize(res.data) as Object as Team
 
@@ -51,7 +49,7 @@ export const useTeamStore = defineStore('team', {
     },
 
     async editTeam(data: Partial<Team>) {
-      await axios.patch(`${BASE_URL}/team/edit/${this.team.teamId}/`, snakify(data)).then((res) => {
+      await server.patch(`team/edit/${this.team.teamId}/`, snakify(data)).then((res) => {
         if (res.status == 200) {
           const data = camelize(res.data) as Object as Team
           this.currentTeam = JSON.stringify(data)
@@ -60,9 +58,9 @@ export const useTeamStore = defineStore('team', {
     },
 
     async joinTeam(userId: Number, joinCode: String, teamAdmin: Boolean = false) {
-      await axios
+      await server
         .patch(
-          `${BASE_URL}/user/join/${userId}/`,
+          `user/join/${userId}/`,
           snakify({
             joinCode,
             teamAdmin
@@ -83,7 +81,7 @@ export const useTeamStore = defineStore('team', {
     },
 
     async deleteTeam() {
-      await axios.delete(`${BASE_URL}/team/delete/${this.user.teamId}/`).then((res) => {
+      await server.delete(`team/delete/${this.user.teamId}/`).then((res) => {
         if (res.status == 200) {
           this.authUser = JSON.stringify({
             ...this.user,
@@ -96,7 +94,7 @@ export const useTeamStore = defineStore('team', {
     },
 
     async removeTeam() {
-      await axios.patch(`${BASE_URL}/user/remove/${this.user.id}/`).then((res) => {
+      await server.patch(`user/remove/${this.user.id}/`).then((res) => {
         if (res.status == 200) {
           this.authUser = JSON.stringify({
             ...this.user,
