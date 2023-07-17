@@ -6,7 +6,6 @@ import camelize from 'camelize-ts'
 import type { User } from '@/types/user'
 import server from '@/utils/server'
 
-
 export const useTeamStore = defineStore('team', {
   state: () => ({
     currentTeam: useStorage('team', null as string | null),
