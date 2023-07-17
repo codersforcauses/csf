@@ -17,7 +17,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # FRONTEND_URL = config("FRONTEND_URL", default="http://localhost:8082")
-FRONTEND_URL = "http://localhost:8082"
+FRONTEND_URL = os.environ.get("FRONTEND_URL")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
