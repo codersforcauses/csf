@@ -1,6 +1,6 @@
 <template>
-  <section :fullscreen="mobile" class="vertical-align" align="center">
-    <v-row justify="center" class="pa-10">
+  <section :fullscreen="mobile" class="vertical-align pa-10" align="center">
+    <v-row justify="center" class="mb-10">
       <h2>You are not currently part of a team</h2>
     </v-row>
     <NewTeamModal />
