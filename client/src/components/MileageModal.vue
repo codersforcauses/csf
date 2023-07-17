@@ -29,6 +29,8 @@
                     label="Date"
                     v-model="mileage.date"
                     bg-color="white"
+                    :max="maxDate"
+                    :min="minDate"
                     :rules="[required]"
                   />
                 </v-col>
@@ -40,7 +42,11 @@
               </v-row>
               <v-row>
                 <v-col>
-                  <div v-if="tempIconType === 'RUNNING'" class="ma-0 pa-0" id="runner">
+                  <div
+                    v-if="userStore.user!.travelMethod === 'RUNNING'"
+                    class="ma-0 pa-0"
+                    id="runner"
+                  >
                     <v-slider
                       v-model="mileage.kilometres"
                       color="secondaryGreen"
@@ -51,7 +57,11 @@
                       max="100"
                     />
                   </div>
-                  <div v-if="tempIconType === 'WALKING'" id="walker" class="ma-0 pa-0">
+                  <div
+                    v-if="userStore.user!.travelMethod === 'WALKING'"
+                    id="walker"
+                    class="ma-0 pa-0"
+                  >
                     <v-slider
                       v-model="mileage.kilometres"
                       color="green"
@@ -62,7 +72,11 @@
                       max="100"
                     />
                   </div>
-                  <div v-if="tempIconType === 'WHEELING'" id="wheeler" class="ma-0 pa-0">
+                  <div
+                    v-if="userStore.user!.travelMethod === 'WHEELING'"
+                    id="wheeler"
+                    class="ma-0 pa-0"
+                  >
                     <v-slider
                       v-model="mileage.kilometres"
                       color="green"
@@ -102,23 +116,25 @@
 import { computed } from 'vue'
 import { ref, watchEffect } from 'vue'
 import { useUserStore } from '../stores/user'
-import server from '@/utils/server'
+import { useMileageStore } from '@/stores/mileage'
 
 const userStore = useUserStore()
+const mileageStore = useMileageStore()
 
 const isFullscreen = ref(false)
 const props = defineProps(['modelValue'])
 const emit = defineEmits(['update:modelValue', 'handleSubmit'])
 
-const mileage = ref({ kilometres: '', date: '' })
+const mileage = ref({ kilometres: '1', date: '' })
+
+const maxDate = ref('')
+const minDate = ref('')
+setMinAndMaxDate()
 
 const form = ref(false)
 const required = (v: string) => {
   return !!v || 'Field is required'
 }
-
-// The icon on the slider changes depending on this variable. Current temp options are "RUNNING" | "WALKING" | "WHEELING"
-const tempIconType: string = 'RUNNING'
 
 const value = computed({
   get() {
@@ -129,11 +145,20 @@ const value = computed({
   }
 })
 
-const handleSubmit = () => {
-  const user = userStore.user.id
-  // server.post('post_mileage/', {"user": user, "kilometers": mileage.value.distance, "date": mileage.value.date})
-  server.post('mileage/post_mileage/', { user, ...mileage.value })
+const handleSubmit = async () => {
+  const user = userStore.user!.id
+  await mileageStore.postMileage(user, parseFloat(mileage.value.kilometres), mileage.value.date)
   emit('update:modelValue', false)
+  emit('handleSubmit')
+}
+
+function setMinAndMaxDate() {
+  let now = new Date()
+  // need to shift, since toJSON() will get the UTC time
+  let nowShifted = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+  maxDate.value = nowShifted.toJSON().slice(0, 10)
+  nowShifted.setDate(nowShifted.getDate() - 30)
+  minDate.value = nowShifted.toJSON().slice(0, 10)
 }
 
 // Copied from SignUpModal

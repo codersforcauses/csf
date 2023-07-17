@@ -49,7 +49,7 @@ class TeamTests(APITestCase):
 
     def test_update_team(self):
         team_before_update = Team.objects.get()
-        response = self.client.put(
+        response = self.client.patch(
             reverse("team:update-team",
                     kwargs={"team_id": team_before_update.team_id}),
             {

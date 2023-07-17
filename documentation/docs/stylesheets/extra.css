@@ -1,0 +1,12 @@
+:root {
+  --md-primary-fg-color: #ed1c24;
+}
+
+[data-md-color-scheme='slate'] {
+  --md-hue: 0;
+}
+
+nav > a > img {
+  width: 100px !important;
+  height: 50px !important;
+}

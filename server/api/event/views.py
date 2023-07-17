@@ -1,11 +1,10 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-
 from .models import Event
 from .serializers import EventSerialiser
 
 
-@api_view(['POST'])
+@api_view(["POST"])
 def create_event(request):
     serialiser = EventSerialiser(data=request.data)
     if serialiser.is_valid():
@@ -16,21 +15,21 @@ def create_event(request):
         return Response(serialiser.errors, status=400)
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 def get_event(request, event_id):
     event = Event.objects.get(event_id=event_id)
     serializer = EventSerialiser(event)
     return Response(serializer.data)
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 def get_events(request):
     events = Event.objects.all()
     serializer = EventSerialiser(events, many=True)
     return Response(serializer.data)
 
 
-@api_view(['PUT'])
+@api_view(["PUT"])
 def update_event(request, event_id):
     event = Event.objects.get(event_id=event_id)
     if event.is_public is False:
@@ -42,7 +41,7 @@ def update_event(request, event_id):
         return Response("Event is not private")
 
 
-@api_view(['DELETE'])
+@api_view(["DELETE"])
 def delete_event(request, event_id):
     event = Event.objects.get(event_id=event_id)
     if event.is_public is False:
