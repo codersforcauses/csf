@@ -109,12 +109,12 @@ import camelize from 'camelize-ts'
 const userStore = useUserStore()
 
 const state = reactive<UserSettings>({
-  username: userStore.user.username,
-  firstName: userStore.user.firstName,
-  lastName: userStore.user.lastName,
-  email: userStore.user.email,
-  avatar: userStore.user.avatar,
-  travelMethod: userStore.user.travelMethod
+  username: userStore.user!.username,
+  firstName: userStore.user!.firstName,
+  lastName: userStore.user!.lastName,
+  email: userStore.user!.email,
+  avatar: userStore.user!.avatar,
+  travelMethod: userStore.user!.travelMethod
 })
 
 const errors = reactive<ChangeDetailsError>({
