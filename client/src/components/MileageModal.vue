@@ -43,7 +43,7 @@
               <v-row>
                 <v-col>
                   <div
-                    v-if="userStore.user.travelMethod === 'RUNNING'"
+                    v-if="userStore.user!.travelMethod === 'RUNNING'"
                     class="ma-0 pa-0"
                     id="runner"
                   >
@@ -58,7 +58,7 @@
                     />
                   </div>
                   <div
-                    v-if="userStore.user.travelMethod === 'WALKING'"
+                    v-if="userStore.user!.travelMethod === 'WALKING'"
                     id="walker"
                     class="ma-0 pa-0"
                   >
@@ -73,7 +73,7 @@
                     />
                   </div>
                   <div
-                    v-if="userStore.user.travelMethod === 'WHEELING'"
+                    v-if="userStore.user!.travelMethod === 'WHEELING'"
                     id="wheeler"
                     class="ma-0 pa-0"
                   >
