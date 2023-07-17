@@ -1,5 +1,11 @@
 <template>
-  <v-dialog v-model="dialog" :fullscreen="isFullscreen" max-width="500px" max-height="100vh">
+  <v-dialog
+    v-model="dialog"
+    :fullscreen="isFullscreen"
+    max-width="500px"
+    max-height="100vh"
+    v-if="modalStore.isLogin"
+  >
     <v-card class="bg-backgroundGrey" align="center" justify="center">
       <div class="bg-backgroundGrey">
         <v-container class="pa-0">
@@ -14,7 +20,7 @@
           </v-col>
           <v-spacer />
           <v-col cols="auto">
-            <v-btn variant="plain" @click="closeModal">
+            <v-btn variant="plain" @click="modalStore.close">
               <v-icon icon="mdi-close" size="32px" />
             </v-btn>
           </v-col>
@@ -74,7 +80,12 @@
             <v-row align="center" justify="center" class="mt-4">
               <p>
                 or
-                <v-btn variant="plain" color="secondaryBlue" style="font-size: 12px">
+                <v-btn
+                  variant="plain"
+                  color="secondaryBlue"
+                  style="font-size: 12px"
+                  @click="modalStore.register"
+                >
                   Register
                 </v-btn>
               </p>
@@ -193,19 +204,19 @@
 
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
-import { useDisplay } from 'vuetify'
 import { useUserStore } from '@/stores/user'
 import { AxiosError } from 'axios'
+import { useModalStore } from '@/stores/modal'
 
-const { mobile } = useDisplay()
 const dialog = ref(true)
+
 const userStore = useUserStore()
+const modalStore = useModalStore()
 const page = ref<1 | 2 | 3 | 4 | 5>(1)
 const isFullscreen = ref(false)
 
 const form = ref({
-  username: '',
-  password: '',
+  ...modalStore.computedFields,
   email: '',
   token: '',
   newPassword: '',
@@ -219,23 +230,13 @@ const errors = ref({
   newPassword: ''
 })
 
-defineProps(['loginModal'])
-const emit = defineEmits(['openLoginModal'])
-
 const required = (v: string) => !!v || 'Field is required'
 
-function isEmail(candidate: string) {
-  return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(candidate)
-}
-
-const closeModal = () => {
-  emit('openLoginModal', false)
-}
+const isEmail = (candidate: string) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(candidate)
 
 const submitForm = async () => {
-  if (await userStore.loginUser(form.value.username, form.value.password)) {
-    closeModal()
-  } else {
+  if (await userStore.loginUser(form.value.username, form.value.password)) modalStore.close()
+  else {
     userStore.authToken = null
     userStore.authUser = null
     errors.value.login = 'Your username or password is incorrect'
@@ -300,3 +301,4 @@ watchEffect(async () => {
   }
 })
 </script>
+@/stores/modal
