@@ -1,9 +1,8 @@
 <template>
   <v-dialog
-    v-model="dialog"
+    v-model="modalStore.isRegister"
     :fullscreen="isFullscreen"
     max-width="500px"
-    v-if="modalStore.isRegister"
   >
     <v-card style="height: 100%">
       <div v-if="firstPage">
@@ -263,12 +262,12 @@ import snakify from 'snakify-ts'
 import { AxiosError } from 'axios'
 import camelize from 'camelize-ts'
 import { useModalStore } from '@/stores/modal'
+import { storeToRefs } from 'pinia'
 const userStore = useUserStore()
 const modalStore = useModalStore()
 
 const isFullscreen = ref(false)
 const firstPage = ref<boolean>(true)
-const dialog = ref(true)
 const avatarPaths = ref([
   { url: 'avatar1.jpg', alt: 'avatar1', isSelected: true },
   { url: 'avatar2.jpg', alt: 'avatar2', isSelected: false },
@@ -283,8 +282,10 @@ const travelMethod = ref([
   { logo: 'mdi-walk', mode: 'WALKING', isSelected: false }
 ])
 
+const {username, password} = storeToRefs(modalStore)
 const state = reactive({
-  ...modalStore.computedFields,
+  username,
+  password,
   firstName: '',
   lastName: '',
   email: '',

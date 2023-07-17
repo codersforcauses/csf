@@ -1,10 +1,9 @@
 <template>
   <v-dialog
-    v-model="dialog"
+    v-model="modalStore.isLogin"
     :fullscreen="isFullscreen"
     max-width="500px"
     max-height="100vh"
-    v-if="modalStore.isLogin"
   >
     <v-card class="bg-backgroundGrey" align="center" justify="center">
       <div class="bg-backgroundGrey">
@@ -44,7 +43,7 @@
             :rules="[required]"
             :error-messages="errors.login"
             @focus="errors.login = ''"
-            v-model="form.username"
+            v-model="modalStore.username"
             label="Username"
             required
           />
@@ -52,7 +51,7 @@
             bg-color="#FFFFFF"
             :rules="[required]"
             @focus="errors.login = ''"
-            v-model="form.password"
+            v-model="modalStore.password"
             label="Password"
             type="password"
             required
@@ -208,7 +207,6 @@ import { useUserStore } from '@/stores/user'
 import { AxiosError } from 'axios'
 import { useModalStore } from '@/stores/modal'
 
-const dialog = ref(true)
 
 const userStore = useUserStore()
 const modalStore = useModalStore()
@@ -216,7 +214,6 @@ const page = ref<1 | 2 | 3 | 4 | 5>(1)
 const isFullscreen = ref(false)
 
 const form = ref({
-  ...modalStore.computedFields,
   email: '',
   token: '',
   newPassword: '',
@@ -235,7 +232,7 @@ const required = (v: string) => !!v || 'Field is required'
 const isEmail = (candidate: string) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(candidate)
 
 const submitForm = async () => {
-  if (await userStore.loginUser(form.value.username, form.value.password)) modalStore.close()
+  if (await userStore.loginUser(modalStore.username, modalStore.password)) modalStore.close()
   else {
     userStore.authToken = null
     userStore.authUser = null
