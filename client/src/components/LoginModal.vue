@@ -20,7 +20,13 @@
           </v-col>
           <v-spacer />
           <v-col cols="auto">
-            <v-btn variant="plain" @click="resetState(); modalStore.close()">
+            <v-btn
+              variant="plain"
+              @click="
+                resetState()
+                modalStore.close()
+              "
+            >
               <v-icon icon="mdi-close" size="32px" />
             </v-btn>
           </v-col>
@@ -222,7 +228,7 @@ const initialForm = ref({
   newPassword: '',
   confirmPassword: ''
 })
-const form = ref({...initialForm.value})
+const form = ref({ ...initialForm.value })
 
 const errors = ref({
   login: '',
