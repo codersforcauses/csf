@@ -1,7 +1,10 @@
 <template>
   <div v-if="!loading">
     <v-row class="ma-0 pl-4 pr-4 pt-4 pb-0" align="center" justify="center">
+      <v-spacer />
       <h1>Welcome back, {{ firstName }}</h1>
+      <v-spacer />
+      <v-btn size="small" icon="mdi-cog" variant="text" href="/settings" />
     </v-row>
     <v-divider />
     <v-row class="ma-0 pl-4 pr-4 pb-0 pt-0" align="center">
@@ -68,17 +71,15 @@
 import { ref, onMounted } from 'vue'
 import MileageModal from '../components/MileageModal.vue'
 import { useUserStore } from '@/stores/user'
-import { METHODS } from 'http'
 import { useMileageStore } from '@/stores/mileage'
 
 const userStore = useUserStore()
 const method = ref()
-const travelMethod = ref()
 const loading = ref(true)
 const user = ref()
 const firstName = ref()
 
-const getIconName = async (medium: any) => {
+const getIconName = (medium: any) => {
   switch (medium) {
     case 'RUNNING':
       method.value = 'mdi-run-fast'
@@ -127,7 +128,7 @@ onMounted(async () => {
     try {
       user.value = userStore.user
       firstName.value = user.value.firstName
-      await getIconName(user.value.travelMethod)
+      getIconName(user.value.travelMethod)
       await mileageStore.getRecentMileage(userStore.user.id)
       updateChallengeProgress()
     } catch (error) {

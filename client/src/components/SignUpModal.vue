@@ -317,7 +317,6 @@ const submit = async () => {
     firstPage.value = true
   } else {
     delete obj.confirm_password
-    delete obj.avatar
     Object.assign(errors, initialErrors)
     try {
       await userStore.registerUser(obj)
