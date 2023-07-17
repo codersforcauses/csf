@@ -132,7 +132,7 @@
   </v-container>
 
   <!-- Leave/Delete Team -->
-  <v-row justify="center">
+  <v-row justify="center" class="ma-5">
     <v-btn size="large" color="red white--text" v-if="user.teamAdmin" @click="deleteTeam">
       Delete Team
     </v-btn>
