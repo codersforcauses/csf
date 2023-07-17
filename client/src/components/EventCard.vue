@@ -4,7 +4,7 @@
       <span class="font-weight-bold">{{ event.name }}</span>
       <v-spacer />
       <v-icon
-        v-if="user.teamAdmin && !event.isPublic"
+        v-if="user?.teamAdmin && !event.isPublic"
         icon="mdi-pencil"
         @click="openModal"
         size="24"
