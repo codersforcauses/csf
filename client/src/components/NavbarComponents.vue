@@ -189,9 +189,9 @@
 
   <v-img :src="FooterBanner" width="100%" height="8" class="sticky-nav-img" cover />
 
-  <SignUpModal v-if="modalStore.isRegister"/>
+  <SignUpModal v-if="modalStore.isRegister" />
 
-  <LoginModal v-if="modalStore.isLogin"/>
+  <LoginModal v-if="modalStore.isLogin" />
   <PopupDialog
     v-model="openConfirmLogoutDialogueBox"
     title="Confirm Logout"
