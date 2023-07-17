@@ -14,12 +14,7 @@
         <v-text-field bg-color="white" label="Team Name" v-model="form.name" class="mx-5" />
         <v-textarea bg-color="white" label="Bio" v-model="form.bio" class="mx-5" />
         <v-card-actions class="justify-center mb-4">
-            <v-btn
-            variant="elevated"
-            color="primaryRed"
-            @click="submitForm"
-            >Create</v-btn
-          >
+          <v-btn variant="elevated" color="primaryRed" @click="submitForm">Create</v-btn>
         </v-card-actions>
       </form>
     </v-card>

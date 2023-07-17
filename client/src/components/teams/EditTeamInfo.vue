@@ -6,7 +6,12 @@
     color="black"
     @click="editTeamInfoDialog = true"
   />
-  <v-dialog v-model="editTeamInfoDialog" :fullscreen="isFullscreen" max-width="500px" max-height="100vh">
+  <v-dialog
+    v-model="editTeamInfoDialog"
+    :fullscreen="isFullscreen"
+    max-width="500px"
+    max-height="100vh"
+  >
     <v-card class="bg-backgroundGrey">
       <v-img src="/images/Footer-min.jpeg" width="100%" max-height="16" cover />
       <v-card-actions>
@@ -18,12 +23,7 @@
         <v-text-field bg-color="white" label="Event Name" v-model="newTeamName" class="mx-5" />
         <v-textarea bg-color="white" label="Description" v-model="newBioText" class="mx-5" />
         <v-card-actions class="justify-center mb-4">
-            <v-btn
-            variant="elevated"
-            color="primaryRed"
-            @click="editTeamInfo"
-            >Save Changes</v-btn
-          >
+          <v-btn variant="elevated" color="primaryRed" @click="editTeamInfo">Save Changes</v-btn>
         </v-card-actions>
       </form>
     </v-card>
