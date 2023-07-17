@@ -63,114 +63,19 @@
       </v-list>
     </v-col>
   </v-row>
-
-  <!--Edit Subteam-->
-  <v-dialog v-model="data.dialog" fullscreen transition="dialog-bottom-transition">
-    <v-img src="/images/Footer-min.jpeg" width="100%" max-height="32" cover />
-    <v-card>
-      <v-card-text>
-        <!--Subteam Name-->
-        <v-btn
-          class="ma-0 pa-0 float-right"
-          variant="text"
-          icon="mdi mdi-window-close"
-          @click="data.dialog = false"
-        />
-        <div class="font-weight-bold my-6 text-h4">Edit Subteam</div>
-        <div class="w-100 d-flex flex-column text-center align-center justify-center">
-          <v-text-field
-            variant="solo"
-            v-model="data.selectedTeam.teamName"
-            :rules="[data.rules.required]"
-            label="Edit subteam name"
-            required
-            dense
-            class="text-h3 w-75 py-3 custom-text-field"
-          />
-        </div>
-        <v-divider class="my-4" color="info"></v-divider>
-
-        <!--Members-->
-        <div class="font-weight-bold my-6 text-h4">Members</div>
-
-        <!--Add New Member-->
-        <v-select
-          :items="data.allMembers"
-          label="Select member"
-          v-model="data.selectedMember"
-          dense
-          @update:modelValue="addMember"
-        >
-          <template v-slot:selection="{ item }">
-            <v-list-item
-              v-bind="item"
-              :title="item.raw.firstname + ' ' + item.raw.lastname"
-            ></v-list-item>
-          </template>
-          <template v-slot:item="{ props, item }">
-            <v-list-item
-              v-bind="props"
-              prepend-avatar="https://cdn.vuetifyjs.com/images/john.png"
-              :title="item.raw.firstname + ' ' + item.raw.lastname"
-            />
-            <v-divider color="info"></v-divider>
-          </template>
-        </v-select>
-
-        <!--Member List-->
-        <v-list>
-          <v-list-item v-for="(member, index) in data.selectedTeam?.members" :key="index">
-            <v-list-item-content>
-              <v-avatar>
-                <img :src="member.avatar" alt="Avatar" class="custom-avatar" />
-              </v-avatar>
-              <span class="ml-3 font-weight-bold">
-                {{ member.firstname + ' ' + member.lastname }}
-              </span>
-              <!--remove member icon-->
-              <v-icon
-                class="float-right"
-                icon="mdi mdi-window-close"
-                size="24px"
-                id="pointer-cursor"
-                @click="display = true"
-              />
-              <PopupDialog
-                v-model="display"
-                :title="'Remove Team Member'"
-                :text="`Are you sure you wish to remove this member?`"
-                :submit-text="'Confirm'"
-                @handle-submit="removeMember(member.id)"
-              />
-            </v-list-item-content>
-            <v-divider class="mt-4" color="info"></v-divider>
-          </v-list-item>
-        </v-list>
-        <!--Buttons-->
-        <div class="w-100 d-flex justify-center">
-          <v-btn color="success" class="mr-8" variant="flat" @click="saveTeam">Save</v-btn>
-          <ConfirmButton
-            :action="'delete'"
-            :object="'subteam'"
-            :use-done-for-button="false"
-            @handle-confirm="removeSubTeam"
-          />
-        </div>
-      </v-card-text>
-    </v-card>
-  </v-dialog>
+  <SubTeamsModal @controlDialog="controlDialog" @saveTeam="saveTeam" @removeSubTeam="removeSubTeam" @updateAllMembers="updateAllMembers" :dialog="data.dialog" :allMembers="allMembers"  /> 
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, toRefs } from 'vue'
-
-import ConfirmButton from '@/components/ConfirmButton.vue'
-import PopupDialog from '@/components/PopupDialog.vue'
+import SubTeamsModal from './SubTeamsModal.vue';
+//import ConfirmButton from '@/components/ConfirmButton.vue'
+// import PopupDialog from '@/components/PopupDialog.vue'
 
 //import { type Subteam } from '../types/subteam.ts'
 
 defineProps(['isSubTeamsVisible'])
-
+ 
 //dummy data
 const data = reactive({
   newSubTeamName: '',
@@ -181,6 +86,26 @@ const data = reactive({
   rules: {
     required: (value: string) => !!value || 'Field is required'
   },
+  allMembers: [
+    {
+      id: 111,
+      firstname: 'Ned',
+      lastname: 'A',
+      avatar: 'https://cdn.vuetifyjs.com/images/john.png'
+    },
+    {
+      id: 131,
+      firstname: 'Ned',
+      lastname: 'B',
+      avatar: 'https://cdn.vuetifyjs.com/images/john.png'
+    },
+    {
+      id: 141,
+      firstname: 'Ned',
+      lastname: 'C',
+      avatar: 'https://cdn.vuetifyjs.com/images/john.png'
+    }
+  ],
   subteams: [
     {
       teamName: 'Team1',
@@ -234,26 +159,7 @@ const data = reactive({
     }
   ],
 
-  allMembers: [
-    {
-      id: 111,
-      firstname: 'Ned',
-      lastname: 'A',
-      avatar: 'https://cdn.vuetifyjs.com/images/john.png'
-    },
-    {
-      id: 131,
-      firstname: 'Ned',
-      lastname: 'B',
-      avatar: 'https://cdn.vuetifyjs.com/images/john.png'
-    },
-    {
-      id: 141,
-      firstname: 'Ned',
-      lastname: 'C',
-      avatar: 'https://cdn.vuetifyjs.com/images/john.png'
-    }
-  ],
+ 
   selectedTeam: {
     teamName: '',
     teamId: '',
@@ -270,18 +176,32 @@ const data = reactive({
   selectedId: '',
   updatedTeamName: ''
 })
-
-data.subteams.find((item) => item.teamId === data.selectedId)
-
-const openEditSubteamDialog = (teamId: string) => {
-  data.dialog = true
-  data.selectedMember = null
-  data.selectedTeam = reactive(
-    JSON.parse(JSON.stringify(data.subteams.find((item) => item.teamId === teamId)))
-  )
-  data.selectedId = teamId
+// modal actions
+const controlDialog = (newVal:boolean) => {
+  data.dialog = newVal
+}
+const saveTeam = (selectedTeam:any) => {
+  if (selectedTeam.teamName === '') {
+    return
+  }
+  data.subteams =  data.subteams.map(item => {
+    if (item.teamId === selectedTeam.teamId) {
+      return  selectedTeam
+    }
+    return item
+  })
+  data.dialog = false
 }
 
+const removeSubTeam = (teamId:string|number) => {
+  data.subteams = data.subteams.filter((item) => item.teamId !== teamId)
+  data.dialog = false
+}
+const updateAllMembers = (members:any) => {
+  data.allMembers = members
+}
+
+// team list actions
 const addSubTeam = () => {
   if (data.newSubTeamName === '') {
     return
@@ -303,45 +223,23 @@ const randomString = (len: number) => {
   }
   return pwd
 }
-const removeMember = (memberId: number) => {
-  // Find the member that was removed
-  const foundMember = data.selectedTeam.members.filter((item) => item.id === memberId)[0]
-  // Add them to the all members list
-  data.allMembers.push(foundMember)
-  data.selectedTeam.members = data.selectedTeam.members.filter((item) => item.id !== memberId)
-}
-const addMember = () => {
-  if (data.selectedMember) {
-    data.selectedTeam.members.push(data.selectedMember)
-    // Removing that member from the select members drop down list
-    data.allMembers = data.allMembers.filter((member) => member !== data.selectedMember)
-    // Setting selected member to null
-    data.selectedMember = null
-  }
-}
-const saveTeam = () => {
-  if (data.selectedTeam.teamName === '') {
-    return
-  }
-  data.subteams = data.subteams.map((item) => {
-    if (item.teamId === data.selectedId) {
-      return data.selectedTeam
-    }
-    return item
-  })
-  data.dialog = false
-}
 
-const removeSubTeam = () => {
-  data.subteams = data.subteams.filter((item) => item.teamId !== data.selectedId)
-  data.dialog = false
+// ----------------- dialog actions -----------------
+data.subteams.find((item) => item.teamId === data.selectedId)
+
+const openEditSubteamDialog = (teamId: string) => {
+  data.dialog = true
+  data.selectedMember = null
+  data.selectedTeam = reactive(
+    JSON.parse(JSON.stringify(data.subteams.find((item) => item.teamId === teamId)))
+  )
+  data.selectedId = teamId
 }
 
 defineExpose({
   ...toRefs(data)
 })
 
-const display = ref(false)
 </script>
 
 <style scoped>
