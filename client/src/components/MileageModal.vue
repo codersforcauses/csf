@@ -137,7 +137,7 @@ const value = computed({
 })
 
 const handleSubmit = async () => {
-  const user = userStore.user.id
+  const user = userStore.user!.id
   await mileageStore.postMileage(user, parseFloat(mileage.value.kilometres), mileage.value.date)
   emit('update:modelValue', false)
   emit('handleSubmit')
