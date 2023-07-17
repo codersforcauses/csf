@@ -1,0 +1,79 @@
+name: Backend CI
+
+on:
+  pull_request:
+    types: ["opened", "synchronize", "reopened", "edited"]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: server
+
+    services:
+      db:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: github-actions
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python Env
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11.4'
+
+      - name: Setup Poetry 🏗
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Cache .venv 📦
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3.0.6
+        with:
+          path: server/.venv
+          key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install dependencies 👨🏻‍💻
+        run: poetry install
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+
+      - name: Run Migrations 🕊️
+        env:
+          API_SECRET_KEY: o!v%_v0zjvc5+_)e!r+o!_uefr2a&)lfgv17$ex=a!ei%!y-_o
+          POSTGRES_HOST: localhost
+          POSTGRES_PASSWORD: password
+          POSTGRES_PORT: 5432
+          EMAIL_PORT: 1025
+        run: |
+          source .venv/bin/activate
+          python manage.py migrate
+
+      - name: Run tests 🧪
+        env:
+          API_SECRET_KEY: o!v%_v0zjvc5+_)e!r+o!_uefr2a&)lfgv17$ex=a!ei%!y-_o
+          POSTGRES_HOST: localhost
+          POSTGRES_PASSWORD: password
+          POSTGRES_PORT: 5432
+          EMAIL_PORT: 1025
+        run: |
+          source .venv/bin/activate
+          python3 -m pip install coverage
+          coverage run manage.py test
+          coverage xml
+
+      - name: Upload Coverage ☂️
+        uses: codecov/codecov-action@v3
+        with:
+          flags: backend
+          files: ./server/coverage.xml
