@@ -1,5 +1,10 @@
 <template>
-  <v-dialog v-model="dialog" :fullscreen="isFullscreen" max-width="500px">
+  <v-dialog
+    v-model="dialog"
+    :fullscreen="isFullscreen"
+    max-width="500px"
+    v-if="modalStore.isRegister"
+  >
     <v-card style="height: 100%">
       <div v-if="firstPage">
         <form class="bg-backgroundGrey">
@@ -8,7 +13,7 @@
           </v-container>
           <v-row justify="end">
             <v-col cols="auto">
-              <v-btn variant="text" @click="closeModal">
+              <v-btn variant="text" @click="modalStore.close">
                 <v-icon icon="mdi-close" size="32px"></v-icon
               ></v-btn>
             </v-col>
@@ -112,7 +117,11 @@
               <v-row align="center" justify="center">
                 <v-col cols="auto">
                   <!-- todo add in routing to login modal when its ready -->
-                  <v-btn variant="text" color="secondaryBlue" style="font-size: 12px"
+                  <v-btn
+                    variant="text"
+                    color="secondaryBlue"
+                    style="font-size: 12px"
+                    @click="modalStore.login"
                     >Already Have an account?</v-btn
                   >
                 </v-col>
@@ -128,7 +137,7 @@
           </v-container>
           <v-row justify="end">
             <v-col cols="auto">
-              <v-btn variant="text" @click="closeModal">
+              <v-btn variant="text" @click="modalStore.close">
                 <v-icon icon="mdi-close" size="32px"></v-icon
               ></v-btn>
             </v-col>
@@ -253,14 +262,10 @@ import { useUserStore } from '../stores/user'
 import snakify from 'snakify-ts'
 import { AxiosError } from 'axios'
 import camelize from 'camelize-ts'
+import { useModalStore } from '@/stores/modal'
 const userStore = useUserStore()
+const modalStore = useModalStore()
 
-defineProps(['dialogModal'])
-const emit = defineEmits(['openSignUpModal'])
-
-const closeModal = () => {
-  emit('openSignUpModal', false)
-}
 const isFullscreen = ref(false)
 const firstPage = ref<boolean>(true)
 const dialog = ref(true)
@@ -278,18 +283,17 @@ const travelMethod = ref([
   { logo: 'mdi-walk', mode: 'WALKING', isSelected: false }
 ])
 
-const state = reactive<Signup>({
-  username: '',
+const state = reactive({
+  ...modalStore.computedFields,
   firstName: '',
   lastName: '',
   email: '',
-  password: '',
   confirmPassword: '',
   teamSignup: false,
   hasConsent: false,
   avatar: '',
   travelMethod: ''
-})
+}) as Signup
 
 const errorMsg = ref('')
 const initialErrors = {
@@ -313,10 +317,10 @@ const submit = async () => {
     firstPage.value = true
   } else {
     delete obj.confirm_password
-    delete obj.avatar
     Object.assign(errors, initialErrors)
     try {
       await userStore.registerUser(obj)
+      modalStore.login()
     } catch (error: AxiosError | any) {
       console.debug(error)
       if (error instanceof AxiosError && error.message) {
@@ -382,3 +386,4 @@ watchEffect(async () => {
   background-color: #345e9e !important;
 }
 </style>
+@/stores/modal
