@@ -36,8 +36,10 @@ export interface UserSettings {
 }
 
 export interface ChangeDetailsError {
-  username?: string
-  email?: string
+  username?: string | string[]
+  email?: string | string[]
+  firstName?: string | string[]
+  lastName?: string | string[]
 }
 
 export interface ChangePasswordError {

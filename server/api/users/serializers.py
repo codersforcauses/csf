@@ -22,6 +22,7 @@ class ChangeDetailsSerializer(ModelSerializer):
             "avatar",
             "travel_method"
         ]
+        extra_kwargs = {'first_name': {'allow_blank': False}, 'last_name': {'allow_blank': False}}
 
 
 class JoinTeamSerializer(ModelSerializer):
@@ -36,7 +37,6 @@ class ChangePasswordSerializer(ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = [
-            # "id",
             "password"
         ]
         extra_kwargs = {
@@ -58,7 +58,6 @@ class RequestResetPasswordSerializer(ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = [
-            # "email",
             "reset_token",
             "reset_time",
         ]
@@ -69,7 +68,6 @@ class ResetPasswordSerializer(ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = [
-            # "id",
             "password",
             "reset_token",
         ]

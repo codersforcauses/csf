@@ -14,10 +14,22 @@
         />
       </v-col>
       <v-col cols="12">
-        <v-text-field bg-color="#FFFFFF" v-model="state.firstName" label="First name" />
+        <v-text-field
+          bg-color="#FFFFFF"
+          v-model="state.firstName"
+          label="First name"
+          :error-messages="errors.firstName"
+          @focus="errors.firstName = ''"
+        />
       </v-col>
       <v-col cols="12">
-        <v-text-field bg-color="#FFFFFF" v-model="state.lastName" label="Last name" />
+        <v-text-field
+          bg-color="#FFFFFF"
+          v-model="state.lastName"
+          label="Last name"
+          :error-messages="errors.lastName"
+          @focus="errors.lastName = ''"
+        />
       </v-col>
       <v-col cols="12">
         <v-text-field
@@ -105,9 +117,11 @@ const state = reactive<UserSettings>({
   travelMethod: userStore.user.travelMethod
 })
 
-const errors = ref({
+const errors = reactive<ChangeDetailsError>({
   username: '',
-  email: ''
+  email: '',
+  firstName: '',
+  lastName: ''
 })
 
 const avatarPaths = ref(
@@ -162,12 +176,7 @@ async function changeDetails() {
   } catch (error: AxiosError | any) {
     if (error instanceof AxiosError && error.response && error.response.status === 400) {
       let newErrors = camelize(error.response.data) as ChangeDetailsError
-      if (newErrors.email) {
-        errors.value.email = newErrors.email
-      }
-      if (newErrors.username) {
-        errors.value.username = newErrors.username
-      }
+      Object.assign(errors, newErrors)
     }
   }
 }
