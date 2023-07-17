@@ -114,8 +114,6 @@
 </template>
 
 <script setup lang="ts">
-
-
 import Footer from '@/components/Footer.vue'
 import studentsLearning from '/images/students_learning.webp'
 import thankYou from '/images/thank_you.jpg'

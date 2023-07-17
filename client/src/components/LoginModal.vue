@@ -207,7 +207,6 @@ import { useUserStore } from '@/stores/user'
 import { AxiosError } from 'axios'
 import { useModalStore } from '@/stores/modal'
 
-
 const userStore = useUserStore()
 const modalStore = useModalStore()
 const page = ref<1 | 2 | 3 | 4 | 5>(1)

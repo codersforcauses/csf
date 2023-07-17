@@ -1,9 +1,5 @@
 <template>
-  <v-dialog
-    v-model="modalStore.isRegister"
-    :fullscreen="isFullscreen"
-    max-width="500px"
-  >
+  <v-dialog v-model="modalStore.isRegister" :fullscreen="isFullscreen" max-width="500px">
     <v-card style="height: 100%">
       <div v-if="firstPage">
         <form class="bg-backgroundGrey">
@@ -282,7 +278,7 @@ const travelMethod = ref([
   { logo: 'mdi-walk', mode: 'WALKING', isSelected: false }
 ])
 
-const {username, password} = storeToRefs(modalStore)
+const { username, password } = storeToRefs(modalStore)
 const state = reactive({
   username,
   password,
