@@ -5,13 +5,10 @@ from .models import Mileage
 from ..users.models import User
 from .serializers import MileageSerializer, UserSerializer  # , PostMileageSerializer
 from django.core.exceptions import ObjectDoesNotExist
-# from django.http import HttpResponse
-
 
 import datetime
 
 CHALLENGE_LENGTH = 14  # days
-
 
 
 @api_view(['GET'])
