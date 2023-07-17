@@ -59,7 +59,7 @@ export const useEventStore = defineStore('event', {
       const userStore = useUserStore()
       
       if (userStore.user.firstName != null) {
-        await userStore.verifyToken(userStore.token?.refresh)
+        await userStore.refreshToken(userStore.token?.refresh)
       }
 
       const headers: AxiosRequestConfig['headers'] = {

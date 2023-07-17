@@ -126,9 +126,9 @@ export const useUserStore = defineStore('user', {
       await server.post('auth/register/', obj)
     },
 
-    async verifyToken(token: string) {
+    async refreshToken(token: string) {
 
-      const data = JSON.parse(this.authToken?.toString() as string)
+      const data = JSON.parse(this.authToken?.toString() as string) as Tokens
 
       const headers: AxiosRequestConfig['headers'] = {
         refresh: token
