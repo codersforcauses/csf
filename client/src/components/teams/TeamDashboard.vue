@@ -26,17 +26,17 @@
           <h2>Invite Code</h2>
           <p class="invite-code">{{ teamData.invite_code }}</p>
         </v-col>
-          <v-tooltip location="end">
-            <template v-slot:activator="{ props }">
-              <v-icon
-                @click="copyInviteCode"
-                v-bind="props"
-                class="mdi mdi-clipboard-multiple-outline px-10"
-                size="32px"
-              />
-            </template>
-            <span>{{ copyHoverText }}</span>
-          </v-tooltip>
+        <v-tooltip location="end">
+          <template v-slot:activator="{ props }">
+            <v-icon
+              @click="copyInviteCode"
+              v-bind="props"
+              class="mdi mdi-clipboard-multiple-outline px-10"
+              size="32px"
+            />
+          </template>
+          <span>{{ copyHoverText }}</span>
+        </v-tooltip>
       </v-row>
       <v-divider />
 
@@ -46,20 +46,20 @@
           <h2>Bio</h2>
           <p v-if="isBioVisible">{{ teamData.bio }}</p>
         </v-col>
-          <v-icon
-            v-if="isBioVisible"
-            icon="mdi mdi-chevron-down"
-            @click="isBioVisible = !isBioVisible"
-            class="px-10"
-            size="50px"
-          />
-          <v-icon
-            v-else
-            icon="mdi mdi-chevron-right"
-            @click="isBioVisible = !isBioVisible"
-            class="px-10"
-            size="50px"
-          />
+        <v-icon
+          v-if="isBioVisible"
+          icon="mdi mdi-chevron-down"
+          @click="isBioVisible = !isBioVisible"
+          class="px-10"
+          size="50px"
+        />
+        <v-icon
+          v-else
+          icon="mdi mdi-chevron-right"
+          @click="isBioVisible = !isBioVisible"
+          class="px-10"
+          size="50px"
+        />
       </v-row>
       <v-divider></v-divider>
 
@@ -69,8 +69,20 @@
           <h2>Daily KMs</h2>
           <MileageGraph v-if="isDailyKmsVisible" />
         </v-col>
-          <v-icon v-if="isDailyKmsVisible" @click="isDailyKmsVisible = !isDailyKmsVisible" icon="mdi mdi-chevron-down" size="50px" class="px-10"/>
-          <v-icon v-else @click="isDailyKmsVisible = !isDailyKmsVisible" icon="mdi mdi-chevron-right" size="50px" class="px-10"/>
+        <v-icon
+          v-if="isDailyKmsVisible"
+          @click="isDailyKmsVisible = !isDailyKmsVisible"
+          icon="mdi mdi-chevron-down"
+          size="50px"
+          class="px-10"
+        />
+        <v-icon
+          v-else
+          @click="isDailyKmsVisible = !isDailyKmsVisible"
+          icon="mdi mdi-chevron-right"
+          size="50px"
+          class="px-10"
+        />
       </v-row>
       <v-divider />
 
@@ -81,23 +93,23 @@
           <p v-if="isSubTeamsVisible">Leave this for now</p>
         </v-col>
 
-          <v-icon icon="mdi mdi-plus" size="45px" class="px-6" id="pointer-cursor" />
-          <v-icon
-            v-if="isSubTeamsVisible"
-            icon="mdi mdi-chevron-down"
-            @click="isSubTeamsVisible = !isSubTeamsVisible"
-            size="50px"
-            id="pointer-cursor"
-            class="px-10"
-          />
-          <v-icon
-            v-else
-            icon="mdi mdi-chevron-right"
-            @click="isSubTeamsVisible = !isSubTeamsVisible"
-            size="50px"
-            id="pointer-cursor"
-            class="px-10"
-          />
+        <v-icon icon="mdi mdi-plus" size="45px" class="px-6" id="pointer-cursor" />
+        <v-icon
+          v-if="isSubTeamsVisible"
+          icon="mdi mdi-chevron-down"
+          @click="isSubTeamsVisible = !isSubTeamsVisible"
+          size="50px"
+          id="pointer-cursor"
+          class="px-10"
+        />
+        <v-icon
+          v-else
+          icon="mdi mdi-chevron-right"
+          @click="isSubTeamsVisible = !isSubTeamsVisible"
+          size="50px"
+          id="pointer-cursor"
+          class="px-10"
+        />
       </v-row>
       <v-divider />
 
@@ -112,8 +124,8 @@
           <h2>Leaderboard</h2>
           <p v-if="isLeaderboardVisible">Leave this for now</p>
         </v-col>
-          <v-icon v-if="isLeaderboardVisible" icon="mdi mdi-chevron-down" size="50px" class="px-10"/>
-          <v-icon v-else icon="mdi mdi-chevron-right" size="50px" class="px-10"/>
+        <v-icon v-if="isLeaderboardVisible" icon="mdi mdi-chevron-down" size="50px" class="px-10" />
+        <v-icon v-else icon="mdi mdi-chevron-right" size="50px" class="px-10" />
       </v-row>
       <v-divider class="mb-10" />
     </v-row>
