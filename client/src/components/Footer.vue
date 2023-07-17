@@ -24,6 +24,7 @@
             color="white"
             variant="text"
             size="x-small"
+            aria-label="link to csf's facebook"
           >
             <v-icon color="white" size="28">mdi-facebook</v-icon>
           </v-btn>
@@ -33,6 +34,7 @@
             color="white"
             variant="text"
             size="x-small"
+            aria-label="link to csf's twitter"
           >
             <v-icon color="white" size="28">mdi-twitter</v-icon>
           </v-btn>
@@ -42,6 +44,7 @@
             color="white"
             variant="text"
             size="x-small"
+            aria-label="link to csf's linkedin"
           >
             <v-icon color="white" size="28">mdi-linkedin</v-icon>
           </v-btn>
@@ -51,6 +54,7 @@
             color="white"
             variant="text"
             size="x-small"
+            aria-label="link to csf's youtube"
           >
             <v-icon color="white" size="28">mdi-youtube</v-icon>
           </v-btn>
@@ -60,6 +64,7 @@
             color="white"
             variant="text"
             size="x-small"
+            aria-label="link to csf's instagram"
           >
             <v-icon color="white" size="28">mdi-instagram</v-icon>
           </v-btn>
