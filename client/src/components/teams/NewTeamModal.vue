@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" :fullscreen="isFullscreen" max-width="500px" max-height="100vh">
-    <template v-slot:activator="{ props }">
-      <v-btn size="large" color="red white--text" v-bind="props">New Team</v-btn>
+    <template v-slot:activator="{ props: dialog }">
+      <v-btn size="large" color="red white--text" v-bind="dialog">New Team</v-btn>
     </template>
     <v-card class="bg-backgroundGrey">
       <v-img src="/images/Footer-min.jpeg" width="100%" max-height="16" cover />
@@ -39,6 +39,10 @@ const form = ref({
 
 const submitForm = () => {
   teamStore.createTeam({ ...form.value })
+}
+
+const openDialog = () => {
+  dialog.value = true
 }
 
 const closeDialog = () => {
