@@ -1,5 +1,5 @@
 <template>
-  <div class="container" v-if="!isLoading">
+  <v-container v-if="!isLoading">
     <v-row
       class="bg-primaryWhite pt-6 mx-3"
       align="center"
@@ -46,7 +46,7 @@
         </v-btn>
       </div>
     </div>
-  </div>
+  </v-container>
   <div v-else class="w-100 d-inline-block">
     <v-progress-circular indeterminate color="primaryRed" class="mt-12 mx-auto d-block" />
   </div>
@@ -111,12 +111,5 @@ function openEditModal(id: number) {
   padding-top: 19px;
   padding-bottom: 0px;
   margin-top: -19px;
-}
-
-@media (min-width: 960px) {
-  .container {
-    margin-left: 15px;
-    margin-right: 15px;
-  }
 }
 </style>
