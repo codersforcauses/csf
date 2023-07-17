@@ -34,7 +34,7 @@ def get_mileage(request, user):
                     mileages
                 )
         serializer = MileageSerializer(mileages, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
@@ -42,10 +42,8 @@ def post_mileage(request):
     if request.user.is_authenticated is False:
         return Response("User not authenticated", status=401)
     else:
-        # return HttpResponse(, status=200)
         try:
             user = User.objects.get(id=request.user.id)
-        # return HttpResponse(user.challenge_start_date)
         except ObjectDoesNotExist:
             return Response(user.first_name, status=status.HTTP_400_BAD_REQUEST)
         # start challenge for User if not already started
