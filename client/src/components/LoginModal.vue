@@ -23,7 +23,7 @@
             <v-btn
               variant="plain"
               @click="
-                resetState()
+                resetState(),
                 modalStore.close()
               "
             >
