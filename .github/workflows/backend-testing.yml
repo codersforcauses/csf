@@ -2,7 +2,7 @@ name: Backend CI
 
 on:
   pull_request:
-    types: ["opened", "synchronize", "reopened", "edited"]
+    types: ['opened', 'synchronize', 'reopened', 'edited']
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -56,6 +56,7 @@ jobs:
           POSTGRES_PORT: 5432
           EMAIL_PORT: 1025
         run: |
+          python -c "import os; print('FRONTEND_URL:', os.environ.get('FRONTEND_URL'))"
           source .venv/bin/activate
           python manage.py migrate
 
