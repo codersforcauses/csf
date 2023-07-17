@@ -51,7 +51,7 @@ def update_event(request, event_id):
                     serializer = EventSerialiser(instance=event, data=request.data)
                     if serializer.is_valid():
                         serializer.save()
-                    return Response(serializer.errors, status=400)
+                    return Response(serializer.data, status=200)
                 else:
                     return Response("Event is not private", status=403)
             else:
