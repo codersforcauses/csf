@@ -290,7 +290,7 @@ const state = reactive({
   email: '',
   confirmPassword: '',
   teamSignup: false,
-  hasConsent: false,
+  hasConsent: true,
   avatar: '',
   travelMethod: ''
 }) as Signup
