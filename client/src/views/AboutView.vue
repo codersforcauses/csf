@@ -75,7 +75,7 @@
       </v-list-item>
     </v-list>
   </v-row>
-  <v-img :src="studentsLearning" width="100%" alt="students learning photo"></v-img>
+  <v-img :src="studentsLearning" width="100%" alt="students in a classroom"></v-img>
   <v-row class="px-8 bg-secondaryGrey text-secondaryTint" no-gutters>
     <h2 class="py-2" :style="{ fontFamily: 'Hackney', fontSize: '58px' }">DONATE TODAY</h2>
     <v-divider class="mr-16" />

@@ -1,7 +1,7 @@
 <template>
   <v-dialog width="500px">
     <v-card class="bg-backgroundGrey">
-      <v-img src="/images/Footer-min.jpeg" width="100%" max-height="16" alt="red background" cover/>
+      <v-img src="/images/Footer-min.jpeg" width="100%" max-height="16" alt="" cover/>
       <v-card-actions>
         <v-spacer />
         <v-icon icon="mdi-close" size="x-large" @click="closeModal" />
