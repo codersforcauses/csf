@@ -67,6 +67,7 @@ jobs:
           POSTGRES_PASSWORD: password
           POSTGRES_PORT: 5432
           EMAIL_PORT: 1025
+          FRONTEND_URL: http://localhost:8082
         run: |
           source .venv/bin/activate
           python3 -m pip install coverage
