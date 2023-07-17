@@ -6,6 +6,7 @@ import EventsView from '../views/EventsView.vue'
 import UserSettingsView from '../views/UserSettingsView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import ChallengeView from '../views/ChallengeView.vue'
+import NotFoundView from '../views/NotFoundView.vue'
 import { capitalize } from 'vue'
 import { useModalStore } from '@/stores/modal'
 
@@ -41,6 +42,11 @@ const router = createRouter({
       path: '/challenges',
       name: 'challenges',
       component: ChallengeView
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: NotFoundView
     }
   ]
 })
