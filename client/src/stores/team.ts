@@ -19,7 +19,7 @@ export const useTeamStore = defineStore('team', {
 
   actions: {
     async getTeams() {
-      const teams = await server.get('team/all/').then((res) => {
+      const teams = await server.get('team/get_teams/').then((res) => {
         if (res.status == 200) {
           return res.data
         }
@@ -29,7 +29,7 @@ export const useTeamStore = defineStore('team', {
     },
 
     async getTeam(teamId: Number) {
-      await server.get(`team/${teamId}/`).then((res) => {
+      await server.get(`team/get/${teamId}/`).then((res) => {
         if (res.status == 200) {
           const data = camelize(res.data) as Object as Team
           this.currentTeam = JSON.stringify(data)
@@ -38,7 +38,7 @@ export const useTeamStore = defineStore('team', {
     },
 
     async createTeam(data: Omit<Team, 'teamId' | 'joinCode'>) {
-      await server.post('team/', snakify(data)).then((res) => {
+      await server.post('team/create/', snakify(data)).then((res) => {
         if (res.status == 200) {
           const data = camelize(res.data) as Object as Team
 
