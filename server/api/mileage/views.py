@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from .models import Mileage
 from ..users.models import User
-from .serializers import MileageSerializer, UserSerializer  # , PostMileageSerializer
+from .serializers import MileageSerializer, UserSerializer, LeaderboardSerializer  # , PostMileageSerializer
 
 import datetime
 
@@ -62,8 +62,12 @@ def post_mileage(request):
 
         serializer = MileageSerializer(data=request.data)
         if serializer.is_valid():
-            mileage = serializer.save()
-            response_data = MileageSerializer(mileage).data
-            return Response(response_data, status=status.HTTP_201_CREATED)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def get_leaderboard(request):
+    leaderboard_serializer = LeaderboardSerializer(User.objects.order_by("-total_mileage"), many=True)
+    return Response(leaderboard_serializer.data)

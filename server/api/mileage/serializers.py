@@ -22,6 +22,12 @@ class UserSerializer(ModelSerializer):
         fields = ['id', 'challenge_start_date']
 
 
+class LeaderboardSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username','total_mileage']
+
+
 # class PostMileageSerializer(ModelSerializer):
 
 #     user = UserSerializer()
