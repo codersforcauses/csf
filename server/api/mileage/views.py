@@ -69,5 +69,9 @@ def post_mileage(request):
 
 @api_view(['GET'])
 def get_leaderboard(request):
-    leaderboard_serializer = LeaderboardSerializer(User.objects.order_by("-total_mileage"), many=True)
-    return Response(leaderboard_serializer.data)
+    if request.GET["type"] == "users":
+        leaderboard_serializer = LeaderboardSerializer(User.objects.order_by("-total_mileage"), many=True)
+        return Response(leaderboard_serializer.data)
+    else:
+        # TODO
+        return Response()

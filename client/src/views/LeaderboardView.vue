@@ -38,20 +38,25 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="item in teams" :key="item.name">
-        <td class="w-0">{{ item.rank }}</td>
-        <td>{{ item.name }}</td>
+      <tr v-for="(item, index) in places" :key="item.username">
+        <td class="w-0">{{ index + 1 }}</td>
+        <td>{{ item.username }}</td>
+        <td>{{ item.totalMileage }}</td>
       </tr>
     </tbody>
   </v-table>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { useMileageStore } from '@/stores/mileage';
+import type { UserLeaderboardEntry } from '@/types/mileage'
+import { ref, onMounted } from 'vue'
 
+
+const mileageStore = useMileageStore()
 const activeButton = ref('Individual')
 const searchQuery = ref('')
-const teams = [
+/*const teams = [
   { name: 'Team 1', rank: 1, mileage: 100 },
   { name: 'Team 2', rank: 2, mileage: 90 },
   { name: 'Team 3', rank: 3, mileage: 80 },
@@ -72,7 +77,15 @@ const teams = [
   { name: 'Team 18', rank: 18, mileage: 0 },
   { name: 'Team 19', rank: 19, mileage: 0 },
   { name: 'Team 20', rank: 20, mileage: 0 }
-]
+]*/
+const places = ref<UserLeaderboardEntry[]>([])
+
+onMounted(async () => {
+  let leaderboard = await mileageStore.getLeaderboard("users")
+  if (leaderboard) {
+    places.value = leaderboard
+  }
+})
 </script>
 
 <style>
