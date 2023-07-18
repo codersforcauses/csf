@@ -21,7 +21,6 @@ class teamTests(APITestCase):
             'password': 'testuser123'
         }
         get_token_response = self.client.post(get_token_url, get_token_body, format='json')
-        print(get_token_response.data)
         token = get_token_response.data['access']
         return token
 
