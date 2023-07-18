@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from .models import Mileage
 from ..users.models import User
+from ..team.models import Team
 from .serializers import MileageSerializer
 
 from freezegun import freeze_time
@@ -118,3 +119,34 @@ class MileageTests(APITestCase):
         # refresh user
         self.user = User.objects.get(id=self.user.id)
         self.assertEqual(self.user.challenge_start_date, datetime.date.today())
+
+    def test_leaderboard(self):
+        team1 = Team.objects.create(name="team1", bio="we are team 1")
+        team2 = Team.objects.create(name="team2", bio="we are team 2")
+        user1 = User.objects.create(username='user1', email="user1@eample.com", team_id=team1)
+        user2 = User.objects.create(username='user2', email="user2@eample.com", team_id=team1)
+        user3 = User.objects.create(username='user3', email="user3@eample.com", team_id=team2)
+
+        # test that total_mileage is initialised to 0
+        self.assertEquals(self.user.total_mileage, 0)
+        self.assertEquals(user1.total_mileage, 0)
+        self.assertEquals(team1.total_mileage, 0)
+
+        url = reverse('mileage:post-mileage')
+        self.client.post(url, {'user': user1.id, 'kilometres': 5.0}, format='json')
+        self.client.post(url, {'user': user2.id, 'kilometres': 4.0}, format='json')
+        self.client.post(url, {'user': user3.id, 'kilometres': 4.0}, format='json')
+        self.client.post(url, {'user': user3.id, 'kilometres': 2.0}, format='json')
+
+        # test the user leaderboard
+        response = self.client.get(reverse('mileage:get-leaderboard'), {'type': 'users'}, format='json')
+        self.assertEquals(response.data, [{'username': 'testuser', 'total_mileage': 100.0},
+                                          {'username': 'user3', 'total_mileage': 6.0},
+                                          {'username': 'user1', 'total_mileage': 5.0},
+                                          {'username': 'user2', 'total_mileage': 4.0}])
+        response = self.client.get(reverse('mileage:get-leaderboard'), {'type': 'users'}, format='json')
+
+        # test the team leaderboard
+        response = self.client.get(reverse('mileage:get-leaderboard'), {'type': 'team'}, format='json')
+        self.assertEquals(response.data, [{'name': 'team1', 'bio': 'we are team 1', 'total_mileage': 9.0},
+                                          {'name': 'team2', 'bio': 'we are team 2', 'total_mileage': 6.0}])

@@ -26,12 +26,13 @@ class UserSerializer(ModelSerializer):
 class UserLeaderboardSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ['username','total_mileage']
+        fields = ['username', 'total_mileage']
+
 
 class TeamLeaderboardSerializer(ModelSerializer):
     class Meta:
         model = Team
-        fields = ['name','bio','total_mileage']
+        fields = ['name', 'bio', 'total_mileage']
 
 
 # class PostMileageSerializer(ModelSerializer):

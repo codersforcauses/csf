@@ -68,6 +68,7 @@ def post_mileage(request):
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET'])
 def get_leaderboard(request):
     if request.GET["type"] == "users":
