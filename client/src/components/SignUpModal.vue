@@ -319,9 +319,9 @@ const submit = async () => {
     try {
       await userStore.registerUser(obj)
       notify({
-          title: "Sign Up",
-          type: "success",
-          text: "Sign Up Successful"
+        title: 'Sign Up',
+        type: 'success',
+        text: 'Sign Up Successful'
       })
       modalStore.login()
     } catch (error: AxiosError | any) {
@@ -337,10 +337,10 @@ const submit = async () => {
         errorMsg.value = JSON.stringify(error)
       }
       notify({
-          title: "Sign Up",
-          type: "error",
-          text: "Sign Up Unsuccessful"
-        })
+        title: 'Sign Up',
+        type: 'error',
+        text: 'Sign Up Unsuccessful'
+      })
     }
   }
 }

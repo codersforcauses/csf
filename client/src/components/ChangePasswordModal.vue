@@ -78,9 +78,9 @@ async function changePassword() {
       if (status === 200) {
         passwordChanged.value = true
         notify({
-          title: "Password Change",
-          type: "success",
-          text: "Password Successfully Changed"
+          title: 'Password Change',
+          type: 'success',
+          text: 'Password Successfully Changed'
         })
       }
     } catch (error: AxiosError | any) {
@@ -93,9 +93,9 @@ async function changePassword() {
           errors.newPassword = data.password
         }
         notify({
-          title: "Password Change",
-          type: "error",
-          text: "Password Change Error"
+          title: 'Password Change',
+          type: 'error',
+          text: 'Password Change Error'
         })
       }
     }

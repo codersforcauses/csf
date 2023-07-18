@@ -206,7 +206,7 @@ import { ref, watchEffect } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { AxiosError } from 'axios'
 import { useModalStore } from '@/stores/modal'
-import { notify } from '@kyvg/vue3-notification';
+import { notify } from '@kyvg/vue3-notification'
 
 const userStore = useUserStore()
 const modalStore = useModalStore()
@@ -231,23 +231,22 @@ const required = (v: string) => !!v || 'Field is required'
 const isEmail = (candidate: string) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(candidate)
 
 const submitForm = async () => {
-  if (await userStore.loginUser(modalStore.username, modalStore.password)){ 
+  if (await userStore.loginUser(modalStore.username, modalStore.password)) {
     notify({
-      title: "Login",
-      type: "success",
-      text: "Login Success",
-    });
+      title: 'Login',
+      type: 'success',
+      text: 'Login Success'
+    })
     modalStore.close()
-  }
-  else {
+  } else {
     userStore.authToken = null
     userStore.authUser = null
     errors.value.login = 'Your username or password is incorrect'
     notify({
-      title: "Login",
-      type: "error",
-      text: errors.value.login,
-    });
+      title: 'Login',
+      type: 'error',
+      text: errors.value.login
+    })
   }
 }
 
@@ -257,10 +256,10 @@ async function emailUser() {
       if ((await userStore.sendResetEmail(form.value.email)) === 200) {
         errors.value.email = ''
         notify({
-          title: "Reset Email",
-          type: "success",
-          text: "Reset Email Sent",
-        });
+          title: 'Reset Email',
+          type: 'success',
+          text: 'Reset Email Sent'
+        })
       }
     } finally {
       page.value = 3
@@ -268,10 +267,10 @@ async function emailUser() {
   } else {
     errors.value.email = 'Email is invalid'
     notify({
-          title: "Reset Email",
-          type: "error",
-          text: errors.value.email,
-    });
+      title: 'Reset Email',
+      type: 'error',
+      text: errors.value.email
+    })
   }
 }
 
@@ -280,10 +279,10 @@ async function submitToken() {
     let status = await userStore.submitResetToken(form.value.token)
     if (status === 200) {
       notify({
-      title: "Reset Token",
-      type: "success",
-      text: "Reset Token Sent",
-      });
+        title: 'Reset Token',
+        type: 'success',
+        text: 'Reset Token Sent'
+      })
       errors.value.token = ''
       page.value = 4
     }
@@ -291,10 +290,10 @@ async function submitToken() {
     if (error instanceof AxiosError && error.response && error.response.status === 400) {
       errors.value.token = 'Invalid token'
       notify({
-          title: "Reset Token",
-          type: "error",
-          text: errors.value.token,
-      });
+        title: 'Reset Token',
+        type: 'error',
+        text: errors.value.token
+      })
     }
   }
 }
@@ -306,19 +305,19 @@ async function submitNewPassword() {
         errors.value.newPassword = ''
         page.value = 5
         notify({
-          title: "New Password",
-          type: "success",
-          text: "New Password Has Been Submitted",
-        });
+          title: 'New Password',
+          type: 'success',
+          text: 'New Password Has Been Submitted'
+        })
       }
     } catch (error: AxiosError | any) {
       if (error instanceof AxiosError && error.response && error.response.status === 400) {
         errors.value.newPassword = error.response.data.password
         notify({
-          title: "New Password",
-          type: "error",
-          text: error.response.data.password,
-        });
+          title: 'New Password',
+          type: 'error',
+          text: error.response.data.password
+        })
       }
     }
   } else {

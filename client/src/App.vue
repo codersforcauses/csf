@@ -8,7 +8,13 @@ import { RouterView } from 'vue-router'
   <ReloadPWA />
   <NavbarComponents />
   <RouterView />
-  <notifications classes="my-notification" position="bottom right" max="1" duration="2"/>
+  <notifications
+    classes="my-notification"
+    position="bottom right"
+    width="450px"
+    max="1"
+    duration="2"
+  />
 </template>
 
 <style>
@@ -142,8 +148,9 @@ body {
 }
 
 .my-notification {
-  margin-bottom: 10%;
-  margin-right: 10%;
+  padding: 2%;
+  margin-bottom: 5%;
+  margin-right: 5%;
   font-size: 15px;
   color: #ffffff;
 
