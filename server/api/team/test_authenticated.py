@@ -6,7 +6,7 @@ from api.team.models import Team
 
 
 class teamTests(APITestCase):
-    def set_up(self):
+    def setUp(self):
         self.team = Team.objects.create(
             name="mockTeam1",
             join_code="mockTeamCode1",
