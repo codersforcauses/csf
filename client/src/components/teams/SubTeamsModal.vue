@@ -86,16 +86,19 @@ const addMember = () => {
 }
 
 const removeMember = (memberId: number) => {
+  console.log(memberId)
   // Find the member to be removed
   const foundMember: MemberView | undefined = selectedSubteamCopy.members.find((item) => item.id === memberId)
+ 
   // If found, add it to the avaliable member list and remove it from the selected subteam
+  console.log(foundMember)
   if (foundMember) {
     avaliableMemeberList.value.push(foundMember);
     selectedSubteamCopy.members = selectedSubteamCopy.members.filter((item) => item.id !== memberId)
   }
 }
 
-const display = ref(false)
+const display = ref(0)
 
 const showDialog = computed({
     // getter
@@ -181,14 +184,14 @@ const showDialog = computed({
                 icon="mdi mdi-window-close"
                 size="24px"
                 id="pointer-cursor"
-                @click="display = true"
+                @click="display = member.id"
               />
               <PopupDialog
                 v-model="display"
                 :title="'Remove Team Member'"
                 :text="`Are you sure you wish to remove this member?`"
                 :submit-text="'Confirm'"
-                @handle-submit="removeMember(member.id)"
+                @handle-submit="removeMember(display)"
               />
             </v-list-item-content>
             <v-divider class="mt-4" color="info"></v-divider>
