@@ -107,18 +107,8 @@ function calcWidth(travelDist: number, totalDist: number) {
   return Math.min((100 * travelDist) / totalDist, 100)
 }
 
-function getRecentMileage() {
-  if (userStore.user) {
-    let arr = mileageStore.mileageByUser
-    if (arr) {
-      return arr.reduce((a, b) => a + b.kilometres, 0)
-    }
-  }
-  return 0
-}
-
 function updateChallengeProgress() {
-  distanceTravelled.value = getRecentMileage()
+  distanceTravelled.value = mileageStore.totalKmByUser
 }
 
 onMounted(async () => {

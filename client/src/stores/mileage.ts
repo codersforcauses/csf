@@ -10,6 +10,10 @@ export const useMileageStore = defineStore('mileage', {
     mileageByUser: useStorage('mileageByUser', [] as Mileage[]),
     mileageByTeam: useStorage('mileageByTeam', [] as Mileage[])
   }),
+  getters: {
+    totalKmByUser: (state) => state.mileageByUser.reduce((acc, cur) => acc + cur.kilometres, 0),
+    totalKmByTeam: (state) => state.mileageByTeam.reduce((acc, cur) => acc + cur.kilometres, 0)
+  },
   actions: {
     postMileage(mileage: Omit<Mileage, 'mileageId'>) {
       return server.post('mileage/post_mileage/', mileage).then(() => {
