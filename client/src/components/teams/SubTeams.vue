@@ -63,19 +63,20 @@
       </v-list>
     </v-col>
   </v-row>
-  <SubTeamsModal @controlDialog="controlDialog" @saveTeam="saveTeam" @removeSubTeam="removeSubTeam"
-    :selectedTeam="selectedTeam" :dialog="state.dialog" :noTeamMembers="state.noTeamMembers" />
+  <SubTeamsModal v-model="showSubTeamModal" @saveTeam="saveTeam" @removeSubTeam="removeSubTeam"
+    :selectedSubteam="selectedSubteam" :avaliableMemeberList="state.avaliableMemeberList" />
 </template>
 
 <script setup lang="ts">
-import {reactive, toRefs } from 'vue'
+import {reactive, ref} from 'vue'
 import SubTeamsModal from './SubTeamsModal.vue';
 
 //import { type Subteam } from '../types/subteam.ts'
-// defineProps(['isSubTeamsVisible'])
-let selectedTeam = reactive({
+
+let selectedSubteam = reactive({
   teamName: '',
   teamId: '',
+  subteamId: '',
   totalKM: '',
   members: [
     {
@@ -87,18 +88,18 @@ let selectedTeam = reactive({
   ]
 })
 
-//dummy data
+const showSubTeamModal = ref(false)
 //dummy data
 const state = reactive({
   newSubTeamName: '',
   open: ['Users'],
-  dialog: false,
+  // dialog: false,
   i: '1',
   selectedMember: null,
   rules: {
     required: (value: string) => !!value || 'Field is required'
   },
-  noTeamMembers: [
+  avaliableMemeberList: [
     {
       id: 111,
       firstname: 'Ned',
@@ -171,7 +172,7 @@ const state = reactive({
     }
   ],
 
-  selectedTeam: {
+  selectedSubteam: {
     teamName: '',
     teamId: '',
     totalKM: '',
@@ -188,36 +189,32 @@ const state = reactive({
   updatedTeamName: ''
 })
 
-// modal actions
-const controlDialog = (newVal:boolean) => {
-  state.dialog = newVal
-}
-const saveTeam = (selectedTeam:any, noTeamMembers: any) => {
-  if (selectedTeam.teamName === '') {
+const saveTeam = (selectedSubteam:any, avaliableMemeberList: any) => {
+  if (selectedSubteam.teamName === '') {
     return
   }
   state.subteams =  state.subteams.map(item => {
-    if (item.teamId === selectedTeam.teamId) {
-      return  selectedTeam
+    if (item.teamId === selectedSubteam.teamId) {
+      return  selectedSubteam
     }
     return item
   })
-  updateNoTeamMembers(noTeamMembers)
-  state.dialog = false
+  updateAvaliableMemeberList(avaliableMemeberList)
+  showSubTeamModal.value = false
 }
 
 const removeSubTeam = (teamId:string|number) => {
-  // relase members to noTeamMembers
+  // relase members to avaliableMemeberList
   const team = state.subteams.find((item) => item.teamId === teamId)
   if (team) {
-    updateNoTeamMembers([...state.noTeamMembers, ...team.members])
+    updateAvaliableMemeberList([...state.avaliableMemeberList, ...team.members])
   }
   state.subteams = state.subteams.filter((item) => item.teamId !== teamId)
-  state.dialog = false
+  showSubTeamModal.value = false
 }
 
-const updateNoTeamMembers = (members: any) => {
-  state.noTeamMembers = members
+const updateAvaliableMemeberList = (members: any) => {
+  state.avaliableMemeberList = members
 }
 
 // team list actions
@@ -247,17 +244,9 @@ const randomString = (len: number) => {
 state.subteams.find((item) => item.teamId === state.selectedId)
 
 const openEditSubteamDialog = (teamId: string) => {
-
-  selectedTeam = JSON.parse(JSON.stringify(state.subteams.find((item) => item.teamId === teamId)))
-
-
-  state.dialog = true
-
+  selectedSubteam = JSON.parse(JSON.stringify(state.subteams.find((item) => item.teamId === teamId)))
+  showSubTeamModal.value = true
 }
-
-defineExpose({
-  ...toRefs(state)
-})
 
 </script>
 

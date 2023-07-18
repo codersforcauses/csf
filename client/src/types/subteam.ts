@@ -16,7 +16,7 @@ export interface MemberView {
 export interface SubteamView{
     teamName: string;
     teamId: string;
-    subteamId:string
+    subteamId:string;
     totalKM: string;
     members: MemberView[];
 }
