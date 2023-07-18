@@ -57,7 +57,7 @@ def update_team(request, team_id):
 @api_view(['DELETE'])
 def delete_team(request, team_id):
     if (request.user.is_authenticated is False):
-        return Response("User is not authenticated", status=401)
+        return Response("User is not authenticated", status=403)
     else:
         team = Team.objects.get(team_id=team_id)
         team_name_formatted = f"{team.name} - {team.join_code}"

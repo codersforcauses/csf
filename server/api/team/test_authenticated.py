@@ -11,16 +11,17 @@ class teamTests(APITestCase):
             name="mockTeam1",
             join_code="mockTeamCode1",
         )
-        self.user = User.objects.create_user(username='testuser1', password='testuser1234', team_id=self.team, team_admin=True)
+        self.user = User.objects.create_user(username='testuser', password='testuser123', team_id=self.team, team_admin=True, is_active=True)
         self.user.save()
 
     def get_token(self):
         get_token_url = reverse('auth:jwt_token')
         get_token_body = {
-            'username': 'testuser1',
+            'username': 'testuser',
             'password': 'testuser123'
         }
         get_token_response = self.client.post(get_token_url, get_token_body, format='json')
+        print(get_token_response.data)
         token = get_token_response.data['access']
         return token
 
