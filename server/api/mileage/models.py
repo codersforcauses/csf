@@ -20,13 +20,22 @@ def on_change(sender, instance, **kwargs):
         previous = Mileage.objects.get(mileage_id=instance.mileage_id)
         instance.user.total_mileage += (instance.kilometres - previous.kilometres)
         instance.user.save()
-    else:
+        if instance.user.team_id:
+            instance.user.team_id.total_mileage += (instance.kilometres - previous.kilometres)
+            instance.user.team_id.save()
+    else: # creating than updating
         user = User.objects.get(id=instance.user.id)
         user.total_mileage += instance.kilometres
         user.save()
+        if instance.user.team_id:
+            instance.user.team_id.total_mileage += instance.kilometres
+            instance.user.team_id.save()
         
 
 @receiver(post_delete, sender=Mileage)
 def on_delete(sender, instance, **kwargs):  
     instance.user.total_mileage -= instance.kilometres
     instance.user.save()
+    if instance.user.team_id:
+        instance.user.team_id.total_mileage -= instance.kilometres
+        instance.user.team_id.save()

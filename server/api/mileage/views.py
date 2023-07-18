@@ -3,7 +3,8 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from .models import Mileage
 from ..users.models import User
-from .serializers import MileageSerializer, UserSerializer, LeaderboardSerializer  # , PostMileageSerializer
+from ..team.models import Team
+from .serializers import MileageSerializer, UserSerializer, UserLeaderboardSerializer, TeamLeaderboardSerializer  # , PostMileageSerializer
 
 import datetime
 
@@ -70,8 +71,8 @@ def post_mileage(request):
 @api_view(['GET'])
 def get_leaderboard(request):
     if request.GET["type"] == "users":
-        leaderboard_serializer = LeaderboardSerializer(User.objects.order_by("-total_mileage"), many=True)
+        leaderboard_serializer = UserLeaderboardSerializer(User.objects.order_by("-total_mileage"), many=True)
         return Response(leaderboard_serializer.data)
     else:
-        # TODO
-        return Response()
+        leaderboard_serializer = TeamLeaderboardSerializer(Team.objects.order_by("-total_mileage"), many=True)
+        return Response(leaderboard_serializer.data)
