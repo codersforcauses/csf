@@ -3,10 +3,9 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from .models import Event, Team
-from api.users.models import User
+# from api.users.models import User
 
 import datetime
-
 
 
 class EventTests(APITestCase):
@@ -33,7 +32,6 @@ class EventTests(APITestCase):
             team_id=createTeam,
         )
 
-
     def test_create_event(self):
         created_event_name = "createEventTestPublic"
         created_event_description = "public event for unit test"
@@ -51,15 +49,13 @@ class EventTests(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-
-
     def test_get_events(self):
         response = self.client.get(reverse("event:get-events"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data_count = 0
         for _ in response.data:
             data_count = data_count + 1
-        self.assertEqual(1, data_count) # We only want to return the public events
+        self.assertEqual(1, data_count)  # We only want to return the public events
 
     def test_update_private_event(self):
         eventBeforeUpdate = Event.objects.get(name="eventTestPrivate")

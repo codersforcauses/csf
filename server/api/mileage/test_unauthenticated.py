@@ -3,10 +3,10 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from .models import Mileage
 from ..users.models import User
-from .serializers import MileageSerializer
+# from .serializers import MileageSerializer
 
-from freezegun import freeze_time
-import datetime
+# from freezegun import freeze_time
+# import datetime
 
 
 class MileageTests(APITestCase):
@@ -25,4 +25,3 @@ class MileageTests(APITestCase):
         data = {'user': self.user.id, 'kilometres': 200.0}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-

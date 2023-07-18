@@ -8,7 +8,6 @@ from api.users.models import User
 import datetime
 
 
-
 class EventTests(APITestCase):
     def setUp(self):
         createTeam = Team.objects.create(
@@ -146,7 +145,6 @@ class EventTests(APITestCase):
     def test_delete_public_event(self):
         token = self.get_token()
         self.client.credentials(HTTP_AUTHORIZATION='Bearer {0}'.format(token))
-        
         eventToDelete = Event.objects.get(name="eventTestPublic")
         response = self.client.delete(
             reverse(
