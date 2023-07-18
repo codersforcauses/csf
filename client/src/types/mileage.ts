@@ -1,6 +1,6 @@
 export default interface Mileage {
   mileageId: number
-  userId: number
+  user: number
   kilometres: number
   date: string
 }

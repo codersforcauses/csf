@@ -15,7 +15,7 @@ class MileageTests(APITestCase):
         self.mileage = Mileage.objects.create(user=self.user, kilometres=100.0)
 
     def test_get_mileage(self):
-        url = reverse('mileage:get-mileage', args=[self.user.id])
+        url = reverse('mileage:get-mileage-by-user', args=[self.user.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -77,7 +77,7 @@ class MileageTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # test only get mileages within challenge period if challenge param in query
-        url = reverse('mileage:get-mileage', args=[self.user.id])
+        url = reverse('mileage:get-mileage-by-user', args=[self.user.id])
         response = self.client.get(url, {'challenge': True})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -98,7 +98,7 @@ class MileageTests(APITestCase):
     def _test_rollover_challenge(self):
 
         # get mileages after challenge period has ended
-        url = reverse('mileage:get-mileage', args=[self.user.id])
+        url = reverse('mileage:get-mileage-by-user', args=[self.user.id])
         response = self.client.get(url, {'challenge': True})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 0)
@@ -109,7 +109,7 @@ class MileageTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # test only gets mileage in new challenge period
-        url = reverse('mileage:get-mileage', args=[self.user.id])
+        url = reverse('mileage:get-mileage-by-user', args=[self.user.id])
         response = self.client.get(url, {'challenge': True})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

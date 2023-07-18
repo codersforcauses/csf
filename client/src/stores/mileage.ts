@@ -3,36 +3,33 @@ import { useStorage } from '@vueuse/core'
 import server from '@/utils/server'
 import type Mileage from '@/types/mileage'
 import camelize from 'camelize-ts'
+import { useUserStore } from './user'
 
 export const useMileageStore = defineStore('mileage', {
   state: () => ({
-    recentMileage: useStorage('recentMileage', [] as Mileage[])
+    mileageByUser: useStorage('mileageByUser', [] as Mileage[]),
+    mileageByTeam: useStorage('mileageByTeam', [] as Mileage[])
   }),
   actions: {
-    async postMileage(userId: number, kilometres: number, date: string) {
-      await server
-        .post('mileage/post_mileage/', {
-          user: userId,
-          kilometres,
-          date
-        })
-        .then(async () => {
-          await this.getRecentMileage(userId)
-        })
+    postMileage(mileage: Omit<Mileage, 'mileageId'>) {
+      return server.post('mileage/post_mileage/', mileage).then(() => {
+        this.getMileageByUser()
+        this.getMileageByTeam()
+      })
     },
-
-    async getRecentMileage(userId: number) {
-      await server
-        .get(`mileage/get_mileage/${userId}`, {
-          params: {
-            challenge: true
-          }
-        })
-        .then((res) => {
-          if (res.status == 200) {
-            this.recentMileage = camelize(res.data) as Mileage[]
-          }
-        })
+    async getMileageByUser() {
+      const { status, data } = await server.get(
+        `mileage/get_mileage/user/${useUserStore().user!.id}`,
+        { params: { challenge: true } }
+      )
+      if (status == 200) this.mileageByUser = camelize(data) as Mileage[]
+    },
+    async getMileageByTeam() {
+      const { status, data } = await server.get(
+        `mileage/get_mileage/team/${useUserStore().user!.teamId!}`,
+        { params: { challenge: true } }
+      )
+      if (status == 200) this.mileageByUser = camelize(data) as Mileage[]
     }
   }
 })

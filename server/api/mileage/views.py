@@ -4,43 +4,66 @@ from rest_framework import status
 from .models import Mileage
 from ..users.models import User
 from .serializers import MileageSerializer, UserSerializer  # , PostMileageSerializer
+from django.db.models import F
+
 
 import datetime
 
 CHALLENGE_LENGTH = 14  # days
 
 
-@api_view(['GET'])
-def get_mileage(request, user):
-    mileages = Mileage.objects.filter(user=user)
+@api_view(["GET"])
+def get_mileage_by_user(request, user):
+    mileage = Mileage.objects.filter(user=user)
 
     # only get mileages within current challenge period
-    if 'challenge' in request.GET:
-        user = User.objects.get(id=user)
-
-        if user.challenge_start_date is None:
-            mileages = []
-        # end challenge period if days are up
-        elif (datetime.date.today() - user.challenge_start_date).days > CHALLENGE_LENGTH:
-            user_serializer = UserSerializer(instance=user, data={'challenge_start_date': None})
-            if user_serializer.is_valid():
-                user_serializer.save()
-            mileages = []
-
-        else:
-            mileages = filter(
-                lambda m: user.challenge_start_date and m.date >= user.challenge_start_date,
-                mileages
+    if "challenge" in request.GET:
+        mileage = mileage.filter(
+            user__challenge_start_date__range=(
+                datetime.date.today() - datetime.timedelta(days=CHALLENGE_LENGTH),
+                F("date"),
             )
+        )
 
-    serializer = MileageSerializer(mileages, many=True)
+        # do we need to do this here? its alr done in post_mileage
+
+        # end challenge period if days are up
+        # elif (datetime.date.today() - user.challenge_start_date).days > CHALLENGE_LENGTH:
+        #     user_serializer = UserSerializer(instance=user, data={'challenge_start_date': None})
+        #     if user_serializer.is_valid():
+        #         user_serializer.save()
+        #     mileages = []
+        # else:
+        #     mileages = filter(
+        #         lambda m: user.challenge_start_date and m.date >= user.challenge_start_date,
+        #         mileages
+        #     )
+
+    serializer = MileageSerializer(mileage, many=True)
     return Response(serializer.data)
 
 
-@api_view(['POST'])
+@api_view(["GET"])
+def get_mileage_by_team(request, team):
+    mileage = Mileage.objects.filter(user__team_id=team)
+
+    # only get mileages within current challenge period
+    if "challenge" in request.GET:
+        mileage = mileage.filter(
+            user__challenge_start_date__range=(
+                datetime.date.today() - datetime.timedelta(days=CHALLENGE_LENGTH),
+                F("date"),
+            )
+        )
+
+    serializer = MileageSerializer(mileage, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["POST"])
 def post_mileage(request):
     try:
-        user = User.objects.get(id=request.data['user'])
+        user = User.objects.get(id=request.data["user"])
     except User.DoesNotExist:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -51,10 +74,7 @@ def post_mileage(request):
     if (datetime.date.today() - challenge_start_date).days > CHALLENGE_LENGTH:
         challenge_start_date = datetime.date.today()
 
-    user_data = {
-        'id': user.id,
-        'challenge_start_date': challenge_start_date
-    }
+    user_data = {"id": user.id, "challenge_start_date": challenge_start_date}
 
     user_serializer = UserSerializer(instance=user, data=user_data)
     if user_serializer.is_valid():

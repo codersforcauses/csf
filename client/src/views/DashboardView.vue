@@ -2,7 +2,7 @@
   <div v-if="!loading">
     <v-row class="ma-0 pl-4 pr-4 pt-4 pb-0" align="center" justify="center">
       <v-spacer />
-      <h1>Welcome back, {{ firstName }}</h1>
+      <h1>Welcome back, {{ userStore.user!.firstName }}</h1>
       <v-spacer />
       <v-btn size="small" icon="mdi-cog" variant="text" href="/settings" />
     </v-row>
@@ -76,8 +76,6 @@ import { useMileageStore } from '@/stores/mileage'
 const userStore = useUserStore()
 const method = ref()
 const loading = ref(true)
-const user = ref()
-const firstName = ref()
 
 const getIconName = (medium: any) => {
   switch (medium) {
@@ -111,7 +109,7 @@ function calcWidth(travelDist: number, totalDist: number) {
 
 function getRecentMileage() {
   if (userStore.user) {
-    let arr = mileageStore.recentMileage
+    let arr = mileageStore.mileageByUser
     if (arr) {
       return arr.reduce((a, b) => a + b.kilometres, 0)
     }
@@ -126,10 +124,8 @@ function updateChallengeProgress() {
 onMounted(async () => {
   if (userStore.user) {
     try {
-      user.value = userStore.user
-      firstName.value = user.value.firstName
-      getIconName(user.value.travelMethod)
-      await mileageStore.getRecentMileage(userStore.user.id)
+      getIconName(userStore.user.firstName)
+      await mileageStore.getMileageByUser()
       updateChallengeProgress()
     } catch (error) {
       console.log(error)
