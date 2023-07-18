@@ -1,6 +1,6 @@
 # Navigate the Admin Dashboard
 
-The admin dashboard can be found at `www.westillneedanaddress.com/admin` and all staff accounts will be able to access it.
+The admin dashboard can be found at `http://csf.codersforcauses.org/admin` and all staff accounts will be able to access it.
 
 ![Django Dashboard](../img/dashboard.png)
 
