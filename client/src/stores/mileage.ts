@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import { useStorage } from '@vueuse/core'
 import server from '@/utils/server'
-import type { Mileage, UserLeaderboardEntry, TeamLeaderboardEntry } from '@/types/mileage'
+import type { UserLeaderboardEntry, TeamLeaderboardEntry } from '@/types/mileage'
+import type Mileage from '@/types/mileage'
 import camelize from 'camelize-ts'
 
 export const useMileageStore = defineStore('mileage', {
