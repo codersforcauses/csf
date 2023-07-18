@@ -88,29 +88,27 @@
 
       <!-- Sub-teams -->
       <v-row align="start" class="my-2">
-        <v-col cols="12">
-          <v-row class="d-flex justify-center">
-            <v-col>
-              <h2>Sub-Teams</h2>
-            </v-col>
-            <v-col align="end">
-              <v-icon
-                v-if="isSubTeamsVisible"
-                icon="mdi mdi-chevron-down"
-                @click="isSubTeamsVisible = !isSubTeamsVisible"
-                size="50px"
-                id="pointer-cursor"
-              />
-              <v-icon
-                v-else
-                icon="mdi mdi-chevron-right"
-                @click="isSubTeamsVisible = !isSubTeamsVisible"
-                size="50px"
-                id="pointer-cursor"
-              />
-            </v-col>
-          </v-row>
+        <v-col id="pointer-cursor" @click="isSubTeamsVisible = !isSubTeamsVisible">
+          <h2>Sub-Teams</h2>
+          <p v-if="isSubTeamsVisible">Leave this for now</p>
         </v-col>
+        <v-icon icon="mdi mdi-plus" size="45px" class="px-6" id="pointer-cursor" />
+        <v-icon
+          v-if="isSubTeamsVisible"
+          icon="mdi mdi-chevron-down"
+          @click="isSubTeamsVisible = !isSubTeamsVisible"
+          size="50px"
+          id="pointer-cursor"
+          class="px-10"
+        />
+        <v-icon
+          v-else
+          icon="mdi mdi-chevron-right"
+          @click="isSubTeamsVisible = !isSubTeamsVisible"
+          size="50px"
+          id="pointer-cursor"
+          class="px-10"
+        />
         <v-col class="w-100" id="pointer-cursor">
           <SubTeams v-if="isSubTeamsVisible" />
         </v-col>
