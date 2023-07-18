@@ -6,6 +6,8 @@ from django.db.models import Q
 from .models import Event
 from .serializers import EventSerialiser
 
+from django.http import HttpResponse
+
 
 @api_view(["POST"])
 def create_event(request):
@@ -28,7 +30,7 @@ def get_events(request):
             team_serializer = EventSerialiser(events, many=True)
             return Response(team_serializer.data)
         else:
-            events = Event.objects.all()
+            events = Event.objects.filter(is_public=True)
             serializer = EventSerialiser(events, many=True)
             return Response(serializer.data)
     else:
