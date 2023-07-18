@@ -7,6 +7,7 @@ import UserSettingsView from '../views/UserSettingsView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import ChallengeView from '../views/ChallengeView.vue'
 import LeaderboardView from '../views/LeaderboardView.vue'
+import NotFoundView from '../views/NotFoundView.vue'
 import { capitalize } from 'vue'
 import { useModalStore } from '@/stores/modal'
 
@@ -47,6 +48,11 @@ const router = createRouter({
       path: '/leaderboards',
       name: 'leaderboards',
       component: LeaderboardView
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: NotFoundView
     }
   ]
 })
