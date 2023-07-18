@@ -68,7 +68,6 @@ export const useTeamStore = defineStore('team', {
         )
         .then((res) => {
           if (res.status == 200) {
-            const data = camelize(res.data) as Object as User
             const { teamId, teamAdmin } = camelize(res.data as Snakify<Partial<User>>)
             this.authUser = JSON.stringify({
               ...this.user,
