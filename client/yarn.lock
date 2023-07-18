@@ -3629,11 +3629,6 @@ joi@^17.7.0:
     "@sideway/formula" "^3.0.1"
     "@sideway/pinpoint" "^2.0.0"
 
-jose@^4.14.4:
-  version "4.14.4"
-  resolved "https://registry.yarnpkg.com/jose/-/jose-4.14.4.tgz#59e09204e2670c3164ee24cbfe7115c6f8bff9ca"
-  integrity sha512-j8GhLiKmUAh+dsFXlX1aJCbt5KMibuKb+d7j1JaOJG6s2UjX1PQlW+OKB/sD4a/5ZYF4RcmYmLSndOoU3Lt/3g==
-
 js-beautify@1.14.6:
   version "1.14.6"
   resolved "https://registry.yarnpkg.com/js-beautify/-/js-beautify-1.14.6.tgz#b23ca5d74a462c282c7711bb51150bcc97f2b507"

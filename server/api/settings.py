@@ -178,6 +178,8 @@ SIMPLE_JWT = {
     "SIGNING_KEY": os.environ.get("JWT_SECRET_KEY"),
 }
 
+print(type(os.environ.get("JWT_SECRET_KEY")), os.environ.get("JWT_SECRET_KEY"))
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',

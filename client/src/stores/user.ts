@@ -1,11 +1,10 @@
 import { defineStore } from 'pinia'
 import { useStorage } from '@vueuse/core'
 import server from '@/utils/server'
-import type { User, UserSettings } from '@/types/user'
+import type { Tokens, User, UserSettings } from '@/types/user'
 import camelize from 'camelize-ts'
 import snakify, { type Snakify } from 'snakify-ts'
-import { type AxiosRequestConfig } from 'axios'
-import { base64url, jwtDecrypt } from 'jose'
+// import { base64url, jwtDecrypt } from 'jose'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -14,7 +13,7 @@ export const useUserStore = defineStore('user', {
   }),
   getters: {
     user: (state) => (state.authUser ? (JSON.parse(state.authUser) as User) : null),
-    token: (state) => (state.authToken ? JSON.parse(state.authToken) : null)
+    token: (state) => (state.authToken ? (JSON.parse(state.authToken) as Tokens) : null)
   },
   actions: {
     logout() {
@@ -35,7 +34,9 @@ export const useUserStore = defineStore('user', {
             return true
           }
         })
-        .catch(() => {
+        .catch((error) => {
+          console.log(error)
+
           this.authToken = null
           this.authUser = null
           return false
@@ -139,23 +140,22 @@ export const useUserStore = defineStore('user', {
     },
 
     async refreshToken(token: string) {
-      // const test = process.env.SECRET_KEY;
-      //
-      // console.log(import.meta.env.VITE_SECRET);
+      const secret = import.meta.env.VITE_JWT_SECRET_KEY
+      const parts = <string[]>this.token?.access?.split('.')
+      const payload = JSON.parse(atob(parts[1]))
+      // console.log(payload);
+      const left = payload.exp - (Date.now() / 60)
+      console.log(left);
+      
+      
+      
 
-      // console.log(import.meta.);
-      const secret = import.meta.env.VITE_SECRET as string
-      const jwt =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg5NTg3ODkxLCJpYXQiOjE2ODk1ODc1OTEsImp0aSI6IjhlMTNhYzdhNmMwODRmMDJhYTVhNTBkMjAzNWQwNWU0IiwidXNlcl9pZCI6Mn0.NDGRVje0J3YyFzxq5qxBbjD-5n-Wiv3nywAs4qFsCqw'
-      // const data = JSON.parse(this.authToken?.toString() as string) as Tokens
-      // console.log(data.access)
-
-      const { payload, protectedHeader } = await jwtDecrypt(jwt, secret, {
-        issuer: 'urn:example:issuer',
-        audience: 'urn:example:audience'
-      })
-      console.log(protectedHeader)
-      console.log(payload)
+      // const { payload, protectedHeader } = await jwtDecrypt(jwt, secret, {
+      //   issuer: 'urn:example:issuer',
+      //   audience: 'urn:example:audience'
+      // })
+      // console.log(protectedHeader)
+      // console.log(payload)
       //   const headers: AxiosRequestConfig['headers'] = {
       //     refresh: token
       //   }
