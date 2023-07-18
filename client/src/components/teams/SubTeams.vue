@@ -63,13 +63,18 @@
       </v-list>
     </v-col>
   </v-row>
-  <SubTeamsModal v-model="showSubTeamModal" @saveTeam="saveTeam" @removeSubTeam="removeSubTeam"
-    :selectedSubteam="selectedSubteam" :avaliableMemeberList="state.avaliableMemeberList" />
+  <SubTeamsModal
+    v-model="showSubTeamModal"
+    @saveTeam="saveTeam"
+    @removeSubTeam="removeSubTeam"
+    :selectedSubteam="selectedSubteam"
+    :avaliableMemeberList="state.avaliableMemeberList"
+  />
 </template>
 
 <script setup lang="ts">
-import {reactive, ref} from 'vue'
-import SubTeamsModal from './SubTeamsModal.vue';
+import { reactive, ref } from 'vue'
+import SubTeamsModal from './SubTeamsModal.vue'
 
 //import { type Subteam } from '../types/subteam.ts'
 
@@ -189,13 +194,13 @@ const state = reactive({
   updatedTeamName: ''
 })
 
-const saveTeam = (selectedSubteam:any, avaliableMemeberList: any) => {
+const saveTeam = (selectedSubteam: any, avaliableMemeberList: any) => {
   if (selectedSubteam.teamName === '') {
     return
   }
-  state.subteams =  state.subteams.map(item => {
+  state.subteams = state.subteams.map((item) => {
     if (item.teamId === selectedSubteam.teamId) {
-      return  selectedSubteam
+      return selectedSubteam
     }
     return item
   })
@@ -203,7 +208,7 @@ const saveTeam = (selectedSubteam:any, avaliableMemeberList: any) => {
   showSubTeamModal.value = false
 }
 
-const removeSubTeam = (teamId:string|number) => {
+const removeSubTeam = (teamId: string | number) => {
   // relase members to avaliableMemeberList
   const team = state.subteams.find((item) => item.teamId === teamId)
   if (team) {
@@ -244,10 +249,11 @@ const randomString = (len: number) => {
 state.subteams.find((item) => item.teamId === state.selectedId)
 
 const openEditSubteamDialog = (teamId: string) => {
-  selectedSubteam = JSON.parse(JSON.stringify(state.subteams.find((item) => item.teamId === teamId)))
+  selectedSubteam = JSON.parse(
+    JSON.stringify(state.subteams.find((item) => item.teamId === teamId))
+  )
   showSubTeamModal.value = true
 }
-
 </script>
 
 <style scoped>

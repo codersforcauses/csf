@@ -110,9 +110,9 @@
           class="px-10"
         />
       </v-row>
-        <v-col cols="12" class="w-100" id="pointer-cursor">
-          <SubTeams v-if="isSubTeamsVisible" />
-        </v-col>
+      <v-col cols="12" class="w-100" id="pointer-cursor">
+        <SubTeams v-if="isSubTeamsVisible" />
+      </v-col>
       <v-divider />
 
       <!-- Leaderboard -->

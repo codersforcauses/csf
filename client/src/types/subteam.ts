@@ -5,20 +5,19 @@ export interface Subteam {
 }
 
 export interface MemberView {
-  id: number;
-  firstname: string;
-  lastname: string;
-  avatar: string;
-   
+  id: number
+  firstname: string
+  lastname: string
+  avatar: string
 }
 
 //TODO SUBTEAM
-export interface SubteamView{
-    teamName: string;
-    teamId: string;
-    subteamId:string;
-    totalKM: string;
-    members: MemberView[];
+export interface SubteamView {
+  teamName: string
+  teamId: string
+  subteamId: string
+  totalKM: string
+  members: MemberView[]
 }
 
 //user
@@ -29,6 +28,5 @@ export interface SubteamView{
 //change user subteamid
 //userid -> change subteamid
 
-
 // teamid -> userids -> userlist -> available users -> noteam users
-// teamid -> subteamid -> subteaminformation -> subteam 
+// teamid -> subteamid -> subteaminformation -> subteam
