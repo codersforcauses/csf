@@ -13,8 +13,8 @@ export const useMileageStore = defineStore('mileage', {
       await server
         .post('mileage/post_mileage/', {
           user: userId,
-          kilometres: kilometres,
-          date: date
+          kilometres,
+          date
         })
         .then(async () => {
           await this.getRecentMileage(userId)
