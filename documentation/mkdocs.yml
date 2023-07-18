@@ -2,6 +2,23 @@ site_name: CSF Documentation
 copyright: Copyright Coders for Causes
 site_url: https://example.com/
 repu_url: https://github.com/codersforcauses/csf
+extra_css:
+  - stylesheets/extra.css
 
 theme:
-  name: "readthedocs"
+  name: material
+  palette:
+    - media: '(prefers-color-scheme: light)' # below here is a palette for light mode
+      primary: custom
+      scheme: default
+      toggle:
+        icon: material/brightness-4
+        name: Switch to dark mode
+    - media: '(prefers-color-scheme: dark)' # below here is a palette for dark mode
+      primary: custom
+      scheme: slate
+      toggle:
+        icon: material/brightness-7
+        name: Switch to light mode
+  logo: img/CSF_Logo_WHITE.png
+  favicon: img/CSF_Logo_RGB_thickborder.jpg

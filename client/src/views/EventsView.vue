@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isLoading">
+  <v-container v-if="!isLoading">
     <v-row
       class="bg-primaryWhite pt-6 mx-3"
       align="center"
@@ -16,7 +16,7 @@
         v-model="searchQuery"
       />
       <v-btn
-        v-if="tempIsTeamAdmin"
+        v-if="user?.teamAdmin"
         size="x-large"
         density="compact"
         variant="flat"
@@ -31,7 +31,6 @@
         v-for="(event, idx) in filteredEventsList"
         :key="event.eventId"
         :event="event"
-        :isTeamAdmin="tempIsTeamAdmin"
         @edit="openEditModal"
         :background-colour="idx % 2 === 0 ? 'bg-primaryWhite' : 'bg-backgroundGrey'"
       />
@@ -39,7 +38,7 @@
         <v-icon icon="mdi-calendar-blank" size="x-large" />
         <p class="font-weight-bold text-body-1 mt-3">No current events :(</p>
         <v-btn
-          v-if="tempIsTeamAdmin"
+          v-if="user?.teamAdmin"
           size="x-large"
           class="bg-primaryRed text-primaryWhite mt-3"
           @click="isAddingEvent = true"
@@ -47,7 +46,7 @@
         </v-btn>
       </div>
     </div>
-  </div>
+  </v-container>
   <div v-else class="w-100 d-inline-block">
     <v-progress-circular indeterminate color="primaryRed" class="mt-12 mx-auto d-block" />
   </div>
@@ -67,8 +66,11 @@ import { type Event } from '../types/event'
 import EventsModal from '../components/EventsModal.vue'
 import { ref, computed, onMounted } from 'vue'
 import { useEventStore } from '../stores/event'
+import { useUserStore } from '@/stores/user'
+import { storeToRefs } from 'pinia'
 
 const eventStore = useEventStore()
+const { user } = storeToRefs(useUserStore())
 const isLoading = ref(true)
 
 onMounted(async () => {
@@ -82,7 +84,6 @@ const filteredEventsList = computed<Event[]>(() =>
     (e.name + e.description).toLowerCase().includes(searchQuery.value)
   )
 )
-const tempIsTeamAdmin = ref<boolean>(true)
 const isAddingEvent = ref<boolean>(false)
 const isEditingEvent = ref<boolean>(false)
 const editingEvent = ref<Event>(<Event>{})
