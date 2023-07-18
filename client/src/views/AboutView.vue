@@ -12,7 +12,11 @@
       d="m0 64 60 10.7c60 10.3 180 32.3 300 48 120 16.3 240 26.3 360 16C840 128 960 96 1080 85.3c120-10.3 240-.3 300 5.4l60 5.3V0H0Z"
     />
   </svg>
-  <v-img :src="StrideForEducationRBGLogo" class="px-8 mt-n8 mb-8 w-100" alt="Stride for education logo"/>
+  <v-img
+    :src="StrideForEducationRBGLogo"
+    class="px-8 mt-n8 mb-8 w-100"
+    alt="Stride for education logo"
+  />
   <v-divider class="mx-4" />
   <p class="pa-8">
     Community Spirit Foundation is running Stride For Education – a challenge designed to motivate
@@ -61,7 +65,7 @@
       fulfil their potential.
     </p>
   </v-row>
-  <v-row class="px-8 bg-primaryRed"  no-gutters>
+  <v-row class="px-8 bg-primaryRed" no-gutters>
     <h2 class="py-2" :style="{ fontFamily: 'Hackney', fontSize: '58px' }">OUR BELIEFS</h2>
     <v-divider class="mr-16" />
     <v-list no-gutters class="bg-primaryRed my-3" role="list">
