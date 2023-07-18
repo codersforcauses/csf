@@ -5,9 +5,9 @@
       <v-row justify="space-between" no-gutters>
         <v-col cols="10">
           <v-text-field
-            :rules="[data.rules.required]"
+            :rules="[state.rules.required]"
             variant="outlined"
-            v-model="data.newSubTeamName"
+            v-model="state.newSubTeamName"
             label="Add subteam"
           />
         </v-col>
@@ -18,9 +18,9 @@
     </v-col>
 
     <v-col cols="12">
-      <v-list v-model:opened="data.open">
+      <v-list v-model:opened="state.open">
         <v-list-group value="Users">
-          <template v-for="team in data.subteams" :key="team.teamName">
+          <template v-for="team in state.subteams" :key="team.teamName">
             <v-list-group sub-group no-action :value="team.teamName">
               <template v-slot:activator="{ props }">
                 <!--avatar-->
@@ -63,21 +63,33 @@
       </v-list>
     </v-col>
   </v-row>
-  <SubTeamsModal @controlDialog="controlDialog" @saveTeam="saveTeam" @removeSubTeam="removeSubTeam" @updateAllMembers="updateAllMembers" :dialog="data.dialog" :allMembers="allMembers"  /> 
+  <SubTeamsModal @controlDialog="controlDialog" @saveTeam="saveTeam" @removeSubTeam="removeSubTeam"
+    :selectedTeam="selectedTeam" :dialog="state.dialog" :noTeamMembers="state.noTeamMembers" />
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, toRefs } from 'vue'
+import {reactive, toRefs } from 'vue'
 import SubTeamsModal from './SubTeamsModal.vue';
-//import ConfirmButton from '@/components/ConfirmButton.vue'
-// import PopupDialog from '@/components/PopupDialog.vue'
 
 //import { type Subteam } from '../types/subteam.ts'
+// defineProps(['isSubTeamsVisible'])
+let selectedTeam = reactive({
+  teamName: '',
+  teamId: '',
+  totalKM: '',
+  members: [
+    {
+      id: 13,
+      firstname: 'Unknown',
+      lastname: 'Unknown',
+      avatar: 'https://cdn.vuetifyjs.com/images/john.png'
+    }
+  ]
+})
 
-defineProps(['isSubTeamsVisible'])
- 
 //dummy data
-const data = reactive({
+//dummy data
+const state = reactive({
   newSubTeamName: '',
   open: ['Users'],
   dialog: false,
@@ -86,7 +98,7 @@ const data = reactive({
   rules: {
     required: (value: string) => !!value || 'Field is required'
   },
-  allMembers: [
+  noTeamMembers: [
     {
       id: 111,
       firstname: 'Ned',
@@ -159,7 +171,6 @@ const data = reactive({
     }
   ],
 
- 
   selectedTeam: {
     teamName: '',
     teamId: '',
@@ -167,8 +178,8 @@ const data = reactive({
     members: [
       {
         id: 13,
-        firstname: 'Tom',
-        lastname: 'T',
+        firstname: 'Unknown',
+        lastname: 'Unknown',
         avatar: 'https://cdn.vuetifyjs.com/images/john.png'
       }
     ]
@@ -176,38 +187,46 @@ const data = reactive({
   selectedId: '',
   updatedTeamName: ''
 })
+
 // modal actions
 const controlDialog = (newVal:boolean) => {
-  data.dialog = newVal
+  state.dialog = newVal
 }
-const saveTeam = (selectedTeam:any) => {
+const saveTeam = (selectedTeam:any, noTeamMembers: any) => {
   if (selectedTeam.teamName === '') {
     return
   }
-  data.subteams =  data.subteams.map(item => {
+  state.subteams =  state.subteams.map(item => {
     if (item.teamId === selectedTeam.teamId) {
       return  selectedTeam
     }
     return item
   })
-  data.dialog = false
+  updateNoTeamMembers(noTeamMembers)
+  state.dialog = false
 }
 
 const removeSubTeam = (teamId:string|number) => {
-  data.subteams = data.subteams.filter((item) => item.teamId !== teamId)
-  data.dialog = false
+  // relase members to noTeamMembers
+  const team = state.subteams.find((item) => item.teamId === teamId)
+  if (team) {
+    updateNoTeamMembers([...state.noTeamMembers, ...team.members])
+  }
+  state.subteams = state.subteams.filter((item) => item.teamId !== teamId)
+  state.dialog = false
 }
-const updateAllMembers = (members:any) => {
-  data.allMembers = members
+
+const updateNoTeamMembers = (members: any) => {
+  state.noTeamMembers = members
 }
 
 // team list actions
 const addSubTeam = () => {
-  if (data.newSubTeamName === '') {
+  if (state.newSubTeamName === '') {
     return
   }
-  data.subteams.push({
-    teamName: data.newSubTeamName,
+  state.subteams.push({
+    teamName: state.newSubTeamName,
     teamId: randomString(32),
     totalKM: '0KM',
     members: []
@@ -225,19 +244,19 @@ const randomString = (len: number) => {
 }
 
 // ----------------- dialog actions -----------------
-data.subteams.find((item) => item.teamId === data.selectedId)
+state.subteams.find((item) => item.teamId === state.selectedId)
 
 const openEditSubteamDialog = (teamId: string) => {
-  data.dialog = true
-  data.selectedMember = null
-  data.selectedTeam = reactive(
-    JSON.parse(JSON.stringify(data.subteams.find((item) => item.teamId === teamId)))
-  )
-  data.selectedId = teamId
+
+  selectedTeam = JSON.parse(JSON.stringify(state.subteams.find((item) => item.teamId === teamId)))
+
+
+  state.dialog = true
+
 }
 
 defineExpose({
-  ...toRefs(data)
+  ...toRefs(state)
 })
 
 </script>

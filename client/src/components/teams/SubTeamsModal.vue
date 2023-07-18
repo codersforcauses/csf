@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref, reactive, toRefs,onMounted,computed,PropType } from 'vue'
+import { ref, reactive, toRef, computed, watch} from 'vue'
+import type { Ref, PropType} from 'vue';
 
 import ConfirmButton from '@/components/ConfirmButton.vue'
 import PopupDialog from '@/components/PopupDialog.vue'
 
-
+//create interferences for member and selectedTeam Object
 interface Member {
   id: number;
   firstname: string;
@@ -12,99 +13,126 @@ interface Member {
   avatar: string;
 }
 
-interface SelectedTeam {
-  teamName: string;
-  teamId: string;
-  totalKM: string;
-  members: Member[];
+//TODO SUBTEAM
+interface Team {
+    teamName: string;
+    teamId: string;
+    totalKM: string;
+    members: Member[];
 }
 
- 
-// control dialog, save team
-const emit = defineEmits(['saveTeam', 'removeSubTeam','updateAllMembers','controlDialog'])
+// Open dialog
+const emit = defineEmits(['saveTeam', 'removeSubTeam', 'controlDialog'])
+
 const props = defineProps({
   selectedTeam: {
-            type: Object as PropType<SelectedTeam>,
-            required: true
-        },
-        dialog: {
-          type: Boolean,
-          required: true
-        },
-        allMembers: {
-          type: Array as PropType<Member[]>,
-          required: true
-        }
-    })
- 
- 
-onMounted(() => {
-  data.updatedTeamName = props.selectedTeam.teamName
-  data.allMembers = props.allMembers 
+      type: Object as PropType<Team>,
+      required: true
+  },
+  dialog: {
+    type: Boolean,
+    required: true
+  },
+  //AvaliableMemeberList
+  noTeamMembers: {
+        type: Array as PropType<Member[]>,
+        required: true
+  }
 })
+
+//Modify selectedTeam
+watch(() => props.selectedTeam, (first, second) => {
+    //local selectedTeam -> Local
+    _selectedTeam = reactive({
+        teamName: first.teamName,
+        teamId: first.teamId,
+        totalKM: first.totalKM,
+        members: first.members
+    })
+    updatedTeamName.value = props.selectedTeam.teamName
+});
+
  
+// edit sub team name input rules
+const rules = {
+    required: (value: string) => !!value || 'Field is required'
+}
+
+const updatedTeamName: Ref<String> = ref(props.selectedTeam?.teamName)
+
+
+// selectable avaliable member list
+const noTeamMembers: Ref<Member[]> = toRef(props, 'noTeamMembers')
+const selectedMember: Ref<Member> = ref({
+    id: 0,
+    firstname: '',
+    lastname: '',
+    avatar: ''
+})
+
+const addMember = () => {
+    if (selectedMember.value !== null) {
+        _selectedTeam.members.push(selectedMember.value)
+        // Removing that member from the select members drop down list
+        for (let i = 0; i < noTeamMembers.value.length; i++) {
+            if (noTeamMembers.value[i].id === selectedMember.value.id) {
+                noTeamMembers.value.splice(i, 1)
+            }
+        }
+
+        console.log(noTeamMembers.value);
+
+        // Setting selected member to null
+        selectedMember.value = {
+            id: 0,
+            firstname: '',
+            lastname: '',
+            avatar: ''
+        }
+    }
+}
+
+// members in team
+
+let _selectedTeam :Team= reactive({
+    teamName: '',
+    teamId: '',
+    totalKM: '',
+    members: [
+        {
+            id: 13,
+            firstname: 'Unknown',
+            lastname: 'Unknown',
+            avatar: 'https://cdn.vuetifyjs.com/images/john.png'
+        }
+    ]
+})
+
+const removeMember = (memberId: number) => {
+  // // Find the member that was removed
+  const foundMember: Member | undefined = _selectedTeam.members.find((item) => item.id === memberId)
+  // // // Add them to the all members list
+  if (foundMember) {
+  noTeamMembers.value.push(foundMember);
+  _selectedTeam.members = _selectedTeam.members.filter((item) => item.id !== memberId)
+
+}
+}
 
 const display = ref(false)
 
 //dummy data
-const data = reactive({
-
-  selectedMember  : null,
-  allMembers:{},
-  
-  rules: {
-    required: (value: string) => !!value || 'Field is required'
-  },
- 
-  // selectedTeam: {
-  //   teamName: '',
-  //   teamId: '',
-  //   totalKM: '',
-  //   members: [
-  //     {
-  //       id: 13,
-  //       firstname: 'Tom',
-  //       lastname: 'T',
-  //       avatar: 'https://cdn.vuetifyjs.com/images/john.png'
-  //     }
-  //   ]
-  // },
-  // allMembers:
-  updatedTeamName: ''
-})
- 
 const _dialog = computed({
-  // getter
-  get() {
-    return props.dialog
-  },
-  // setter
-  set(newValue) {
-    // Note: we are using destructuring assignment syntax here.
-
-    emit('controlDialog', newValue)
-  }
+    // getter
+    get() {
+        return props.dialog
+    },
+    // setter
+    set(newValue: boolean) {
+        // Note: we are using destructuring assignment syntax here.
+        emit('controlDialog', newValue)
+    }
 })
-// methods
-const removeMember = (memberId: number) => {
-  // // Find the member that was removed
-  const foundMember = data.selectedTeam.members.filter((item) => item.id === memberId)[0]
-  // // Add them to the all members list
-  allMembers.push(foundMember)
-
-  data.selectedTeam.members = data.selectedTeam.members.filter((item) => item.id !== memberId)
-}
-const addMember = () => {
-  if (data.selectedMember) {
-    data.selectedTeam.members.push(data.selectedMember)
-    // Removing that member from the select members drop down list
-   const tempAllMembers= data.allMembers.filter((member) => member !== data.selectedMember)
-    emit('updateAllMembers',tempAllMembers)
-    // Setting selected member to null
-    data.selectedMember = null
-  }
-}
-// -----------------------------
 </script>
 
 <template>
@@ -124,8 +152,8 @@ const addMember = () => {
         <div class="w-100 d-flex flex-column text-center align-center justify-center">
           <v-text-field
             variant="solo"
-            v-model="data.updatedTeamName"
-            :rules="[data.rules.required]"
+            v-model="_selectedTeam.teamName"
+            :rules="[rules.required]"
             label="Edit subteam name"
             required
             dense
@@ -139,9 +167,9 @@ const addMember = () => {
 
         <!--Add New Member-->
         <v-select
-          :items="allMembers"
+          :items="noTeamMembers"
           label="Select member"
-          v-model="data.selectedMember"
+          v-model="selectedMember"
           dense
           @update:modelValue="addMember"
         >
@@ -163,7 +191,7 @@ const addMember = () => {
 
         <!--Member List-->
         <v-list>
-          <v-list-item v-for="(member, index) in data.selectedTeam?.members" :key="index">
+          <v-list-item v-for="(member, index) in _selectedTeam.members" :key="index">
             <v-list-item-content>
               <v-avatar>
                 <img :src="member.avatar" alt="Avatar" class="custom-avatar" />
@@ -192,12 +220,12 @@ const addMember = () => {
         </v-list>
         <!--Buttons-->
         <div class="w-100 d-flex justify-center">
-          <v-btn color="success" class="mr-8" variant="flat" @click="saveTeam">Save</v-btn>
+          <v-btn color="success" class="mr-8" variant="flat" @click="$emit('saveTeam', _selectedTeam, noTeamMembers)">Save</v-btn>
           <ConfirmButton
             :action="'delete'"
             :object="'subteam'"
             :use-done-for-button="false"
-            @handle-confirm="emit('removeSubTeam', selectedTeam.teamId)"
+            @handle-confirm="$emit('removeSubTeam', selectedTeam.teamId)"
           />
         </div>
       </v-card-text>
