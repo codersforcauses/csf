@@ -35,12 +35,21 @@
       <tr>
         <th class="text-left">Rank</th>
         <th class="text-left">Name</th>
+        <th class="text-left">Mileage</th>
       </tr>
     </thead>
-    <tbody>
-      <tr v-for="(item, index) in places" :key="item.username">
+    <tbody v-if="activeButton==='Individual'">
+      <tr v-for="(item, index) in userLeaderboard" :key="item.username">
         <td class="w-0">{{ index + 1 }}</td>
         <td>{{ item.username }}</td>
+        <td>{{ item.totalMileage }}</td>
+      </tr>
+    </tbody>
+    <tbody v-else>
+      <tr v-for="(item, index) in teamLeaderboard" :key="item.name">
+        <td class="w-0">{{ index + 1 }}</td>
+        <td>{{ item.name }}</td>
+        <!--  use bio too -->
         <td>{{ item.totalMileage }}</td>
       </tr>
     </tbody>
@@ -49,7 +58,7 @@
 
 <script setup lang="ts">
 import { useMileageStore } from '@/stores/mileage';
-import type { UserLeaderboardEntry } from '@/types/mileage'
+import type { UserLeaderboardEntry, TeamLeaderboardEntry } from '@/types/mileage'
 import { ref, onMounted } from 'vue'
 
 
@@ -78,12 +87,17 @@ const searchQuery = ref('')
   { name: 'Team 19', rank: 19, mileage: 0 },
   { name: 'Team 20', rank: 20, mileage: 0 }
 ]*/
-const places = ref<UserLeaderboardEntry[]>([])
+const userLeaderboard = ref<UserLeaderboardEntry[]>([])
+const teamLeaderboard = ref<TeamLeaderboardEntry[]>([])
 
 onMounted(async () => {
-  let leaderboard = await mileageStore.getLeaderboard("users")
-  if (leaderboard) {
-    places.value = leaderboard
+  let users = await mileageStore.getLeaderboard("users") as UserLeaderboardEntry[]
+  let teams = await mileageStore.getLeaderboard("teams") as TeamLeaderboardEntry[]
+  if (users) {
+    userLeaderboard.value = users
+  }
+  if (teams) {
+    teamLeaderboard.value = teams
   }
 })
 </script>

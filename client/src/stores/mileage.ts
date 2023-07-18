@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { useStorage } from '@vueuse/core'
 import server from '@/utils/server'
-import type { Mileage, UserLeaderboardEntry } from '@/types/mileage'
+import type { Mileage, UserLeaderboardEntry, TeamLeaderboardEntry } from '@/types/mileage'
 import camelize from 'camelize-ts'
 
 export const useMileageStore = defineStore('mileage', {
@@ -41,7 +41,7 @@ export const useMileageStore = defineStore('mileage', {
         }
       }).then((res) => {
         if (res.status == 200) {
-          return camelize(res.data) as UserLeaderboardEntry[]
+          return camelize(res.data) as UserLeaderboardEntry[] | TeamLeaderboardEntry[]
         }
       })
     }
