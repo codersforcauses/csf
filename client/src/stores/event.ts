@@ -4,7 +4,7 @@ import camelize from 'camelize-ts'
 import snakify, { type Snakify } from 'snakify-ts'
 import server from '@/utils/server'
 import { useUserStore } from './user'
-import { type AxiosRequestConfig } from 'axios'
+import  { type AxiosRequestConfig } from 'axios'
 
 export const useEventStore = defineStore('event', {
   state: () => ({
@@ -56,13 +56,16 @@ export const useEventStore = defineStore('event', {
       }
     },
     async getEvents() {
-      const userStore = useUserStore()
+      // const userStore = useUserStore()
 
-      const headers: AxiosRequestConfig['headers'] = {
-        Authorization: 'Bearer ' + userStore.token?.access
-      }
+      // const headers: AxiosRequestConfig['headers'] = {
+      //   Authorization: 'Bearer ' + userStore.token?.access
+      // }
 
-      const { data, status } = await server.get('event/get/', headers)
+      // console.log(headers);
+      
+
+      const { data, status } = await server.get('event/get/')      
 
       if (status == 200) this.events = camelize(data as Snakify<Event>[])
     }

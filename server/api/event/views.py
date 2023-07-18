@@ -6,8 +6,6 @@ from django.db.models import Q
 from .models import Event
 from .serializers import EventSerialiser
 
-from django.http import HttpResponse
-
 
 @api_view(["POST"])
 def create_event(request):
