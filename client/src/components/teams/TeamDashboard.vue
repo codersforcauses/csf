@@ -26,19 +26,17 @@
           <h2>Invite Code</h2>
           <p class="invite-code">{{ teamData.invite_code }}</p>
         </v-col>
-        <v-col align="end" class="px-5">
-          <v-tooltip location="start">
-            <template v-slot:activator="{ props }">
-              <v-icon
-                @click="copyInviteCode"
-                v-bind="props"
-                class="mdi mdi-clipboard-multiple-outline"
-                size="32px"
-              />
-            </template>
-            <span>{{ copyHoverText }}</span>
-          </v-tooltip>
-        </v-col>
+        <v-tooltip location="end">
+          <template v-slot:activator="{ props }">
+            <v-icon
+              @click="copyInviteCode"
+              v-bind="props"
+              class="mdi mdi-clipboard-multiple-outline px-10"
+              size="32px"
+            />
+          </template>
+          <span>{{ copyHoverText }}</span>
+        </v-tooltip>
       </v-row>
       <v-divider />
 
@@ -48,38 +46,43 @@
           <h2>Bio</h2>
           <p v-if="isBioVisible">{{ teamData.bio }}</p>
         </v-col>
-        <v-col align="end" class="px-3">
-          <v-icon
-            v-if="isBioVisible"
-            icon="mdi mdi-chevron-down"
-            @click="isBioVisible = !isBioVisible"
-            size="50px"
-          />
-          <v-icon
-            v-else
-            icon="mdi mdi-chevron-right"
-            @click="isBioVisible = !isBioVisible"
-            size="50px"
-          />
-        </v-col>
+        <v-icon
+          v-if="isBioVisible"
+          icon="mdi mdi-chevron-down"
+          @click="isBioVisible = !isBioVisible"
+          class="px-10"
+          size="50px"
+        />
+        <v-icon
+          v-else
+          icon="mdi mdi-chevron-right"
+          @click="isBioVisible = !isBioVisible"
+          class="px-10"
+          size="50px"
+        />
       </v-row>
       <v-divider></v-divider>
 
       <!-- Daily Kilometres -->
-      <v-row
-        align="start"
-        @click="isDailyKmsVisible = !isDailyKmsVisible"
-        id="pointer-cursor"
-        class="my-2"
-      >
+      <v-row align="start" id="pointer-cursor" class="my-2">
         <v-col>
           <h2>Daily KMs</h2>
-          <p v-if="isDailyKmsVisible">daily Km's chart goes here</p>
+          <MileageGraph v-if="isDailyKmsVisible" />
         </v-col>
-        <v-col align="end" class="px-3">
-          <v-icon v-if="isDailyKmsVisible" icon="mdi mdi-chevron-down" size="50px" />
-          <v-icon v-else icon="mdi mdi-chevron-right" size="50px" />
-        </v-col>
+        <v-icon
+          v-if="isDailyKmsVisible"
+          @click="isDailyKmsVisible = !isDailyKmsVisible"
+          icon="mdi mdi-chevron-down"
+          size="50px"
+          class="px-10"
+        />
+        <v-icon
+          v-else
+          @click="isDailyKmsVisible = !isDailyKmsVisible"
+          icon="mdi mdi-chevron-right"
+          size="50px"
+          class="px-10"
+        />
       </v-row>
       <v-divider />
 
@@ -89,23 +92,24 @@
           <h2>Sub-Teams</h2>
           <p v-if="isSubTeamsVisible">Leave this for now</p>
         </v-col>
-        <v-col align="end" class="px-3">
-          <v-icon icon="mdi mdi-plus" size="45px" class="px-6" id="pointer-cursor" />
-          <v-icon
-            v-if="isSubTeamsVisible"
-            icon="mdi mdi-chevron-down"
-            @click="isSubTeamsVisible = !isSubTeamsVisible"
-            size="50px"
-            id="pointer-cursor"
-          />
-          <v-icon
-            v-else
-            icon="mdi mdi-chevron-right"
-            @click="isSubTeamsVisible = !isSubTeamsVisible"
-            size="50px"
-            id="pointer-cursor"
-          />
-        </v-col>
+
+        <v-icon icon="mdi mdi-plus" size="45px" class="px-6" id="pointer-cursor" />
+        <v-icon
+          v-if="isSubTeamsVisible"
+          icon="mdi mdi-chevron-down"
+          @click="isSubTeamsVisible = !isSubTeamsVisible"
+          size="50px"
+          id="pointer-cursor"
+          class="px-10"
+        />
+        <v-icon
+          v-else
+          icon="mdi mdi-chevron-right"
+          @click="isSubTeamsVisible = !isSubTeamsVisible"
+          size="50px"
+          id="pointer-cursor"
+          class="px-10"
+        />
       </v-row>
       <v-divider />
 
@@ -120,41 +124,61 @@
           <h2>Leaderboard</h2>
           <p v-if="isLeaderboardVisible">Leave this for now</p>
         </v-col>
-        <v-col align="end" class="px-3">
-          <v-icon v-if="isLeaderboardVisible" icon="mdi mdi-chevron-down" size="50px" />
-          <v-icon v-else icon="mdi mdi-chevron-right" size="50px" />
-        </v-col>
+        <v-icon v-if="isLeaderboardVisible" icon="mdi mdi-chevron-down" size="50px" class="px-10" />
+        <v-icon v-else icon="mdi mdi-chevron-right" size="50px" class="px-10" />
       </v-row>
       <v-divider class="mb-10" />
     </v-row>
   </v-container>
 
   <!-- Leave/Delete Team -->
-  <v-row justify="center">
-    <v-btn size="large" color="red white--text" v-if="user.is_admin"> Delete Team </v-btn>
-    <v-btn size="large" color="red white--text" v-else>Leave Team</v-btn>
+  <v-row justify="center" class="ma-5">
+    <v-btn size="large" color="red white--text" v-if="user.teamAdmin" @click="deleteTeam">
+      Delete Team
+    </v-btn>
+    <v-btn size="large" color="red white--text" v-else @click="removeTeam">Leave Team</v-btn>
   </v-row>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useDisplay } from 'vuetify'
 import EditTeamInfo from './EditTeamInfo.vue'
+import MileageGraph from '../MileageGraph.vue'
 const { mobile } = useDisplay()
+import { useTeamStore } from '@/stores/team'
+import { storeToRefs } from 'pinia'
+const teamStore = useTeamStore()
+const { team, user } = storeToRefs(teamStore)
 
-const user = {
-  is_admin: true
+onMounted(async () => {
+  if (user.value.teamId) await teamStore.getTeam(user.value.teamId)
+})
+const deleteTeam = () => {
+  teamStore.deleteTeam()
+}
+const removeTeam = () => {
+  teamStore.removeTeam()
 }
 
-const teamData = {
-  team_name: 'CFC Runners',
+const teamData = ref({
+  team_name: team.value ? team.value.name : '',
   total_kilometres: 990,
-  invite_code: 'AHGQ234JHGW',
-  bio: 'This is our great team bio for our team CFC Runners',
+  invite_code: team.value ? team.value.joinCode : '',
+  bio: team.value ? team.value.bio : '',
   daily_kms: [],
   sub_teams: [],
   leaderboard: []
-}
+})
+
+watch(team, (newTeam) => {
+  // Update the teamData when the team value changes
+  if (newTeam) {
+    teamData.value.team_name = newTeam.name
+    teamData.value.bio = newTeam.bio
+    teamData.value.invite_code = newTeam.joinCode
+  }
+})
 
 const isBioVisible = ref(false)
 const isDailyKmsVisible = ref(false)
@@ -164,7 +188,7 @@ const isLeaderboardVisible = ref(false)
 const copyHoverText = ref('Copy to Clipboard')
 
 const copyInviteCode = () => {
-  navigator.clipboard.writeText(teamData.invite_code)
+  navigator.clipboard.writeText(teamData.value.invite_code)
   copyHoverText.value = 'Copied!'
 
   setTimeout(() => {

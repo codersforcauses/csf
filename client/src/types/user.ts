@@ -1,5 +1,5 @@
 export interface User {
-  id: Number
+  id: number
   username: string
   firstName: string
   lastName: string
@@ -26,7 +26,28 @@ export interface Signup {
   hasConsent: boolean
 }
 
-export interface Tokens  {
+export interface UserSettings {
+  username: string
+  firstName: string
+  lastName: string
+  email: string
+  avatar: string
+  travelMethod: string
+}
+
+export interface ChangeDetailsError {
+  username?: string | string[]
+  email?: string | string[]
+  firstName?: string | string[]
+  lastName?: string | string[]
+}
+
+export interface ChangePasswordError {
+  oldPassword?: string
+  password?: string
+}
+
+export interface Tokens {
   access: string
   refresh: string
 }

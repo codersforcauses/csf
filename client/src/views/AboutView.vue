@@ -38,7 +38,7 @@
       variant="flat"
       :style="{ fontFamily: 'Hackney', fontSize: '42px' }"
       style="letter-spacing: -1px"
-      @click="openSignUpModal"
+      @click="modalStore.register"
     >
       REGISTER NOW
     </v-btn>
@@ -111,27 +111,18 @@
     </p></v-row
   >
   <Footer />
-  <SignUpModal
-    :dialog-modal="signupModal"
-    v-if="signupModal"
-    @open-signUp-modal="openSignUpModal"
-  />
 </template>
 
 <script setup lang="ts">
 import Footer from '@/components/Footer.vue'
-import { ref } from 'vue'
-import SignUpModal from '@/components/SignUpModal.vue'
 import studentsLearning from '/images/students_learning.webp'
 import thankYou from '/images/thank_you.jpg'
 import StrideForEducationGif from '/gif/Stride_1.gif'
 import CSFBanner from '/images/CSF_Banner.jpg'
 import StrideForEducationRBGLogo from '/images/SFE_RGB_Logo.png'
 
-const signupModal = ref<boolean>(false)
-const openSignUpModal = () => {
-  signupModal.value = !signupModal.value
-}
+import { useModalStore } from '@/stores/modal'
+const modalStore = useModalStore()
 
 const beliefs = [
   'Every young person we work with should be able to dream big and be proud.',
