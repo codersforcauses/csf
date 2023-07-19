@@ -15,7 +15,9 @@ Click on `Add Event`
 
 ![Event Dashboard](../img/addevent.png)
 
-Check the `is public` box so that all users can see the event! Ignore `Team id`, this is used for when a team wants to create a private event. Save the form.
+Check the `is public` box so that all users can see the event! Ignore `Team id`, this is used for when a team wants to create a private event. If `is archived` is checked then it will not be displayed to users on the events page.
+
+Save the form.
 ![Events Form](../img/eventform.png)
 
 You should see your newly created event on the event dashboard page.
