@@ -1,6 +1,6 @@
 <template>
   <v-icon
-    v-if="user.teamAdmin"
+    v-if="userStore.user.teamAdmin"
     icon="mdi mdi-pencil"
     size="32px"
     color="black"
@@ -39,15 +39,15 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
 import { useTeamStore } from '@/stores/team'
-import { storeToRefs } from 'pinia'
+import { useUserStore } from '@/stores/user';
 const teamStore = useTeamStore()
-const { user, team } = storeToRefs(teamStore)
+const userStore = useUserStore()
 
 const isFullscreen = ref(false)
 
 const editTeamInfoDialog = ref(false)
-const newBioText = ref(team.value ? team.value.bio : '')
-const newTeamName = ref(team.value ? team.value.name : '')
+const newBioText = ref(teamStore.team ? teamStore.team.bio : '')
+const newTeamName = ref(teamStore.team ? teamStore.team.name : '')
 
 const editTeamInfo = async () => {
   teamStore.editTeam({ name: newTeamName.value, bio: newBioText.value })

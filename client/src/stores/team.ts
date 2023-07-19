@@ -1,15 +1,15 @@
 import { defineStore } from 'pinia'
 import snakify from 'snakify-ts'
 import type { Team } from '@/types/team'
-import { useStorage } from '@vueuse/core'
 import camelize from 'camelize-ts'
 import type { User } from '@/types/user'
 import server from '@/utils/server'
 import { useUserStore } from './user'
+import useNullableStorage from '@/utils/useNullableStorage'
 
 export const useTeamStore = defineStore('team', () => {
   const userStore = useUserStore()
-  const team = useStorage('team', null as Team | null)
+  const team = useNullableStorage<Team>('team')
 
   const removeTeamFromState = () => {
     userStore.user!.teamId = undefined
@@ -39,7 +39,7 @@ export const useTeamStore = defineStore('team', () => {
       const res = await server.post('team/create/', snakify(data))
       if (res.status == 200) {
         team.value = camelize<Team>(res.data)
-        this.joinTeam(userStore.user!.id, team.value.joinCode, true)
+        this.joinTeam(team.value.joinCode, true)
       }
     },
 
@@ -48,9 +48,9 @@ export const useTeamStore = defineStore('team', () => {
       if (res.status == 200) team.value = camelize<Team>(res.data)
     },
 
-    async joinTeam(userId: number, joinCode: string, teamAdmin: boolean = false) {
+    async joinTeam(joinCode: string, teamAdmin: boolean = false) {
       const res = await server.patch(
-        `user/join/${userId}/`,
+        `user/join/${userStore.user!.id}/`,
         snakify({
           joinCode,
           teamAdmin

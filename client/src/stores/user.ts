@@ -1,13 +1,13 @@
 import { defineStore } from 'pinia'
-import { useStorage } from '@vueuse/core'
 import server from '@/utils/server'
 import type { Signup, Tokens, User, UserSettings } from '@/types/user'
 import camelize from 'camelize-ts'
 import snakify from 'snakify-ts'
+import useNullableStorage from '@/utils/useNullableStorage'
 
 export const useUserStore = defineStore('user', () => {
-  const user = useStorage('authUser', null as User | null)
-  const token = useStorage('authToken', null as Tokens | null)
+  const user = useNullableStorage<User>('authUser')
+  const token = useNullableStorage<Tokens>('authToken')
 
   if (token.value != null)
     server.defaults.headers.common['Authorization'] = 'Bearer ' + token.value.access
@@ -27,7 +27,7 @@ export const useUserStore = defineStore('user', () => {
     },
 
     async login(username: string, password: string) {
-      const { status, data } = await server.post('auth/token/', { username, password })
+      const { status, data } = await server.post('auth/token/', { username, password }, {validateStatus: () => true})
       if (status == 200) {
         await this.getUser(username)
         token.value = data
