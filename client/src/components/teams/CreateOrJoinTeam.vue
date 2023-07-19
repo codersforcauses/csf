@@ -39,15 +39,12 @@ import { useDisplay } from 'vuetify'
 import NewTeamModal from '@/components/teams/NewTeamModal.vue'
 import { ref } from 'vue'
 import { useTeamStore } from '@/stores/team'
-import { storeToRefs } from 'pinia'
 const teamStore = useTeamStore()
-
-const { user } = storeToRefs(teamStore)
 
 const joinCode = ref('')
 
 const joinTeam = () => {
-  teamStore.joinTeam(user.value.id, joinCode.value)
+  teamStore.joinTeam(joinCode.value)
 }
 
 const { mobile } = useDisplay()
