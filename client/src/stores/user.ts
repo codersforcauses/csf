@@ -14,15 +14,18 @@ export const useUserStore = defineStore('user', () => {
 
   return {
     user,
+
     logout() {
       user.value = null
       token.value = null
       delete server.defaults.headers.common['Authorization']
     },
+
     async getUser(username: string) {
       const { status, data } = await server.get(`user/${username}/`)
       if (status == 200) user.value = camelize<User>(data) as User
     },
+
     async login(username: string, password: string) {
       const { status, data } = await server.post('auth/token/', { username, password })
       if (status == 200) {
@@ -33,6 +36,7 @@ export const useUserStore = defineStore('user', () => {
       }
       return false
     },
+
     async changePassword(oldPassword: string, newPassword: string) {
       if (user.value) {
         return await server
@@ -48,6 +52,7 @@ export const useUserStore = defineStore('user', () => {
           })
       }
     },
+
     async changeDetails(newDetails: UserSettings) {
       return await server
         .patch(`user/change_details/${user.value!.id}`, snakify(newDetails))
@@ -55,6 +60,7 @@ export const useUserStore = defineStore('user', () => {
           return res.status
         })
     },
+
     async sendResetEmail(email: string) {
       return await server
         .post('user/request_reset_password/', {
@@ -64,6 +70,7 @@ export const useUserStore = defineStore('user', () => {
           return res.status
         })
     },
+
     async submitResetToken(token: string) {
       return await server
         .post(
@@ -76,6 +83,7 @@ export const useUserStore = defineStore('user', () => {
           return res.status
         })
     },
+
     async submitNewPassword(token: string, newPassword: string) {
       return await server
         .post(
@@ -89,6 +97,7 @@ export const useUserStore = defineStore('user', () => {
           return res.status
         })
     },
+
     async registerUser(signup: Signup) {
       await server.post('auth/register/', snakify(signup))
     }
