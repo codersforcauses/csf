@@ -135,7 +135,12 @@
 
   <!-- Leave/Delete Team -->
   <v-row justify="center" class="ma-5">
-    <v-btn size="large" color="red white--text" v-if="userStore.user.teamAdmin" @click="deleteTeam">
+    <v-btn
+      size="large"
+      color="red white--text"
+      v-if="userStore.user!.teamAdmin"
+      @click="deleteTeam"
+    >
       Delete Team
     </v-btn>
     <v-btn size="large" color="red white--text" v-else @click="removeTeam">Leave Team</v-btn>
@@ -155,7 +160,7 @@ const teamStore = useTeamStore()
 const userStore = useUserStore()
 
 onMounted(async () => {
-  if (userStore.user.teamId) await teamStore.getTeam(userStore.user.teamId)
+  if (userStore.user!.teamId) await teamStore.getTeam(userStore.user!.teamId)
 })
 const deleteTeam = () => {
   teamStore.deleteTeam()
@@ -174,7 +179,7 @@ const teamData = ref({
   leaderboard: []
 })
 
-watch(teamStore.team, (newTeam) => {
+watch(teamStore.team!, (newTeam) => {
   // Update the teamData when the team value changes
   if (newTeam) {
     teamData.value.team_name = newTeam.name

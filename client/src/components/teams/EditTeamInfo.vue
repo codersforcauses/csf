@@ -1,6 +1,6 @@
 <template>
   <v-icon
-    v-if="userStore.user.teamAdmin"
+    v-if="userStore.user!.teamAdmin"
     icon="mdi mdi-pencil"
     size="32px"
     color="black"
