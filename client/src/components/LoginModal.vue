@@ -244,8 +244,7 @@ const submitForm = async () => {
       text: 'Login Success'
     })
     modalStore.close()
-  }
-  else {
+  } else {
     errors.value.login = 'Your username or password is incorrect'
     notify({
       title: 'Login',
