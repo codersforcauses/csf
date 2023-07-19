@@ -27,7 +27,11 @@ export const useUserStore = defineStore('user', () => {
     },
 
     async login(username: string, password: string) {
-      const { status, data } = await server.post('auth/token/', { username, password }, {validateStatus: () => true})
+      const { status, data } = await server.post(
+        'auth/token/',
+        { username, password },
+        { validateStatus: () => true }
+      )
       if (status == 200) {
         await this.getUser(username)
         token.value = data

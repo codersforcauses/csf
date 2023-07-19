@@ -39,7 +39,7 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
 import { useTeamStore } from '@/stores/team'
-import { useUserStore } from '@/stores/user';
+import { useUserStore } from '@/stores/user'
 const teamStore = useTeamStore()
 const userStore = useUserStore()
 

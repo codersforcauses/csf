@@ -237,7 +237,7 @@ const isEmail = (candidate: string) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3}
 
 const submitForm = async () => {
   if (await userStore.login(modalStore.username, modalStore.password)) modalStore.close()
-  else errors.value.login = 'Your username or password is incorrect' 
+  else errors.value.login = 'Your username or password is incorrect'
 }
 
 async function emailUser() {
