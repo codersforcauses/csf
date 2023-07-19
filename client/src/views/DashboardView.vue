@@ -1,7 +1,7 @@
 <template>
   <div v-if="!loading">
     <v-container>
-      <v-row class="ma-0 px-13 pt-4 " align="center" justify="center">
+      <v-row class="ma-0 px-13 pt-4" align="center" justify="center">
         <v-spacer />
         <v-col align="center">
           <h1>Welcome back, {{ firstName }}</h1>
@@ -24,8 +24,14 @@
                 </v-col>
                 <v-spacer />
                 <v-col cols="auto">
-                  <v-btn variant="elevated" elevated="2" :ripple="true" icon="mdi-plus" color="primaryRed"
-                    @click="dialog = true" />
+                  <v-btn
+                    variant="elevated"
+                    elevated="2"
+                    :ripple="true"
+                    icon="mdi-plus"
+                    color="primaryRed"
+                    @click="dialog = true"
+                  />
                   <MileageModal v-model="dialog" @handle-submit="updateChallengeProgress" />
                 </v-col>
               </v-row>
@@ -48,8 +54,10 @@
           <v-row dense>
             <v-col>
               <div class="progress-bar rounded-lg">
-                <div :class="`rounded-lg ${challenge.colour}`"
-                  :style="`width: ${calcWidth(distanceTravelled, challenge.length)}%`"></div>
+                <div
+                  :class="`rounded-lg ${challenge.colour}`"
+                  :style="`width: ${calcWidth(distanceTravelled, challenge.length)}%`"
+                ></div>
               </div>
             </v-col>
             <v-col cols="3" sm="2" lg="1">
@@ -142,7 +150,7 @@ onMounted(async () => {
   background-color: #e2e2e2;
 }
 
-.progress-bar>div,
+.progress-bar > div,
 .length-label {
   height: 30px;
 }
