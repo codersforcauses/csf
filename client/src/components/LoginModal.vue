@@ -237,23 +237,8 @@ const required = (v: string) => !!v || 'Field is required'
 const isEmail = (candidate: string) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(candidate)
 
 const submitForm = async () => {
-  if (await userStore.loginUser(modalStore.username, modalStore.password)) {
-    notify({
-      title: 'Login',
-      type: 'success',
-      text: 'Login Success'
-    })
-    modalStore.close()
-  } else {
-    userStore.authToken = null
-    userStore.authUser = null
-    errors.value.login = 'Your username or password is incorrect'
-    notify({
-      title: 'Login',
-      type: 'error',
-      text: errors.value.login
-    })
-  }
+  if (await userStore.login(modalStore.username, modalStore.password)) modalStore.close()
+  else errors.value.login = 'Your username or password is incorrect'
 }
 
 async function emailUser() {

@@ -260,11 +260,11 @@ import FooterBanner from '/images/Footer-min.jpeg'
 import { type Signup } from '../types/user'
 import ConsentModal from './ConsentModal.vue'
 import { useUserStore } from '../stores/user'
-import snakify from 'snakify-ts'
 import { AxiosError } from 'axios'
 import camelize from 'camelize-ts'
 import { useModalStore } from '@/stores/modal'
 import { storeToRefs } from 'pinia'
+import { reactiveOmit } from '@vueuse/core'
 import { notify } from '@kyvg/vue3-notification'
 const userStore = useUserStore()
 const modalStore = useModalStore()
@@ -315,20 +315,13 @@ const submit = async () => {
   const method = travelMethod.value.filter((method) => method.isSelected === true)
   state.travelMethod = method[0].mode
   state.avatar = avatar[0].url
-  const obj = snakify(state)
-  if (obj.confirm_password != obj.password) {
+  if (state.confirmPassword != state.password) {
     Object.assign(errors, { confirmPassword: "Passwords don't match" })
     firstPage.value = true
   } else {
-    delete obj.confirm_password
-    Object.assign(errors, initialErrors)
     try {
-      await userStore.registerUser(obj)
-      notify({
-        title: 'Sign Up',
-        type: 'success',
-        text: 'Sign Up Successful'
-      })
+      Object.assign(errors, initialErrors)
+      await userStore.registerUser(reactiveOmit(state, 'confirmPassword'))
       modalStore.login()
     } catch (error: AxiosError | any) {
       console.debug(error)

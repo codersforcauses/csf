@@ -10,7 +10,7 @@ export interface User {
   hasConsent: boolean
   subteamId?: number
   teamId?: number
-  teamAdmin?: Boolean
+  teamAdmin?: boolean
 }
 
 export interface Signup {
