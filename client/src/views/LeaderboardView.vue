@@ -29,10 +29,11 @@
       v-model="searchQuery"
     />
   </v-row>
-  <v-table fixed-header class="mx-4">
+
+  <v-table fixed-header class="mx-8">
     <thead>
       <tr>
-        <th class="text-right">Rank</th>
+        <th class="text-right w-0">Rank</th>
         <th class="text-left">Name</th>
         <th class="text-left">Mileage</th>
       </tr>
@@ -87,19 +88,7 @@ const activeButton = ref('Individual')
 const searchQuery = ref('')
 const userLeaderboard = ref<RankedUserLeaderboardEntry[]>([])
 const teamLeaderboard = ref<RankedTeamLeaderboardEntry[]>([])
-/*const teamLeaderboard = ref<RankedTeamLeaderboardEntry[]>([
-  { name: 'Team 1', rank: 1, totalMileage: 100, bio: 'test' },
-  { name: 'Team 2', rank: 2, totalMileage: 90, bio: 'test' },
-  { name: 'Team 3', rank: 3, totalMileage: 80, bio: 'test' },
-  { name: 'Team 4', rank: 4, totalMileage: 70, bio: 'test' },
-  { name: 'Team 5', rank: 5, totalMileage: 60, bio: 'test' },
-  { name: 'Team 6', rank: 6, totalMileage: 50, bio: 'test' },
-  { name: 'Team 7', rank: 7, totalMileage: 40, bio: 'test' },
-  { name: 'Team 8', rank: 8, totalMileage: 30, bio: 'test' },
-  { name: 'Team 9', rank: 9, totalMileage: 20, bio: 'test' },
-  { name: 'Team 10', rank: 10, totalMileage: 10, bio: 'test' },
-  { name: 'Team 11', rank: 11, totalMileage: 0, bio: 'test' }
-])*/
+
 const filteredUserLeaderboard = computed<RankedUserLeaderboardEntry[]>(() =>
   userLeaderboard.value.filter((user) => user.username.toLowerCase().includes(searchQuery.value))
 )
