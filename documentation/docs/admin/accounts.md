@@ -20,7 +20,7 @@
 - `Email`: Password reset will go to this address
 - `Team signup`: Ignore - Used for teachers who sign up a class
 - `Has consent`: Data will not be exported to CSV if this is not checked.
-- `avatar`: Select any image - to see the images they cwill have to sign into the frontend
+- `avatar`: Select any image - to see the images they will have to sign in on the frontend
 - `Travel method`: Used for the frontend app, changes icon depending on what was selected
 - `Subteam id`: This can be ignored, it is used if the user has joined a team and been assigned to a subteam
 - `Team id`: Used to select the team this user is part of (can be blank)
