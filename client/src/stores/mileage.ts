@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
 import { useStorage } from '@vueuse/core'
 import server from '@/utils/server'
-import type { UserLeaderboardEntry, TeamLeaderboardEntry } from '@/types/mileage'
+import type { UserLeaderboardEntry, TeamLeaderboardEntry, GetLeaderboardParam, UserLeaderboard, TeamLeaderboard } from '@/types/mileage'
 import type Mileage from '@/types/mileage'
 import camelize from 'camelize-ts'
+import snakify from 'snakify-ts'
 
 export const useMileageStore = defineStore('mileage', {
   state: () => ({
@@ -35,14 +36,12 @@ export const useMileageStore = defineStore('mileage', {
           }
         })
     },
-    async getLeaderboard(type: "users" | "teams") {
+    async getLeaderboard(param: GetLeaderboardParam) {
       return await server.get(`mileage/get_leaderboard/`, {
-        params: {
-          type: type
-        }
+        params: snakify(param)
       }).then((res) => {
         if (res.status == 200) {
-          return camelize(res.data) as UserLeaderboardEntry[] | TeamLeaderboardEntry[]
+          return camelize(res.data) as unknown as UserLeaderboard | TeamLeaderboard
         }
       })
     }

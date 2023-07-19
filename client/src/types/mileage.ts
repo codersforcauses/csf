@@ -5,6 +5,22 @@ export default interface Mileage {
   date: string
 }
 
+export interface GetLeaderboardParam {
+  type: "users" | "teams"
+  username?: string
+  teamName?: string
+}
+
+export interface UserLeaderboard {
+  leaderboard: UserLeaderboardEntry[]
+  user?: RankedUserLeaderboardEntry
+}
+
+export interface TeamLeaderboard {
+  leaderboard: TeamLeaderboardEntry[]
+  team?: RankedTeamLeaderboardEntry
+}
+
 export interface UserLeaderboardEntry {
   username: string
   totalMileage: number

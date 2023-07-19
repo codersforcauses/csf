@@ -39,6 +39,16 @@
       </tr>
     </thead>
     <tbody v-if="activeButton === 'Individual'">
+      <tr v-if="currentUser" style="border-collapse: separate; border-spacing: 20px;">
+        <td v-if="currentUser.rank < 4" class="text-right w-0">
+          <v-icon icon="mdi-trophy" size="20px" :class="getTrophyColour(currentUser.rank)" /> {{ currentUser.rank }}
+        </td>
+        <td v-else class="text-right w-0">{{ currentUser.rank }}</td>
+        <td>{{ currentUser.username }}</td>
+        <td>{{ currentUser.totalMileage }}</td>
+      </tr>
+      <!-- What follows is a dumb way of making a gap in the table -->
+      <tr v-if="currentUser"><td></td><td></td><td></td></tr> 
       <tr v-for="item in filteredUserLeaderboard" :key="item.username">
         <td v-if="item.rank < 4" class="text-right w-0">
           <v-icon icon="mdi-trophy" size="20px" :class="getTrophyColour(item.rank)" /> {{ item.rank }}
@@ -49,6 +59,16 @@
       </tr>
     </tbody>
     <tbody v-else>
+      <tr v-if="currentTeam" style="border-collapse: separate; border-spacing: 20px;">
+        <td v-if="currentTeam.rank < 4" class="text-right w-0">
+          <v-icon icon="mdi-trophy" size="20px" :class="getTrophyColour(currentTeam.rank)" /> {{ currentTeam.rank }}
+        </td>
+        <td v-else class="text-right w-0">{{ currentTeam.rank }}</td>
+        <td>{{ currentTeam.name }}</td>
+        <td>{{ currentTeam.totalMileage }}</td>
+      </tr>
+      <!-- What follows is a dumb way of making a gap in the table -->
+      <tr v-if="currentTeam"><td></td><td></td><td></td></tr> 
       <tr v-for="item in filteredTeamLeaderboard" :key="item.name">
         <td v-if="item.rank < 4" class="text-right w-0">
           <v-icon icon="mdi-trophy" size="20px" :class="getTrophyColour(item.rank)" /> {{ item.rank }}
@@ -64,19 +84,28 @@
 
 <script setup lang="ts">
 import { useMileageStore } from '@/stores/mileage'
+import { useUserStore } from '@/stores/user'
+import { useTeamStore } from '@/stores/team'
 import type {
   UserLeaderboardEntry,
   RankedUserLeaderboardEntry,
   TeamLeaderboardEntry,
-  RankedTeamLeaderboardEntry
+  RankedTeamLeaderboardEntry,
+  GetLeaderboardParam,
+  UserLeaderboard,
+  TeamLeaderboard
 } from '@/types/mileage'
 import { ref, onMounted, computed } from 'vue'
 
 const mileageStore = useMileageStore()
+const userStore = useUserStore()
+const teamStore = useTeamStore()
 const activeButton = ref('Individual')
 const searchQuery = ref('')
 const userLeaderboard = ref<RankedUserLeaderboardEntry[]>([])
 const teamLeaderboard = ref<RankedTeamLeaderboardEntry[]>([])
+const currentUser = ref<RankedUserLeaderboardEntry | undefined>()
+const currentTeam = ref<RankedTeamLeaderboardEntry | undefined>()
 
 const filteredUserLeaderboard = computed<RankedUserLeaderboardEntry[]>(() =>
   userLeaderboard.value.filter((user) => user.username.toLowerCase().includes(searchQuery.value))
@@ -97,26 +126,41 @@ function getTrophyColour(rank: number) {
 }
 
 onMounted(async () => {
-  let users = (await mileageStore.getLeaderboard('users')) as UserLeaderboardEntry[]
-  let teams = (await mileageStore.getLeaderboard('teams')) as TeamLeaderboardEntry[]
-  let users2: RankedUserLeaderboardEntry[] = []
-  users.forEach((user, index) => {
-    if (index > 0 && user.totalMileage === users[index - 1].totalMileage) {
-      users2.push({ ...user, rank: users2[index - 1].rank })
-    } else {
-      users2.push({ ...user, rank: index + 1 })
+  let userParam = {type:'users'} as GetLeaderboardParam
+  if (userStore.user) userParam.username = userStore.user.username
+  let teamParam = {type:'teams'} as GetLeaderboardParam
+  if (teamStore.team) teamParam.teamName = teamStore.team.name
+  let usersResult = await mileageStore.getLeaderboard(userParam)
+  if (usersResult) {
+    usersResult = usersResult as UserLeaderboard
+    let users = usersResult.leaderboard as UserLeaderboardEntry[]
+    let users2: RankedUserLeaderboardEntry[] = []
+    users.forEach((user, index) => {
+      if (index > 0 && user.totalMileage === users[index - 1].totalMileage) {
+        users2.push({ ...user, rank: users2[index - 1].rank })
+      } else {
+        users2.push({ ...user, rank: index + 1 })
+      }
+    })
+    userLeaderboard.value = users2
+    currentUser.value = usersResult.user
+  }
+  let teamsResult = await mileageStore.getLeaderboard(teamParam)
+  if (teamsResult) {
+    teamsResult = teamsResult as TeamLeaderboard
+    let teams = teamsResult.leaderboard as TeamLeaderboardEntry[]
+    let teams2: RankedTeamLeaderboardEntry[] = []
+    teams.forEach((team, index) => {
+      if (index > 0 && team.totalMileage === teams[index - 1].totalMileage) {
+        teams2.push({ ...team, rank: teams2[index - 1].rank })
+      } else {
+        teams2.push({ ...team, rank: index + 1 })
+      }
+    })
+    teamLeaderboard.value = teams2
+    currentTeam.value = teamsResult.team
     }
-  })
-  let teams2: RankedTeamLeaderboardEntry[] = []
-  teams.forEach((team, index) => {
-    if (index > 0 && team.totalMileage === teams[index - 1].totalMileage) {
-      teams2.push({ ...team, rank: teams2[index - 1].rank })
-    } else {
-      teams2.push({ ...team, rank: index + 1 })
-    }
-  })
-  userLeaderboard.value = users2
-  teamLeaderboard.value = teams2
+
 })
 </script>
 
