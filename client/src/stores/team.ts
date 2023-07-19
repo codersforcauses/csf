@@ -49,7 +49,7 @@ export const useTeamStore = defineStore('team', {
     },
 
     async editTeam(data: Partial<Team>) {
-      await server.patch(`team/edit/${this.team.teamId}/`, snakify(data)).then((res) => {
+      await server.put(`team/edit/${this.team.teamId}/`, snakify(data)).then((res) => {
         if (res.status == 200) {
           const data = camelize(res.data) as Object as Team
           this.currentTeam = JSON.stringify(data)

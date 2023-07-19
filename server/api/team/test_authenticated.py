@@ -11,6 +11,10 @@ class teamTests(APITestCase):
             name="mockTeam1",
             join_code="mockTeamCode1",
         )
+        self.team2 = Team.objects.create(
+            name="mockTeam2",
+            join_code="mockTeamCode2",
+        )
         self.user = User.objects.create_user(username='testuser', password='testuser123', team_id=self.team, team_admin=True, is_active=True)
         self.user.save()
 
@@ -44,6 +48,15 @@ class teamTests(APITestCase):
             format='json'
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = self.client.put(
+            reverse(
+                "team:update-team",
+                kwargs={"team_id": self.team2.team_id}
+            ),
+            {"name": "team2Updated", "join_code": "team2Updated", "bio": "team2Updated"},
+            format='json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_delete_team(self):
         token = self.get_token()
