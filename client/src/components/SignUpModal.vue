@@ -265,6 +265,7 @@ import camelize from 'camelize-ts'
 import { useModalStore } from '@/stores/modal'
 import { storeToRefs } from 'pinia'
 import { reactiveOmit } from '@vueuse/core'
+import { notify } from '@kyvg/vue3-notification'
 const userStore = useUserStore()
 const modalStore = useModalStore()
 
@@ -322,6 +323,11 @@ const submit = async () => {
       Object.assign(errors, initialErrors)
       await userStore.registerUser(reactiveOmit(state, 'confirmPassword'))
       modalStore.login()
+      notify({
+        title: 'Sign Up',
+        type: 'success',
+        text: 'Sign Up Successful'
+      })
     } catch (error: AxiosError | any) {
       console.debug(error)
       if (error instanceof AxiosError && error.message) {
@@ -334,6 +340,11 @@ const submit = async () => {
       } else {
         errorMsg.value = JSON.stringify(error)
       }
+      notify({
+        title: 'Sign Up',
+        type: 'error',
+        text: 'Sign Up Unsuccessful'
+      })
     }
   }
 }
