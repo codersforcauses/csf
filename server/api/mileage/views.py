@@ -9,6 +9,7 @@ from .serializers import MileageSerializer, UserSerializer, UserLeaderboardSeria
 import datetime
 
 CHALLENGE_LENGTH = 14  # days
+LEADERBOARD_SIZE = 100
 
 
 @api_view(['GET'])
@@ -73,7 +74,7 @@ def post_mileage(request):
 def get_leaderboard(request):
     if request.GET["type"] == "users":
         leaderboard_serializer = UserLeaderboardSerializer(User.objects.order_by("-total_mileage"), many=True)
-        return Response(leaderboard_serializer.data)
+        
     else:
         leaderboard_serializer = TeamLeaderboardSerializer(Team.objects.order_by("-total_mileage"), many=True)
-        return Response(leaderboard_serializer.data)
+    return Response(leaderboard_serializer.data[:LEADERBOARD_SIZE])

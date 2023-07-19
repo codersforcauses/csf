@@ -39,15 +39,15 @@
       </tr>
     </thead>
     <tbody v-if="activeButton==='Individual'">
-      <tr v-for="(item, index) in userLeaderboard" :key="item.username">
-        <td class="w-0">{{ index + 1 }}</td>
+      <tr v-for="item in filteredUserLeaderboard" :key="item.username">
+        <td class="w-0">{{ item.rank }}</td>
         <td>{{ item.username }}</td>
         <td>{{ item.totalMileage }}</td>
       </tr>
     </tbody>
     <tbody v-else>
-      <tr v-for="(item, index) in teamLeaderboard" :key="item.name">
-        <td class="w-0">{{ index + 1 }}</td>
+      <tr v-for="item in filteredTeamLeaderboard" :key="item.name">
+        <td class="w-0">{{ item.rank }}</td>
         <td>{{ item.name }}</td>
         <!--  use bio too -->
         <td>{{ item.totalMileage }}</td>
@@ -58,8 +58,8 @@
 
 <script setup lang="ts">
 import { useMileageStore } from '@/stores/mileage';
-import type { UserLeaderboardEntry, TeamLeaderboardEntry } from '@/types/mileage'
-import { ref, onMounted } from 'vue'
+import type { UserLeaderboardEntry, RankedUserLeaderboardEntry, TeamLeaderboardEntry, RankedTeamLeaderboardEntry } from '@/types/mileage'
+import { ref, onMounted, computed } from 'vue'
 
 
 const mileageStore = useMileageStore()
@@ -87,18 +87,40 @@ const searchQuery = ref('')
   { name: 'Team 19', rank: 19, mileage: 0 },
   { name: 'Team 20', rank: 20, mileage: 0 }
 ]*/
-const userLeaderboard = ref<UserLeaderboardEntry[]>([])
-const teamLeaderboard = ref<TeamLeaderboardEntry[]>([])
+const userLeaderboard = ref<RankedUserLeaderboardEntry[]>([])
+const teamLeaderboard = ref<RankedTeamLeaderboardEntry[]>([])
+const filteredUserLeaderboard = computed<RankedUserLeaderboardEntry[]>(() =>
+  userLeaderboard.value.filter((user) =>
+    (user.username).toLowerCase().includes(searchQuery.value)
+  )
+)
+const filteredTeamLeaderboard = computed<RankedTeamLeaderboardEntry[]>(() =>
+  teamLeaderboard.value.filter((team) =>
+    (team.name).toLowerCase().includes(searchQuery.value)
+  )
+)
 
 onMounted(async () => {
   let users = await mileageStore.getLeaderboard("users") as UserLeaderboardEntry[]
   let teams = await mileageStore.getLeaderboard("teams") as TeamLeaderboardEntry[]
-  if (users) {
-    userLeaderboard.value = users
-  }
-  if (teams) {
-    teamLeaderboard.value = teams
-  }
+  let users2: RankedUserLeaderboardEntry[] = []
+  users.forEach((user, index) => {
+    if (index > 0 && user.totalMileage === users[index-1].totalMileage) {
+      users2.push({...user, rank: users2[index-1].rank})
+    } else {
+      users2.push({...user, rank: index+1})
+    }
+  })
+  let teams2: RankedTeamLeaderboardEntry[] = []
+  teams.forEach((team, index) => {
+    if (index > 0 && team.totalMileage === teams[index-1].totalMileage) {
+      teams2.push({...team, rank: teams2[index-1].rank})
+    } else {
+      teams2.push({...team, rank: index+1})
+    }
+  })
+  userLeaderboard.value = users2
+  teamLeaderboard.value = teams2
 })
 </script>
 
