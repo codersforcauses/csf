@@ -37,7 +37,7 @@ export const useMileageStore = defineStore('mileage', {
         })
     },
     async getLeaderboard(param: GetLeaderboardParam) {
-      return await server.get(`mileage/get_leaderboard/`, {
+      return await server.get('api/mileage/get_leaderboard/', {
         params: snakify(param)
       }).then((res) => {
         if (res.status == 200) {
