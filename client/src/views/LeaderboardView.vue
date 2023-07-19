@@ -40,29 +40,18 @@
     </thead>
     <tbody v-if="activeButton === 'Individual'">
       <tr v-for="item in filteredUserLeaderboard" :key="item.username">
-        <td v-if="item.rank === 1" class="text-right w-0">
-          <v-icon icon="mdi-trophy" size="20px" class="text-yellow-darken-1" /> {{ item.rank }}
+        <td v-if="item.rank < 4" class="text-right w-0">
+          <v-icon icon="mdi-trophy" size="20px" :class="getTrophyColour(item.rank)" /> {{ item.rank }}
         </td>
-        <td v-else-if="item.rank === 2" class="text-right w-0">
-          <v-icon icon="mdi-trophy" size="20px" class="text-blue-grey-lighten-1" /> {{ item.rank }}
-        </td>
-        <td v-else-if="item.rank === 3" class="text-right w-0">
-          <v-icon icon="mdi-trophy" size="20px" class="text-orange-darken-1" /> {{ item.rank }}
-        </td>
+        <td v-else class="text-right w-0">{{ item.rank }}</td>
         <td>{{ item.username }}</td>
         <td>{{ item.totalMileage }}</td>
       </tr>
     </tbody>
     <tbody v-else>
       <tr v-for="item in filteredTeamLeaderboard" :key="item.name">
-        <td v-if="item.rank === 1" class="text-right w-0">
-          <v-icon icon="mdi-trophy" size="20px" class="text-yellow-darken-1" /> {{ item.rank }}
-        </td>
-        <td v-else-if="item.rank === 2" class="text-right w-0">
-          <v-icon icon="mdi-trophy" size="20px" class="text-blue-grey-lighten-1" /> {{ item.rank }}
-        </td>
-        <td v-else-if="item.rank === 3" class="text-right w-0">
-          <v-icon icon="mdi-trophy" size="20px" class="text-orange-darken-1" /> {{ item.rank }}
+        <td v-if="item.rank < 4" class="text-right w-0">
+          <v-icon icon="mdi-trophy" size="20px" :class="getTrophyColour(item.rank)" /> {{ item.rank }}
         </td>
         <td v-else class="text-right w-0">{{ item.rank }}</td>
         <td>{{ item.name }}</td>
@@ -95,6 +84,17 @@ const filteredUserLeaderboard = computed<RankedUserLeaderboardEntry[]>(() =>
 const filteredTeamLeaderboard = computed<RankedTeamLeaderboardEntry[]>(() =>
   teamLeaderboard.value.filter((team) => team.name.toLowerCase().includes(searchQuery.value))
 )
+
+function getTrophyColour(rank: number) {
+  switch (rank) {
+    case 1:
+      return "text-yellow-darken-1"
+    case 2:
+      return "text-blue-grey-lighten-1"
+    default:
+      return "text-orange-darken-1"
+  }
+}
 
 onMounted(async () => {
   let users = (await mileageStore.getLeaderboard('users')) as UserLeaderboardEntry[]
