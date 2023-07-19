@@ -12,8 +12,8 @@ import { RouterView } from 'vue-router'
     classes="my-notification"
     position="bottom right"
     width="450px"
-    max="1"
-    duration="2"
+    duration="3"
+    closeOnClick="True"
   />
 </template>
 

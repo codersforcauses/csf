@@ -80,7 +80,7 @@ async function changePassword() {
         notify({
           title: 'Password Change',
           type: 'success',
-          text: 'Password Successfully Changed'
+          text: 'Password Changed Successful'
         })
       }
     } catch (error: AxiosError | any) {

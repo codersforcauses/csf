@@ -3,6 +3,7 @@ import { ref, watchEffect } from 'vue'
 import { type Event } from '../types/event'
 import { useEventStore } from '../stores/event'
 import ConfirmButton from '@/components/ConfirmButton.vue'
+import { notify } from '@kyvg/vue3-notification'
 
 const props = defineProps<{ type: 'Create' | 'Edit'; event?: Event }>()
 const emit = defineEmits(['close'])
@@ -23,7 +24,25 @@ const refs = () => ({
   isPublic: isPublic.value
 })
 
-const addEvent = () => eventStore.createEvent(refs()).then(closeModal).catch(console.log)
+const addEvent = () =>
+  eventStore
+    .createEvent(refs())
+    .then(() => {
+      notify({
+        title: 'Add Event',
+        type: 'success',
+        text: 'Add Event Successful'
+      })
+      closeModal
+    })
+    .catch(() => {
+      console.log
+      notify({
+        title: 'Add Event',
+        type: 'error',
+        text: 'Add Event Error'
+      })
+    })
 
 const editEvent = () => {
   if (props.event)
@@ -32,8 +51,22 @@ const editEvent = () => {
         ...props.event,
         ...refs()
       })
-      .then(closeModal)
-      .catch(console.log)
+      .then(() => {
+        notify({
+          title: 'Edit Event',
+          type: 'success',
+          text: 'Edit Event Successful'
+        })
+        closeModal
+      })
+      .catch(() => {
+        console.log
+        notify({
+          title: 'Edit Event',
+          type: 'error',
+          text: 'Edit Event Error'
+        })
+      })
 }
 
 const archiveEvent = () => {
@@ -44,13 +77,44 @@ const archiveEvent = () => {
         ...refs(),
         isArchived: true
       })
-      .then(closeModal)
-      .catch(console.log)
+      .then(() => {
+        notify({
+          title: 'Archive Event',
+          type: 'success',
+          text: 'Archive Event Successful'
+        })
+        closeModal
+      })
+      .catch(() => {
+        notify({
+          title: 'Archive Event',
+          type: 'error',
+          text: 'Archive Event Error'
+        })
+        console.log
+      })
 }
 
 const deleteEvent = () => {
   if (props.event)
-    return eventStore.deleteEvent(props.event.eventId).then(closeModal).catch(console.log)
+    return eventStore
+      .deleteEvent(props.event.eventId)
+      .then(() => {
+        notify({
+          title: 'Delete Event',
+          type: 'success',
+          text: 'Delete Event Successful'
+        })
+        closeModal
+      })
+      .catch(() => {
+        console.log
+        notify({
+          title: 'Delete Event',
+          type: 'error',
+          text: 'Delete Event Error'
+        })
+      })
 }
 
 const closeModal = () => emit('close')

@@ -68,13 +68,20 @@ import { ref, computed, onMounted } from 'vue'
 import { useEventStore } from '../stores/event'
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
+import { notify } from '@kyvg/vue3-notification'
 
 const eventStore = useEventStore()
 const { user } = storeToRefs(useUserStore())
 const isLoading = ref(true)
 
 onMounted(async () => {
-  await eventStore.getEvents()
+  await eventStore.getEvents().catch(() => {
+    notify({
+      title: 'Get Events',
+      type: 'error',
+      text: 'Get Events Error'
+    })
+  })
   isLoading.value = false
 })
 

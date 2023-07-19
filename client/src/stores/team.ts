@@ -5,6 +5,7 @@ import { useStorage } from '@vueuse/core'
 import camelize from 'camelize-ts'
 import type { User } from '@/types/user'
 import server from '@/utils/server'
+import { notify } from '@kyvg/vue3-notification'
 
 export const useTeamStore = defineStore('team', {
   state: () => ({
@@ -21,10 +22,19 @@ export const useTeamStore = defineStore('team', {
     async getTeams() {
       const teams = await server.get('team/all/').then((res) => {
         if (res.status == 200) {
+          notify({
+            title: 'Get Teams',
+            type: 'success',
+            text: 'Get Teams Successful'
+          })
           return res.data
         }
       })
-
+      notify({
+        title: 'Get Teams',
+        type: 'error',
+        text: 'Get Teams Error'
+      })
       return camelize(teams)
     },
 
@@ -38,23 +48,51 @@ export const useTeamStore = defineStore('team', {
     },
 
     async createTeam(data: Omit<Team, 'teamId' | 'joinCode'>) {
-      await server.post('team/', snakify(data)).then((res) => {
-        if (res.status == 200) {
-          const data = camelize(res.data) as Object as Team
+      await server
+        .post('team/', snakify(data))
+        .then((res) => {
+          if (res.status == 200) {
+            const data = camelize(res.data) as Object as Team
 
-          this.currentTeam = JSON.stringify(data)
-          this.joinTeam(this.user.id, data.joinCode, true)
-        }
-      })
+            this.currentTeam = JSON.stringify(data)
+            this.joinTeam(this.user.id, data.joinCode, true)
+            notify({
+              title: 'Create Team',
+              type: 'success',
+              text: 'Create Team Successful'
+            })
+          }
+        })
+        .catch(() =>
+          notify({
+            title: 'Create Team',
+            type: 'error',
+            text: 'Create Team Error'
+          })
+        )
     },
 
     async editTeam(data: Partial<Team>) {
-      await server.patch(`team/edit/${this.team.teamId}/`, snakify(data)).then((res) => {
-        if (res.status == 200) {
-          const data = camelize(res.data) as Object as Team
-          this.currentTeam = JSON.stringify(data)
-        }
-      })
+      await server
+        .patch(`team/edit/${this.team.teamId}/`, snakify(data))
+        .then((res) => {
+          if (res.status == 200) {
+            const data = camelize(res.data) as Object as Team
+            this.currentTeam = JSON.stringify(data)
+            notify({
+              title: 'Edit Team',
+              type: 'success',
+              text: 'Edit Team Successful'
+            })
+          }
+        })
+        .catch(() =>
+          notify({
+            title: 'Edit Team',
+            type: 'error',
+            text: 'Edit Team Error'
+          })
+        )
     },
 
     async joinTeam(userId: Number, joinCode: String, teamAdmin: Boolean = false) {
@@ -76,34 +114,74 @@ export const useTeamStore = defineStore('team', {
               teamAdmin
             })
             this.getTeam(teamId as Number)
+            notify({
+              title: 'Join Team',
+              type: 'success',
+              text: 'Join Team Successful'
+            })
           }
         })
+        .catch(() =>
+          notify({
+            title: 'Join Team',
+            type: 'error',
+            text: 'Join Team Error'
+          })
+        )
     },
 
     async deleteTeam() {
-      await server.delete(`team/delete/${this.user.teamId}/`).then((res) => {
-        if (res.status == 200) {
-          this.authUser = JSON.stringify({
-            ...this.user,
-            teamId: null,
-            teamAdmin: false
+      await server
+        .delete(`team/delete/${this.user.teamId}/`)
+        .then((res) => {
+          if (res.status == 200) {
+            this.authUser = JSON.stringify({
+              ...this.user,
+              teamId: null,
+              teamAdmin: false
+            })
+            this.currentTeam = null
+            notify({
+              title: 'Delete Team',
+              type: 'success',
+              text: 'Delete Team Successful'
+            })
+          }
+        })
+        .catch(() =>
+          notify({
+            title: 'Delete Team',
+            type: 'error',
+            text: 'Delete Team Error'
           })
-          this.currentTeam = null
-        }
-      })
+        )
     },
 
     async removeTeam() {
-      await server.patch(`user/remove/${this.user.id}/`).then((res) => {
-        if (res.status == 200) {
-          this.authUser = JSON.stringify({
-            ...this.user,
-            teamId: null,
-            teamAdmin: false
+      await server
+        .patch(`user/remove/${this.user.id}/`)
+        .then((res) => {
+          if (res.status == 200) {
+            this.authUser = JSON.stringify({
+              ...this.user,
+              teamId: null,
+              teamAdmin: false
+            })
+            this.currentTeam = null
+            notify({
+              title: 'Remove Team',
+              type: 'success',
+              text: 'Remove Team Successful'
+            })
+          }
+        })
+        .catch(() =>
+          notify({
+            title: 'Remove Team',
+            type: 'error',
+            text: 'Remove Team Error'
           })
-          this.currentTeam = null
-        }
-      })
+        )
     }
   }
 })
