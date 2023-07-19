@@ -1,5 +1,5 @@
 <template>
-  <v-img :src="CSFBanner" width="100%"></v-img>
+  <v-img :src="CSFBanner" width="100%" alt="csf banner"></v-img>
   <v-row class="pt-8 px-8 bg-secondaryGrey" no-gutters justify="center">
     <h2 class="text-secondaryTint text-center">
       <span class="font-weight-bold">Education changes lives:</span>
@@ -12,7 +12,11 @@
       d="m0 64 60 10.7c60 10.3 180 32.3 300 48 120 16.3 240 26.3 360 16C840 128 960 96 1080 85.3c120-10.3 240-.3 300 5.4l60 5.3V0H0Z"
     />
   </svg>
-  <v-img :src="StrideForEducationRBGLogo" class="px-8 mt-n8 mb-8 w-100" />
+  <v-img
+    :src="StrideForEducationRBGLogo"
+    class="px-8 mt-n8 mb-8 w-100"
+    alt="Stride for education logo"
+  />
   <v-divider class="mx-4" />
   <p class="pa-8">
     Community Spirit Foundation is running Stride For Education – a challenge designed to motivate
@@ -25,7 +29,7 @@
     other participants. Compare your progress with other users, teams, or even your own teammates,
     and let the friendly competition inspire you to reach new levels of achievement.
   </p>
-  <v-img :src="StrideForEducationGif" width="100%"></v-img>
+  <v-img :src="StrideForEducationGif" width="100%" alt="Stride for Education GIF"></v-img>
   <p class="pa-8">
     Every step you take as part of this challenge is one step further in Community Spirit
     Foundation's journey of helping to support First Nations young people to realise their potential
@@ -38,7 +42,7 @@
       variant="flat"
       :style="{ fontFamily: 'Hackney', fontSize: '42px' }"
       style="letter-spacing: -1px"
-      @click="openSignUpModal"
+      @click="modalStore.register"
     >
       REGISTER NOW
     </v-btn>
@@ -64,8 +68,8 @@
   <v-row class="px-8 bg-primaryRed" no-gutters>
     <h2 class="py-2" :style="{ fontFamily: 'Hackney', fontSize: '58px' }">OUR BELIEFS</h2>
     <v-divider class="mr-16" />
-    <v-list no-gutters class="bg-primaryRed my-3">
-      <v-list-item v-for="belief in beliefs" :key="belief">
+    <v-list no-gutters class="bg-primaryRed my-3" role="list">
+      <v-list-item v-for="belief in beliefs" :key="belief" role="listitem">
         <v-list-item-icon>
           <v-icon>mdi-circle-medium</v-icon>
         </v-list-item-icon>
@@ -75,7 +79,7 @@
       </v-list-item>
     </v-list>
   </v-row>
-  <v-img :src="studentsLearning" width="100%"></v-img>
+  <v-img :src="studentsLearning" width="100%" alt="students in a classroom"></v-img>
   <v-row class="px-8 bg-secondaryGrey text-secondaryTint" no-gutters>
     <h2 class="py-2" :style="{ fontFamily: 'Hackney', fontSize: '58px' }">DONATE TODAY</h2>
     <v-divider class="mr-16" />
@@ -101,7 +105,7 @@
       </v-btn>
     </v-row>
   </v-row>
-  <v-img :src="thankYou" width="100%"></v-img>
+  <v-img :src="thankYou" width="100%" alt="student doing handstand"></v-img>
   <v-row class="ma-8" no-gutters>
     <p>
       The Community Spirit Foundation acknowledges and pays our respects to the past, present and
@@ -111,27 +115,18 @@
     </p></v-row
   >
   <Footer />
-  <SignUpModal
-    :dialog-modal="signupModal"
-    v-if="signupModal"
-    @open-signUp-modal="openSignUpModal"
-  />
 </template>
 
 <script setup lang="ts">
 import Footer from '@/components/Footer.vue'
-import { ref } from 'vue'
-import SignUpModal from '@/components/SignUpModal.vue'
 import studentsLearning from '/images/students_learning.webp'
 import thankYou from '/images/thank_you.jpg'
 import StrideForEducationGif from '/gif/Stride_1.gif'
 import CSFBanner from '/images/CSF_Banner.jpg'
 import StrideForEducationRBGLogo from '/images/SFE_RGB_Logo.png'
 
-const signupModal = ref<boolean>(false)
-const openSignUpModal = () => {
-  signupModal.value = !signupModal.value
-}
+import { useModalStore } from '@/stores/modal'
+const modalStore = useModalStore()
 
 const beliefs = [
   'Every young person we work with should be able to dream big and be proud.',

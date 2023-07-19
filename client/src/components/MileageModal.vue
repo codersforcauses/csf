@@ -2,7 +2,7 @@
   <v-dialog v-model="value" :fullscreen="isFullscreen" width="500px">
     <v-card height="600px" class="bg-backgroundGrey">
       <div style="height: 10px">
-        <v-img src="/images/Footer-min.jpeg" width="100%" cover />
+        <v-img src="/images/Footer-min.jpeg" width="100%" alt="red background" cover />
       </div>
       <div class="d-flex justify-end">
         <v-btn variant="text" @click="$emit('update:modelValue', !modelValue)">
@@ -29,6 +29,8 @@
                     label="Date"
                     v-model="mileage.date"
                     bg-color="white"
+                    :max="maxDate"
+                    :min="minDate"
                     :rules="[required]"
                   />
                 </v-col>
@@ -40,7 +42,11 @@
               </v-row>
               <v-row>
                 <v-col>
-                  <div v-if="tempIconType === 'RUNNING'" class="ma-0 pa-0" id="runner">
+                  <div
+                    v-if="userStore.user!.travelMethod === 'RUNNING'"
+                    class="ma-0 pa-0"
+                    id="runner"
+                  >
                     <v-slider
                       v-model="mileage.kilometres"
                       color="secondaryGreen"
@@ -51,7 +57,11 @@
                       max="100"
                     />
                   </div>
-                  <div v-if="tempIconType === 'WALKING'" id="walker" class="ma-0 pa-0">
+                  <div
+                    v-if="userStore.user!.travelMethod === 'WALKING'"
+                    id="walker"
+                    class="ma-0 pa-0"
+                  >
                     <v-slider
                       v-model="mileage.kilometres"
                       color="green"
@@ -62,7 +72,11 @@
                       max="100"
                     />
                   </div>
-                  <div v-if="tempIconType === 'WHEELING'" id="wheeler" class="ma-0 pa-0">
+                  <div
+                    v-if="userStore.user!.travelMethod === 'WHEELING'"
+                    id="wheeler"
+                    class="ma-0 pa-0"
+                  >
                     <v-slider
                       v-model="mileage.kilometres"
                       color="green"
@@ -102,23 +116,25 @@
 import { computed } from 'vue'
 import { ref, watchEffect } from 'vue'
 import { useUserStore } from '../stores/user'
-import server from '@/utils/server'
+import { useMileageStore } from '@/stores/mileage'
 
 const userStore = useUserStore()
+const mileageStore = useMileageStore()
 
 const isFullscreen = ref(false)
 const props = defineProps(['modelValue'])
 const emit = defineEmits(['update:modelValue', 'handleSubmit'])
 
-const mileage = ref({ kilometres: '', date: '' })
+const mileage = ref({ kilometres: '1', date: '' })
+
+const maxDate = ref('')
+const minDate = ref('')
+setMinAndMaxDate()
 
 const form = ref(false)
 const required = (v: string) => {
   return !!v || 'Field is required'
 }
-
-// The icon on the slider changes depending on this variable. Current temp options are "RUNNING" | "WALKING" | "WHEELING"
-const tempIconType: string = 'RUNNING'
 
 const value = computed({
   get() {
@@ -129,11 +145,20 @@ const value = computed({
   }
 })
 
-const handleSubmit = () => {
-  const user = userStore.user.id
-  // server.post('post_mileage/', {"user": user, "kilometers": mileage.value.distance, "date": mileage.value.date})
-  server.post('mileage/post_mileage/', { user, ...mileage.value })
+const handleSubmit = async () => {
+  const user = userStore.user!.id
+  await mileageStore.postMileage(user, parseFloat(mileage.value.kilometres), mileage.value.date)
   emit('update:modelValue', false)
+  emit('handleSubmit')
+}
+
+function setMinAndMaxDate() {
+  let now = new Date()
+  // need to shift, since toJSON() will get the UTC time
+  let nowShifted = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+  maxDate.value = nowShifted.toJSON().slice(0, 10)
+  nowShifted.setDate(nowShifted.getDate() - 30)
+  minDate.value = nowShifted.toJSON().slice(0, 10)
 }
 
 // Copied from SignUpModal
@@ -159,7 +184,7 @@ watchEffect(async () => {
 #runner :deep(.v-slider-thumb__surface) {
   border-radius: 0% !important;
   background-color: transparent !important;
-  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>run</title><path d="M13.5,5.5C14.59,5.5 15.5,4.58 15.5,3.5C15.5,2.38 14.59,1.5 13.5,1.5C12.39,1.5 11.5,2.38 11.5,3.5C11.5,4.58 12.39,5.5 13.5,5.5M9.89,19.38L10.89,15L13,17V23H15V15.5L12.89,13.5L13.5,10.5C14.79,12 16.79,13 19,13V11C17.09,11 15.5,10 14.69,8.58L13.69,7C13.29,6.38 12.69,6 12,6C11.69,6 11.5,6.08 11.19,6.08L6,8.28V13H8V9.58L9.79,8.88L8.19,17L3.29,16L2.89,18L9.89,19.38Z" /></svg>');
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>run-fast</title><path d="M16.5,5.5A2,2 0 0,0 18.5,3.5A2,2 0 0,0 16.5,1.5A2,2 0 0,0 14.5,3.5A2,2 0 0,0 16.5,5.5M12.9,19.4L13.9,15L16,17V23H18V15.5L15.9,13.5L16.5,10.5C17.89,12.09 19.89,13 22,13V11C20.24,11.03 18.6,10.11 17.7,8.6L16.7,7C16.34,6.4 15.7,6 15,6C14.7,6 14.5,6.1 14.2,6.1L9,8.3V13H11V9.6L12.8,8.9L11.2,17L6.3,16L5.9,18L12.9,19.4M4,9A1,1 0 0,1 3,8A1,1 0 0,1 4,7H7V9H4M5,5A1,1 0 0,1 4,4A1,1 0 0,1 5,3H10V5H5M3,13A1,1 0 0,1 2,12A1,1 0 0,1 3,11H7V13H3Z" /></svg>');
   background-size: cover;
 }
 

@@ -1,44 +1,40 @@
 <template>
-  <section>
-    <v-dialog v-model="dialog" :fullscreen="mobile" max-width="960px">
-      <template v-slot:activator="{ props }">
-        <v-btn size="large" color="red white--text" v-bind="props">New Team</v-btn>
-      </template>
-      <v-card>
-        <v-card-title>
-          <v-row>
-            <v-col>
-              <span id="new-team" class="text-h5 ps-5">New Team</span>
-            </v-col>
-            <v-col align="end">
-              <v-icon class="mdi mdi-close" @click="closeDialog"></v-icon>
-            </v-col>
-          </v-row>
-        </v-card-title>
-        <form @submit.prevent="submitForm">
-          <v-card-text>
-            <v-form>
-              <v-text-field v-model="form.name" label="Team Name"></v-text-field>
-              <v-textarea v-model="form.bio" label="Bio"></v-textarea>
-            </v-form>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer />
-            <v-row>
-              <v-btn size="large" justify="center" bg-color="red" @click="submitForm">Create</v-btn>
-            </v-row>
-          </v-card-actions>
-        </form>
-      </v-card>
-    </v-dialog>
-  </section>
+  <v-dialog v-model="dialog" :fullscreen="isFullscreen" max-width="500px" max-height="100vh">
+    <template v-slot:activator="{ props: dialog }">
+      <v-btn size="large" color="red white--text" v-bind="dialog">New Team</v-btn>
+    </template>
+    <v-card class="bg-backgroundGrey">
+      <v-img
+        src="/images/Footer-min.jpeg"
+        width="100%"
+        max-height="16"
+        alt="red background"
+        cover
+      />
+      <v-card-actions>
+        <v-spacer />
+        <v-icon icon="mdi-close" size="x-large" @click="closeDialog" />
+      </v-card-actions>
+      <v-card-title class="justify-center text-h4 mb-6">Create Team</v-card-title>
+      <form class="pb-0 mb-0 mx-8">
+        <v-text-field bg-color="white" label="Team Name" v-model="form.name" class="mx-5" />
+        <v-textarea bg-color="white" label="Bio" v-model="form.bio" class="mx-5" />
+        <v-card-actions class="justify-center mb-4">
+          <v-btn variant="elevated" color="primaryRed" @click="submitForm">Create</v-btn>
+        </v-card-actions>
+      </form>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useDisplay } from 'vuetify'
+import { ref, watchEffect } from 'vue'
+import { useTeamStore } from '@/stores/team'
 
-const { mobile } = useDisplay()
+const teamStore = useTeamStore()
+
+const isFullscreen = ref(false)
+
 const dialog = ref(false)
 const form = ref({
   name: '',
@@ -48,10 +44,11 @@ const form = ref({
 // formValidation = check if team name already exists
 
 const submitForm = () => {
-  console.log('Team Name:', form.value.name)
-  console.log('Team Bio:', form.value.bio)
-  console.log('Team_id:', 'unique id_1')
-  console.log('Join Code:', 'unique id_2')
+  teamStore.createTeam({ ...form.value })
+}
+
+const openDialog = () => {
+  dialog.value = true
 }
 
 const closeDialog = () => {
@@ -59,4 +56,17 @@ const closeDialog = () => {
   form.value.name = ''
   form.value.bio = ''
 }
+
+watchEffect(async () => {
+  const updateFullscreen = async () => {
+    isFullscreen.value = window.innerWidth <= 500
+  }
+
+  await updateFullscreen()
+
+  window.addEventListener('resize', updateFullscreen)
+  return () => {
+    window.removeEventListener('resize', updateFullscreen)
+  }
+})
 </script>

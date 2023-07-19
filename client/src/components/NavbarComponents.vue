@@ -1,7 +1,13 @@
 <template>
   <v-toolbar dark app color="black" class="hidden-sm-and-down sticky-nav">
     <v-btn :width="125" :height="60" :to="homelink" :active="false">
-      <v-img :width="125" :height="60" cover src="/images/CSF_Logo_WHITE.png"></v-img>
+      <v-img
+        :width="125"
+        :height="60"
+        cover
+        src="/images/CSF_Logo_WHITE.png"
+        alt="white csf logo"
+      ></v-img>
     </v-btn>
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down d-flex align-center" align="center">
@@ -33,6 +39,7 @@
           variant="flat"
           :style="{ fontFamily: 'Hackney', fontSize: '20px' }"
           style="letter-spacing: 0.5px"
+          to="/settings"
           >{{ user.username }}</v-btn
         >
 
@@ -53,7 +60,7 @@
           variant="flat"
           :style="{ fontFamily: 'Hackney', fontSize: '20px' }"
           style="letter-spacing: 0.5px"
-          @click="openLoginModal"
+          @click="modalStore.login"
           >LOGIN</v-btn
         >
         <v-btn
@@ -63,7 +70,7 @@
           variant="flat"
           :style="{ fontFamily: 'Hackney', fontSize: '20px' }"
           style="letter-spacing: 0.5px"
-          @click="openSignUpModal"
+          @click="modalStore.register"
           >SIGNUP</v-btn
         >
       </v-row>
@@ -71,7 +78,13 @@
   </v-toolbar>
   <v-toolbar dark app color="black" class="hidden-md-and-up sticky-nav">
     <v-btn :width="125" :height="60" :to="homelink" :active="false">
-      <v-img :width="125" :height="60" cover src="/images/CSF_Logo_WHITE.png" />
+      <v-img
+        :width="125"
+        :height="60"
+        cover
+        src="/images/CSF_Logo_WHITE.png"
+        alt="white csf logo"
+      />
     </v-btn>
     <v-spacer></v-spacer>
     <v-dialog
@@ -81,7 +94,7 @@
       class="hidden-md-and-up"
     >
       <template v-slot:activator="{ props }">
-        <v-btn icon v-bind="props" class="hidden-md-and-up">
+        <v-btn icon v-bind="props" class="hidden-md-and-up" aria-label="open navigation bar">
           <v-icon>mdi-menu</v-icon>
         </v-btn>
       </template>
@@ -89,7 +102,13 @@
         <v-container class="pa-0 ma-0">
           <v-toolbar color="black" class="hidden-md-and-up sticky-nav">
             <v-btn :width="125" :height="60" :to="homelink" @click="dialog = false" :active="false">
-              <v-img :width="125" :height="60" cover src="/images/CSF_Logo_WHITE.png" />
+              <v-img
+                :width="125"
+                :height="60"
+                cover
+                src="/images/CSF_Logo_WHITE.png"
+                alt="white csf logo"
+              />
             </v-btn>
             <v-spacer></v-spacer>
             <v-btn icon @click="dialog = false" class="hidden-md-and-up">
@@ -145,6 +164,8 @@
             variant="flat"
             :style="{ fontFamily: 'Hackney', fontSize: '28px' }"
             style="letter-spacing: 0.5px"
+            @click="dialog = false"
+            to="/settings"
             >{{ user.username }}</v-btn
           >
 
@@ -166,7 +187,7 @@
             variant="flat"
             :style="{ fontFamily: 'Hackney', fontSize: '28px' }"
             style="letter-spacing: 0.5px"
-            @click="openLoginModal"
+            @click="modalStore.login"
             >LOGIN</v-btn
           >
           <v-btn
@@ -176,7 +197,7 @@
             variant="flat"
             :style="{ fontFamily: 'Hackney', fontSize: '28px' }"
             style="letter-spacing: 0.5px"
-            @click="openSignUpModal"
+            @click="modalStore.register"
             >SIGNUP</v-btn
           >
         </v-row>
@@ -186,14 +207,9 @@
 
   <v-img :src="FooterBanner" width="100%" height="8" class="sticky-nav-img" cover />
 
-  <SignUpModal
-    :dialog-modal="signupModal"
-    v-if="signupModal"
-    @open-signUp-modal="openSignUpModal"
-  />
+  <SignUpModal v-if="modalStore.isRegister" />
 
-  <LoginModal :dialog-modal="loginModal" v-if="loginModal" @open-login-modal="openLoginModal" />
-
+  <LoginModal v-if="modalStore.isLogin" />
   <PopupDialog
     v-model="openConfirmLogoutDialogueBox"
     title="Confirm Logout"
@@ -213,33 +229,29 @@ import PopupDialog from './PopupDialog.vue'
 
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
-import router from '@/router'
+
+import { useRouter } from 'vue-router'
+import { useModalStore } from '@/stores/modal'
+
+const router = useRouter()
 
 const userStore = useUserStore()
+const modalStore = useModalStore()
 
 const { user } = storeToRefs(userStore)
 
 const { mobile } = useDisplay()
 const dialog = ref<boolean>(false)
-const signupModal = ref<boolean>(false)
-const loginModal = ref<boolean>(false)
 const openConfirmLogoutDialogueBox = ref<boolean>(false)
 
 let homelink = '/'
-
-const openSignUpModal = () => {
-  signupModal.value = !signupModal.value
-}
-
-const openLoginModal = () => {
-  loginModal.value = !loginModal.value
-}
 
 const openPopupDialog = () => {
   openConfirmLogoutDialogueBox.value = true
 }
 
 const logout = () => {
+  router.push('/')
   userStore.logout()
   router.push(homelink)
 }
@@ -297,3 +309,4 @@ const menu = [
   background-color: #ed1c24;
 }
 </style>
+@/stores/modal

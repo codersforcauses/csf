@@ -11,13 +11,13 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
-# from decouple import config
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # FRONTEND_URL = config("FRONTEND_URL", default="http://localhost:8082")
-FRONTEND_URL = "http://localhost:8082"
+FRONTEND_URL = os.environ.get("FRONTEND_URL")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -170,10 +170,18 @@ AUTH_USER_MODEL = "users.User"
 
 # JWT
 
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=3),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=3),
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": os.environ.get("JWT_SECRET_KEY"),
+}
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
 }
 
 # EMAIL

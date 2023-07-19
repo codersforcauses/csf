@@ -1,6 +1,6 @@
 <template>
-  <TeamDashboard v-if="user_id && team_id" />
-  <CreateOrJoinTeam v-else-if="user_id && !team_id" />
+  <TeamDashboard v-if="user && user.teamId" />
+  <CreateOrJoinTeam v-else-if="user && !user.teamId" />
   <LoginModal v-else />
 </template>
 
@@ -24,7 +24,5 @@ onMounted(async () => {
   
 })
 
-// change these values to show the different modals
-const user_id = ref(true)
-const team_id = ref(true)
+onMounted(async () => {})
 </script>

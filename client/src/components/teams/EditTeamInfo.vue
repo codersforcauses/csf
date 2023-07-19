@@ -1,37 +1,73 @@
 <template>
   <v-icon
-    v-if="user.is_admin"
+    v-if="user.teamAdmin"
     icon="mdi mdi-pencil"
     size="32px"
     color="black"
     @click="editTeamInfoDialog = true"
   />
-  <v-dialog v-model="editTeamInfoDialog" width="auto">
-    <v-card>
-      <v-card-text>What would you like to set the team name and bio to?</v-card-text>
-      <v-text-field v-model="newTeamName" placeholder="Team Name"></v-text-field>
-      <v-textarea v-model="newBioText" placeholder="Bio"></v-textarea>
+  <v-dialog
+    v-model="editTeamInfoDialog"
+    :fullscreen="isFullscreen"
+    max-width="500px"
+    max-height="100vh"
+  >
+    <v-card class="bg-backgroundGrey">
+      <v-img
+        src="/images/Footer-min.jpeg"
+        width="100%"
+        max-height="16"
+        alt="red background"
+        cover
+      />
       <v-card-actions>
-        <v-btn @click="editTeamInfo">Submit</v-btn>
-        <v-btn @click="editTeamInfoDialog = false">Cancel</v-btn>
+        <v-spacer />
+        <v-icon icon="mdi-close" size="x-large" @click="closeDialog" />
       </v-card-actions>
+      <v-card-title class="justify-center text-h4 mb-6">Edit Team</v-card-title>
+      <form class="pb-0 mb-0 mx-8">
+        <v-text-field bg-color="white" label="Team Name" v-model="newTeamName" class="mx-5" />
+        <v-textarea bg-color="white" label="Description" v-model="newBioText" class="mx-5" />
+        <v-card-actions class="justify-center mb-4">
+          <v-btn variant="elevated" color="primaryRed" @click="editTeamInfo">Save Changes</v-btn>
+        </v-card-actions>
+      </form>
     </v-card>
   </v-dialog>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watchEffect } from 'vue'
+import { useTeamStore } from '@/stores/team'
+import { storeToRefs } from 'pinia'
+const teamStore = useTeamStore()
+const { user, team } = storeToRefs(teamStore)
+
+const isFullscreen = ref(false)
 
 const editTeamInfoDialog = ref(false)
-const newBioText = ref('')
-const newTeamName = ref('')
+const newBioText = ref(team.value ? team.value.bio : '')
+const newTeamName = ref(team.value ? team.value.name : '')
 
-const editTeamInfo = () => {
-  console.log('Bio: ' + newBioText.value)
-  console.log('Team Name: ' + newTeamName.value)
+const editTeamInfo = async () => {
+  teamStore.editTeam({ name: newTeamName.value, bio: newBioText.value })
+  editTeamInfoDialog.value = false
 }
 
-const user = {
-  is_admin: true
+const closeDialog = () => {
+  editTeamInfoDialog.value = false
 }
+
+watchEffect(async () => {
+  const updateFullscreen = async () => {
+    isFullscreen.value = window.innerWidth <= 500
+  }
+
+  await updateFullscreen()
+
+  window.addEventListener('resize', updateFullscreen)
+  return () => {
+    window.removeEventListener('resize', updateFullscreen)
+  }
+})
 </script>
