@@ -11,7 +11,7 @@ export const useEventStore = defineStore('event', {
   }),
   actions: {
     async createEvent(partialEvent: Omit<Event, 'eventId' | 'isArchived' | 'teamId'>) {
-      const userStore= useUserStore();
+      const userStore = useUserStore()
       const modifiedData = snakify({
         ...partialEvent,
         isArchived: false,
