@@ -57,8 +57,8 @@ class User(AbstractUser):
     has_consent = models.BooleanField(default=False)  # boolean
     travel_method = models.CharField(max_length=100, blank=True, choices=[('RUNNING', 'RUNNING'), ('WHEELING', 'WHEELING'), ('WALKING', 'WALKING')])
     avatar = models.CharField(max_length=100, default="avatar1.jpg", choices=[(
-        'avatar 1', 'avatar 1'), ('avatar 2', 'avatar 2'), ('avatar 3', 'avatar 3'), ('avatar 4', 'avatar 4'),
-        ('avatar 5', 'avatar 5'), ('avatar 6', 'avatar 6')])
+        'avatar1.jpg', 'avatar 1'), ('avatar2.jpg', 'avatar 2'), ('avatar3.jpg', 'avatar 3'), ('avatar4.jpg', 'avatar 4'),
+        ('avatar5.jpg', 'avatar 5'), ('avatar6.jpg', 'avatar 6')])
     subteam_id = models.ForeignKey(SubTeam, null=True, on_delete=models.SET_NULL, blank=True)
     team_id = models.ForeignKey(Team, null=True, on_delete=models.SET_NULL, blank=True)
     team_admin = models.BooleanField(default=False)
