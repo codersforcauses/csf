@@ -79,6 +79,11 @@ onMounted(async () => {
     await eventStore.getEvents()
   } catch (e) {
     console.log(e)
+    notify({
+      title: 'Get Events',
+      type: 'error',
+      text: 'Get Events Error'
+    })
   }
   isLoading.value = false
 })

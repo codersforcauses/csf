@@ -43,7 +43,18 @@ export const useTeamStore = defineStore('team', {
         if (res.status == 200) {
           const data = camelize(res.data) as Object as Team
           this.currentTeam = JSON.stringify(data)
+          notify({
+            title: 'Get Team',
+            type: 'success',
+            text: 'Get Team Successful'
+          })
         }
+      }).catch(() => {
+        notify({
+          title: 'Get Team',
+          type: 'error',
+          text: 'Get Team Error'
+        })
       })
     },
 
@@ -75,7 +86,18 @@ export const useTeamStore = defineStore('team', {
         if (res.status == 200) {
           const data = camelize(res.data) as Object as Team
           this.currentTeam = JSON.stringify(data)
+          notify({
+            title: 'Edit Team',
+            type: 'success',
+            text: 'Edit Team Successful'
+          })
         }
+      }).catch(() => {
+        notify({
+          title: 'Get Team',
+          type: 'error',
+          text: 'Edit Team Error'
+        })
       })
     },
 
