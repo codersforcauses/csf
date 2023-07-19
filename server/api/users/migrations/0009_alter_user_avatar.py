@@ -13,6 +13,9 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='user',
             name='avatar',
-            field=models.CharField(choices=[('avatar 1', 'avatar 1'), ('avatar 2', 'avatar 2'), ('avatar 3', 'avatar 3'), ('avatar 4', 'avatar 4'), ('avatar 5', 'avatar 5'), ('avatar 6', 'avatar 6')], default='avatar1.jpg', max_length=100),
+            field=models.CharField(choices=[
+                ('avatar 1', 'avatar 1'), ('avatar 2', 'avatar 2'), ('avatar 3', 'avatar 3'),
+                ('avatar 4', 'avatar 4'), ('avatar 5', 'avatar 5'), ('avatar 6', 'avatar 6')], default='avatar1.jpg',
+                max_length=100),
         ),
     ]
