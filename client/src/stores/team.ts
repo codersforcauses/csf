@@ -39,29 +39,34 @@ export const useTeamStore = defineStore('team', {
     },
 
     async getTeam(teamId: Number) {
-      await server.get(`team/get/${teamId}/`).then((res) => {
-        if (res.status == 200) {
-          const data = camelize(res.data) as Object as Team
-          this.currentTeam = JSON.stringify(data)
+      await server
+        .get(`team/get/${teamId}/`)
+        .then((res) => {
+          if (res.status == 200) {
+            const data = camelize(res.data) as Object as Team
+            this.currentTeam = JSON.stringify(data)
+            notify({
+              title: 'Get Team',
+              type: 'success',
+              text: 'Get Team Successful'
+            })
+          }
+        })
+        .catch(() => {
           notify({
             title: 'Get Team',
-            type: 'success',
-            text: 'Get Team Successful'
+            type: 'error',
+            text: 'Get Team Error'
           })
-        }
-      }).catch(() => {
-        notify({
-          title: 'Get Team',
-          type: 'error',
-          text: 'Get Team Error'
         })
-      })
     },
 
     async createTeam(data: Omit<Team, 'teamId' | 'joinCode'>) {
-      await server.post('team/create/', snakify(data)).then((res) => {
-        if (res.status == 200) {
-          const data = camelize(res.data) as Object as Team
+      await server
+        .post('team/create/', snakify(data))
+        .then((res) => {
+          if (res.status == 200) {
+            const data = camelize(res.data) as Object as Team
 
             this.currentTeam = JSON.stringify(data)
             this.joinTeam(this.user.id, data.joinCode, true)
@@ -82,23 +87,26 @@ export const useTeamStore = defineStore('team', {
     },
 
     async editTeam(data: Partial<Team>) {
-      await server.put(`team/edit/${this.team.teamId}/`, snakify(data)).then((res) => {
-        if (res.status == 200) {
-          const data = camelize(res.data) as Object as Team
-          this.currentTeam = JSON.stringify(data)
-          notify({
-            title: 'Edit Team',
-            type: 'success',
-            text: 'Edit Team Successful'
-          })
-        }
-      }).catch(() => {
-        notify({
-          title: 'Get Team',
-          type: 'error',
-          text: 'Edit Team Error'
+      await server
+        .put(`team/edit/${this.team.teamId}/`, snakify(data))
+        .then((res) => {
+          if (res.status == 200) {
+            const data = camelize(res.data) as Object as Team
+            this.currentTeam = JSON.stringify(data)
+            notify({
+              title: 'Edit Team',
+              type: 'success',
+              text: 'Edit Team Successful'
+            })
+          }
         })
-      })
+        .catch(() => {
+          notify({
+            title: 'Get Team',
+            type: 'error',
+            text: 'Edit Team Error'
+          })
+        })
     },
 
     async joinTeam(userId: Number, joinCode: String, teamAdmin: Boolean = false) {
