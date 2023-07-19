@@ -29,25 +29,41 @@
       v-model="searchQuery"
     />
   </v-row>
-
   <v-table fixed-header class="mx-4">
     <thead>
       <tr>
-        <th class="text-left">Rank</th>
+        <th class="text-right">Rank</th>
         <th class="text-left">Name</th>
         <th class="text-left">Mileage</th>
       </tr>
     </thead>
-    <tbody v-if="activeButton==='Individual'">
+    <tbody v-if="activeButton === 'Individual'">
       <tr v-for="item in filteredUserLeaderboard" :key="item.username">
-        <td class="w-0">{{ item.rank }}</td>
+        <td v-if="item.rank === 1" class="text-right w-0">
+          <v-icon icon="mdi-trophy" size="20px" class="text-yellow-darken-1" /> {{ item.rank }}
+        </td>
+        <td v-else-if="item.rank === 2" class="text-right w-0">
+          <v-icon icon="mdi-trophy" size="20px" class="text-blue-grey-lighten-1" /> {{ item.rank }}
+        </td>
+        <td v-else-if="item.rank === 3" class="text-right w-0">
+          <v-icon icon="mdi-trophy" size="20px" class="text-orange-darken-1" /> {{ item.rank }}
+        </td>
         <td>{{ item.username }}</td>
         <td>{{ item.totalMileage }}</td>
       </tr>
     </tbody>
     <tbody v-else>
       <tr v-for="item in filteredTeamLeaderboard" :key="item.name">
-        <td class="w-0">{{ item.rank }}</td>
+        <td v-if="item.rank === 1" class="text-right w-0">
+          <v-icon icon="mdi-trophy" size="20px" class="text-yellow-darken-1" /> {{ item.rank }}
+        </td>
+        <td v-else-if="item.rank === 2" class="text-right w-0">
+          <v-icon icon="mdi-trophy" size="20px" class="text-blue-grey-lighten-1" /> {{ item.rank }}
+        </td>
+        <td v-else-if="item.rank === 3" class="text-right w-0">
+          <v-icon icon="mdi-trophy" size="20px" class="text-orange-darken-1" /> {{ item.rank }}
+        </td>
+        <td v-else class="text-right w-0">{{ item.rank }}</td>
         <td>{{ item.name }}</td>
         <!--  use bio too -->
         <td>{{ item.totalMileage }}</td>
@@ -57,66 +73,57 @@
 </template>
 
 <script setup lang="ts">
-import { useMileageStore } from '@/stores/mileage';
-import type { UserLeaderboardEntry, RankedUserLeaderboardEntry, TeamLeaderboardEntry, RankedTeamLeaderboardEntry } from '@/types/mileage'
+import { useMileageStore } from '@/stores/mileage'
+import type {
+  UserLeaderboardEntry,
+  RankedUserLeaderboardEntry,
+  TeamLeaderboardEntry,
+  RankedTeamLeaderboardEntry
+} from '@/types/mileage'
 import { ref, onMounted, computed } from 'vue'
-
 
 const mileageStore = useMileageStore()
 const activeButton = ref('Individual')
 const searchQuery = ref('')
-/*const teams = [
-  { name: 'Team 1', rank: 1, mileage: 100 },
-  { name: 'Team 2', rank: 2, mileage: 90 },
-  { name: 'Team 3', rank: 3, mileage: 80 },
-  { name: 'Team 4', rank: 4, mileage: 70 },
-  { name: 'Team 5', rank: 5, mileage: 60 },
-  { name: 'Team 6', rank: 6, mileage: 50 },
-  { name: 'Team 7', rank: 7, mileage: 40 },
-  { name: 'Team 8', rank: 8, mileage: 30 },
-  { name: 'Team 9', rank: 9, mileage: 20 },
-  { name: 'Team 10', rank: 10, mileage: 10 },
-  { name: 'Team 11', rank: 11, mileage: 0 },
-  { name: 'Team 12', rank: 12, mileage: 0 },
-  { name: 'Team 13', rank: 13, mileage: 0 },
-  { name: 'Team 14', rank: 14, mileage: 0 },
-  { name: 'Team 15', rank: 15, mileage: 0 },
-  { name: 'Team 16', rank: 16, mileage: 0 },
-  { name: 'Team 17', rank: 17, mileage: 0 },
-  { name: 'Team 18', rank: 18, mileage: 0 },
-  { name: 'Team 19', rank: 19, mileage: 0 },
-  { name: 'Team 20', rank: 20, mileage: 0 }
-]*/
 const userLeaderboard = ref<RankedUserLeaderboardEntry[]>([])
 const teamLeaderboard = ref<RankedTeamLeaderboardEntry[]>([])
+/*const teamLeaderboard = ref<RankedTeamLeaderboardEntry[]>([
+  { name: 'Team 1', rank: 1, totalMileage: 100, bio: 'test' },
+  { name: 'Team 2', rank: 2, totalMileage: 90, bio: 'test' },
+  { name: 'Team 3', rank: 3, totalMileage: 80, bio: 'test' },
+  { name: 'Team 4', rank: 4, totalMileage: 70, bio: 'test' },
+  { name: 'Team 5', rank: 5, totalMileage: 60, bio: 'test' },
+  { name: 'Team 6', rank: 6, totalMileage: 50, bio: 'test' },
+  { name: 'Team 7', rank: 7, totalMileage: 40, bio: 'test' },
+  { name: 'Team 8', rank: 8, totalMileage: 30, bio: 'test' },
+  { name: 'Team 9', rank: 9, totalMileage: 20, bio: 'test' },
+  { name: 'Team 10', rank: 10, totalMileage: 10, bio: 'test' },
+  { name: 'Team 11', rank: 11, totalMileage: 0, bio: 'test' }
+])*/
 const filteredUserLeaderboard = computed<RankedUserLeaderboardEntry[]>(() =>
-  userLeaderboard.value.filter((user) =>
-    (user.username).toLowerCase().includes(searchQuery.value)
-  )
+  userLeaderboard.value.filter((user) => user.username.toLowerCase().includes(searchQuery.value))
 )
 const filteredTeamLeaderboard = computed<RankedTeamLeaderboardEntry[]>(() =>
-  teamLeaderboard.value.filter((team) =>
-    (team.name).toLowerCase().includes(searchQuery.value)
-  )
+  teamLeaderboard.value.filter((team) => team.name.toLowerCase().includes(searchQuery.value))
 )
 
 onMounted(async () => {
-  let users = await mileageStore.getLeaderboard("users") as UserLeaderboardEntry[]
-  let teams = await mileageStore.getLeaderboard("teams") as TeamLeaderboardEntry[]
+  let users = (await mileageStore.getLeaderboard('users')) as UserLeaderboardEntry[]
+  let teams = (await mileageStore.getLeaderboard('teams')) as TeamLeaderboardEntry[]
   let users2: RankedUserLeaderboardEntry[] = []
   users.forEach((user, index) => {
-    if (index > 0 && user.totalMileage === users[index-1].totalMileage) {
-      users2.push({...user, rank: users2[index-1].rank})
+    if (index > 0 && user.totalMileage === users[index - 1].totalMileage) {
+      users2.push({ ...user, rank: users2[index - 1].rank })
     } else {
-      users2.push({...user, rank: index+1})
+      users2.push({ ...user, rank: index + 1 })
     }
   })
   let teams2: RankedTeamLeaderboardEntry[] = []
   teams.forEach((team, index) => {
-    if (index > 0 && team.totalMileage === teams[index-1].totalMileage) {
-      teams2.push({...team, rank: teams2[index-1].rank})
+    if (index > 0 && team.totalMileage === teams[index - 1].totalMileage) {
+      teams2.push({ ...team, rank: teams2[index - 1].rank })
     } else {
-      teams2.push({...team, rank: index+1})
+      teams2.push({ ...team, rank: index + 1 })
     }
   })
   userLeaderboard.value = users2
