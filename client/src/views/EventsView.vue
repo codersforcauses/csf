@@ -84,8 +84,10 @@ onMounted(async () => {
 
 const searchQuery = ref<string | undefined>('') // pressing the clear button sets the text field to undefined
 const filteredEventsList = computed<Event[]>(() =>
-  eventStore.events.filter((e) =>
-    !searchQuery.value || (e.name + e.description).toLowerCase().includes(searchQuery.value.toLowerCase())
+  eventStore.events.filter(
+    (e) =>
+      !searchQuery.value ||
+      (e.name + e.description).toLowerCase().includes(searchQuery.value.toLowerCase())
   )
 )
 const isAddingEvent = ref<boolean>(false)
