@@ -21,14 +21,7 @@ export const useTeamStore = defineStore('team', {
   actions: {
     async getTeams() {
       const teams = await server.get('team/get_teams/').then((res) => {
-        if (res.status == 200) {
-          notify({
-            title: 'Get Teams',
-            type: 'success',
-            text: 'Get Teams Successful'
-          })
-          return res.data
-        }
+        if (res.status == 200) return res.data
       })
       notify({
         title: 'Get Teams',
@@ -45,11 +38,6 @@ export const useTeamStore = defineStore('team', {
           if (res.status == 200) {
             const data = camelize(res.data) as Object as Team
             this.currentTeam = JSON.stringify(data)
-            notify({
-              title: 'Get Team',
-              type: 'success',
-              text: 'Get Team Successful'
-            })
           }
         })
         .catch(() => {

@@ -9,9 +9,9 @@ import { RouterView } from 'vue-router'
   <NavbarComponents />
   <RouterView />
   <notifications
-    classes="my-notification"
+    classes="csf-notification"
     position="bottom right"
-    width="450px"
+    width="350px"
     duration="3"
     closeOnClick="True"
   />
@@ -147,11 +147,11 @@ body {
   font-weight: 100;
 }
 
-.my-notification {
+.csf-notification {
   padding: 2%;
-  margin-bottom: 5%;
-  margin-right: 5%;
-  font-size: 15px;
+  margin-bottom: 3%;
+  margin-right: 3%;
+  font-size: 14px;
   color: #ffffff;
 
   .notification-title {
