@@ -4,6 +4,8 @@ import type { Signup, Tokens, User, UserSettings } from '@/types/user'
 import camelize from 'camelize-ts'
 import snakify from 'snakify-ts'
 import useNullableStorage from '@/utils/useNullableStorage'
+import { useTeamStore } from './team'
+import { useMileageStore } from './mileage'
 
 export const useUserStore = defineStore('user', () => {
   const user = useNullableStorage<User>('authUser')
@@ -18,6 +20,8 @@ export const useUserStore = defineStore('user', () => {
     logout() {
       user.value = null
       token.value = null
+      useTeamStore().team = null
+      useMileageStore().recentMileage = []
       delete server.defaults.headers.common['Authorization']
     },
 
