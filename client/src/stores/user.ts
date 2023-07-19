@@ -23,7 +23,7 @@ export const useUserStore = defineStore('user', () => {
 
     async getUser(username: string) {
       const { status, data } = await server.get(`user/${username}/`)
-      if (status == 200) user.value = camelize<User>(data) as User
+      if (status == 200) user.value = camelize<User>(data)
     },
 
     async login(username: string, password: string) {
