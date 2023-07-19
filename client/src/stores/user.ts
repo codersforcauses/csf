@@ -26,9 +26,9 @@ export const useUserStore = defineStore('user', {
           username: username,
           password: password
         })
-        .then((res) => {
+        .then(async (res) => {
           if (res.status == 200) {
-            this.getUser(username)
+            await this.getUser(username)
             this.authToken = JSON.stringify(res.data)
             return true
           }

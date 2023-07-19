@@ -75,13 +75,11 @@ const { user } = storeToRefs(useUserStore())
 const isLoading = ref(true)
 
 onMounted(async () => {
-  await eventStore.getEvents().catch(() => {
-    notify({
-      title: 'Get Events',
-      type: 'error',
-      text: 'Get Events Error'
-    })
-  })
+  try {
+    await eventStore.getEvents()
+  } catch (e) {
+    console.log(e)
+  }
   isLoading.value = false
 })
 

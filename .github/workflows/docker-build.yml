@@ -2,63 +2,56 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
-
   backend:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Get the date
-      id: date
-      run: echo "::set-output name=date::$(date +'%Y%m%d%H%M%S')"
+      - uses: actions/checkout@v3
+      - name: Get the date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y%m%d%H%M%S')"
 
-    # Login
-    -
-      name: Login to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ vars.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+      # Login
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    # Server Docker image
-    -
-      name: Build and push the server Docker image
-      uses: docker/build-push-action@v4
-      with:
-        context: .
-        file: ./docker/server/Dockerfile
-        push: true
-        tags: ${{ vars.DOCKERHUB_USERNAME}}/csf-prod-server:${{ steps.date.outputs.date }}, ${{ vars.DOCKERHUB_USERNAME }}/csf-prod-server:latest
+      # Server Docker image
+      - name: Build and push the server Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./docker/server/Dockerfile
+          push: true
+          tags: ${{ vars.DOCKERHUB_USERNAME}}/csf-prod-server:${{ steps.date.outputs.date }}, ${{ vars.DOCKERHUB_USERNAME }}/csf-prod-server:latest
 
   frontend:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Get the date
-      id: date
-      run: echo "::set-output name=date::$(date +'%Y%m%d%H%M%S')"
+      - uses: actions/checkout@v3
+      - name: Get the date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y%m%d%H%M%S')"
 
-    # Login
-    -
-      name: Login to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ vars.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+      # Login
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    # Client Docker image
-    -
-      name: Build and push the client Docker image
-      uses: docker/build-push-action@v4
-      with:
-        context: .
-        file: ./docker/client/Dockerfile
-        push: true
-        tags: ${{ vars.DOCKERHUB_USERNAME}}/csf-prod-client:${{ steps.date.outputs.date }}, ${{ vars.DOCKERHUB_USERNAME }}/csf-prod-client:latest
+      # Client Docker image
+      - name: Build and push the client Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./docker/client/Dockerfile
+          push: true
+          tags: ${{ vars.DOCKERHUB_USERNAME}}/csf-prod-client:${{ steps.date.outputs.date }}, ${{ vars.DOCKERHUB_USERNAME }}/csf-prod-client:latest

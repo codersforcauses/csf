@@ -128,7 +128,13 @@
       <div v-if="!firstPage">
         <form style="bottom: auto" class="bg-backgroundGrey" @submit.prevent="">
           <v-container class="pa-0">
-            <v-img src="/images/Footer-min.jpeg" width="auto" height="10" cover></v-img>
+            <v-img
+              src="/images/Footer-min.jpeg"
+              width="auto"
+              height="10"
+              alt="red background"
+              cover
+            ></v-img>
           </v-container>
           <v-row justify="end">
             <v-col cols="auto">

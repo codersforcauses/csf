@@ -8,7 +8,13 @@
     <v-card class="bg-backgroundGrey" align="center" justify="center">
       <div class="bg-backgroundGrey">
         <v-container class="pa-0">
-          <v-img src="/images/Footer-min.jpeg" width="100%" height="10" cover />
+          <v-img
+            src="/images/Footer-min.jpeg"
+            width="100%"
+            height="10"
+            alt="red background"
+            cover
+          />
         </v-container>
 
         <v-row justify="end">

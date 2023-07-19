@@ -136,7 +136,13 @@ watchEffect(async () => {
 <template>
   <v-dialog :fullscreen="isFullscreen" max-width="500px" max-height="100vh">
     <v-card class="bg-backgroundGrey">
-      <v-img src="/images/Footer-min.jpeg" width="100%" max-height="16" cover />
+      <v-img
+        src="/images/Footer-min.jpeg"
+        width="100%"
+        max-height="16"
+        alt="red background"
+        cover
+      />
       <v-card-actions>
         <v-spacer />
         <v-icon icon="mdi-close" size="x-large" @click="closeModal" />
