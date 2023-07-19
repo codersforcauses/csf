@@ -26,7 +26,7 @@ export const useEventStore = defineStore('event', {
         const { status } = await server.put(`event/update/${event.eventId}`, snakify(event))
         if (status == 200) {
           if (event.isArchived) {
-            this.events.splice(index,1)
+            this.events.splice(index, 1)
           } else {
             this.events[index] = event
           }
