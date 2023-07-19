@@ -24,7 +24,13 @@ export const useEventStore = defineStore('event', {
       const index = this.events.findIndex((e) => e.eventId == event.eventId && !e.isPublic)
       if (index > -1) {
         const { status } = await server.put(`event/update/${event.eventId}`, snakify(event))
-        if (status == 200) this.events[index] = event
+        if (status == 200) {
+          if (event.isArchived) {
+            this.events.splice(index,1)
+          } else {
+            this.events[index] = event
+          }
+        }
       }
     },
     async deleteEvent(eventId: Event['eventId']) {
