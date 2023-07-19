@@ -60,7 +60,9 @@
             </v-col>
             <v-col cols="4" sm="2" lg="1">
               <div :class="`length-label rounded-lg ${challenge.colour}`">
-                <h3 class="primaryWhite text-center">{{ `${distanceTravelled}/${challenge.length}KM` }}</h3>
+                <h3 class="primaryWhite text-center">
+                  {{ `${distanceTravelled}/${challenge.length}KM` }}
+                </h3>
               </div>
             </v-col>
           </v-row>
