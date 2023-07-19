@@ -184,7 +184,7 @@ watch(team, (newTeam) => {
 })
 
 const isBioVisible = ref(false)
-const isDailyKmsVisible = ref(false)
+const isDailyKmsVisible = ref(true)
 const isSubTeamsVisible = ref(false)
 const isLeaderboardVisible = ref(false)
 
