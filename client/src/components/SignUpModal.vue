@@ -323,6 +323,11 @@ const submit = async () => {
       Object.assign(errors, initialErrors)
       await userStore.registerUser(reactiveOmit(state, 'confirmPassword'))
       modalStore.login()
+      notify({
+        title: 'Sign Up',
+        type: 'success',
+        text: 'Sign Up Successful'
+      })
     } catch (error: AxiosError | any) {
       console.debug(error)
       if (error instanceof AxiosError && error.message) {
