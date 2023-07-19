@@ -90,10 +90,9 @@
       <v-row align="start" class="my-2">
         <v-col id="pointer-cursor" @click="isSubTeamsVisible = !isSubTeamsVisible">
           <h2>Sub-Teams</h2>
-          <p v-if="isSubTeamsVisible">Leave this for now</p>
+          <!-- <p v-if="isSubTeamsVisible">Leave this for now</p> -->
         </v-col>
-
-        <v-icon icon="mdi mdi-plus" size="45px" class="px-6" id="pointer-cursor" />
+        <!-- <v-icon icon="mdi mdi-plus" size="45px" class="px-6" id="pointer-cursor" /> -->
         <v-icon
           v-if="isSubTeamsVisible"
           icon="mdi mdi-chevron-down"
@@ -111,6 +110,9 @@
           class="px-10"
         />
       </v-row>
+      <v-col cols="12" class="w-100" id="pointer-cursor">
+        <SubTeams v-if="isSubTeamsVisible" />
+      </v-col>
       <v-divider />
 
       <!-- Leaderboard -->
@@ -144,6 +146,7 @@
 import { onMounted, ref, watch } from 'vue'
 import { useDisplay } from 'vuetify'
 import EditTeamInfo from './EditTeamInfo.vue'
+import SubTeams from './SubTeams.vue'
 import MileageGraph from '../MileageGraph.vue'
 const { mobile } = useDisplay()
 import { useTeamStore } from '@/stores/team'

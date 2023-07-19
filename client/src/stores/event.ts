@@ -11,10 +11,11 @@ export const useEventStore = defineStore('event', {
   }),
   actions: {
     async createEvent(partialEvent: Omit<Event, 'eventId' | 'isArchived' | 'teamId'>) {
+      const userStore = useUserStore()
       const modifiedData = snakify({
         ...partialEvent,
         isArchived: false,
-        teamId: null // temp
+        teamId: userStore.user?.teamId
       })
       const { data, status } = await server.post('event/create/', modifiedData)
       if (status == 200) this.events.push(camelize(data as Snakify<Event>))
