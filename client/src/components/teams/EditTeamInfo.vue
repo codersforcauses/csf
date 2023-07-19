@@ -26,7 +26,7 @@
       </v-card-actions>
       <v-card-title class="justify-center text-h4 mb-6">Edit Team</v-card-title>
       <form class="pb-0 mb-0 mx-8">
-        <v-text-field bg-color="white" label="Event Name" v-model="newTeamName" class="mx-5" />
+        <v-text-field bg-color="white" label="Team Name" v-model="newTeamName" class="mx-5" />
         <v-textarea bg-color="white" label="Description" v-model="newBioText" class="mx-5" />
         <v-card-actions class="justify-center mb-4">
           <v-btn variant="elevated" color="primaryRed" @click="editTeamInfo">Save Changes</v-btn>
