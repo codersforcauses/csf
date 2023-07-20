@@ -170,15 +170,9 @@ AUTH_USER_MODEL = "users.User"
 
 # JWT
 
-
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=3),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=3),
-    "ALGORITHM": "HS256",
-    "SIGNING_KEY": os.environ.get("JWT_SECRET_KEY"),
+    "SIGNING_KEY": os.environ.get("JWT_SIGNING_KEY"),
 }
-
-print(type(os.environ.get("JWT_SECRET_KEY")), os.environ.get("JWT_SECRET_KEY"))
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
