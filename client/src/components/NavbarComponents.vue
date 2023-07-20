@@ -1,7 +1,13 @@
 <template>
   <v-toolbar dark app color="black" class="hidden-sm-and-down sticky-nav">
     <v-btn :width="125" :height="60" :to="homelink" :active="false">
-      <v-img :width="125" :height="60" cover src="/images/CSF_Logo_WHITE.png"></v-img>
+      <v-img
+        :width="125"
+        :height="60"
+        cover
+        src="/images/CSF_Logo_WHITE.png"
+        alt="white csf logo"
+      ></v-img>
     </v-btn>
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down d-flex align-center" align="center">
@@ -72,7 +78,13 @@
   </v-toolbar>
   <v-toolbar dark app color="black" class="hidden-md-and-up sticky-nav">
     <v-btn :width="125" :height="60" :to="homelink" :active="false">
-      <v-img :width="125" :height="60" cover src="/images/CSF_Logo_WHITE.png" />
+      <v-img
+        :width="125"
+        :height="60"
+        cover
+        src="/images/CSF_Logo_WHITE.png"
+        alt="white csf logo"
+      />
     </v-btn>
     <v-spacer></v-spacer>
     <v-dialog
@@ -82,7 +94,7 @@
       class="hidden-md-and-up"
     >
       <template v-slot:activator="{ props }">
-        <v-btn icon v-bind="props" class="hidden-md-and-up">
+        <v-btn icon v-bind="props" class="hidden-md-and-up" aria-label="open navigation bar">
           <v-icon>mdi-menu</v-icon>
         </v-btn>
       </template>
@@ -90,7 +102,13 @@
         <v-container class="pa-0 ma-0">
           <v-toolbar color="black" class="hidden-md-and-up sticky-nav">
             <v-btn :width="125" :height="60" :to="homelink" @click="dialog = false" :active="false">
-              <v-img :width="125" :height="60" cover src="/images/CSF_Logo_WHITE.png" />
+              <v-img
+                :width="125"
+                :height="60"
+                cover
+                src="/images/CSF_Logo_WHITE.png"
+                alt="white csf logo"
+              />
             </v-btn>
             <v-spacer></v-spacer>
             <v-btn icon @click="dialog = false" class="hidden-md-and-up">

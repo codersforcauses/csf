@@ -8,6 +8,13 @@ import { RouterView } from 'vue-router'
   <ReloadPWA />
   <NavbarComponents />
   <RouterView />
+  <notifications
+    classes="csf-notification"
+    position="bottom right"
+    width="350px"
+    duration="3"
+    closeOnClick="True"
+  />
 </template>
 
 <style>
@@ -138,5 +145,31 @@ body {
   src: local('Sofia Pro'),
     url('./assets/fonts/Mostardesign - Sofia Pro Ultra Light.otf') format('opentype');
   font-weight: 100;
+}
+
+.csf-notification {
+  padding: 2%;
+  margin-bottom: 3%;
+  margin-right: 3%;
+  font-size: 14px;
+  color: #ffffff;
+
+  .notification-title {
+    text-align: center;
+  }
+
+  .notification-content {
+    text-align: center;
+  }
+
+  &.success {
+    background: rgb(0, 157, 79);
+    border-left-color: rgb(0, 157, 79);
+  }
+
+  &.error {
+    background: rgb(237, 28, 36);
+    border-left-color: rgb(237, 28, 36);
+  }
 }
 </style>

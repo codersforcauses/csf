@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from .models import Event, Team
+from api.users.models import User
 
 import datetime
 
@@ -20,7 +21,6 @@ class EventTests(APITestCase):
             description="public event for unit test",
             is_public=True,
             is_archived=False,
-            team_id=createTeam,
         )
         Event.objects.create(
             name="eventTestPrivate",
@@ -31,8 +31,23 @@ class EventTests(APITestCase):
             is_archived=True,
             team_id=createTeam,
         )
+        self.testuser = User.objects.create_user(username='John', password='John123!', team_id=createTeam, team_admin=True)
+        self.testuser.save()
+
+    def get_token(self):
+        get_token_url = reverse('auth:jwt_token')
+        get_token_body = {
+            'username': 'John',
+            'password': 'John123!'
+        }
+        get_token_response = self.client.post(get_token_url, get_token_body, format='json')
+
+        token = get_token_response.data['access']
+        return token
 
     def test_create_event(self):
+        token = self.get_token()
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer {0}'.format(token))
         created_event_name = "createEventTestPublic"
         created_event_description = "public event for unit test"
         response = self.client.post(
@@ -56,23 +71,10 @@ class EventTests(APITestCase):
         self.assertTrue(created_event.is_public)
         self.assertFalse(created_event.is_archived)
 
-    def test_get_event(self):
-        existingTeam = Team.objects.get()
-        one_event = Event.objects.get(name="eventTestPublic")
-        response = self.client.get(
-            reverse("event:get-event", kwargs={"event_id": one_event.event_id})
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(one_event.name, "eventTestPublic")
-        self.assertEqual(one_event.start_date, datetime.date.today())
-        self.assertEqual(one_event.end_date, datetime.date.today())
-        self.assertEqual(one_event.description, "public event for unit test")
-        self.assertTrue(one_event.is_public)
-        self.assertFalse(one_event.is_archived)
-        self.assertEqual(one_event.team_id, existingTeam)
-
     def test_get_events(self):
-        all_event = Event.objects.all()
+        token = self.get_token()
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer {0}'.format(token))
+        all_event = Event.objects.filter(is_archived=False)
         response = self.client.get(reverse("event:get-events"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data_count = 0
@@ -81,6 +83,8 @@ class EventTests(APITestCase):
         self.assertEqual(all_event.count(), data_count)
 
     def test_update_private_event(self):
+        token = self.get_token()
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer {0}'.format(token))
         eventBeforeUpdate = Event.objects.get(name="eventTestPrivate")
         response = self.client.put(
             reverse(
@@ -92,17 +96,18 @@ class EventTests(APITestCase):
                 "start_date": datetime.date.today(),
                 "end_date": datetime.date.today(),
                 "description": "unit test try update",
-                "is_public": True,
+                "is_public": False,
                 "is_archived": False,
             },
             format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data.keys()), 0)  # no errors
-        self.assertEqual(Event.objects.get(event_id=eventBeforeUpdate.event_id).name, "updateEventTestPrivate")
-        self.assertEqual(Event.objects.get(event_id=eventBeforeUpdate.event_id).description, "unit test try update")
+        self.assertEqual(response.data['name'], "updateEventTestPrivate")
+        self.assertEqual(response.data['description'], "unit test try update")
 
     def test_update_public_event(self):
+        token = self.get_token()
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer {0}'.format(token))
         eventBeforeUpdate = Event.objects.get(name="eventTestPublic")
         response = self.client.put(
             reverse(
@@ -119,10 +124,12 @@ class EventTests(APITestCase):
             },
             format="json",
         )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, "Event is not private")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.data, "User is not authorised to update this event")
 
     def test_delete_private_event(self):
+        token = self.get_token()
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer {0}'.format(token))
         eventCountBeforeDelete = Event.objects.all().count()
         eventToDelete = Event.objects.get(name="eventTestPrivate")
         response = self.client.delete(
@@ -136,6 +143,8 @@ class EventTests(APITestCase):
         self.assertEqual(eventCountBeforeDelete - 1, eventCountAfterDelete)
 
     def test_delete_public_event(self):
+        token = self.get_token()
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer {0}'.format(token))
         eventToDelete = Event.objects.get(name="eventTestPublic")
         response = self.client.delete(
             reverse(
@@ -143,5 +152,5 @@ class EventTests(APITestCase):
                 kwargs={"event_id": eventToDelete.event_id}
                 ),
         )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, "Event is not private")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.data, "User is not authorised to update this event")

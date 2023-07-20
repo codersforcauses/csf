@@ -1,109 +1,147 @@
 import { defineStore } from 'pinia'
-import snakify, { type Snakify } from 'snakify-ts'
+import snakify from 'snakify-ts'
 import type { Team } from '@/types/team'
-import { useStorage } from '@vueuse/core'
 import camelize from 'camelize-ts'
 import type { User } from '@/types/user'
 import server from '@/utils/server'
+import { notify } from '@kyvg/vue3-notification'
+import { useUserStore } from './user'
+import useNullableStorage from '@/utils/useNullableStorage'
 
-export const useTeamStore = defineStore('team', {
-  state: () => ({
-    currentTeam: useStorage('team', null as string | null),
-    authUser: useStorage('authUser', null as string | null)
-  }),
+export const useTeamStore = defineStore('team', () => {
+  const userStore = useUserStore()
+  const team = useNullableStorage<Team>('team')
 
-  getters: {
-    user: (state) => JSON.parse(state.authUser as string) as User,
-    team: (state) => JSON.parse(state.currentTeam as string) as Team
-  },
+  const removeTeamFromState = () => {
+    userStore.user!.teamId = undefined
+    userStore.user!.teamAdmin = false
+    team.value = null
+  }
 
-  actions: {
+  return {
+    team,
+
     async getTeams() {
-      const teams = await server.get('team/all/').then((res) => {
-        if (res.status == 200) {
-          return res.data
-        }
+      const teams = await server.get('team/get_teams/').then((res) => {
+        if (res.status == 200) return res.data
       })
-
+      notify({
+        title: 'Get Teams',
+        type: 'error',
+        text: 'Get Teams Error'
+      })
       return camelize(teams)
     },
 
     async getTeam(teamId: Number) {
-      await server.get(`team/${teamId}/`).then((res) => {
-        if (res.status == 200) {
-          const data = camelize(res.data) as Object as Team
-          this.currentTeam = JSON.stringify(data)
-        }
-      })
-    },
-
-    async createTeam(data: Omit<Team, 'teamId' | 'joinCode'>) {
-      await server.post('team/', snakify(data)).then((res) => {
-        if (res.status == 200) {
-          const data = camelize(res.data) as Object as Team
-
-          this.currentTeam = JSON.stringify(data)
-          this.joinTeam(this.user.id, data.joinCode, true)
-        }
-      })
-    },
-
-    async editTeam(data: Partial<Team>) {
-      await server.patch(`team/edit/${this.team.teamId}/`, snakify(data)).then((res) => {
-        if (res.status == 200) {
-          const data = camelize(res.data) as Object as Team
-          this.currentTeam = JSON.stringify(data)
-        }
-      })
-    },
-
-    async joinTeam(userId: Number, joinCode: String, teamAdmin: Boolean = false) {
-      await server
-        .patch(
-          `user/join/${userId}/`,
-          snakify({
-            joinCode,
-            teamAdmin
-          })
-        )
-        .then((res) => {
-          if (res.status == 200) {
-            const data = camelize(res.data) as Object as User
-            const { teamId, teamAdmin } = camelize(res.data as Snakify<Partial<User>>)
-            this.authUser = JSON.stringify({
-              ...this.user,
-              teamId,
-              teamAdmin
-            })
-            this.getTeam(teamId as Number)
-          }
+      const res = await server.get(`team/get/${teamId}/`)
+      if (res.status == 200) team.value = camelize<Team>(res.data)
+      else
+        notify({
+          title: 'Get Team',
+          type: 'error',
+          text: 'Get Team Error'
         })
     },
 
+    async createTeam(data: Omit<Team, 'teamId' | 'joinCode'>) {
+      const res = await server.post('team/create/', snakify(data))
+      if (res.status == 200) {
+        team.value = camelize<Team>(res.data)
+        this.joinTeam(team.value.joinCode, true)
+        notify({
+          title: 'Create Team',
+          type: 'success',
+          text: 'Create Team Successful'
+        })
+      } else {
+        notify({
+          title: 'Create Team',
+          type: 'error',
+          text: 'Create Team Error'
+        })
+      }
+    },
+
+    async editTeam(data: Partial<Team>) {
+      const res = await server.put(`team/edit/${team.value!.teamId}/`, snakify(data))
+      if (res.status == 200) {
+        notify({
+          title: 'Edit Team',
+          type: 'success',
+          text: 'Edit Team Successful'
+        })
+        team.value = camelize<Team>(res.data)
+      } else {
+        notify({
+          title: 'Edit Team',
+          type: 'error',
+          text: 'Edit Team Error'
+        })
+      }
+    },
+
+    async joinTeam(joinCode: string, teamAdmin: boolean = false) {
+      const res = await server.patch(
+        `user/join/${userStore.user!.id}/`,
+        snakify({
+          joinCode,
+          teamAdmin
+        })
+      )
+      if (res.status == 200) {
+        const data = camelize<Required<Pick<User, 'teamId' | 'teamAdmin'>>>(res.data)
+        userStore.user!.teamId = data.teamId
+        userStore.user!.teamAdmin = data.teamAdmin
+        this.getTeam(data.teamId)
+        notify({
+          title: 'Join Team',
+          type: 'success',
+          text: 'Join Team Successful'
+        })
+      } else {
+        notify({
+          title: 'Join Team',
+          type: 'error',
+          text: 'Join Team Error'
+        })
+      }
+    },
+
     async deleteTeam() {
-      await server.delete(`team/delete/${this.user.teamId}/`).then((res) => {
-        if (res.status == 200) {
-          this.authUser = JSON.stringify({
-            ...this.user,
-            teamId: null,
-            teamAdmin: false
-          })
-          this.currentTeam = null
-        }
-      })
+      const res = await server.delete(`team/delete/${team.value!.teamId}/`)
+      if (res.status == 200) {
+        removeTeamFromState()
+        notify({
+          title: 'Delete Team',
+          type: 'success',
+          text: 'Delete Team Successful'
+        })
+      } else {
+        notify({
+          title: 'Delete Team',
+          type: 'error',
+          text: 'Delete Team Error'
+        })
+      }
     },
 
     async removeTeam() {
-      await server.patch(`user/remove/${this.user.id}/`).then((res) => {
-        if (res.status == 200) {
-          this.authUser = JSON.stringify({
-            ...this.user,
-            teamId: null,
-            teamAdmin: false
-          })
-          this.currentTeam = null
-        }
-      })
+      const res = await server.patch(`user/remove/${userStore.user!.id}/`)
+      if (res.status == 200) {
+        removeTeamFromState()
+        notify({
+          title: 'Remove Team',
+          type: 'success',
+          text: 'Remove Team Successful'
+        })
+      } else {
+        notify({
+          title: 'Remove Team',
+          type: 'error',
+          text: 'Remove Team Error'
+        })
+      }
     }
   }
 })

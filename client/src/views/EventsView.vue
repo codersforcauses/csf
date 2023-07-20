@@ -16,7 +16,7 @@
         v-model="searchQuery"
       />
       <v-btn
-        v-if="user?.teamAdmin"
+        v-if="user?.teamAdmin && user?.teamId"
         size="x-large"
         density="compact"
         variant="flat"
@@ -38,7 +38,7 @@
         <v-icon icon="mdi-calendar-blank" size="x-large" />
         <p class="font-weight-bold text-body-1 mt-3">No current events :(</p>
         <v-btn
-          v-if="user?.teamAdmin"
+          v-if="user?.teamAdmin && user?.teamId"
           size="x-large"
           class="bg-primaryRed text-primaryWhite mt-3"
           @click="isAddingEvent = true"
@@ -68,20 +68,32 @@ import { ref, computed, onMounted } from 'vue'
 import { useEventStore } from '../stores/event'
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
+import { notify } from '@kyvg/vue3-notification'
 
 const eventStore = useEventStore()
 const { user } = storeToRefs(useUserStore())
 const isLoading = ref(true)
 
 onMounted(async () => {
-  await eventStore.getEvents()
+  try {
+    await eventStore.getEvents()
+  } catch (e) {
+    console.log(e)
+    notify({
+      title: 'Get Events',
+      type: 'error',
+      text: 'Get Events Error'
+    })
+  }
   isLoading.value = false
 })
 
-const searchQuery = ref('')
+const searchQuery = ref<string | undefined>('') // pressing the clear button sets the text field to undefined
 const filteredEventsList = computed<Event[]>(() =>
-  eventStore.events.filter((e) =>
-    (e.name + e.description).toLowerCase().includes(searchQuery.value)
+  eventStore.events.filter(
+    (e) =>
+      !searchQuery.value ||
+      (e.name + e.description).toLowerCase().includes(searchQuery.value.toLowerCase())
   )
 )
 const isAddingEvent = ref<boolean>(false)

@@ -1,44 +1,45 @@
 import { defineStore } from 'pinia'
-import { useStorage } from '@vueuse/core'
 import server from '@/utils/server'
-import type { User, UserSettings } from '@/types/user'
+import type { Signup, Tokens, User, UserSettings } from '@/types/user'
 import camelize from 'camelize-ts'
-import snakify, { type Snakify } from 'snakify-ts'
+import snakify from 'snakify-ts'
+import { useTeamStore } from './team'
+import { useMileageStore } from './mileage'
+import useNullableStorage from '@/utils/useNullableStorage'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    authUser: useStorage('authUser', null as string | null),
-    authToken: useStorage('authToken', null as string | null)
+    user: useNullableStorage<User>('authUser'),
+    token: useNullableStorage<Tokens>('authToken')
   }),
-  getters: {
-    user: (state) => (state.authUser ? (JSON.parse(state.authUser) as User) : null),
-    token: (state) => (state.authToken ? JSON.parse(state.authToken) : null)
-  },
+
   actions: {
     logout() {
-      this.authUser = null
-      this.authToken = null
+      this.user = null
+      this.token = null
+      useTeamStore().team = null
+      useMileageStore().recentMileage = []
     },
 
-    async loginUser(username: string, password: string) {
-      return await server
-        .post('auth/token/', {
-          username: username,
-          password: password
-        })
-        .then((res) => {
-          if (res.status == 200) {
-            this.getUser(username)
-            this.authToken = JSON.stringify(res.data)
-            return true
-          }
-        })
-        .catch(() => {
-          this.authToken = null
-          this.authUser = null
-          return false
-        })
+    async getUser(username: string) {
+      const { status, data } = await server.get(`user/${username}/`)
+      if (status == 200) this.user = camelize<User>(data)
     },
+
+    async login(username: string, password: string) {
+      const { status, data } = await server.post(
+        'auth/token/',
+        { username, password },
+        { validateStatus: () => true }
+      )
+      if (status == 200) {
+        await this.getUser(username)
+        this.token = data
+        return true
+      }
+      return false
+    },
+
     async changePassword(oldPassword: string, newPassword: string) {
       if (this.user) {
         return await server
@@ -54,6 +55,7 @@ export const useUserStore = defineStore('user', {
           })
       }
     },
+
     async changeDetails(newDetails: UserSettings) {
       return await server
         .patch(`user/change_details/${this.user!.id}`, snakify(newDetails))
@@ -61,6 +63,7 @@ export const useUserStore = defineStore('user', {
           return res.status
         })
     },
+
     async sendResetEmail(email: string) {
       return await server
         .post('user/request_reset_password/', {
@@ -70,6 +73,7 @@ export const useUserStore = defineStore('user', {
           return res.status
         })
     },
+
     async submitResetToken(token: string) {
       return await server
         .post(
@@ -82,6 +86,7 @@ export const useUserStore = defineStore('user', {
           return res.status
         })
     },
+
     async submitNewPassword(token: string, newPassword: string) {
       return await server
         .post(
@@ -96,44 +101,21 @@ export const useUserStore = defineStore('user', {
         })
     },
 
-    async getUser(username: string) {
-      await server.get(`user/${username}/`).then((res) => {
-        if (res.status == 200) {
-          const {
-            id,
-            username,
-            firstName,
-            lastName,
-            email,
-            avatar,
-            travelMethod,
-            teamSignup,
-            hasConsent,
-            subteamId,
-            teamId,
-            teamAdmin
-          } = camelize(res.data as Snakify<User>)
-
-          this.authUser = JSON.stringify({
-            id,
-            username,
-            firstName,
-            lastName,
-            email,
-            avatar,
-            travelMethod,
-            teamSignup,
-            hasConsent,
-            subteamId,
-            teamId,
-            teamAdmin
-          })
-        }
-      })
+    async registerUser(signup: Signup) {
+      await server.post('auth/register/', snakify(signup))
     },
 
-    async registerUser(obj: object) {
-      await server.post('auth/register/', obj)
+    async refreshToken() {
+      if (this.token != null) {
+        const { status, data } = await server.post('auth/refresh/', {
+          refresh: this.token.refresh
+        })
+        if (status == 200) {
+          this.token.access = data.access
+          return true
+        }
+      }
+      return false
     }
   }
 })

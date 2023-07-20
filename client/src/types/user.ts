@@ -10,7 +10,7 @@ export interface User {
   hasConsent: boolean
   subteamId?: number
   teamId?: number
-  teamAdmin?: Boolean
+  teamAdmin?: boolean
 }
 
 export interface Signup {
@@ -45,4 +45,9 @@ export interface ChangeDetailsError {
 export interface ChangePasswordError {
   oldPassword?: string
   password?: string
+}
+
+export interface Tokens {
+  access: string
+  refresh: string
 }

@@ -4,7 +4,13 @@
       <v-btn size="large" color="red white--text" v-bind="dialog">New Team</v-btn>
     </template>
     <v-card class="bg-backgroundGrey">
-      <v-img src="/images/Footer-min.jpeg" width="100%" max-height="16" cover />
+      <v-img
+        src="/images/Footer-min.jpeg"
+        width="100%"
+        max-height="16"
+        alt="red background"
+        cover
+      />
       <v-card-actions>
         <v-spacer />
         <v-icon icon="mdi-close" size="x-large" @click="closeDialog" />
@@ -41,9 +47,10 @@ const submitForm = () => {
   teamStore.createTeam({ ...form.value })
 }
 
-const openDialog = () => {
-  dialog.value = true
-}
+// never used vvv
+// const openDialog = () => {
+//   dialog.value = true
+// }
 
 const closeDialog = () => {
   dialog.value = false
