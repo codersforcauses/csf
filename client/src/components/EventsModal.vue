@@ -33,7 +33,7 @@ const errors = reactive<EventError>({
   name: [],
   startDate: [],
   endDate: [],
-  description: [],
+  description: []
 })
 
 function setMinDate() {
@@ -47,30 +47,29 @@ const required = (v: string) => !!v || 'Field is required'
 
 const addEvent = () => {
   eventStore
-  .createEvent(refs())
-  .then(() => {
-    notify({
-      title: 'Add Event',
-      type: 'success',
-      text: 'Add Event Successful'
+    .createEvent(refs())
+    .then(() => {
+      notify({
+        title: 'Add Event',
+        type: 'success',
+        text: 'Add Event Successful'
+      })
+      closeModal()
     })
-    closeModal()
-  })
-  .catch((error: AxiosError | any) => {
-    if (error instanceof AxiosError && error.response && error.response.status === 400) {
-      let newErrors = camelize(error.response.data) as unknown as EventError
-      if (newErrors.nonFieldErrors) {
-        errors.startDate = newErrors.nonFieldErrors
+    .catch((error: AxiosError | any) => {
+      if (error instanceof AxiosError && error.response && error.response.status === 400) {
+        let newErrors = camelize(error.response.data) as unknown as EventError
+        if (newErrors.nonFieldErrors) {
+          errors.startDate = newErrors.nonFieldErrors
+        }
       }
-    }
-    notify({
-      title: 'Add Event',
-      type: 'error',
-      text: 'Error adding event'
+      notify({
+        title: 'Add Event',
+        type: 'error',
+        text: 'Error adding event'
+      })
     })
-  })
 }
-  
 
 const editEvent = () => {
   if (props.event)
@@ -180,7 +179,13 @@ watchEffect(async () => {
       </v-card-actions>
       <v-card-title class="justify-center text-h4 mb-6">{{ `${type} Event` }}</v-card-title>
       <v-form class="pb-0 mb-0 mx-8" v-model="valid">
-        <v-text-field bg-color="white" label="Event Name" v-model="name" class="mx-5" :rules="[required]"/>
+        <v-text-field
+          bg-color="white"
+          label="Event Name"
+          v-model="name"
+          class="mx-5"
+          :rules="[required]"
+        />
         <v-text-field
           bg-color="white"
           label="Start Date"
@@ -201,7 +206,13 @@ watchEffect(async () => {
           v-model="endDate"
           class="mx-5"
         />
-        <v-textarea bg-color="white" label="Description" v-model="description" :rules="[required]" class="mx-5" />
+        <v-textarea
+          bg-color="white"
+          label="Description"
+          v-model="description"
+          :rules="[required]"
+          class="mx-5"
+        />
         <v-card-actions v-if="type === 'Edit'" class="justify-center mb-4">
           <v-btn variant="outlined" class="text-secondaryBlue mr-16" @click="archiveEvent"
             >ARCHIVE</v-btn
