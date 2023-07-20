@@ -24,34 +24,12 @@ export default defineConfig({
       strategies: 'injectManifest',
       manifest: {
         name: 'Stride For Education',
-        short_name: 'Stride For Education',
+        short_name: 'SFE',
         theme_color: '#ffffff',
         start_url: '/',
         display: 'standalone',
         background_color: '#ffffff',
         icons: [
-          // {
-          //   src: "public/images/CSF_Logo_WHITE.png",
-          //   sizes: "192x192",
-          //   type: "image/png",
-          // },
-          // {
-          //   src: "/icon-512.png",
-          //   sizes: "512x512",
-          //   type: "image/png",
-          // },
-          // {
-          //   src: "icon-512.png",
-          //   sizes: "512x512",
-          //   type: "image/png",
-          //   purpose: "any maskable",
-          // },
-          // {
-          //   src: "public/images/CSF_Logo_WHITE.png",
-          //   sizes: "512x512",
-          //   type: "image/png",
-          //   purpose: "any maskable",
-          // },
           {
             src: 'images/CSF_144px.png',
             sizes: '144x144',
@@ -66,6 +44,18 @@ export default defineConfig({
           {
             src: 'images/CSF_Logo_WHITE.png',
             sizes: '842x425',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
+          {
+            src: 'images/CSF_feet_144px.png',
+            sizes: '144x144',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
+          {
+            src: 'images/CSF_512px.png',
+            sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable'
           }
