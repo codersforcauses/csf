@@ -217,7 +217,6 @@
                         ><a @click="openConsentModal">our privacy statement</a></span
                       >
                     </p>
-                    <p v-if="errorMsg" class="pt-5 pl-2" style="color: red">{{ errorMsg }}</p>
                   </v-col>
                 </v-row>
               </v-row>
