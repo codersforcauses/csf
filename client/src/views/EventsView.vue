@@ -16,7 +16,7 @@
         v-model="searchQuery"
       />
       <v-btn
-        v-if="user?.teamAdmin"
+        v-if="user?.teamAdmin && user?.teamId"
         size="x-large"
         density="compact"
         variant="flat"
@@ -38,7 +38,7 @@
         <v-icon icon="mdi-calendar-blank" size="x-large" />
         <p class="font-weight-bold text-body-1 mt-3">No current events :(</p>
         <v-btn
-          v-if="user?.teamAdmin"
+          v-if="user?.teamAdmin && user?.teamId"
           size="x-large"
           class="bg-primaryRed text-primaryWhite mt-3"
           @click="isAddingEvent = true"
