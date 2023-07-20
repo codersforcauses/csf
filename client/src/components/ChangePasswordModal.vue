@@ -57,6 +57,7 @@ import { useUserStore } from '../stores/user'
 import { AxiosError } from 'axios'
 import type { ChangePasswordError } from '../types/user'
 import camelize from 'camelize-ts'
+import { notify } from '@kyvg/vue3-notification'
 
 const emit = defineEmits(['close'])
 const state = reactive({
@@ -82,6 +83,11 @@ async function changePassword() {
       let status = await userStore.changePassword(state.oldPassword, state.newPassword)
       if (status === 200) {
         passwordChanged.value = true
+        notify({
+          title: 'Password Change',
+          type: 'success',
+          text: 'Password Changed Successful'
+        })
       }
     } catch (error: AxiosError | any) {
       if (error instanceof AxiosError && error.response && error.response.status === 400) {
@@ -92,6 +98,11 @@ async function changePassword() {
         if (data.password) {
           errors.newPassword = data.password
         }
+        notify({
+          title: 'Password Change',
+          type: 'error',
+          text: 'Password Change Error'
+        })
       }
     }
   }

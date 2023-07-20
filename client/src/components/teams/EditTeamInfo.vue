@@ -1,6 +1,6 @@
 <template>
   <v-icon
-    v-if="user.teamAdmin"
+    v-if="userStore.user!.teamAdmin"
     icon="mdi mdi-pencil"
     size="32px"
     color="black"
@@ -26,7 +26,7 @@
       </v-card-actions>
       <v-card-title class="justify-center text-h4 mb-6">Edit Team</v-card-title>
       <form class="pb-0 mb-0 mx-8">
-        <v-text-field bg-color="white" label="Event Name" v-model="newTeamName" class="mx-5" />
+        <v-text-field bg-color="white" label="Team Name" v-model="newTeamName" class="mx-5" />
         <v-textarea bg-color="white" label="Description" v-model="newBioText" class="mx-5" />
         <v-card-actions class="justify-center mb-4">
           <v-btn variant="elevated" color="primaryRed" @click="editTeamInfo">Save Changes</v-btn>
@@ -39,15 +39,15 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
 import { useTeamStore } from '@/stores/team'
-import { storeToRefs } from 'pinia'
+import { useUserStore } from '@/stores/user'
 const teamStore = useTeamStore()
-const { user, team } = storeToRefs(teamStore)
+const userStore = useUserStore()
 
 const isFullscreen = ref(false)
 
 const editTeamInfoDialog = ref(false)
-const newBioText = ref(team.value ? team.value.bio : '')
-const newTeamName = ref(team.value ? team.value.name : '')
+const newBioText = ref(teamStore.team ? teamStore.team.bio : '')
+const newTeamName = ref(teamStore.team ? teamStore.team.name : '')
 
 const editTeamInfo = async () => {
   teamStore.editTeam({ name: newTeamName.value, bio: newBioText.value })

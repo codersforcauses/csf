@@ -1,69 +1,75 @@
 <template>
   <div v-if="!loading">
-    <v-row class="ma-0 pl-4 pr-4 pt-4 pb-0" align="center" justify="center">
-      <v-spacer />
-      <h1>Welcome back, {{ firstName }}</h1>
-      <v-spacer />
-      <v-btn size="small" icon="mdi-cog" variant="text" href="/settings" />
-    </v-row>
-    <v-divider />
-    <v-row class="ma-0 pl-4 pr-4 pb-0 pt-0" align="center">
-      <v-col>
-        <v-card variant="flat" class="pb-1">
-          <v-container class="pa-0" fluid>
-            <v-row class="ma-0">
-              <v-col cols="auto" class="pl-0 pr-0">
-                <v-icon :icon="method" size="52"></v-icon>
-              </v-col>
-              <v-col>
-                <v-chip color="green" class="rounded text-h5">{{ tempUserMileage }} KM</v-chip>
-                <v-card-subtitle>TOTAL</v-card-subtitle>
-              </v-col>
-              <v-spacer />
-              <v-col cols="auto">
-                <v-btn
-                  variant="elevated"
-                  elevated="2"
-                  :ripple="true"
-                  icon="mdi-plus"
-                  color="primaryRed"
-                  @click="dialog = true"
-                />
-                <MileageModal v-model="dialog" @handle-submit="updateChallengeProgress" />
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-divider />
-    <v-row class="ma-0 px-4 pt-0 pb-0" align="center">
-      <v-col>
-        <h1>Daily KMs</h1>
-      </v-col>
-    </v-row>
-  </div>
-  <v-divider />
-  <div class="px-4">
-    <h1>Challenges</h1>
-    <div v-for="challenge in challenges" :key="challenge.name" class="my-4">
-      <h3>{{ challenge.name }}</h3>
-      <v-row dense>
-        <v-col>
-          <div class="progress-bar rounded-lg">
-            <div
-              :class="`rounded-lg ${challenge.colour}`"
-              :style="`width: ${calcWidth(distanceTravelled, challenge.length)}%`"
-            ></div>
-          </div>
+    <v-container>
+      <v-row class="ma-0 px-13 pt-4" align="center" justify="center">
+        <v-col align="center">
+          <h1>Welcome back, {{ firstName }}</h1>
         </v-col>
-        <v-col cols="3" sm="2" lg="1">
-          <div :class="`length-label rounded-lg ${challenge.colour}`">
-            <h3 class="primaryWhite text-center">{{ challenge.length + 'KM' }}</h3>
-          </div>
+        <v-btn size="medium" icon="mdi-cog" variant="text" href="/settings" />
+      </v-row>
+      <v-divider />
+      <v-row class="ma-0 px-4 pb-0 pt-0" align="center">
+        <v-col>
+          <v-card variant="flat" class="pb-1">
+            <v-container class="pa-0" fluid>
+              <v-row class="ma-0">
+                <v-col cols="auto" class="pl-0 pr-0">
+                  <v-icon :icon="method" size="52"></v-icon>
+                </v-col>
+                <v-col>
+                  <v-chip color="green" class="rounded text-h5">{{ tempUserMileage }} KM</v-chip>
+                  <v-card-subtitle>TOTAL</v-card-subtitle>
+                </v-col>
+                <v-spacer />
+                <v-col cols="auto">
+                  <v-btn
+                    variant="elevated"
+                    elevated="2"
+                    :ripple="true"
+                    icon="mdi-plus"
+                    color="primaryRed"
+                    @click="dialog = true"
+                  />
+                  <MileageModal v-model="dialog" @handle-submit="updateChallengeProgress" />
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card>
         </v-col>
       </v-row>
-    </div>
+      <v-divider />
+      <v-row class="ma-0 pt-0 pb-0" align="center">
+        <v-col>
+          <h1>Daily KMs</h1>
+        </v-col>
+      </v-row>
+      <!-- </v-container> -->
+
+      <div class="px-2">
+        <h1>Challenges</h1>
+        <div v-for="challenge in challenges" :key="challenge.name" class="my-4">
+          <h3>{{ challenge.name }}</h3>
+          <v-row dense>
+            <v-col>
+              <div class="progress-bar rounded-lg">
+                <div
+                  :class="`rounded-lg ${challenge.colour}`"
+                  :style="`width: ${calcWidth(distanceTravelled, challenge.length)}%`"
+                ></div>
+              </div>
+            </v-col>
+            <v-col cols="4" sm="2" lg="1">
+              <div :class="`length-label rounded-lg ${challenge.colour}`">
+                <h3 class="primaryWhite text-center">
+                  {{ `${distanceTravelled}/${challenge.length}KM` }}
+                </h3>
+              </div>
+            </v-col>
+          </v-row>
+        </div>
+      </div>
+      <v-divider />
+    </v-container>
   </div>
 </template>
 

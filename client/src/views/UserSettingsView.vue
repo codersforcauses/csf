@@ -105,6 +105,7 @@ import { useUserStore } from '../stores/user'
 import { type UserSettings, type ChangeDetailsError } from '../types/user'
 import { AxiosError } from 'axios'
 import camelize from 'camelize-ts'
+import { notify } from '@kyvg/vue3-notification'
 
 const userStore = useUserStore()
 
@@ -171,12 +172,21 @@ async function changeDetails() {
       // update the user details in the store
       userStore.getUser(newUsername)
       // TODO: replace this with a proper dialog/alert
-      alert('details successfully changed')
+      notify({
+        title: 'Change User Details',
+        type: 'success',
+        text: 'Details Successfully Changed'
+      })
     }
   } catch (error: AxiosError | any) {
     if (error instanceof AxiosError && error.response && error.response.status === 400) {
       let newErrors = camelize(error.response.data) as ChangeDetailsError
       Object.assign(errors, newErrors)
+      notify({
+        title: 'Change User Details',
+        type: 'error',
+        text: 'Error On Changing Details'
+      })
     }
   }
 }
