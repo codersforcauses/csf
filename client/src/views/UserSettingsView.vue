@@ -132,7 +132,7 @@ const avatarPaths = ref(
       return {
         url: `avatar${i + 1}.jpg`,
         alt: `avatar${i + 1}`,
-        isSelected: state.avatar === `avatar${i + 1}.jpg`
+        isSelected: parseInt(state.avatar) === i + 1
       }
     })
 )
