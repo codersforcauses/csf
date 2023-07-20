@@ -31,19 +31,25 @@ export default defineConfig({
         background_color: '#ffffff',
         icons: [
           {
-            src: 'images/CSF_feet_144px.png',
+            src: 'images/CSF_feet_144_144px.png',
             sizes: '144x144',
             type: 'image/png',
           },
           {
-            src: 'images/CSF_feet_144px.png',
+            src: 'images/CSF_feet_144_144px.png',
             sizes: '144x144',
             type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: 'images/CSF_feet_512px.png',
-            sizes: '512x512',
+            src: 'images/CSF_feet_113_113px.png',
+            sizes: '113x113',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
+          {
+            src: 'images/CSF_feet_512_791px.png',
+            sizes: '512x791',
             type: 'image/png',
             purpose: 'maskable'
           },
