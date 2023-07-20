@@ -30,22 +30,27 @@ export default defineConfig({
         display: 'standalone',
         background_color: '#ffffff',
         icons: [
+          // {
+          //   src: 'images/CSF_144px.png',
+          //   sizes: '144x144',
+          //   type: 'image/png'
+          // },
+          // {
+          //   src: 'images/CSF_144px.png',
+          //   sizes: '144x144',
+          //   type: 'image/png',
+          //   purpose: 'maskable'
+          // },
+          // {
+          //   src: 'images/CSF_Logo_WHITE.png',
+          //   sizes: '842x425',
+          //   type: 'image/png',
+          //   purpose: 'maskable'
+          // },
           {
-            src: 'images/CSF_144px.png',
-            sizes: '144x144',
-            type: 'image/png'
-          },
-          {
-            src: 'images/CSF_144px.png',
+            src: 'images/CSF_feet_144px.png',
             sizes: '144x144',
             type: 'image/png',
-            purpose: 'maskable'
-          },
-          {
-            src: 'images/CSF_Logo_WHITE.png',
-            sizes: '842x425',
-            type: 'image/png',
-            purpose: 'maskable'
           },
           {
             src: 'images/CSF_feet_144px.png',
@@ -54,11 +59,17 @@ export default defineConfig({
             purpose: 'maskable'
           },
           {
-            src: 'images/CSF_512px.png',
+            src: 'images/CSF_feet_512px.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable'
-          }
+          },
+          // {
+          //   src: 'images/CSF_512px.png',
+          //   sizes: '512x512',
+          //   type: 'image/png',
+          //   purpose: 'maskable'
+          // }
         ]
       }
     })
