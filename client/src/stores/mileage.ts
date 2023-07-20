@@ -16,20 +16,19 @@ export const useMileageStore = defineStore('mileage', {
     totalKmByTeam: (state) => state.mileageByTeam.reduce((acc, cur) => acc + cur.kilometres, 0)
   },
   actions: {
-    postMileage(mileage: Omit<Mileage, 'mileageId'>) {
+    addMileage(mileage: Omit<Mileage, 'mileageId'>) {
       return server
         .post('mileage/post_mileage/', mileage)
-        .then(() => {
-          this.getMileageByUser()
-          this.getMileageByTeam()
-        })
-        .finally(() =>
+        .then(async resp => {
+          const data = camelize<Mileage>(resp.data)
+          this.mileageByTeam.push(data)
+          this.mileageByUser.push(data)
           notify({
             title: 'Post Mileage',
             type: 'success',
             text: 'Post Mileage Successful'
           })
-        )
+        })
         .catch(() =>
           notify({
             title: 'Post Mileage',

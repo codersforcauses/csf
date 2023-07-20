@@ -1,5 +1,6 @@
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from .models import Mileage
 from ..users.models import User
@@ -14,6 +15,7 @@ CHALLENGE_LENGTH = 14  # days
 
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def get_mileage_by_user(request, user):
     mileage = Mileage.objects.filter(user=user)
 
@@ -45,6 +47,7 @@ def get_mileage_by_user(request, user):
 
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def get_mileage_by_team(request, team):
     mileage = Mileage.objects.filter(user__team_id=team)
 
@@ -62,29 +65,27 @@ def get_mileage_by_team(request, team):
 
 
 @api_view(["POST"])
+@permission_classes([IsAuthenticated])
 def post_mileage(request):
-    if request.user.is_authenticated is False:
-        return Response("User not authenticated", status=401)
-    else:
-        try:
-            user = User.objects.get(id=request.user.id)
-        except ObjectDoesNotExist:
-            return Response(user.first_name, status=status.HTTP_400_BAD_REQUEST)
-        # start challenge for User if not already started
-        challenge_start_date = user.challenge_start_date or datetime.date.today()
-        # reset challenge if time is up
-        if (datetime.date.today() - challenge_start_date).days > CHALLENGE_LENGTH:
-            challenge_start_date = datetime.date.today()
-        user_data = {
-            'id': user.id,
-            'challenge_start_date': challenge_start_date
-        }
-        user_serializer = UserSerializer(instance=user, data=user_data)
-        if user_serializer.is_valid():
-            user_serializer.save()
-            serializer = MileageSerializer(data=request.data)
-            if serializer.is_valid():
-                mileage = serializer.save()
-                response_data = MileageSerializer(mileage).data
-                return Response(response_data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        user = User.objects.get(id=request.user.id)
+    except ObjectDoesNotExist:
+        return Response(user.first_name, status=status.HTTP_400_BAD_REQUEST)
+    # start challenge for User if not already started
+    challenge_start_date = user.challenge_start_date or datetime.date.today()
+    # reset challenge if time is up
+    if (datetime.date.today() - challenge_start_date).days > CHALLENGE_LENGTH:
+        challenge_start_date = datetime.date.today()
+    user_data = {
+        'id': user.id,
+        'challenge_start_date': challenge_start_date
+    }
+    user_serializer = UserSerializer(instance=user, data=user_data)
+    if user_serializer.is_valid():
+        user_serializer.save()
+        serializer = MileageSerializer(data=request.data)
+        if serializer.is_valid():
+            mileage = serializer.save()
+            response_data = MileageSerializer(mileage).data
+            return Response(response_data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
