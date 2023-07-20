@@ -2,10 +2,6 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import SubTeam
 from .serializers import SubTeamSerialiser
-from ..users.models import User
-from ..users.serializers import UserSerialiser, UserUpdateSerializer
-
-from django.db.models import Q
 
 
 @api_view(['POST'])
@@ -53,24 +49,12 @@ def delete_subteam(request, subteam_id):
     if (request.user.is_authenticated is False):
         return Response("User not authenticated", status=401)
     else:
-        users = User.objects.filter(Q(subteam_id=subteam_id) & Q(team_id=request.user.team_id))
-        serialiser = UserUpdateSerializer(users, many=True)
-        return Response(serialiser.data, status=200)
-
-
-@api_view(['GET'])
-def get_available_users(request):
-    if request.user.is_authenticated is False:
-        return Response("User not authenticated", status=403)
-    else:
-        users = User.objects.filter(Q(subteam_id=None) & Q(team_id=request.user.team_id))
-        serialiser = UserSerialiser(users, many=True)
-        return Response(serialiser.data, status=200)
-
-
-@api_view(['PUT'])
-def edit_user_to_subteam(request, subteam_id, user_id):
-    user = User.objects.get(user_id=user_id)
-    user.subteam_id = subteam_id
-    user.save()
-    return Response("User added to subteam", status=200)
+        if (request.user.team_admin is False):
+            return Response("User is not authorised to delete a subteam", status=403)
+        else:
+            if (request.user.team_id != SubTeam.objects.get(subteam_id=subteam_id).team_id):
+                return Response("User is not authorised to delete this subteam", status=403)
+            else:
+                subteam = SubTeam.objects.get(subteam_id=subteam_id)
+                subteam.delete()
+                return Response("SubTeeam successfully deleted", status=200)
