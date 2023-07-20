@@ -18,7 +18,8 @@ export const useUserStore = defineStore('user', {
       this.user = null
       this.token = null
       useTeamStore().team = null
-      useMileageStore().recentMileage = []
+      useMileageStore().mileageByUser = []
+      useMileageStore().mileageByTeam = []
     },
 
     async getUser(username: string) {
