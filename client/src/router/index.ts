@@ -44,7 +44,7 @@ const router = createRouter({
       component: ChallengeView
     },
     {
-      path: '/:path(.*)*',
+      path: '/:pathMatch(.*)*',
       name: 'not-found',
       component: NotFoundView
     }
