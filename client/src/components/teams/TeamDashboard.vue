@@ -12,7 +12,7 @@
 
       <!-- Total Kilometres -->
       <v-row align="center" class="my-2">
-        <v-icon class="mdi mdi-run-fast ml-3" size="50px" />
+        <v-icon :class="['mdi','ml-3', getIconName(userStore.user!.travelMethod)]" size="50px" />
         <v-col>
           <v-chip color="green" class="rounded text-h5">{{ teamData.total_kilometres }} KM</v-chip>
           <h3>TOTAL</h3>
@@ -202,6 +202,17 @@ const copyInviteCode = () => {
   setTimeout(() => {
     copyHoverText.value = 'Copy Invite Code'
   }, 2000)
+}
+
+const getIconName = (medium: string) => {
+  switch (medium) {
+    case 'RUNNING':
+      return 'mdi-run-fast'
+    case 'WHEELING':
+      return 'mdi-wheelchair-accessibility'
+    case 'WALKING':
+      return 'mdi-walk'
+  }
 }
 </script>
 

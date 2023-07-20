@@ -33,7 +33,7 @@ const addEvent = () =>
         type: 'success',
         text: 'Add Event Successful'
       })
-      closeModal
+      closeModal()
     })
     .catch(() => {
       console.log
@@ -57,7 +57,7 @@ const editEvent = () => {
           type: 'success',
           text: 'Edit Event Successful'
         })
-        closeModal
+        closeModal()
       })
       .catch(() => {
         console.log
@@ -83,7 +83,7 @@ const archiveEvent = () => {
           type: 'success',
           text: 'Archive Event Successful'
         })
-        closeModal
+        closeModal()
       })
       .catch(() => {
         notify({
@@ -105,7 +105,7 @@ const deleteEvent = () => {
           type: 'success',
           text: 'Delete Event Successful'
         })
-        closeModal
+        closeModal()
       })
       .catch(() => {
         console.log
