@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { useStorage } from '@vueuse/core'
 import server from '@/utils/server'
+import axios from 'axios'
 import type { Tokens, User, UserSettings } from '@/types/user'
 import camelize from 'camelize-ts'
 import snakify, { type Snakify } from 'snakify-ts'
@@ -139,37 +140,27 @@ export const useUserStore = defineStore('user', {
       await server.post('auth/register/', obj)
     },
 
-    async refreshToken(token: string) {
-      const secret = import.meta.env.VITE_JWT_SECRET_KEY
-      const parts = <string[]>this.token?.access?.split('.')
-      const payload = JSON.parse(atob(parts[1]))
-      // console.log(payload);
-      const left = payload.exp - (Date.now() / 60)
-      console.log(left);
-      
-      
-      
-
-      // const { payload, protectedHeader } = await jwtDecrypt(jwt, secret, {
-      //   issuer: 'urn:example:issuer',
-      //   audience: 'urn:example:audience'
-      // })
-      // console.log(protectedHeader)
-      // console.log(payload)
-      //   const headers: AxiosRequestConfig['headers'] = {
-      //     refresh: token
-      //   }
-
-      //   await server
-      //     .post('auth/refresh/', headers)
-      //     .then((res) => {
-      //       data.access = res.data.access
-      //     })
-      //     .catch((error) => {
-      //       console.log(error)
-      //     })
-
-      //   this.authToken = JSON.stringify(data);
+    async checkToken() {
+      const keys = <Tokens>this.token
+      if (keys) {
+        const parts = <string[]>keys.access.split('.')
+        const payload = JSON.parse(atob(parts[1]))
+        const left = payload.exp - Date.now() / 1000
+        if (left < 0) {
+          try {
+            const { data } = await axios.post('http://localhost:8081/api/auth/refresh/', {
+              refresh: this.token?.refresh
+            })
+            keys.access = <string>data.access
+          } catch (error) {
+            console.log('error', error)
+          }
+        } else {
+          console.log('JWT not expired')
+        }
+      } else {
+        console.log('no auth')
+      }
     }
   }
 })
