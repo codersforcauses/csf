@@ -141,25 +141,16 @@ export const useUserStore = defineStore('user', {
     },
 
     async checkToken() {
-      const keys = <Tokens>this.token
-      if (keys) {
-        const parts = <string[]>keys.access.split('.')
+      if (this.token != null) {
+        const parts = this.token.access.split('.')
         const payload = JSON.parse(atob(parts[1]))
         const left = payload.exp - Date.now() / 1000
         if (left < 0) {
-          try {
-            const { data } = await axios.post('http://localhost:8081/api/auth/refresh/', {
-              refresh: this.token?.refresh
-            })
-            keys.access = <string>data.access
-          } catch (error) {
-            console.log('error', error)
-          }
-        } else {
-          console.log('JWT not expired')
+          const { status, data } = await axios.post('http://localhost:8081/api/auth/refresh/', {
+            refresh: this.token.refresh
+          })
+          if (status == 200) this.token.access = data.access
         }
-      } else {
-        console.log('no auth')
       }
     }
   }
