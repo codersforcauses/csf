@@ -27,6 +27,8 @@ SECRET_KEY = os.environ.get("API_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("APP_ENV") == "DEVELOPMENT"
 
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8081', 'https://csf.codersforcauses.org', 'http://localhost:8000']
+
 ALLOWED_HOSTS = (
     os.environ.get("API_ALLOWED_HOSTS").split()
     if os.environ.get("API_ALLOWED_HOSTS")
