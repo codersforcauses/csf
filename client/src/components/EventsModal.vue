@@ -18,6 +18,8 @@ const description = ref(props.event?.description ?? '')
 const isPublic = ref(props.event?.isPublic ?? false)
 const isFullscreen = ref(false)
 const valid = ref(true)
+const minDate = ref('')
+setMinDate()
 
 const refs = () => ({
   name: name.value,
@@ -33,6 +35,13 @@ const errors = reactive<EventError>({
   endDate: [],
   description: [],
 })
+
+function setMinDate() {
+  let now = new Date()
+  // need to shift, since toJSON() will get the UTC time
+  let nowShifted = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+  minDate.value = nowShifted.toJSON().slice(0, 10)
+}
 
 const required = (v: string) => !!v || 'Field is required'
 
@@ -176,6 +185,7 @@ watchEffect(async () => {
           bg-color="white"
           label="Start Date"
           type="date"
+          :min="minDate"
           :rules="[required]"
           v-model="startDate"
           :error-messages="errors.startDate"
@@ -186,6 +196,7 @@ watchEffect(async () => {
           bg-color="white"
           label="End Date"
           type="date"
+          :min="minDate"
           :rules="[required]"
           v-model="endDate"
           class="mx-5"

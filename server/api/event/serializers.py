@@ -11,7 +11,7 @@ class EventSerialiser(ModelSerializer):
 
     def validate(self, data):
         if data['start_date'] > data['end_date']:
-            raise ValidationError('Event end date must be after start date')
+            raise ValidationError('Event start date must be before start date')
         if data['start_date'] < date.today():
             raise ValidationError('Event cannot be created with a start date in the past')
         return data
