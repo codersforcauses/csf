@@ -217,7 +217,6 @@
                         ><a @click="openConsentModal">our privacy statement</a></span
                       >
                     </p>
-                    <p v-if="errorMsg" class="pt-5 pl-2" style="color: red">{{ errorMsg }}</p>
                   </v-col>
                 </v-row>
               </v-row>
@@ -260,11 +259,12 @@ import FooterBanner from '/images/Footer-min.jpeg'
 import { type Signup } from '../types/user'
 import ConsentModal from './ConsentModal.vue'
 import { useUserStore } from '../stores/user'
-import snakify from 'snakify-ts'
 import { AxiosError } from 'axios'
 import camelize from 'camelize-ts'
 import { useModalStore } from '@/stores/modal'
 import { storeToRefs } from 'pinia'
+import { reactiveOmit } from '@vueuse/core'
+import { notify } from '@kyvg/vue3-notification'
 const userStore = useUserStore()
 const modalStore = useModalStore()
 
@@ -314,16 +314,19 @@ const submit = async () => {
   const method = travelMethod.value.filter((method) => method.isSelected === true)
   state.travelMethod = method[0].mode
   state.avatar = avatar[0].url
-  const obj = snakify(state)
-  if (obj.confirm_password != obj.password) {
+  if (state.confirmPassword != state.password) {
     Object.assign(errors, { confirmPassword: "Passwords don't match" })
     firstPage.value = true
   } else {
-    delete obj.confirm_password
-    Object.assign(errors, initialErrors)
     try {
-      await userStore.registerUser(obj)
+      Object.assign(errors, initialErrors)
+      await userStore.registerUser(reactiveOmit(state, 'confirmPassword'))
       modalStore.login()
+      notify({
+        title: 'Sign Up',
+        type: 'success',
+        text: 'Sign Up Successful'
+      })
     } catch (error: AxiosError | any) {
       console.debug(error)
       if (error instanceof AxiosError && error.message) {
@@ -336,6 +339,11 @@ const submit = async () => {
       } else {
         errorMsg.value = JSON.stringify(error)
       }
+      notify({
+        title: 'Sign Up',
+        type: 'error',
+        text: 'Sign Up Unsuccessful'
+      })
     }
   }
 }

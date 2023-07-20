@@ -16,7 +16,6 @@
       >
         {{ event.isPublic ? 'Official' : 'Private' }}
       </v-chip>
-      <v-chip v-if="event.isArchived"> Archived </v-chip>
     </v-card-title>
     <v-card-subtitle class="text-primaryRed font-italic"
       >{{ event.startDate }} - {{ event.endDate }}</v-card-subtitle

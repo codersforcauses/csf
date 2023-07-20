@@ -12,7 +12,7 @@
 
       <!-- Total Kilometres -->
       <v-row align="center" class="my-2">
-        <v-icon class="mdi mdi-run-fast ml-3" size="50px" />
+        <v-icon :class="['mdi','ml-3', getIconName(userStore.user!.travelMethod)]" size="50px" />
         <v-col>
           <v-chip color="green" class="rounded text-h5">{{ teamData.total_kilometres }} KM</v-chip>
           <h3>TOTAL</h3>
@@ -135,7 +135,12 @@
 
   <!-- Leave/Delete Team -->
   <v-row justify="center" class="ma-5">
-    <v-btn size="large" color="red white--text" v-if="user.teamAdmin" @click="deleteTeam">
+    <v-btn
+      size="large"
+      color="red white--text"
+      v-if="userStore.user!.teamAdmin"
+      @click="deleteTeam"
+    >
       Delete Team
     </v-btn>
     <v-btn size="large" color="red white--text" v-else @click="removeTeam">Leave Team</v-btn>
@@ -150,12 +155,12 @@ import SubTeams from './SubTeams.vue'
 import MileageGraph from '../MileageGraph.vue'
 const { mobile } = useDisplay()
 import { useTeamStore } from '@/stores/team'
-import { storeToRefs } from 'pinia'
+import { useUserStore } from '@/stores/user'
 const teamStore = useTeamStore()
-const { team, user } = storeToRefs(teamStore)
+const userStore = useUserStore()
 
 onMounted(async () => {
-  if (user.value.teamId) await teamStore.getTeam(user.value.teamId)
+  if (userStore.user!.teamId) await teamStore.getTeam(userStore.user!.teamId)
 })
 const deleteTeam = () => {
   teamStore.deleteTeam()
@@ -165,16 +170,16 @@ const removeTeam = () => {
 }
 
 const teamData = ref({
-  team_name: team.value ? team.value.name : '',
+  team_name: teamStore.team ? teamStore.team.name : '',
   total_kilometres: 990,
-  invite_code: team.value ? team.value.joinCode : '',
-  bio: team.value ? team.value.bio : '',
+  invite_code: teamStore.team ? teamStore.team.joinCode : '',
+  bio: teamStore.team ? teamStore.team.bio : '',
   daily_kms: [],
   sub_teams: [],
   leaderboard: []
 })
 
-watch(team, (newTeam) => {
+watch(teamStore.team!, (newTeam) => {
   // Update the teamData when the team value changes
   if (newTeam) {
     teamData.value.team_name = newTeam.name
@@ -184,7 +189,7 @@ watch(team, (newTeam) => {
 })
 
 const isBioVisible = ref(false)
-const isDailyKmsVisible = ref(false)
+const isDailyKmsVisible = ref(true)
 const isSubTeamsVisible = ref(false)
 const isLeaderboardVisible = ref(false)
 
@@ -197,6 +202,17 @@ const copyInviteCode = () => {
   setTimeout(() => {
     copyHoverText.value = 'Copy Invite Code'
   }, 2000)
+}
+
+const getIconName = (medium: string) => {
+  switch (medium) {
+    case 'RUNNING':
+      return 'mdi-run-fast'
+    case 'WHEELING':
+      return 'mdi-wheelchair-accessibility'
+    case 'WALKING':
+      return 'mdi-walk'
+  }
 }
 </script>
 

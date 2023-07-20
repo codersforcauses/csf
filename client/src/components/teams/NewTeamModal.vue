@@ -47,9 +47,10 @@ const submitForm = () => {
   teamStore.createTeam({ ...form.value })
 }
 
-const openDialog = () => {
-  dialog.value = true
-}
+// never used vvv
+// const openDialog = () => {
+//   dialog.value = true
+// }
 
 const closeDialog = () => {
   dialog.value = false

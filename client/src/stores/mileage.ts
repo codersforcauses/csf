@@ -3,6 +3,7 @@ import { useStorage } from '@vueuse/core'
 import server from '@/utils/server'
 import type Mileage from '@/types/mileage'
 import camelize from 'camelize-ts'
+import { notify } from '@kyvg/vue3-notification'
 
 export const useMileageStore = defineStore('mileage', {
   state: () => ({
@@ -18,6 +19,20 @@ export const useMileageStore = defineStore('mileage', {
         })
         .then(async () => {
           await this.getRecentMileage(userId)
+        })
+        .finally(() => {
+          notify({
+            title: 'Post Mileage',
+            type: 'success',
+            text: 'Post Mileage Successful'
+          })
+        })
+        .catch(() => {
+          notify({
+            title: 'Post Mileage',
+            type: 'error',
+            text: 'Post Mileage Error'
+          })
         })
     },
 
