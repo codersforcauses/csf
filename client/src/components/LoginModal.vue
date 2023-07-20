@@ -259,11 +259,6 @@ async function emailUser() {
     try {
       if ((await userStore.sendResetEmail(form.value.email)) === 200) {
         errors.value.email = ''
-        notify({
-          title: 'Reset Email',
-          type: 'success',
-          text: 'Reset Email Sent'
-        })
       }
     } finally {
       page.value = 3
