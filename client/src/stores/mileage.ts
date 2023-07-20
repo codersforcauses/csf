@@ -17,18 +17,20 @@ export const useMileageStore = defineStore('mileage', {
   },
   actions: {
     postMileage(mileage: Omit<Mileage, 'mileageId'>) {
-      return server.post('mileage/post_mileage/', mileage).then(() => {
-        this.getMileageByUser()
-        this.getMileageByTeam()
-      })
-        .finally(() => 
+      return server
+        .post('mileage/post_mileage/', mileage)
+        .then(() => {
+          this.getMileageByUser()
+          this.getMileageByTeam()
+        })
+        .finally(() =>
           notify({
             title: 'Post Mileage',
             type: 'success',
             text: 'Post Mileage Successful'
           })
         )
-        .catch(() => 
+        .catch(() =>
           notify({
             title: 'Post Mileage',
             type: 'error',
