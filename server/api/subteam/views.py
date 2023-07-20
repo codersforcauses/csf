@@ -2,6 +2,13 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import SubTeam
 from .serializers import SubTeamSerialiser
+<<<<<<< Updated upstream
+=======
+from ..users.models import User
+from ..users.serializers import UserSerialiser, UserUpdateSerializer
+
+from django.db.models import Q
+>>>>>>> Stashed changes
 
 
 @api_view(['POST'])
