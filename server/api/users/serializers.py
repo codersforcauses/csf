@@ -86,7 +86,6 @@ class ResetPasswordSerializer(ModelSerializer):
 
 
 class UserUpdateSerializer(ModelSerializer):
-       
     class Meta:
         model = get_user_model()
         fields = [
