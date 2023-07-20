@@ -3,7 +3,7 @@
     <v-container>
       <v-row class="ma-0 px-13 pt-4" align="center" justify="center">
         <v-col align="center">
-          <h1>Welcome back, {{ firstName }}</h1>
+          <h1>Welcome back, {{ username }}</h1>
         </v-col>
         <v-btn size="medium" icon="mdi-cog" variant="text" href="/settings" />
       </v-row>
@@ -83,7 +83,7 @@ const userStore = useUserStore()
 const method = ref()
 const loading = ref(true)
 const user = ref()
-const firstName = ref()
+const username = ref()
 
 const getIconName = (medium: any) => {
   switch (medium) {
@@ -133,7 +133,7 @@ onMounted(async () => {
   if (userStore.user) {
     try {
       user.value = userStore.user
-      firstName.value = user.value.firstName
+      username.value = user.value.username
       getIconName(user.value.travelMethod)
       await mileageStore.getRecentMileage(userStore.user.id)
       updateChallengeProgress()
