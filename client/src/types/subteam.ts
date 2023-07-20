@@ -13,9 +13,9 @@ export interface MemberView {
 
 //TODO SUBTEAM
 export interface SubteamView {
-  teamName: string
-  teamId: string
-  subteamId: string
+  subteamId: number
+  name: string
+  teamId: number
   totalKM: string
   members: MemberView[]
 }

@@ -26,9 +26,9 @@ const props = defineProps({
 })
 
 let selectedSubteamCopy: SubteamView = reactive({
-  teamName: '',
-  teamId: '',
-  subteamId: '',
+  name: '',
+  teamId: 0,
+  subteamId: 0,
   totalKM: '',
   members: [
     {
@@ -46,7 +46,7 @@ watch(
   (first) => {
     //local selectedTeam Copy to change values
     selectedSubteamCopy = reactive({
-      teamName: first.teamName,
+      name: first.name,
       teamId: first.teamId,
       subteamId: first.subteamId,
       totalKM: first.totalKM,
@@ -134,7 +134,7 @@ const showDialog = computed({
         <div class="w-100 d-flex flex-column text-center align-center justify-center">
           <v-text-field
             variant="solo"
-            v-model="selectedSubteamCopy.teamName"
+            v-model="selectedSubteamCopy.name"
             :rules="[rules.required]"
             label="Edit subteam name"
             required

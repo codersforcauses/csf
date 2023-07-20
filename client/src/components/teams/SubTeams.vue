@@ -79,9 +79,9 @@ import SubTeamsModal from './SubTeamsModal.vue'
 //import { type Subteam } from '../types/subteam.ts'
 
 let selectedSubteam = reactive({
-  teamName: '',
-  teamId: '',
-  subteamId: '',
+  name: '',
+  teamId: 0,
+  subteamId: 0,
   totalKM: '',
   members: [
     {
