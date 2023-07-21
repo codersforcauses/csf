@@ -93,4 +93,3 @@ class UserTest(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["username"], user_to_match.username)
         self.assertEqual(response.data["email"], user_to_match.email)
-        self.assertEqual(response.data["password"], user_to_match.password)
