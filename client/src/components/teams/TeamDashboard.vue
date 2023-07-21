@@ -179,15 +179,17 @@ const teamData = ref({
   leaderboard: []
 })
 
-  watch(() => teamStore.team, (newTeam) => {
-  // Update the teamData when the team value changes
-  if (newTeam) {
-    teamData.value.team_name = newTeam.name
-    teamData.value.bio = newTeam.bio
-    teamData.value.invite_code = newTeam.joinCode
+watch(
+  () => teamStore.team,
+  (newTeam) => {
+    // Update the teamData when the team value changes
+    if (newTeam) {
+      teamData.value.team_name = newTeam.name
+      teamData.value.bio = newTeam.bio
+      teamData.value.invite_code = newTeam.joinCode
+    }
   }
-})
-
+)
 
 const isBioVisible = ref(false)
 const isDailyKmsVisible = ref(true)
