@@ -259,14 +259,21 @@ async function emailUser() {
     try {
       if ((await userStore.sendResetEmail(form.value.email)) === 200) {
         errors.value.email = ''
+        page.value = 3
         notify({
           title: 'Reset Email',
           type: 'success',
-          text: 'Reset Email Sent'
+          text: `Reset email sent`
         })
       }
-    } finally {
-      page.value = 3
+    } catch (error: AxiosError | any) {
+      if (error instanceof AxiosError && error.response && error.response.status === 400) {
+        notify({
+          title: 'Reset Email',
+          type: 'error',
+          text: error.response.data
+        })
+      }
     }
   } else {
     errors.value.email = 'Email is invalid'
