@@ -27,47 +27,13 @@ export const useSubTeamStore = defineStore('subTeam', {
     info: <any>[],
     subteams: [] as Subteam[],
     teamMembers: [] as User[],
-    avalidableMemberList: [] as User[],
-    subteamMembers: [] as User[]
+    availableMemberList: [] as User[],
+    subteamMembers: [] as User[],
+    subteamsView: [] as SubteamView[]
   }),
 
   getters: {
-    //get all the subteams and their members
-    subteamsInfo(state): SubteamView[] {
-      const view: SubteamView[] = []
-      let membersView: MemberView[] = []
 
-      const totalKM = 0
-      state.subteams.forEach((subteam) => {
-        // const members = state.teamMembers.filter(
-        //   (user) => {
-        //     //filter members for each subteam
-        //     if (user.subteamId){
-        //       return user.subteamId == subteam.subteamId
-        //     }
-        //   }
-        // );
-
-      //convert from user type to memberview type
-      membersView = state.subteamMembers.map((member) => {
-          return {
-            id: member.id,
-            firstname: member.firstName,
-            lastname: member.lastName,
-            avatar: member.avatar
-          }
-        });
-
-
-      view.push({
-        ...subteam,
-        totalKM: totalKM.toString(),
-        members: membersView
-      })
-
-      });
-      return view;
-    },
   },
 
   actions: {
@@ -127,7 +93,7 @@ export const useSubTeamStore = defineStore('subTeam', {
           }
       }
    },
-   async getSubteams(teamId: number) {
+   async updateSubteams(teamId: number) {
     const api = urls.getSubteams(teamId);
     const { data, status } = await server.get(api);
     if (status === 200) {
@@ -138,7 +104,7 @@ export const useSubTeamStore = defineStore('subTeam', {
         const api = urls.getAvailableMembers();
         const { data, status } = await server.get(api);
         if (status === 200) {
-            this.avalidableMemberList = data;
+            this.availableMemberList = data;
         }
     }, 
     async getSubteamMembers(subteamId: number) {
@@ -154,6 +120,38 @@ export const useSubTeamStore = defineStore('subTeam', {
         if (status === 200) {
             this.subteamMembers = data;
         }
-    }    
+    },
+    async getSubteams(teamId: number) {
+      const api = urls.getSubteams(teamId);
+      const { data, status } = await server.get(api);
+      if (status === 200) {
+          this.subteams = data;
+      }
+    },
+       //get all the subteams and their members
+    async getSubteamsView(teamId: number) {
+      let membersView: MemberView[] = []
+      const totalKM = 0
+
+      this.getSubteams(teamId)
+      this.subteams.forEach((subteam) => {
+
+        //convert from user type to memberview type
+        this.getSubteamMembers(subteam.subteamId)
+        membersView = this.subteamMembers.map((member) => {
+            return {
+              id: member.id,
+              firstname: member.firstName,
+              lastname: member.lastName,
+              avatar: member.avatar
+            }
+          });
+        this.subteamsView.push({
+          ...subteam,
+          totalKM: totalKM.toString(),
+          members: membersView
+        })
+      });
+    },    
   }
 })

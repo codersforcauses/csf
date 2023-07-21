@@ -73,7 +73,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref} from 'vue'
 import SubTeamsModal from './SubTeamsModal.vue'
 
 //import { type Subteam } from '../types/subteam.ts'
@@ -94,88 +94,114 @@ let selectedSubteam = reactive({
 })
 
 const showSubTeamModal = ref(false)
+
+import { useSubTeamStore } from '@/stores/subTeam'
+import { onMounted } from 'vue';
+import { notify } from '@kyvg/vue3-notification'
+import { useUserStore } from '@/stores/user'
+
+const userStore = useUserStore();
+const subTeamStore = useSubTeamStore();
+
+onMounted(async () => {
+  try{
+    await subTeamStore.getAvailableMembers()
+    if (userStore.user && userStore.user.teamId) {
+      await subTeamStore.getSubteams(userStore.user.teamId);
+    }
+  } catch (e) {
+    console.log(e)
+    notify({
+      title: 'Get Subteams',
+      type: 'error',
+      text: 'Loading error'
+    })
+  }
+});
+
 //dummy data
 const state = reactive({
   newSubTeamName: '',
   open: ['Users'],
-  // dialog: false,
   i: '1',
   selectedMember: null,
   rules: {
     required: (value: string) => !!value || 'Field is required'
   },
-  avaliableMemeberList: [
-    {
-      id: 111,
-      firstname: 'Ned',
-      lastname: 'A',
-      avatar: 'https://cdn.vuetifyjs.com/images/john.png'
-    },
-    {
-      id: 131,
-      firstname: 'Ned',
-      lastname: 'B',
-      avatar: 'https://cdn.vuetifyjs.com/images/john.png'
-    },
-    {
-      id: 141,
-      firstname: 'Ned',
-      lastname: 'C',
-      avatar: 'https://cdn.vuetifyjs.com/images/john.png'
-    }
-  ],
-  subteams: [
-    {
-      teamName: 'Team1',
-      teamId: '1',
-      totalKM: '60KM',
-      members: [
-        {
-          id: 2,
-          firstname: 'Tom',
-          lastname: 'A',
-          avatar: 'src/assets/Avatars/avatar4.jpg'
-        },
-        {
-          id: 3,
-          firstname: 'Tom',
-          lastname: 'B',
-          avatar: 'src/assets/Avatars/avatar5.jpg'
-        },
-        {
-          id: 4,
-          firstname: 'Tom',
-          lastname: 'C',
-          avatar: 'src/assets/Avatars/avatar6.jpg'
-        }
-      ]
-    },
-    {
-      teamName: 'Team2',
-      teamId: '2',
-      totalKM: '120KM',
-      members: [
-        {
-          id: 11,
-          firstname: 'John',
-          lastname: 'A',
-          avatar: 'src/assets/Avatars/avatar1.jpg'
-        },
-        {
-          id: 12,
-          firstname: 'John',
-          lastname: 'B',
-          avatar: 'src/assets/Avatars/avatar2.jpg'
-        },
-        {
-          id: 13,
-          firstname: 'John',
-          lastname: 'C',
-          avatar: 'src/assets/Avatars/avatar3.jpg'
-        }
-      ]
-    }
-  ],
+  // avaliableMemeberList: [
+  //   {
+  //     id: 111,
+  //     firstname: 'Ned',
+  //     lastname: 'A',
+  //     avatar: 'https://cdn.vuetifyjs.com/images/john.png'
+  //   },
+  //   {
+  //     id: 131,
+  //     firstname: 'Ned',
+  //     lastname: 'B',
+  //     avatar: 'https://cdn.vuetifyjs.com/images/john.png'
+  //   },
+  //   {
+  //     id: 141,
+  //     firstname: 'Ned',
+  //     lastname: 'C',
+  //     avatar: 'https://cdn.vuetifyjs.com/images/john.png'
+  //   }
+  // ],
+  avaliableMemeberList: subTeamStore.availableMemberList ? subTeamStore.availableMemberList:[],
+  subteams: subTeamStore.subteamsView ? subTeamStore.subteamsView : [],
+  // subteams: [
+  //   {
+  //     teamName: 'Team1',
+  //     teamId: '1',
+  //     totalKM: '60KM',
+  //     members: [
+  //       {
+  //         id: 2,
+  //         firstname: 'Tom',
+  //         lastname: 'A',
+  //         avatar: 'src/assets/Avatars/avatar4.jpg'
+  //       },
+  //       {
+  //         id: 3,
+  //         firstname: 'Tom',
+  //         lastname: 'B',
+  //         avatar: 'src/assets/Avatars/avatar5.jpg'
+  //       },
+  //       {
+  //         id: 4,
+  //         firstname: 'Tom',
+  //         lastname: 'C',
+  //         avatar: 'src/assets/Avatars/avatar6.jpg'
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     teamName: 'Team2',
+  //     teamId: '2',
+  //     totalKM: '120KM',
+  //     members: [
+  //       {
+  //         id: 11,
+  //         firstname: 'John',
+  //         lastname: 'A',
+  //         avatar: 'src/assets/Avatars/avatar1.jpg'
+  //       },
+  //       {
+  //         id: 12,
+  //         firstname: 'John',
+  //         lastname: 'B',
+  //         avatar: 'src/assets/Avatars/avatar2.jpg'
+  //       },
+  //       {
+  //         id: 13,
+  //         firstname: 'John',
+  //         lastname: 'C',
+  //         avatar: 'src/assets/Avatars/avatar3.jpg'
+  //       }
+  //     ]
+  //   }
+  // ],
 
   selectedSubteam: {
     teamName: '',
@@ -227,12 +253,17 @@ const addSubTeam = () => {
   if (state.newSubTeamName === '') {
     return
   }
-  state.subteams.push({
-    teamName: state.newSubTeamName,
-    teamId: randomString(32),
-    totalKM: '0KM',
-    members: []
-  })
+  subTeamStore.createSubTeam({
+    name: state.newSubTeamName
+  });
+  subteams.value = subTeamStore.getters.subteamsInfo();
+
+  // state.subteams.push({
+  //   teamName: state.newSubTeamName,
+  //   teamId: randomString(32),
+  //   totalKM: '0KM',
+  //   members: []
+  // })
 }
 const randomString = (len: number) => {
   len = len || 32
