@@ -1,4 +1,5 @@
 <template>
+  <div v-if="!loading">
   <v-card variant="flat">
     <v-card-actions class="d-flex justify-space-between">
       <v-btn
@@ -15,6 +16,7 @@
     </v-card-actions>
     <LineWithLineChart :data="graphData" :options="options" />
   </v-card>
+</div>
 </template>
 
 <script setup lang="ts">
@@ -30,8 +32,9 @@ import {
 } from 'chart.js'
 import type { ChartDataset } from 'chart.js'
 import LineWithLineChart from '../types/LineWithLineChart'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import type Mileage from '../types/mileage'
+import { useMileageStore } from '@/stores/mileage'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend) // creating instance of chart
 
@@ -77,11 +80,18 @@ const tempData = ref<Mileage[]>([
   { mileageId: 38, user: 1, kilometres: 13, date: '2023-07-08' }
 ])
 
+const mileageStore = useMileageStore()
+const dataPoints = ref()
+const loading = ref(true)
 const filteredData = ref<Mileage[]>()
 const labels = computed(() => filteredData.value?.map((data) => data.date))
 const data = computed(() => filteredData.value?.map((data) => data.kilometres))
 const activeButton = ref('This Week')
 
+function updateData() {
+  mileageStore.getMileageDataPointsByTeam()
+  dataPoints.value = mileageStore.dataPoints
+}
 function filterData(range: string) {
   activeButton.value = range
   let minDate
@@ -95,7 +105,7 @@ function filterData(range: string) {
   } else if (range === 'This Year') {
     minDate = new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), currentDate.getDate())
   } else {
-    minDate = tempData.value.reduce((min, obj) => {
+    minDate = dataPoints.value.reduce((min, obj) => {
       const currentDate = new Date(obj.date)
       return currentDate < min ? currentDate : min
     }, new Date())
@@ -139,7 +149,7 @@ function filterData(range: string) {
     }
 
     //making sure dates that don't exist in the database are still included as 0 km
-    const matchingData = tempData.value.find((obj) => obj.date === dateString)
+    const matchingData = dataPoints.value.find((obj) => obj.date === dateString)
     filteredData.value?.unshift({
       mileageId: matchingData ? matchingData.mileageId : -1,
       user: matchingData ? matchingData.user : -1,
@@ -150,6 +160,8 @@ function filterData(range: string) {
   }
 }
 
+
+updateData()
 filterData('This Week')
 
 // GRAPH DATA
