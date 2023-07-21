@@ -17,7 +17,7 @@
                   <v-icon :icon="method" size="52"></v-icon>
                 </v-col>
                 <v-col>
-                  <v-chip color="green" class="rounded text-h5">{{ tempUserMileage }} KM</v-chip>
+                  <v-chip color="green" class="rounded text-h5">{{ UserMileage }} KM</v-chip>
                   <v-card-subtitle>TOTAL</v-card-subtitle>
                 </v-col>
                 <v-spacer />
@@ -54,14 +54,14 @@
               <div class="progress-bar rounded-lg">
                 <div
                   :class="`rounded-lg ${challenge.colour}`"
-                  :style="`width: ${calcWidth(distanceTravelled, challenge.length)}%`"
+                  :style="`width: ${calcWidth(UserMileage, challenge.length)}%`"
                 ></div>
               </div>
             </v-col>
             <v-col cols="4" sm="2" lg="1">
               <div :class="`length-label rounded-lg ${challenge.colour}`">
                 <h3 class="primaryWhite text-center">
-                  {{ `${distanceTravelled}/${challenge.length}KM` }}
+                  {{ `${UserMileage}/${challenge.length}KM` }}
                 </h3>
               </div>
             </v-col>
@@ -80,7 +80,10 @@ import { useUserStore } from '@/stores/user'
 import { useMileageStore } from '@/stores/mileage'
 
 const userStore = useUserStore()
+const mileageStore = useMileageStore()
+
 const method = ref()
+const UserMileage = ref()
 const loading = ref(true)
 
 const getIconName = (medium: any) => {
@@ -97,9 +100,6 @@ const getIconName = (medium: any) => {
   }
 }
 
-const mileageStore = useMileageStore()
-
-const tempUserMileage = ref(100)
 const dialog = ref(false)
 const challenges = ref([
   { name: 'WOORABINDA', length: 24, colour: 'bg-secondaryGreen' },
@@ -107,14 +107,14 @@ const challenges = ref([
   { name: "GALIWIN'KU", length: 84, colour: 'bg-primaryRed' },
   { name: 'PALM ISLAND', length: 120, colour: 'bg-primaryBlack' }
 ])
-const distanceTravelled = ref(0)
 
 function calcWidth(travelDist: number, totalDist: number) {
   return Math.min((100 * travelDist) / totalDist, 100)
 }
 
 function updateChallengeProgress() {
-  distanceTravelled.value = mileageStore.totalKmByUser
+  UserMileage.value = mileageStore.totalKmByUser
+  console.log(UserMileage)
 }
 
 onMounted(async () => {
