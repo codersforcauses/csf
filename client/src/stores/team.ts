@@ -99,6 +99,12 @@ export const useTeamStore = defineStore('team', () => {
           type: 'success',
           text: 'Join Team Successful'
         })
+      } else if (res.status == 404) {
+        notify({
+          title: 'Join Team',
+          type: 'error',
+          text: 'Team Does Not Exists'
+        })
       } else {
         notify({
           title: 'Join Team',

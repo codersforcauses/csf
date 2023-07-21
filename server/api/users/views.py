@@ -117,7 +117,10 @@ def make_reset_email_message(email, username, token):
 @api_view(['PATCH'])
 def join_team(request, id):
     user = User.objects.get(id=id)
-    team = Team.objects.get(join_code=request.data['join_code'])
+    try:
+        team = Team.objects.get(join_code=request.data['join_code'])
+    except Team.DoesNotExist:
+        return Response("Team does not exist", status=404)
 
     data = {
         'team_id': team.team_id,
