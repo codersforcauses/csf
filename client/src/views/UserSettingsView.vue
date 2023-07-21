@@ -5,40 +5,20 @@
     </v-row>
     <v-row dense>
       <v-col cols="12">
-        <v-text-field
-          bg-color="#FFFFFF"
-          v-model="state.username"
-          label="Username"
-          :error-messages="errors.username"
-          @focus="errors.username = ''"
-        />
+        <v-text-field bg-color="#FFFFFF" v-model="state.username" label="Username" :error-messages="errors.username"
+          @focus="errors.username = ''" />
       </v-col>
       <v-col cols="12">
-        <v-text-field
-          bg-color="#FFFFFF"
-          v-model="state.firstName"
-          label="First name"
-          :error-messages="errors.firstName"
-          @focus="errors.firstName = ''"
-        />
+        <v-text-field bg-color="#FFFFFF" v-model="state.firstName" label="First name" :error-messages="errors.firstName"
+          @focus="errors.firstName = ''" />
       </v-col>
       <v-col cols="12">
-        <v-text-field
-          bg-color="#FFFFFF"
-          v-model="state.lastName"
-          label="Last name"
-          :error-messages="errors.lastName"
-          @focus="errors.lastName = ''"
-        />
+        <v-text-field bg-color="#FFFFFF" v-model="state.lastName" label="Last name" :error-messages="errors.lastName"
+          @focus="errors.lastName = ''" />
       </v-col>
       <v-col cols="12">
-        <v-text-field
-          bg-color="#FFFFFF"
-          v-model="state.email"
-          :error-messages="errors.email"
-          @focus="errors.email = ''"
-          label="Email"
-        />
+        <v-text-field bg-color="#FFFFFF" v-model="state.email" :error-messages="errors.email" @focus="errors.email = ''"
+          label="Email" />
       </v-col>
     </v-row>
     <v-col cols="12">
@@ -46,15 +26,14 @@
     </v-col>
     <v-row dense class="px-10">
       <v-col v-for="avatar in avatarPaths" :key="avatar.url" cols="4">
-        <div class="text-center py-3">
-          <v-avatar
-            size="70"
-            @click="selectAvatar(avatar.url)"
-            :class="{ 'avatar-selected': avatar.isSelected === true }"
-          >
-            <v-img :src="`/avatars/${avatar.url}`" :alt="avatar.alt" />
-          </v-avatar>
-        </div>
+        <v-hover v-slot:default="{ isHovering, props }">
+          <div v-bind="props" class="text-center py-3">
+            <v-avatar size="70" @click="selectAvatar(avatar.url)" 
+              :class="{ 'avatar-selected': avatar.isSelected === true, 'avatar-hovered': isHovering === true }">
+              <v-img :src="`/avatars/${avatar.url}`" :alt="avatar.alt" />
+            </v-avatar>
+          </div>
+        </v-hover>
       </v-col>
     </v-row>
     <v-col cols="12">
@@ -63,20 +42,11 @@
     <v-row>
       <v-container class="d-flex justify-space-evenly">
         <div v-for="method in travelMethod" :key="method.logo" class="text-center">
-          <v-avatar
-            size="52px"
-            variant="text"
-            :class="{ 'mode-selected': method.isSelected === true }"
-            ><v-icon
-              :color="method.isSelected ? 'white' : ''"
-              size="44px"
-              :icon="method.logo"
-              @click="
-                () => {
-                  selectMode(method.mode)
-                }
-              "
-            />
+          <v-avatar size="52px" variant="text" :class="{ 'mode-selected': method.isSelected === true }"><v-icon
+              :color="method.isSelected ? 'white' : ''" size="44px" :icon="method.logo" @click="() => {
+                selectMode(method.mode)
+              }
+                " />
           </v-avatar>
           <p>{{ method.mode }}</p>
         </div>
@@ -85,17 +55,12 @@
     <v-row>
       <v-btn class="bg-primaryRed ma-4" @click="changeDetails">Update </v-btn>
       <v-spacer />
-      <v-btn class="bg-primaryRed ma-4" @click="showChangePasswordModal = true"
-        >Change Password
+      <v-btn class="bg-primaryRed ma-4" @click="showChangePasswordModal = true">Change Password
       </v-btn>
     </v-row>
   </v-container>
-  <ChangePasswordModal
-    v-if="showChangePasswordModal"
-    v-model="showChangePasswordModal"
-    @close="showChangePasswordModal = false"
-    @success="passwordChanged"
-  />
+  <ChangePasswordModal v-if="showChangePasswordModal" v-model="showChangePasswordModal"
+    @close="showChangePasswordModal = false" @success="passwordChanged" />
 </template>
 
 <script setup lang="ts">
@@ -118,6 +83,8 @@ const state = reactive<UserSettings>({
   travelMethod: userStore.user!.travelMethod
 })
 
+console.log(
+  state.avatar);
 const errors = reactive<ChangeDetailsError>({
   username: '',
   email: '',
@@ -132,7 +99,7 @@ const avatarPaths = ref(
       return {
         url: `avatar${i + 1}.jpg`,
         alt: `avatar${i + 1}`,
-        isSelected: parseInt(state.avatar) === i + 1
+        isSelected: state.avatar === `avatar${i + 1}.jpg`
       }
     })
 )
@@ -199,6 +166,10 @@ function passwordChanged() {
 <style scoped>
 .avatar-selected {
   border: 6px solid #345e9e !important;
+}
+
+.avatar-hovered {
+  cursor: pointer !important;
 }
 
 .mode-selected {
