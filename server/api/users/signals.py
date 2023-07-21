@@ -6,10 +6,10 @@ from api.users.models import User
 
 
 @receiver(post_save, sender=User)
-def send_newUser_to_admin(sender, instance, created, **kwargs):
+def send_new_user_to_admin(sender, instance, created, **kwargs):
     if created:
         subject = 'A User has registered with CSF'
-        message = 'User {} has registered'.format(instance.username)
+        message = f'User {instance.username} has registered'
         email_from = settings.EMAIL_ADDRESS_FROM
-        recipient = User.objects.get(is_superuser=True).email
-        send_mail(subject, message, email_from, [recipient])
+        recipients = User.objects.filter(is_superuser=True).values_list('email', flat=True)
+        send_mail(subject, message, email_from, recipients)
