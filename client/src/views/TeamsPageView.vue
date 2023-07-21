@@ -12,20 +12,19 @@ import { onMounted } from 'vue'
 import { useSubTeamStore } from '@/stores/subTeam'
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
-const userStore = useUserStore();
+const userStore = useUserStore()
 const subTeamStore = useSubTeamStore()
 
 const { user } = storeToRefs(userStore)
 
 onMounted(async () => {
   try {
-    await subTeamStore.getSubUsers(user.teamId);
+    await subTeamStore.getSubUsers(user.teamId)
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-  console.log(subTeamStore.info);
-
+  console.log(subTeamStore.info)
 })
 
-onMounted(async () => { })
+onMounted(async () => {})
 </script>
