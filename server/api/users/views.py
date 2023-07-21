@@ -1,8 +1,8 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import User
-from .serializers import (ChangeDetailsSerializer, ChangePasswordSerializer, RequestResetPasswordSerializer, ResetPasswordSerializer,
-                          UserSerialiser, JoinTeamSerializer, PublicUserSerializer)
+from .serializers import (ChangeDetailsSerializer, ChangePasswordSerializer, RequestResetPasswordSerializer, 
+                          ResetPasswordSerializer, JoinTeamSerializer, PublicUserSerializer)
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
