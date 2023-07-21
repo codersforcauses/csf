@@ -113,8 +113,9 @@ function calcWidth(travelDist: number, totalDist: number) {
 }
 
 function updateChallengeProgress() {
-  UserMileage.value = mileageStore.totalKmByUser
-  console.log(UserMileage)
+  UserMileage.value = mileageStore.mileagebyUser
+  console.log("team", mileageStore.totalKmByTeam)
+  console.log("user", mileageStore.totalKmByUser)
 }
 
 onMounted(async () => {
@@ -122,6 +123,7 @@ onMounted(async () => {
     try {
       getIconName(userStore.user.travelMethod)
       await mileageStore.getMileageByUser()
+      await mileageStore.getMileageByTeam()
       updateChallengeProgress()
     } catch (error) {
       console.log(error)

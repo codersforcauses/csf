@@ -14,7 +14,7 @@
       <v-row align="center" class="my-2">
         <v-icon :class="['mdi','ml-3', getIconName(userStore.user!.travelMethod)]" size="50px" />
         <v-col>
-          <v-chip color="green" class="rounded text-h5">{{ teamData.total_kilometres }} KM</v-chip>
+          <v-chip color="green" class="rounded text-h5">{{ totalKilometres }} KM</v-chip>
           <h3>TOTAL</h3>
         </v-col>
       </v-row>
@@ -156,11 +156,15 @@ import MileageGraph from '../MileageGraph.vue'
 const { mobile } = useDisplay()
 import { useTeamStore } from '@/stores/team'
 import { useUserStore } from '@/stores/user'
+import { useMileageStore } from '@/stores/mileage'
+
 const teamStore = useTeamStore()
 const userStore = useUserStore()
+const mileageStore = useMileageStore()
 
 onMounted(async () => {
   if (userStore.user!.teamId) await teamStore.getTeam(userStore.user!.teamId)
+  updateTeamMileage()
 })
 const deleteTeam = () => {
   teamStore.deleteTeam()
@@ -168,6 +172,12 @@ const deleteTeam = () => {
 const removeTeam = () => {
   teamStore.removeTeam()
 }
+
+const updateTeamMileage = () =>{
+  totalKilometres.value = mileageStore.getMileageByTeam
+}
+
+const totalKilometres = ref()
 
 const teamData = ref({
   team_name: teamStore.team ? teamStore.team.name : '',

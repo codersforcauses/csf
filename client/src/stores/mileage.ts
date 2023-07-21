@@ -50,6 +50,7 @@ export const useMileageStore = defineStore('mileage', {
         { params: { challenge: true } }
       )
       if (status == 200) this.mileageByUser = camelize(data) as Mileage[]
+      console.log(data)
     }
   }
 })

@@ -18,15 +18,16 @@ CHALLENGE_LENGTH = 14  # days
 @permission_classes([IsAuthenticated])
 def get_mileage_by_user(request, user):
     mileage = Mileage.objects.filter(user=user)
+    serializer = MileageSerializer(mileage, many=True)
 
     # only get mileages within current challenge period
-    if "challenge" in request.GET:
-        mileage = mileage.filter(
-            user__challenge_start_date__range=(
-                datetime.date.today() - datetime.timedelta(days=CHALLENGE_LENGTH),
-                F("date"),
-            )
-        )
+    # if "challenge" in request.GET:
+    #     mileage = mileage.filter(
+    #         user__challenge_start_date__range=(
+    #             datetime.date.today() - datetime.timedelta(days=CHALLENGE_LENGTH),
+    #             F("date"),
+    #         )
+    #     )
 
         # do we need to do this here? its alr done in post_mileage
 
@@ -41,8 +42,7 @@ def get_mileage_by_user(request, user):
         #         lambda m: user.challenge_start_date and m.date >= user.challenge_start_date,
         #         mileages
         #     )
-
-    serializer = MileageSerializer(mileage, many=True)
+    # serializer = MileageSerializer(mileage, many=True)
     return Response(serializer.data)
 
 
