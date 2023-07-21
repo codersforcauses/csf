@@ -49,8 +49,7 @@ export const useMileageStore = defineStore('mileage', {
         `mileage/get_mileage/team/${useUserStore().user!.teamId!}`,
         { params: { challenge: true } }
       )
-      if (status == 200) this.mileageByUser = camelize(data) as Mileage[]
-      console.log(data)
+      if (status == 200) this.mileageByTeam = camelize(data) as Mileage[]
     }
   }
 })

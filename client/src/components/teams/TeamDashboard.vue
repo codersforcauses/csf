@@ -174,14 +174,15 @@ const removeTeam = () => {
 }
 
 const updateTeamMileage = () =>{
-  totalKilometres.value = mileageStore.getMileageByTeam
+  mileageStore.getMileageByTeam()
+  totalKilometres.value = mileageStore.totalKmByTeam
 }
 
 const totalKilometres = ref()
 
 const teamData = ref({
   team_name: teamStore.team ? teamStore.team.name : '',
-  total_kilometres: 990,
+  total_kilometres: 0,
   invite_code: teamStore.team ? teamStore.team.joinCode : '',
   bio: teamStore.team ? teamStore.team.bio : '',
   daily_kms: [],

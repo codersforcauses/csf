@@ -52,13 +52,13 @@ def get_mileage_by_team(request, team):
     mileage = Mileage.objects.filter(user__team_id=team)
 
     # only get mileages within current challenge period
-    if "challenge" in request.GET:
-        mileage = mileage.filter(
-            user__challenge_start_date__range=(
-                datetime.date.today() - datetime.timedelta(days=CHALLENGE_LENGTH),
-                F("date"),
-            )
-        )
+    # if "challenge" in request.GET:
+    #     mileage = mileage.filter(
+    #         user__challenge_start_date__range=(
+    #             datetime.date.today() - datetime.timedelta(days=CHALLENGE_LENGTH),
+    #             F("date"),
+    #         )
+    #     )
 
     serializer = MileageSerializer(mileage, many=True)
     return Response(serializer.data)

@@ -85,6 +85,7 @@ const mileageStore = useMileageStore()
 const method = ref()
 const UserMileage = ref()
 const loading = ref(true)
+const mileageLoaded = ref(true)
 
 const getIconName = (medium: any) => {
   switch (medium) {
@@ -113,17 +114,14 @@ function calcWidth(travelDist: number, totalDist: number) {
 }
 
 function updateChallengeProgress() {
-  UserMileage.value = mileageStore.mileagebyUser
-  console.log("team", mileageStore.totalKmByTeam)
-  console.log("user", mileageStore.totalKmByUser)
+  mileageStore.getMileageByUser()
+  UserMileage.value = mileageStore.totalKmByUser
 }
 
 onMounted(async () => {
   if (userStore.user) {
     try {
       getIconName(userStore.user.travelMethod)
-      await mileageStore.getMileageByUser()
-      await mileageStore.getMileageByTeam()
       updateChallengeProgress()
     } catch (error) {
       console.log(error)
