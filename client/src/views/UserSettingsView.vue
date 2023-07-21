@@ -148,14 +148,14 @@ const travelMethod = ref([
 
 const selectAvatar = (url: string) => {
   avatarPaths.value.forEach((avatar) => {
-    avatar.isSelected = avatar.url === url // ? !avatar.isSelected : false
+    avatar.isSelected = avatar.url === url
   })
   state.avatar = url
 }
 
 const selectMode = (mode: string) => {
   travelMethod.value.forEach((method) => {
-    method.isSelected = method.mode === mode ? !method.isSelected : false
+    method.isSelected = method.mode === mode
   })
   state.travelMethod = mode
 }
