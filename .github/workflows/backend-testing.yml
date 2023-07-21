@@ -63,7 +63,7 @@ jobs:
       - name: Run tests 🧪
         env:
           API_SECRET_KEY: o!v%_v0zjvc5+_)e!r+o!_uefr2a&)lfgv17$ex=a!ei%!y-_o
-          JWT_SECRET_KEY: NjMgNmYgNmQgNmQgNzUgNmUgNjkgNzQgNzkgNzMgNzAgNjkgNzIgNjkgNzQgNjYgNmYgNzUgNmUgNjQgNjEgNzQgNjkgNmYgNmU=
+          JWT_SIGNING_KEY: NjMgNmYgNmQgNmQgNzUgNmUgNjkgNzQgNzkgNzMgNzAgNjkgNzIgNjkgNzQgNjYgNmYgNzUgNmUgNjQgNjEgNzQgNjkgNmYgNmU=
           POSTGRES_HOST: localhost
           POSTGRES_PASSWORD: password
           POSTGRES_PORT: 5432
