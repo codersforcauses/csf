@@ -1,5 +1,3 @@
-<template>
-</template>
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useRegisterSW } from 'virtual:pwa-register/vue'
