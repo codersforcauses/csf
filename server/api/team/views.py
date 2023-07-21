@@ -65,4 +65,7 @@ def delete_team(request, team_id):
             return Response("User is not authorised to delete this team", status=403)
         else:
             team.delete()
+            request.user.team_admin = False
+            request.user.team_id = None
+            request.user.save()
             return Response("Team successfully deleted", status=200)
