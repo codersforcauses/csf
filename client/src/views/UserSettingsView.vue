@@ -46,15 +46,20 @@
     </v-col>
     <v-row dense class="px-10">
       <v-col v-for="avatar in avatarPaths" :key="avatar.url" cols="4">
-        <div class="text-center py-3">
-          <v-avatar
-            size="70"
-            @click="selectAvatar(avatar.url)"
-            :class="{ 'avatar-selected': avatar.isSelected === true }"
-          >
-            <v-img :src="`/avatars/${avatar.url}`" :alt="avatar.alt" />
-          </v-avatar>
-        </div>
+        <v-hover v-slot:default="{ isHovering, props }">
+          <div v-bind="props" class="text-center py-3">
+            <v-avatar
+              size="70"
+              @click="selectAvatar(avatar.url)"
+              :class="{
+                'avatar-selected': avatar.isSelected === true,
+                'avatar-hovered': isHovering === true
+              }"
+            >
+              <v-img :src="`/avatars/${avatar.url}`" :alt="avatar.alt" />
+            </v-avatar>
+          </div>
+        </v-hover>
       </v-col>
     </v-row>
     <v-col cols="12">
@@ -118,6 +123,7 @@ const state = reactive<UserSettings>({
   travelMethod: userStore.user!.travelMethod
 })
 
+console.log(state.avatar)
 const errors = reactive<ChangeDetailsError>({
   username: '',
   email: '',
@@ -199,6 +205,10 @@ function passwordChanged() {
 <style scoped>
 .avatar-selected {
   border: 6px solid #345e9e !important;
+}
+
+.avatar-hovered {
+  cursor: pointer !important;
 }
 
 .mode-selected {
