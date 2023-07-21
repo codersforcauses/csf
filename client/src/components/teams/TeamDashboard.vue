@@ -135,14 +135,13 @@
 
   <!-- Leave/Delete Team -->
   <v-row justify="center" class="ma-5">
-    <v-btn
-      size="large"
-      color="red white--text"
+    <ConfirmButton
       v-if="userStore.user!.teamAdmin"
-      @click="deleteTeam"
-    >
-      Delete Team
-    </v-btn>
+      :action="'delete'"
+      :object="'team'"
+      :use-done-for-button="false"
+      @handle-confirm="deleteTeam"
+    />
     <v-btn size="large" color="red white--text" v-else @click="removeTeam">Leave Team</v-btn>
   </v-row>
 </template>
@@ -153,6 +152,7 @@ import { useDisplay } from 'vuetify'
 import EditTeamInfo from './EditTeamInfo.vue'
 import SubTeams from './SubTeams.vue'
 import MileageGraph from '../MileageGraph.vue'
+import ConfirmButton from '@/components/ConfirmButton.vue'
 const { mobile } = useDisplay()
 import { useTeamStore } from '@/stores/team'
 import { useUserStore } from '@/stores/user'
@@ -179,7 +179,7 @@ const teamData = ref({
   leaderboard: []
 })
 
-watch(teamStore.team!, (newTeam) => {
+  watch(() => teamStore.team, (newTeam) => {
   // Update the teamData when the team value changes
   if (newTeam) {
     teamData.value.team_name = newTeam.name
@@ -187,6 +187,7 @@ watch(teamStore.team!, (newTeam) => {
     teamData.value.invite_code = newTeam.joinCode
   }
 })
+
 
 const isBioVisible = ref(false)
 const isDailyKmsVisible = ref(true)
