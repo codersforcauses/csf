@@ -32,7 +32,7 @@
         :key="event.eventId"
         :event="event"
         @edit="openEditModal"
-        :background-colour="idx % 2 === 0 ? 'bg-primaryWhite' : 'bg-backgroundGrey'"
+        :background-colour="idx % 2 === 0 ? 'bg-primaryWhite' : 'bg-grey-lighten-4'"
       />
       <div v-if="filteredEventsList.length == 0" class="mt-6 mx-3 text-center">
         <v-icon icon="mdi-calendar-blank" size="x-large" />
@@ -115,10 +115,6 @@ function openEditModal(id: number) {
 </script>
 
 <style scoped>
-/* #cards-container > .v-card:nth-child(odd) {
-  background-color: #f4f4f4;
-} */
-
 .v-field__input {
   padding-top: 19px;
   padding-bottom: 0px;
