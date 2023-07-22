@@ -36,12 +36,6 @@ export const useTeamStore = defineStore('team', () => {
     async getTeam(teamId: Number) {
       const res = await server.get(`team/get/${teamId}/`)
       if (res.status == 200) team.value = camelize<Team>(res.data)
-      else
-        notify({
-          title: 'Get Team',
-          type: 'error',
-          text: 'Get Team Error'
-        })
     },
 
     async createTeam(data: Omit<Team, 'teamId' | 'joinCode'>) {
@@ -53,12 +47,6 @@ export const useTeamStore = defineStore('team', () => {
           title: 'Create Team',
           type: 'success',
           text: 'Create Team Successful'
-        })
-      } else {
-        notify({
-          title: 'Create Team',
-          type: 'error',
-          text: 'Create Team Error'
         })
       }
     },
@@ -72,12 +60,6 @@ export const useTeamStore = defineStore('team', () => {
           text: 'Edit Team Successful'
         })
         team.value = camelize<Team>(res.data)
-      } else {
-        notify({
-          title: 'Edit Team',
-          type: 'error',
-          text: 'Edit Team Error'
-        })
       }
     },
 
@@ -99,12 +81,6 @@ export const useTeamStore = defineStore('team', () => {
           type: 'success',
           text: 'Join Team Successful'
         })
-      } else {
-        notify({
-          title: 'Join Team',
-          type: 'error',
-          text: 'Join Team Error'
-        })
       }
     },
 
@@ -117,12 +93,6 @@ export const useTeamStore = defineStore('team', () => {
           type: 'success',
           text: 'Delete Team Successful'
         })
-      } else {
-        notify({
-          title: 'Delete Team',
-          type: 'error',
-          text: 'Delete Team Error'
-        })
       }
     },
 
@@ -134,12 +104,6 @@ export const useTeamStore = defineStore('team', () => {
           title: 'Remove Team',
           type: 'success',
           text: 'Remove Team Successful'
-        })
-      } else {
-        notify({
-          title: 'Remove Team',
-          type: 'error',
-          text: 'Remove Team Error'
         })
       }
     }
