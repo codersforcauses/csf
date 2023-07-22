@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from django.db.models import Q
 
 from .models import Event
-from .serializers import EventSerialiser
+from .serializers import EventSerialiser, CreateEventSerializer, EditEventSerializer
 
 
 @api_view(["POST"])
@@ -12,7 +12,7 @@ def create_event(request):
     if request.user.is_authenticated is False:
         return Response("User not authenticated", status=401)
     else:
-        serialiser = EventSerialiser(data=request.data)
+        serialiser = CreateEventSerializer(data=request.data)
         if serialiser.is_valid():
             serialiser.save()
             return Response(serialiser.data, status=200)
@@ -48,7 +48,7 @@ def update_event(request, event_id):
             event = Event.objects.get(event_id=event_id)
             if request.user.team_id == event.team_id:
                 if event.is_public is False:
-                    serializer = EventSerialiser(instance=event, data=request.data)
+                    serializer = EditEventSerializer(instance=event, data=request.data)
                     if serializer.is_valid():
                         serializer.save()
                         return Response(serializer.data, status=200)
