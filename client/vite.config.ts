@@ -31,61 +31,61 @@ export default defineConfig({
         background_color: '#ffffff',
         icons: [
           {
-            src: 'images/CSF_feet_144_144px.png',
+            src: 'images/CSF_feet_144_sq_px.png',
             sizes: '144x144',
             type: 'image/png',
           },
           {
-            src: 'images/CSF_feet_144_144px.png',
+            src: 'images/CSF_feet_144_sq_px.png',
             sizes: '144x144',
             type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: 'images/CSF_feet_113_113px.png',
-            sizes: '113x113',
+            src: 'images/CSF_feet_72_72px.png',
+            sizes: '72x72',
             type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: 'images/CSF_feet_512_791px.png',
-            sizes: '512x791',
+            src: 'images/CSF_feet_96_96px.png',
+            sizes: '96x96',
             type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: 'images/CSF_feet_55_85px.png',
-            sizes: '55x85',
+            src: 'images/CSF_feet_120_120px.png',
+            sizes: '120x120',
             type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: 'images/CSF_feet_73_113px.png',
-            sizes: '73x113',
+            src: 'images/CSF_feet_152_152px.png',
+            sizes: '152x152',
             type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: 'images/CSF_feet_110_170px.png',
-            sizes: '110x170',
+            src: 'images/CSF_feet_167_167px.png',
+            sizes: '167x167',
             type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: 'images/CSF_feet_128_198px.png',
-            sizes: '128x198',
+            src: 'images/CSF_feet_192_192px.png',
+            sizes: '192x192',
             type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: 'images/CSF_feet_146_227px.png',
-            sizes: '146x227',
+            src: 'images/CSF_feet_384_384px.png',
+            sizes: '384x384',
             type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: 'images/CSF_feet_165_255px.png',
-            sizes: '165x255',
+            src: 'images/CSF_feet_512_512px.png',
+            sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable'
           }
