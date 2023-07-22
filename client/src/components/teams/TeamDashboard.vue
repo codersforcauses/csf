@@ -198,7 +198,7 @@ const deleteTeam = () => {
 const removeTeam = () => {
   loading.value = true
   teamStore.removeTeam().catch((error: AxiosError | any) => {
-    if (error instanceof AxiosError && error.response && error.response.status === 400) {
+    if (error instanceof AxiosError && error.response) {
       notify({
         title: 'Remove Team',
         type: 'error',

@@ -58,21 +58,21 @@ const joinTeam = async () => {
   loading.value = true
   try {
     await teamStore.joinTeam(joinCode.value)
-  } catch (error) {
+  } catch (error: AxiosError | any) {
     console.error('Error joining team:', error)
     if (error.response.status === 404) {
-        notify({
-          title: 'Join Team',
-          type: 'error',
-          text: 'Team Does Not Exists'
-        })
-      } else if (error.response.status === 400) {
-        notify({
-          title: 'Join Team',
-          type: 'error',
-          text: 'Join Team Error'
-        })
-      }
+      notify({
+        title: 'Join Team',
+        type: 'error',
+        text: 'Team Does Not Exists'
+      })
+    } else if (error.response.status === 400) {
+      notify({
+        title: 'Join Team',
+        type: 'error',
+        text: 'Join Team Error'
+      })
+    }
   } finally {
     loading.value = false
   }
