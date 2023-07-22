@@ -16,13 +16,16 @@ import datetime
 
 
 @api_view(['GET'])
-def get_user(request, username):
-    try:
-        user = User.objects.get(username=username)
-    except User.DoesNotExist:
-        return Response(status=400)
-    serializer = PublicUserSerializer(user)
-    return Response(serializer.data)
+def get_user(request):
+    if request.user.is_authenticated is False:
+        return Response(status=401)
+    else:
+        try:
+            user = User.objects.get(id=request.user.id)
+        except User.DoesNotExist:
+            return Response(status=400)
+        serializer = PublicUserSerializer(user)
+        return Response(serializer.data, status=200)
 
 
 @api_view(['PATCH'])
