@@ -72,7 +72,10 @@
     </v-container>
   </div>
 
-  <ChallengeCompletePopupModalVue v-model="isCompleted" :challenge-name="challengeName"></ChallengeCompletePopupModalVue>
+  <ChallengeCompletePopupModalVue
+    v-model="isCompleted"
+    :challenge-name="challengeName"
+  ></ChallengeCompletePopupModalVue>
 </template>
 
 <script setup lang="ts">
@@ -80,7 +83,7 @@ import { ref, onMounted } from 'vue'
 import MileageModal from '../components/MileageModal.vue'
 import { useUserStore } from '@/stores/user'
 import { useMileageStore } from '@/stores/mileage'
-import ChallengeCompletePopupModalVue from '@/components/ChallengeCompletePopupModal.vue';
+import ChallengeCompletePopupModalVue from '@/components/ChallengeCompletePopupModal.vue'
 
 const userStore = useUserStore()
 const method = ref()
@@ -133,15 +136,15 @@ function getRecentMileage() {
 function updateChallengeProgress(checkForCompletion: boolean) {
   let oldDistance = distanceTravelled.value
   distanceTravelled.value = getRecentMileage()
-  
+
   if (checkForCompletion) {
     challenges.value.forEach((challenge) => {
-      if (oldDistance < challenge.length && distanceTravelled.value >= challenge.length ) {
-      challengeName.value = challenge.name
-      isCompleted.value = true
+      if (oldDistance < challenge.length && distanceTravelled.value >= challenge.length) {
+        challengeName.value = challenge.name
+        isCompleted.value = true
       }
     })
-  }  
+  }
 }
 
 onMounted(async () => {
