@@ -1,8 +1,6 @@
 <template>
   <div id="header-container" class="text-white pa-lg-12 pa-5">
-    <h1 class="text-md-h1 mb-md-10 mb-7 font-weight-medium" id="title">
-      EVENTS
-    </h1>
+    <h1 class="text-md-h1 mb-md-10 mb-7 font-weight-medium" id="title">EVENTS</h1>
   </div>
   <v-container v-if="!isLoading">
     <v-row
