@@ -22,6 +22,16 @@ class UserTest(APITestCase):
             password=self.password,
         )
 
+    def get_token(self):
+        get_token_url = reverse('auth:jwt_token')
+        get_token_body = {
+            'username': 'user0',
+            'password': 'dfjhvb593cdch'
+        }
+        get_token_response = self.client.post(get_token_url, get_token_body, format='json')
+        token = get_token_response.data['access']
+        return token
+
     def test_change_password(self):
         # test response is 200
         url = reverse("user:change-password", kwargs={"id": self.user.id})
@@ -87,7 +97,9 @@ class UserTest(APITestCase):
         self.assertEqual(self.user.check_password(self.newer_password), True)
 
     def test_get_user(self):
-        url = reverse("user:get-user", kwargs={"username": self.username})
+        token = self.get_token()
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer {0}'.format(token))
+        url = reverse("user:get-user")
         response = self.client.get(url)
         user_to_match = User.objects.get(username=self.username)
         self.assertEqual(response.status_code, 200)
