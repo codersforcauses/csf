@@ -55,7 +55,7 @@ const editTeamInfo = async () => {
   teamStore
     .editTeam({ name: newTeamName.value, bio: newBioText.value })
     .catch((error: AxiosError | any) => {
-      if (error instanceof AxiosError && error.response && error.response.status === 404) {
+      if (error instanceof AxiosError && error.response) {
         notify({
           title: 'Edit Team',
           type: 'error',

@@ -164,7 +164,7 @@ const userStore = useUserStore()
 onMounted(async () => {
   if (userStore.user!.teamId)
     await teamStore.getTeam(userStore.user!.teamId).catch((error: AxiosError | any) => {
-      if (error instanceof AxiosError && error.response && error.response.status === 404) {
+      if (error instanceof AxiosError && error.response) {
         notify({
           title: 'Get Team',
           type: 'error',
@@ -175,7 +175,7 @@ onMounted(async () => {
 })
 const deleteTeam = () => {
   teamStore.deleteTeam().catch((error: AxiosError | any) => {
-    if (error instanceof AxiosError && error.response && error.response.status === 404) {
+    if (error instanceof AxiosError && error.response) {
       notify({
         title: 'Delete Team',
         type: 'error',
@@ -186,7 +186,7 @@ const deleteTeam = () => {
 }
 const removeTeam = () => {
   teamStore.removeTeam().catch((error: AxiosError | any) => {
-    if (error instanceof AxiosError && error.response && error.response.status === 404) {
+    if (error instanceof AxiosError && error.response && error.response.status === 400) {
       notify({
         title: 'Remove Team',
         type: 'error',

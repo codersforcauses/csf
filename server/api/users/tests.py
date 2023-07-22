@@ -28,8 +28,6 @@ class UserTest(APITestCase):
             password=self.password,
         )
 
-        # create mock team and put user to created team
-
     def test_change_password(self):
         # test response is 200
         url = reverse("user:change-password", kwargs={"id": self.user.id})

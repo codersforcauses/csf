@@ -46,7 +46,7 @@ const form = ref({
 
 const submitForm = () => {
   teamStore.createTeam({ ...form.value }).catch((error: AxiosError | any) => {
-    if (error instanceof AxiosError && error.response && error.response.status === 404) {
+    if (error instanceof AxiosError && error.response && error.response.status === 400) {
       notify({
         title: 'Create Team',
         type: 'error',
