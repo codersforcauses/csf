@@ -1,5 +1,4 @@
 <template>
-  <div v-if="!loading">
   <v-card variant="flat">
     <v-card-actions class="d-flex justify-space-between">
       <v-btn
@@ -16,7 +15,6 @@
     </v-card-actions>
     <LineWithLineChart :data="graphData" :options="options" />
   </v-card>
-</div>
 </template>
 
 <script setup lang="ts">
@@ -89,8 +87,8 @@ const data = computed(() => filteredData.value?.map((data) => data.kilometres))
 const activeButton = ref('This Week')
 
 function updateData() {
-  mileageStore.getMileageDataPointsByTeam()
-  dataPoints.value = mileageStore.dataPoints
+  mileageStore.getMileageByTeam()
+  dataPoints.value = mileageStore.mileageByTeam
 }
 function filterData(range: string) {
   activeButton.value = range

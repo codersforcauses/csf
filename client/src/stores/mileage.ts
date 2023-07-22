@@ -9,13 +9,11 @@ import { useUserStore } from './user'
 export const useMileageStore = defineStore('mileage', {
   state: () => ({
     mileageByUser: useStorage('mileageByUser', [] as Mileage[]),
-    mileageByTeam: useStorage('mileageByTeam', [] as Mileage[]),
-    mileageDataPointsByTeam: []
+    mileageByTeam: useStorage('mileageByTeam', [] as Mileage[])
   }),
   getters: {
     totalKmByUser: (state) => state.mileageByUser.reduce((acc, cur) => acc + cur.kilometres, 0),
     totalKmByTeam: (state) => state.mileageByTeam.reduce((acc, cur) => acc + cur.kilometres, 0),
-    dataPoints: (state)  => state.mileageDataPointsByTeam
   },
   actions: {
     addMileage(mileage: Omit<Mileage, 'mileageId'>) {
@@ -52,13 +50,6 @@ export const useMileageStore = defineStore('mileage', {
         { params: { challenge: true } }
       )
       if (status == 200) this.mileageByTeam = camelize(data) as Mileage[]
-    },
-    async getMileageDataPointsByTeam() {
-      const { status, data } = await server.get(
-        `mileage/get_mileage/team/${useUserStore().user!.teamId!}`,
-        { params: { challenge: true } }
-      )
-      if (status == 200) this.mileageDataPointsByTeam = camelize(data)
     }
   }
 })
