@@ -1,7 +1,7 @@
 <template>
   <v-card class="mx-3 elevation-0" :class="backgroundColour">
     <v-card-title>
-      <span class="font-weight-bold">{{ event.name }}</span>
+      <span class="font-weight-bold" style="word-break: break-word">{{ event.name }}</span>
       <v-spacer />
       <v-icon
         v-if="user?.teamAdmin && !event.isPublic"
