@@ -83,9 +83,11 @@ def get_leaderboard(request):
         if "team_name" in request.GET:
             rank, team_mileage, index = get_rank_and_mileage_from_leaderboard(leaderboard_serializer.data, request.GET["team_name"], "name")
             if rank != -1 and team_mileage != -1:
-                result["team"] = {"name": request.GET["team_name"], "bio": leaderboard_serializer.data[index]["bio"], "rank": rank, "total_mileage": team_mileage}
-    
+                result["team"] = {"name": request.GET["team_name"], "bio": leaderboard_serializer.data[index]["bio"], 
+                                  "rank": rank, "total_mileage": team_mileage}
+
     return Response(result)
+
 
 def get_rank_and_mileage_from_leaderboard(leaderboard, username, field_name):
     i = 0
