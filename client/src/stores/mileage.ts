@@ -19,10 +19,9 @@ export const useMileageStore = defineStore('mileage', {
     addMileage(mileage: Omit<Mileage, 'mileageId'>) {
       return server
         .post('mileage/post_mileage/', mileage)
-        .then(async resp => {
-          const data = camelize<Mileage>(resp.data)
-          this.mileageByTeam.push(data)
-          this.mileageByUser.push(data)
+        .then(async () => {
+          await this.getMileageByUser()
+          await this.getMileageByTeam()
           notify({
             title: 'Post Mileage',
             type: 'success',

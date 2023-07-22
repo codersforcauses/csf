@@ -67,7 +67,7 @@
       <v-row align="start" id="pointer-cursor" class="my-2">
         <v-col>
           <h2>Daily KMs</h2>
-          <MileageGraph v-if="isDailyKmsVisible" :teamPage="true"/>
+          <MileageGraph v-if="isDailyKmsVisible" :dataPoints="mileageStore.mileageByTeam"/>
         </v-col>
         <v-icon
           v-if="isDailyKmsVisible"

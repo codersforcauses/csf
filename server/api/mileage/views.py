@@ -1,3 +1,4 @@
+import logging
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -18,16 +19,15 @@ CHALLENGE_LENGTH = 14  # days
 @permission_classes([IsAuthenticated])
 def get_mileage_by_user(request, user):
     mileage = Mileage.objects.filter(user=user)
-    serializer = MileageSerializer(mileage, many=True)
 
     # only get mileages within current challenge period
-    # if "challenge" in request.GET:
-    #     mileage = mileage.filter(
-    #         user__challenge_start_date__range=(
-    #             datetime.date.today() - datetime.timedelta(days=CHALLENGE_LENGTH),
-    #             F("date"),
-    #         )
-    #     )
+    if "challenge" in request.GET:
+        mileage = mileage.filter(
+            date__range=(
+                F("user__challenge_start_date"),
+                F("user__challenge_start_date") + datetime.timedelta(days=CHALLENGE_LENGTH),
+            )
+        )
 
         # do we need to do this here? its alr done in post_mileage
 
@@ -42,7 +42,7 @@ def get_mileage_by_user(request, user):
         #         lambda m: user.challenge_start_date and m.date >= user.challenge_start_date,
         #         mileages
         #     )
-    # serializer = MileageSerializer(mileage, many=True)
+    serializer = MileageSerializer(mileage, many=True)
     return Response(serializer.data)
 
 
@@ -52,13 +52,13 @@ def get_mileage_by_team(request, team):
     mileage = Mileage.objects.filter(user__team_id=team)
 
     # only get mileages within current challenge period
-    # if "challenge" in request.GET:
-    #     mileage = mileage.filter(
-    #         user__challenge_start_date__range=(
-    #             datetime.date.today() - datetime.timedelta(days=CHALLENGE_LENGTH),
-    #             F("date"),
-    #         )
-    #     )
+    if "challenge" in request.GET:
+        mileage = mileage.filter(
+            date__range=(
+                F("user__challenge_start_date"),
+                F("user__challenge_start_date") + datetime.timedelta(days=CHALLENGE_LENGTH),
+            )
+        )
 
     serializer = MileageSerializer(mileage, many=True)
     return Response(serializer.data)
