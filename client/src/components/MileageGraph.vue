@@ -36,48 +36,6 @@ import { useMileageStore } from '@/stores/mileage'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend) // creating instance of chart
 
-// DATA FILTERING AND COMPUTED PROPERTIES
-const tempData = ref<Mileage[]>([
-  { mileageId: 1, user: 1, kilometres: 10, date: '2023-06-01' },
-  { mileageId: 2, user: 1, kilometres: 20, date: '2023-06-02' },
-  { mileageId: 3, user: 1, kilometres: 50, date: '2023-06-03' },
-  { mileageId: 4, user: 1, kilometres: 60, date: '2023-06-04' },
-  { mileageId: 5, user: 1, kilometres: 30, date: '2023-06-05' },
-  { mileageId: 6, user: 1, kilometres: 40, date: '2023-06-06' },
-  { mileageId: 7, user: 1, kilometres: 10, date: '2023-06-07' },
-  { mileageId: 8, user: 1, kilometres: 2, date: '2023-06-08' },
-  { mileageId: 9, user: 1, kilometres: 10, date: '2023-06-09' },
-  { mileageId: 10, user: 1, kilometres: 20, date: '2023-06-10' },
-  { mileageId: 11, user: 1, kilometres: 30, date: '2023-06-11' },
-  { mileageId: 12, user: 1, kilometres: 54, date: '2023-06-12' },
-  { mileageId: 13, user: 1, kilometres: 12, date: '2023-06-13' },
-  { mileageId: 14, user: 1, kilometres: 31, date: '2023-06-14' },
-  { mileageId: 15, user: 1, kilometres: 30, date: '2023-06-15' },
-  { mileageId: 16, user: 1, kilometres: 10, date: '2023-06-16' },
-  { mileageId: 17, user: 1, kilometres: 70, date: '2023-06-17' },
-  { mileageId: 18, user: 1, kilometres: 10, date: '2023-06-18' },
-  { mileageId: 19, user: 1, kilometres: 5, date: '2023-06-19' },
-  { mileageId: 20, user: 1, kilometres: 10, date: '2023-06-20' },
-  { mileageId: 21, user: 1, kilometres: 20, date: '2023-06-21' },
-  { mileageId: 22, user: 1, kilometres: 32, date: '2023-06-22' },
-  { mileageId: 23, user: 1, kilometres: 10, date: '2023-06-23' },
-  { mileageId: 24, user: 1, kilometres: 5, date: '2023-06-24' },
-  { mileageId: 25, user: 1, kilometres: 15, date: '2023-06-25' },
-  { mileageId: 26, user: 1, kilometres: 10, date: '2023-06-26' },
-  { mileageId: 27, user: 1, kilometres: 20, date: '2023-06-27' },
-  { mileageId: 28, user: 1, kilometres: 30, date: '2023-06-28' },
-  { mileageId: 29, user: 1, kilometres: 20, date: '2023-06-29' },
-  { mileageId: 30, user: 1, kilometres: 50, date: '2023-06-30' },
-  { mileageId: 31, user: 1, kilometres: 60, date: '2023-07-01' },
-  { mileageId: 32, user: 1, kilometres: 50, date: '2023-07-02' },
-  { mileageId: 33, user: 1, kilometres: 80, date: '2023-07-03' },
-  { mileageId: 34, user: 1, kilometres: 30, date: '2023-07-04' },
-  { mileageId: 35, user: 1, kilometres: 10, date: '2023-07-05' },
-  { mileageId: 36, user: 1, kilometres: 14, date: '2023-07-06' },
-  { mileageId: 37, user: 1, kilometres: 20, date: '2023-07-07' },
-  { mileageId: 38, user: 1, kilometres: 13, date: '2023-07-08' }
-])
-
 const mileageStore = useMileageStore()
 const dataPoints = ref()
 const loading = ref(true)
@@ -85,10 +43,12 @@ const filteredData = ref<Mileage[]>()
 const labels = computed(() => filteredData.value?.map((data) => data.date))
 const data = computed(() => filteredData.value?.map((data) => data.kilometres))
 const activeButton = ref('This Week')
+const props = defineProps<{teamPage : boolean}>()
 
 function updateData() {
   mileageStore.getMileageByTeam()
-  dataPoints.value = mileageStore.mileageByTeam
+  mileageStore.getMileageByUser()
+  dataPoints.value = props.teamPage ? mileageStore.mileageByTeam : mileageStore.mileageByUser
 }
 function filterData(range: string) {
   activeButton.value = range

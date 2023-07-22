@@ -41,6 +41,7 @@
       <v-row class="ma-0 pt-0 pb-0" align="center">
         <v-col>
           <h1>Daily KMs</h1>
+          <MileageGraph v-if="isDailyKmsVisible" :teamPage="true"/>
         </v-col>
       </v-row>
       <!-- </v-container> -->
@@ -78,6 +79,7 @@ import { ref, onMounted } from 'vue'
 import MileageModal from '../components/MileageModal.vue'
 import { useUserStore } from '@/stores/user'
 import { useMileageStore } from '@/stores/mileage'
+import MileageGraph from '../components/MileageGraph.vue'
 
 const userStore = useUserStore()
 const mileageStore = useMileageStore()
