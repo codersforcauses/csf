@@ -111,7 +111,6 @@
               </v-row>
               <v-row align="center" justify="center">
                 <v-col cols="auto">
-                  <!-- todo add in routing to login modal when its ready -->
                   <v-btn
                     variant="text"
                     color="secondaryBlue"
@@ -234,7 +233,6 @@
               </v-row>
               <v-row align="center" justify="center">
                 <v-col cols="auto">
-                  <!-- todo add in routing to login modal when its ready -->
                   <v-btn
                     variant="text"
                     color="secondaryBlue"
