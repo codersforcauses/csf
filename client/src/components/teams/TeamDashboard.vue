@@ -140,9 +140,18 @@
       :action="'delete'"
       :object="'team'"
       :use-done-for-button="false"
+      :loading="loading"
       @handle-confirm="deleteTeam"
     />
-    <v-btn size="large" color="red white--text" v-else @click="removeTeam">Leave Team</v-btn>
+    <v-btn size="large" color="red white--text" v-else @click="removeTeam">
+      <v-progress-circular
+        v-if="loading"
+        indeterminate
+        size="24"
+        color="white"
+      ></v-progress-circular>
+      <span v-else>Leave Team</span>
+    </v-btn>
   </v-row>
 </template>
 
@@ -160,6 +169,7 @@ import { AxiosError } from 'axios'
 import { notify } from '@kyvg/vue3-notification'
 const teamStore = useTeamStore()
 const userStore = useUserStore()
+const loading = ref(false)
 
 onMounted(async () => {
   if (userStore.user!.teamId)
@@ -174,6 +184,7 @@ onMounted(async () => {
     })
 })
 const deleteTeam = () => {
+  loading.value = true
   teamStore.deleteTeam().catch((error: AxiosError | any) => {
     if (error instanceof AxiosError && error.response) {
       notify({
@@ -185,6 +196,7 @@ const deleteTeam = () => {
   })
 }
 const removeTeam = () => {
+  loading.value = true
   teamStore.removeTeam().catch((error: AxiosError | any) => {
     if (error instanceof AxiosError && error.response && error.response.status === 400) {
       notify({

@@ -26,7 +26,15 @@
       </v-col>
     </v-row>
     <v-row justify="center" class="mt-6 mb-5">
-      <v-btn size="large" color="black white--text" @click="joinTeam">Join Team</v-btn>
+      <v-btn size="large" color="black white--text" @click="joinTeam">
+        <v-progress-circular
+          v-if="loading"
+          indeterminate
+          size="24"
+          color="white"
+        ></v-progress-circular>
+        <span v-else>JOIN TEAM</span>
+      </v-btn>
     </v-row>
     <v-row justify="center" class="mt-5 mb-5">
       <p>Get the join code from your team leader</p>
@@ -41,14 +49,18 @@ import { ref } from 'vue'
 import { useTeamStore } from '@/stores/team'
 import { AxiosError } from 'axios'
 import { notify } from '@kyvg/vue3-notification'
-const teamStore = useTeamStore()
 
+const loading = ref(false)
+const teamStore = useTeamStore()
 const joinCode = ref('')
 
-const joinTeam = () => {
-  teamStore.joinTeam(joinCode.value).catch((error: AxiosError | any) => {
-    if (error instanceof AxiosError && error.response) {
-      if (error.response.status === 404) {
+const joinTeam = async () => {
+  loading.value = true
+  try {
+    await teamStore.joinTeam(joinCode.value)
+  } catch (error) {
+    console.error('Error joining team:', error)
+    if (error.response.status === 404) {
         notify({
           title: 'Join Team',
           type: 'error',
@@ -61,8 +73,9 @@ const joinTeam = () => {
           text: 'Join Team Error'
         })
       }
-    }
-  })
+  } finally {
+    loading.value = false
+  }
 }
 
 const { mobile } = useDisplay()
