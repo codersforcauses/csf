@@ -39,48 +39,66 @@
       </tr>
     </thead>
     <tbody v-if="activeButton === 'Individual'">
-      <tr v-if="currentUser" style="border-collapse: separate; border-spacing: 20px;">
+      <tr v-if="currentUser" style="border-collapse: separate; border-spacing: 20px">
         <td v-if="currentUser.rank < 4" class="text-right text-subtitle-1">
-          <v-icon icon="mdi-trophy" size="25px" :class="getTrophyColour(currentUser.rank)" /> {{ currentUser.rank }}
+          <v-icon icon="mdi-trophy" size="25px" :class="getTrophyColour(currentUser.rank)" />
+          {{ currentUser.rank }}
         </td>
         <td v-else class="text-right text-subtitle-1">{{ currentUser.rank }}</td>
         <td class="text-subtitle-1">{{ currentUser.username }}</td>
         <td>
-          <v-chip color="green" class="rounded text-h6 w-100 d-flex justify-center">{{ currentUser.totalMileage }}</v-chip>
+          <v-chip color="green" class="rounded text-h6 w-100 d-flex justify-center">{{
+            currentUser.totalMileage
+          }}</v-chip>
           <!-- <p class="text-subtitle-2 text-center">TOTAL MILEAGE</p> -->
         </td>
       </tr>
       <!-- What follows is a dumb way of making a gap in the table -->
-      <tr v-if="currentUser"><td id="gap"></td><td id="gap"></td><td id="gap"></td></tr> 
+      <tr v-if="currentUser">
+        <td id="gap"></td>
+        <td id="gap"></td>
+        <td id="gap"></td>
+      </tr>
       <tr v-for="item in filteredUserLeaderboard" :key="item.username">
         <td v-if="item.rank < 4" class="text-right text-subtitle-1">
-          <v-icon icon="mdi-trophy" size="25px" :class="getTrophyColour(item.rank)" /> {{ item.rank }}
+          <v-icon icon="mdi-trophy" size="25px" :class="getTrophyColour(item.rank)" />
+          {{ item.rank }}
         </td>
         <td v-else class="text-right text-subtitle-1">{{ item.rank }}</td>
         <td class="text-subtitle-1">{{ item.username }}</td>
         <td>
-          <v-chip color="green" class="rounded text-h6 w-100 d-flex justify-center">{{ item.totalMileage }}</v-chip>
+          <v-chip color="green" class="rounded text-h6 w-100 d-flex justify-center">{{
+            item.totalMileage
+          }}</v-chip>
           <!-- <p class="text-subtitle-2 text-center">TOTAL MILEAGE</p> -->
         </td>
       </tr>
     </tbody>
     <tbody v-else>
-      <tr v-if="currentTeam" style="border-collapse: separate; border-spacing: 20px;">
+      <tr v-if="currentTeam" style="border-collapse: separate; border-spacing: 20px">
         <td v-if="currentTeam.rank < 4" class="text-right text-subtitle-1">
-          <v-icon icon="mdi-trophy" size="25px" :class="getTrophyColour(currentTeam.rank)" /> {{ currentTeam.rank }}
+          <v-icon icon="mdi-trophy" size="25px" :class="getTrophyColour(currentTeam.rank)" />
+          {{ currentTeam.rank }}
         </td>
         <td v-else class="text-right text-subtitle-1">{{ currentTeam.rank }}</td>
         <td class="text-subtitle-1">{{ currentTeam.name }}</td>
         <td>
-          <v-chip color="green" class="rounded text-h6 w-100 d-flex justify-center">{{ currentTeam.totalMileage }}</v-chip>
+          <v-chip color="green" class="rounded text-h6 w-100 d-flex justify-center">{{
+            currentTeam.totalMileage
+          }}</v-chip>
           <!-- <p class="text-subtitle-2 text-center">TOTAL MILEAGE</p> -->
         </td>
       </tr>
       <!-- What follows is a dumb way of making a gap in the table -->
-      <tr v-if="currentTeam"><td id="gap"></td><td id="gap"></td><td id="gap"></td></tr> 
+      <tr v-if="currentTeam">
+        <td id="gap"></td>
+        <td id="gap"></td>
+        <td id="gap"></td>
+      </tr>
       <tr v-for="item in filteredTeamLeaderboard" :key="item.name">
         <td v-if="item.rank < 4" class="text-right text-subtitle-1">
-          <v-icon icon="mdi-trophy" size="25px" :class="getTrophyColour(item.rank)" /> {{ item.rank }}
+          <v-icon icon="mdi-trophy" size="25px" :class="getTrophyColour(item.rank)" />
+          {{ item.rank }}
         </td>
         <td v-else class="text-right text-subtitle-1">{{ item.rank }}</td>
         <td>
@@ -88,7 +106,9 @@
           <p class="text-body-2 text-grey">{{ item.bio }}</p>
         </td>
         <td>
-          <v-chip color="green" class="rounded text-h6 w-100 d-flex justify-center">{{ item.totalMileage }}</v-chip>
+          <v-chip color="green" class="rounded text-h6 w-100 d-flex justify-center">{{
+            item.totalMileage
+          }}</v-chip>
           <!-- <p class="text-subtitle-2 text-center">TOTAL MILEAGE</p> -->
         </td>
       </tr>
@@ -120,39 +140,42 @@ const currentUser = ref<RankedUserLeaderboardEntry | undefined>()
 const currentTeam = ref<RankedTeamLeaderboardEntry | undefined>()
 
 const filteredUserLeaderboard = computed<RankedUserLeaderboardEntry[]>(() =>
-  userLeaderboard.value.filter((user) => user.username.toLowerCase().includes(searchQuery.value.toLowerCase()))
+  userLeaderboard.value.filter((user) =>
+    user.username.toLowerCase().includes(searchQuery.value.toLowerCase())
+  )
 )
 const filteredTeamLeaderboard = computed<RankedTeamLeaderboardEntry[]>(() =>
-  teamLeaderboard.value.filter((team) => team.name.toLowerCase().includes(searchQuery.value.toLowerCase()))
+  teamLeaderboard.value.filter((team) =>
+    team.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  )
 )
 
 function getTrophyColour(rank: number) {
   switch (rank) {
     case 1:
-      return "text-yellow-darken-1"
+      return 'text-yellow-darken-1'
     case 2:
-      return "text-blue-grey-lighten-1"
+      return 'text-blue-grey-lighten-1'
     default:
-      return "text-orange-darken-1"
+      return 'text-orange-darken-1'
   }
 }
 
 onMounted(async () => {
-  let userParam = {type:'users'} as GetLeaderboardParam
+  let userParam = { type: 'users' } as GetLeaderboardParam
   if (userStore.user) userParam.username = userStore.user.username
-  let teamParam = {type:'teams'} as GetLeaderboardParam
+  let teamParam = { type: 'teams' } as GetLeaderboardParam
   if (teamStore.team) teamParam.teamName = teamStore.team.name
-  let usersResult = await mileageStore.getLeaderboard(userParam) as UserLeaderboard
+  let usersResult = (await mileageStore.getLeaderboard(userParam)) as UserLeaderboard
   if (usersResult) {
     userLeaderboard.value = usersResult.leaderboard
     currentUser.value = usersResult.user
   }
-  let teamsResult = await mileageStore.getLeaderboard(teamParam) as TeamLeaderboard
+  let teamsResult = (await mileageStore.getLeaderboard(teamParam)) as TeamLeaderboard
   if (teamsResult) {
     teamLeaderboard.value = teamsResult.leaderboard
     currentTeam.value = teamsResult.team
-    }
-
+  }
 })
 </script>
 

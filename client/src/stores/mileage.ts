@@ -52,13 +52,15 @@ export const useMileageStore = defineStore('mileage', {
         })
     },
     async getLeaderboard(param: GetLeaderboardParam) {
-      return await server.get('mileage/get_leaderboard/', {
-        params: snakify(param)
-      }).then((res) => {
-        if (res.status == 200) {
-          return camelize(res.data) as unknown as UserLeaderboard | TeamLeaderboard
-        }
-      })
+      return await server
+        .get('mileage/get_leaderboard/', {
+          params: snakify(param)
+        })
+        .then((res) => {
+          if (res.status == 200) {
+            return camelize(res.data) as unknown as UserLeaderboard | TeamLeaderboard
+          }
+        })
     }
   }
 })
