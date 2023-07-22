@@ -30,26 +30,17 @@ import {
 } from 'chart.js'
 import type { ChartDataset } from 'chart.js'
 import LineWithLineChart from '../types/LineWithLineChart'
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, watch } from 'vue'
 import type Mileage from '../types/mileage'
-import { useMileageStore } from '@/stores/mileage'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend) // creating instance of chart
 
-const mileageStore = useMileageStore()
-const dataPoints = ref()
-const loading = ref(true)
 const filteredData = ref<Mileage[]>()
 const labels = computed(() => filteredData.value?.map((data) => data.date))
 const data = computed(() => filteredData.value?.map((data) => data.kilometres))
 const activeButton = ref('This Week')
-const props = defineProps<{teamPage : boolean}>()
+const props = defineProps<{dataPoints: Mileage[]}>()
 
-function updateData() {
-  mileageStore.getMileageByTeam()
-  mileageStore.getMileageByUser()
-  dataPoints.value = props.teamPage ? mileageStore.mileageByTeam : mileageStore.mileageByUser
-}
 function filterData(range: string) {
   activeButton.value = range
   let minDate
@@ -63,7 +54,7 @@ function filterData(range: string) {
   } else if (range === 'This Year') {
     minDate = new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), currentDate.getDate())
   } else {
-    minDate = dataPoints.value.reduce((min, obj) => {
+    minDate = props.dataPoints.reduce((min, obj) => {
       const currentDate = new Date(obj.date)
       return currentDate < min ? currentDate : min
     }, new Date())
@@ -107,7 +98,7 @@ function filterData(range: string) {
     }
 
     //making sure dates that don't exist in the database are still included as 0 km
-    const matchingData = dataPoints.value.find((obj) => obj.date === dateString)
+    const matchingData = props.dataPoints.find((obj) => obj.date === dateString)
     filteredData.value?.unshift({
       mileageId: matchingData ? matchingData.mileageId : -1,
       user: matchingData ? matchingData.user : -1,
@@ -118,8 +109,6 @@ function filterData(range: string) {
   }
 }
 
-
-updateData()
 filterData('This Week')
 
 // GRAPH DATA
