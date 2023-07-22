@@ -20,7 +20,15 @@
         <v-text-field bg-color="white" label="Team Name" v-model="form.name" class="mx-5" />
         <v-textarea bg-color="white" label="Bio" v-model="form.bio" class="mx-5" />
         <v-card-actions class="justify-center mb-4">
-          <v-btn variant="elevated" color="primaryRed" @click="submitForm">Create</v-btn>
+          <v-btn variant="elevated" color="primaryRed" @click="submitForm">
+            <v-progress-circular
+              v-if="loading"
+              indeterminate
+              size="24"
+              color="white"
+            ></v-progress-circular>
+            <span v-else>Create</span>
+          </v-btn>
         </v-card-actions>
       </form>
     </v-card>
@@ -34,7 +42,7 @@ import { useTeamStore } from '@/stores/team'
 const teamStore = useTeamStore()
 
 const isFullscreen = ref(false)
-
+const loading = ref(false)
 const dialog = ref(false)
 const form = ref({
   name: '',
@@ -44,7 +52,9 @@ const form = ref({
 // formValidation = check if team name already exists
 
 const submitForm = () => {
+  loading.value = true
   teamStore.createTeam({ ...form.value })
+  // loading.value = false
 }
 
 // never used vvv

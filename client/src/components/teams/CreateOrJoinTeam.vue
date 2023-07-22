@@ -26,7 +26,15 @@
       </v-col>
     </v-row>
     <v-row justify="center" class="mt-6 mb-5">
-      <v-btn size="large" color="black white--text" @click="joinTeam">Join Team</v-btn>
+      <v-btn size="large" color="black white--text" @click="joinTeam">
+        <v-progress-circular
+          v-if="loading"
+          indeterminate
+          size="24"
+          color="white"
+        ></v-progress-circular>
+        <span v-else>JOIN TEAM</span>
+      </v-btn>
     </v-row>
     <v-row justify="center" class="mt-5 mb-5">
       <p>Get the join code from your team leader</p>
@@ -39,12 +47,20 @@ import { useDisplay } from 'vuetify'
 import NewTeamModal from '@/components/teams/NewTeamModal.vue'
 import { ref } from 'vue'
 import { useTeamStore } from '@/stores/team'
-const teamStore = useTeamStore()
 
+const loading = ref(false)
+const teamStore = useTeamStore()
 const joinCode = ref('')
 
-const joinTeam = () => {
-  teamStore.joinTeam(joinCode.value)
+const joinTeam = async () => {
+  loading.value = true
+  try {
+    await teamStore.joinTeam(joinCode.value)
+  } catch (error) {
+    console.error('Error joining team:', error)
+  } finally {
+    loading.value = false
+  }
 }
 
 const { mobile } = useDisplay()

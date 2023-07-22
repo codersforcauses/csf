@@ -101,6 +101,7 @@ const removeMember = (memberId: number) => {
   }
 }
 
+const loading = ref(false)
 const display = ref(false)
 const memberId = ref(0)
 
@@ -218,6 +219,7 @@ const showDialog = computed({
             :action="'delete'"
             :object="'subteam'"
             :use-done-for-button="false"
+            :loading="loading"
             @handle-confirm="$emit('removeSubTeam', selectedSubteam.teamId)"
           />
         </div>

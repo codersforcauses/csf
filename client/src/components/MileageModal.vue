@@ -101,9 +101,15 @@
           </v-row>
         </v-container>
         <v-card-actions class="d-flex justify-center">
-          <v-btn @click="handleSubmit" :disabled="!form" color="primaryRed" variant="elevated"
-            >ADD</v-btn
-          >
+          <v-btn @click="handleSubmit" :disabled="!form" color="primaryRed" variant="elevated">
+            <v-progress-circular
+              v-if="loading"
+              indeterminate
+              size="24"
+              color="white"
+            ></v-progress-circular>
+            <span v-else>ADD</span>
+          </v-btn>
         </v-card-actions>
       </v-form>
       <v-spacer />
@@ -120,7 +126,7 @@ import { useMileageStore } from '@/stores/mileage'
 
 const userStore = useUserStore()
 const mileageStore = useMileageStore()
-
+const loading = ref(false)
 const isFullscreen = ref(false)
 const props = defineProps(['modelValue'])
 const emit = defineEmits(['update:modelValue', 'handleSubmit'])
@@ -146,10 +152,12 @@ const value = computed({
 })
 
 const handleSubmit = async () => {
+  loading.value = true
   const user = userStore.user!.id
   await mileageStore.postMileage(user, parseFloat(mileage.value.kilometres), mileage.value.date)
   emit('update:modelValue', false)
   emit('handleSubmit')
+  loading.value = false
 }
 
 function setMinAndMaxDate() {
