@@ -12,6 +12,6 @@ def send_new_user_to_admin(sender, instance, created, **kwargs):
             'A User has registered with CSF',
             '{} has registered with CSF'.format(instance.first_name + " " + instance.last_name),
             settings.EMAIL_ADDRESS_FROM,
-            User.objects.filter(is_superuser=True).values_list('email', flat=True),
+            [settings.EMAIL_ADDRESS_FROM],
         )
         email.send()
