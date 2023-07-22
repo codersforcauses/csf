@@ -30,14 +30,13 @@ import {
 } from 'chart.js'
 import type { ChartDataset } from 'chart.js'
 import LineWithLineChart from '../types/LineWithLineChart'
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 import type Mileage from '../types/mileage'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend) // creating instance of chart
 
-const filteredData = ref<Mileage[]>()
-const labels = computed(() => filteredData.value?.map((data) => data.date))
-const data = computed(() => filteredData.value?.map((data) => data.kilometres))
+const labels = ref<string[]>([])
+const data = ref<number[]>([])
 const activeButton = ref('This Week')
 const props = defineProps<{ dataPoints: Mileage[] }>()
 
@@ -60,31 +59,16 @@ function filterData(range: string) {
     }, new Date())
   }
 
-  filteredData.value = []
+  labels.value = []
+  data.value = []
   while (currentDate >= minDate) {
     const dateString = currentDate.toISOString().split('T')[0]
     // changing labels based on the range selected
     let datalabel = ''
 
-    const daysOfWeek = ['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri']
-    const monthsOfYear = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sept',
-      'Oct',
-      'Nov',
-      'Dec'
-    ]
-
     const day = currentDate.getDate()
-    const weekday = daysOfWeek[currentDate.getDay()]
-    const month = monthsOfYear[currentDate.getMonth()]
+    const weekday = currentDate.toLocaleString('default', { weekday: 'short' })
+    const month = currentDate.toLocaleString('default', { month: 'short' })
     const year = currentDate.getFullYear()
 
     if (range === 'This Week') {
@@ -98,13 +82,9 @@ function filterData(range: string) {
     }
 
     //making sure dates that don't exist in the database are still included as 0 km
-    const matchingData = props.dataPoints.find((obj) => obj.date === dateString)
-    filteredData.value?.unshift({
-      mileageId: matchingData ? matchingData.mileageId : -1,
-      user: matchingData ? matchingData.user : -1,
-      kilometres: matchingData ? matchingData.kilometres : 0,
-      date: datalabel ? datalabel : dateString
-    })
+    const km = props.dataPoints.reduce((acc, cur) => cur.date === dateString ? acc + cur.kilometres : acc, 0)
+    labels.value.unshift(datalabel)
+    data.value.unshift(km)
     currentDate.setDate(currentDate.getDate() - 1)
   }
 }
