@@ -9,8 +9,8 @@ from django.core.mail import EmailMessage
 def send_new_user_to_admin(sender, instance, created, **kwargs):
     if created:
         email = EmailMessage(
-            'A User has registered with CSF',
-            '{} has registered with CSF'.format(instance.first_name + " " + instance.last_name),
+            'Stride For Education: New User Registered',
+            '{} has registered an account on Stride For Education'.format(instance.first_name + " " + instance.last_name),
             settings.EMAIL_ADDRESS_FROM,
             [settings.EMAIL_ADDRESS_FROM],
         )
