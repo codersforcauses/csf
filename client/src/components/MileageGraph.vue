@@ -4,7 +4,7 @@
       <v-btn
         :class="activeButton === range ? 'bg-green' : 'text-green'"
         variant="tonal"
-        v-for="range in ['This Week', 'This Month', 'This Year', 'Overall']"
+        v-for="range in ranges"
         :key="range"
         rounded="xl"
         size="small"
@@ -32,16 +32,19 @@ import type { ChartDataset } from 'chart.js'
 import LineWithLineChart from '../types/LineWithLineChart'
 import { ref, computed } from 'vue'
 import type Mileage from '../types/mileage'
+import { watch } from 'vue'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend) // creating instance of chart
 
 const labels = ref<string[]>([])
 const data = ref<number[]>([])
-const activeButton = ref('This Week')
+const ranges = ['This Week', 'This Month', 'This Year', 'Overall'] as const
+const activeButton = ref<typeof ranges[number]>('This Week')
 const props = defineProps<{ dataPoints: Mileage[] }>()
 
-function filterData(range: string) {
-  activeButton.value = range
+function filterData(range?: typeof ranges[number]) {
+  if (range) activeButton.value = range
+  else range = activeButton.value
   let minDate
   const currentDate = new Date()
 
@@ -89,7 +92,9 @@ function filterData(range: string) {
   }
 }
 
-filterData('This Week')
+// filterData()
+
+watch(() => props.dataPoints, () => filterData())
 
 // GRAPH DATA
 const graphData = computed(() => {
