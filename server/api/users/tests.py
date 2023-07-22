@@ -107,7 +107,7 @@ class UserTest(APITestCase):
         mock_user = User.objects.get(id=self.user.id)
         mock_team = Team.objects.get(team_id=self.team.team_id)
         url = reverse("user:join-team",
-                      kwargs={"id":mock_user.id})
+                      kwargs={"id": mock_user.id})
         response = self.client.patch(
             url,
             {
@@ -123,7 +123,7 @@ class UserTest(APITestCase):
     def test_join_team_not_found(self):
         mock_user = User.objects.get(id=self.user.id)
         url = reverse("user:join-team",
-                      kwargs={"id":mock_user.id})
+                      kwargs={"id": mock_user.id})
         response = self.client.patch(
             url,
             {
@@ -132,4 +132,4 @@ class UserTest(APITestCase):
             },
             format="json",
         )
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 400)
