@@ -121,7 +121,7 @@ def join_team(request, id):
     try:
         team = Team.objects.get(join_code=request.data['join_code'])
     except Team.DoesNotExist:
-        return Response("Team does not exist", status=400)
+        return Response("Team does not exist", status=404)
 
     data = {
         'team_id': team.team_id,

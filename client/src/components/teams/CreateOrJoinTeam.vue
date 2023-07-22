@@ -47,19 +47,20 @@ const joinCode = ref('')
 
 const joinTeam = () => {
   teamStore.joinTeam(joinCode.value).catch((error: AxiosError | any) => {
-    if (error instanceof AxiosError && error.response && error.response.status === 404) {
-      notify({
+    if (error instanceof AxiosError && error.response) {
+      if (error.response.status === 404) {
+        notify({
           title: 'Join Team',
           type: 'error',
           text: 'Team Does Not Exists'
         })
-      }
-    else if(error instanceof AxiosError && error.response && error.response.status === 404){
-      notify({
+      } else if (error.response.status === 400) {
+        notify({
           title: 'Join Team',
           type: 'error',
           text: 'Join Team Error'
         })
+      }
     }
   })
 }
