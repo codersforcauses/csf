@@ -33,50 +33,62 @@
   <v-table fixed-header class="mx-8">
     <thead>
       <tr>
-        <th class="text-right w-0">Rank</th>
-        <th class="text-left">Name</th>
-        <th class="text-left">Mileage</th>
+        <th id="rankColumn" class="text-right">Rank</th>
+        <th id="nameColumn" class="text-left">Name</th>
+        <th id="mileageColumn" class="text-left">Mileage</th>
       </tr>
     </thead>
     <tbody v-if="activeButton === 'Individual'">
       <tr v-if="currentUser" style="border-collapse: separate; border-spacing: 20px;">
-        <td v-if="currentUser.rank < 4" class="text-right w-0">
+        <td v-if="currentUser.rank < 4" class="text-right text-subtitle-1">
           <v-icon icon="mdi-trophy" size="20px" :class="getTrophyColour(currentUser.rank)" /> {{ currentUser.rank }}
         </td>
-        <td v-else class="text-right w-0">{{ currentUser.rank }}</td>
-        <td>{{ currentUser.username }}</td>
-        <td>{{ currentUser.totalMileage }}</td>
+        <td v-else class="text-right text-subtitle-1">{{ currentUser.rank }}</td>
+        <td class="text-subtitle-1">{{ currentUser.username }}</td>
+        <td>
+          <v-chip color="green" class="rounded text-h6">{{ currentUser.totalMileage }}</v-chip>
+          <p class="text-subtitle-2">TOTAL MILEAGE</p>
+        </td>
       </tr>
       <!-- What follows is a dumb way of making a gap in the table -->
       <tr v-if="currentUser"><td></td><td></td><td></td></tr> 
       <tr v-for="item in filteredUserLeaderboard" :key="item.username">
-        <td v-if="item.rank < 4" class="text-right w-0">
-          <v-icon icon="mdi-trophy" size="20px" :class="getTrophyColour(item.rank)" /> {{ item.rank }}
+        <td v-if="item.rank < 4" class="text-right text-subtitle-1">
+          <v-icon icon="mdi-trophy" size="25px" :class="getTrophyColour(item.rank)" /> {{ item.rank }}
         </td>
-        <td v-else class="text-right w-0">{{ item.rank }}</td>
-        <td>{{ item.username }}</td>
-        <td>{{ item.totalMileage }}</td>
+        <td v-else class="text-right text-subtitle-1">{{ item.rank }}</td>
+        <td class="text-subtitle-1">{{ item.username }}</td>
+        <td>
+          <v-chip color="green" class="rounded text-h6">{{ item.totalMileage }}</v-chip>
+          <p class="text-subtitle-2">TOTAL MILEAGE</p>
+        </td>
       </tr>
     </tbody>
     <tbody v-else>
       <tr v-if="currentTeam" style="border-collapse: separate; border-spacing: 20px;">
-        <td v-if="currentTeam.rank < 4" class="text-right w-0">
+        <td v-if="currentTeam.rank < 4" class="text-right text-subtitle-1">
           <v-icon icon="mdi-trophy" size="20px" :class="getTrophyColour(currentTeam.rank)" /> {{ currentTeam.rank }}
         </td>
-        <td v-else class="text-right w-0">{{ currentTeam.rank }}</td>
-        <td>{{ currentTeam.name }}</td>
-        <td>{{ currentTeam.totalMileage }}</td>
+        <td v-else class="text-right text-subtitle-1">{{ currentTeam.rank }}</td>
+        <td class="text-subtitle-1">{{ currentTeam.name }}</td>
+        <td>
+          <v-chip color="green" class="rounded text-h6">{{ currentTeam.totalMileage }}</v-chip>
+          <p class="text-subtitle-2">TOTAL MILEAGE</p>
+        </td>
       </tr>
       <!-- What follows is a dumb way of making a gap in the table -->
       <tr v-if="currentTeam"><td></td><td></td><td></td></tr> 
       <tr v-for="item in filteredTeamLeaderboard" :key="item.name">
-        <td v-if="item.rank < 4" class="text-right w-0">
-          <v-icon icon="mdi-trophy" size="20px" :class="getTrophyColour(item.rank)" /> {{ item.rank }}
+        <td v-if="item.rank < 4" class="text-right text-subtitle-1">
+          <v-icon icon="mdi-trophy" size="25px" :class="getTrophyColour(item.rank)" /> {{ item.rank }}
         </td>
-        <td v-else class="text-right w-0">{{ item.rank }}</td>
-        <td>{{ item.name }}</td>
+        <td v-else class="text-right text-subtitle-1">{{ item.rank }}</td>
+        <td class="text-subtitle-1">{{ item.name }}</td>
         <!--  use bio too -->
-        <td>{{ item.totalMileage }}</td>
+        <td>
+          <v-chip color="green" class="rounded text-h6">{{ item.totalMileage }}</v-chip>
+          <p class="text-subtitle-2">TOTAL MILEAGE</p>
+        </td>
       </tr>
     </tbody>
   </v-table>
@@ -173,5 +185,17 @@ onMounted(async () => {
 
 #title {
   font-family: Hackney !important;
+}
+
+#rankColumn {
+  width: 80px;
+}
+
+#nameColumn {
+  width: auto;
+}
+
+#mileageColumn {
+  width: 33%;
 }
 </style>
