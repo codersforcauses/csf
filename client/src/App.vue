@@ -12,7 +12,7 @@ import { RouterView } from 'vue-router'
     classes="csf-notification"
     position="bottom right"
     width="350px"
-    duration="3"
+    duration="600"
     closeOnClick="True"
   />
 </template>
@@ -153,23 +153,15 @@ body {
   margin-right: 3%;
   font-size: 14px;
   color: #ffffff;
+  background: #44a4fc;
+  text-align: center !important;
+}
 
-  .notification-title {
-    text-align: center;
-  }
-
-  .notification-content {
-    text-align: center;
-  }
-
-  &.success {
+.csf-notification.success {
     background: rgb(0, 157, 79);
-    border-left-color: rgb(0, 157, 79);
   }
 
-  &.error {
-    background: rgb(237, 28, 36);
-    border-left-color: rgb(237, 28, 36);
-  }
+.csf-notification.error {
+  background: rgb(237, 28, 36);
 }
 </style>
