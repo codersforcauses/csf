@@ -86,10 +86,8 @@
           <v-chip color="green" class="rounded text-h6 w-100 d-flex justify-center">{{
             currentTeam.totalMileage
           }}</v-chip>
-          <!-- <p class="text-subtitle-2 text-center">TOTAL MILEAGE</p> -->
         </td>
       </tr>
-      <!-- What follows is a dumb way of making a gap in the table -->
       <tr v-if="currentTeam">
         <td id="gap"></td>
         <td id="gap"></td>
@@ -109,7 +107,6 @@
           <v-chip color="green" class="rounded text-h6 w-100 d-flex justify-center">{{
             item.totalMileage
           }}</v-chip>
-          <!-- <p class="text-subtitle-2 text-center">TOTAL MILEAGE</p> -->
         </td>
       </tr>
     </tbody>
