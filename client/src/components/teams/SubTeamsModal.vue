@@ -19,7 +19,7 @@ const props = defineProps({
     type: Boolean,
     required: true
   },
-  avaliableMemeberList: {
+  availableMemeberList: {
     type: Array as PropType<MemberView[]>,
     required: true
   }
@@ -29,7 +29,7 @@ let selectedSubteamCopy: SubteamView = reactive({
   name: '',
   teamId: 0,
   subteamId: 0,
-  totalKM: '',
+  totalKm: '',
   members: [
     {
       id: 13,
@@ -49,7 +49,7 @@ watch(
       name: first.name,
       teamId: first.teamId,
       subteamId: first.subteamId,
-      totalKM: first.totalKM,
+      totalKm: first.totalKm,
       members: first.members
     })
   }

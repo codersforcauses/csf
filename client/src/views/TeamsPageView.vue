@@ -18,12 +18,13 @@ const subTeamStore = useSubTeamStore()
 const { user } = storeToRefs(userStore)
 
 onMounted(async () => {
-  try {
-    await subTeamStore.getSubUsers(user.teamId)
-  } catch (error) {
-    console.log(error)
-  }
-  console.log(subTeamStore.info)
+  // try {
+  //   await subTeamStore.getSubUsers(user.value?.teamId)
+  //   console.log(`here is the userid`);
+  //   console.log(user.value?.teamId)
+  // } catch (error) {
+  //   console.log(error)
+  // }
 })
 
 onMounted(async () => {})

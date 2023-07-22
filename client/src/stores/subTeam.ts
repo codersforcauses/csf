@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import server from '@/utils/server'
-import type { Subteam, SubteamView, MemberView } from '@/types/subteam'
-import type { User } from '@/types/user'
+import type { Subteam, SubteamView, MemberView, UserView } from '@/types/subteam'
 import camelize from 'camelize-ts'
 import snakify, { type Snakify } from 'snakify-ts'
 
@@ -9,57 +8,26 @@ import snakify, { type Snakify } from 'snakify-ts'
 import { useUserStore } from './user'
 
 const urls = {
-  createSubteam: () => `create/`,
-  getSubteams: (teamId: number) => `get_subteams/${teamId}`,
-  updateSubteam: (subTeamId: number) => `update_subteam/${subTeamId}`,
-  deleteSubteam: (subTeamId: number) => `delete_subteam/${subTeamId}`,
-  getSubteamMembers: (subTeamId: number) => `get_users/${subTeamId}`,
-  getAvailableMembers: () => `get_available_users/`,
-  editUserSubteam: (userId: number) => `edit_user/${userId}`
+  createSubteam: () => `subteam/create/`,
+  getSubteams: (teamId: number) => `subteam/get_subteams/${teamId}`,
+  updateSubteam: (subTeamId: number) => `subteam/update_subteam/${subTeamId}`,
+  deleteSubteam: (subTeamId: number) => `subteam/delete_subteam/${subTeamId}`,
+  getSubteamMembers: (subTeamId: number) => `subteam/get_users/${subTeamId}`,
+  getAvailableMembers: () => `subteam/get_available_users/`,
+  editUserSubteam: (userId: number) => `subteam/edit_user/${userId}`
 }
 
 export const useSubTeamStore = defineStore('subTeam', {
   state: () => ({
     info: <any>[],
     subteams: [] as Subteam[],
-    teamMembers: [] as User[],
-    availableMemberList: [] as User[],
-    subteamMembers: [] as User[],
+    teamMembers: [] as UserView[],
+    availableMemberList: [] as UserView[],
+    subteamMembers: [] as UserView[],
     subteamsView: [] as SubteamView[]
   }),
 
-  getters: {
-
-    //   const totalKM = 0
-    //   state.subteams.forEach((subteam) => {
-    //     // const members = state.teamMembers.filter(
-    //     //   (user) => {
-    //     //     //filter members for each subteam
-    //     //     if (user.subteamId){
-    //     //       return user.subteamId == subteam.subteamId
-    //     //     }
-    //     //   }
-    //     // );
-
-    //     //convert from user type to memberview type
-    //     membersView = state.subteamMembers.map((member) => {
-    //       return {
-    //         id: member.id,
-    //         firstname: member.firstName,
-    //         lastname: member.lastName,
-    //         avatar: member.avatar
-    //       }
-    //     })
-
-    //     view.push({
-    //       ...subteam,
-    //       totalKM: totalKM.toString(),
-    //       members: membersView
-    //     })
-    //   })
-    //   return view
-    // }
-  },
+  getters: {},
 
   actions: {
     // keep this optional for now as to silence warning in teampagesview.vue
@@ -114,68 +82,75 @@ export const useSubTeamStore = defineStore('subTeam', {
       const api = urls.getSubteams(teamId)
       const { data, status } = await server.get(api)
       if (status === 200) {
-        this.subteams = data
+        this.subteams = camelize(data as Snakify<Subteam>[]);
       }
    },
    async updateSubteams(teamId: number) {
     const api = urls.getSubteams(teamId);
     const { data, status } = await server.get(api);
     if (status === 200) {
-        this.subteams = data;
+        this.subteams = camelize(data as Snakify<Subteam>[]);
     }
     },
     async getAvailableMembers() {
         const api = urls.getAvailableMembers();
         const { data, status } = await server.get(api);
         if (status === 200) {
-            this.availableMemberList = data;
+            this.availableMemberList = camelize(data as Snakify<UserView>[]) ;
         }
     }, 
     async getSubteamMembers(subteamId: number) {
+      
       const api = urls.getSubteamMembers(subteamId)
+      console.log("hello" + api)
       const { data, status } = await server.get(api)
       if (status === 200) {
-        this.subteamMembers = data
+        console.log("subteam members: " + JSON.stringify(data))
+        this.subteamMembers = camelize(data as Snakify<UserView>[]);
+        
+        // console.log("subteam members: " + this.subteamMembers[0])
       }
     },
     async editUserSubteam(userId: number) {
         const api = urls.editUserSubteam(userId);
         const { data, status } = await server.put(api);
         if (status === 200) {
-            this.subteamMembers = data;
+            this.subteamMembers = camelize(data as Snakify<UserView>[]);
         }
     },
-    async getSubteams(teamId: number) {
-      const api = urls.getSubteams(teamId);
-      const { data, status } = await server.get(api);
-      if (status === 200) {
-          this.subteams = data;
-      }
-    },
-       //get all the subteams and their members
+    //get all the subteams and their members
     async getSubteamsView(teamId: number) {
+      this.subteamsView = []
+
       let membersView: MemberView[] = []
-      const totalKM = 0
+      const totalKm = 0
 
-      this.getSubteams(teamId)
-      this.subteams.forEach((subteam) => {
+     await this.getSubteams(teamId)
+      console.log("subteams loaded")
 
+      this.subteams.forEach(async (subteam) => {
         //convert from user type to memberview type
-        this.getSubteamMembers(subteam.subteamId)
+        console.log("subteam: " + subteam.subteamId)
+        await  this.getSubteamMembers(subteam.subteamId)
+        console.log("subteam members loaded")
+
         membersView = this.subteamMembers.map((member) => {
             return {
               id: member.id,
-              firstname: member.firstName,
-              lastname: member.lastName,
+              firstName: member.firstName,
+              lastName: member.lastName,
               avatar: member.avatar
             }
           });
-        this.subteamsView.push({
+        
+        const data = snakify({
           ...subteam,
-          totalKM: totalKM.toString(),
-          members: membersView
+          totalKm: totalKm.toString() + 'KM',
+          members: membersView          
         })
+        this.subteamsView.push(camelize(data as Snakify<SubteamView>))
       });
+      console.log("subteams view loaded")
     },    
   }
 })

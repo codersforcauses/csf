@@ -90,9 +90,13 @@ class UserUpdateSerializer(ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = [
+            "id",
+            "username",
             "first_name",
             "last_name",
             "email",
             "subteam_id",
             "team_id",
+            "avatar",
+            "team_admin"
         ]
