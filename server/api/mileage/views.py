@@ -6,7 +6,6 @@ from ..users.models import User
 from ..team.models import Team
 from .serializers import MileageSerializer, UserSerializer, UserLeaderboardSerializer, TeamLeaderboardSerializer  # , PostMileageSerializer
 from django.core.exceptions import ObjectDoesNotExist
-import copy
 
 import datetime
 
@@ -106,7 +105,7 @@ def get_rank_and_mileage_from_leaderboard(leaderboard, username, field_name):
             index = i
             mileage = leaderboard[i]['total_mileage']
             rank = i + 1
-        elif mileage != -1: 
+        elif mileage != -1:
             # we step backwards through the leaderboard until we find a user/team with greater
             # mileage, or until we've gone the whole way back
             if leaderboard[i]['total_mileage'] > mileage:
