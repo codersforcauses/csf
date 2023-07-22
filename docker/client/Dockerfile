@@ -7,11 +7,13 @@ WORKDIR /app
 COPY /docker/client/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Copy Application code into a directory called `app`
-COPY ./client /app
+COPY ./client/package.json ./client/yarn.lock ./
 
 # Install ALL Dependencies
 RUN yarn install
+
+# Copy Application code into a directory called `app`
+COPY ./client /app
 
 # ========================================
 # ---- Executed at Container Runtime ----

@@ -111,7 +111,6 @@
               </v-row>
               <v-row align="center" justify="center">
                 <v-col cols="auto">
-                  <!-- todo add in routing to login modal when its ready -->
                   <v-btn
                     variant="text"
                     color="secondaryBlue"
@@ -161,15 +160,20 @@
                 </v-col>
                 <v-row dense class="px-10">
                   <v-col v-for="avatar in avatarPaths" :key="avatar.url" cols="4">
-                    <div class="text-center py-3">
-                      <v-avatar
-                        size="70"
-                        @click="selectAvatar(avatar.url)"
-                        :class="{ 'avatar-selected': avatar.isSelected === true }"
-                      >
-                        <v-img :src="`/avatars/${avatar.url}`" :alt="avatar.alt"></v-img>
-                      </v-avatar>
-                    </div>
+                    <v-hover v-slot:default="{ isHovering, props }">
+                      <div v-bind="props" class="text-center py-3">
+                        <v-avatar
+                          size="70"
+                          @click="selectAvatar(avatar.url)"
+                          :class="{
+                            'avatar-selected': avatar.isSelected === true,
+                            'avatar-hovered': isHovering === true
+                          }"
+                        >
+                          <v-img :src="`/avatars/${avatar.url}`" :alt="avatar.alt"></v-img>
+                        </v-avatar>
+                      </div>
+                    </v-hover>
                   </v-col>
                 </v-row>
                 <v-col cols="12">
@@ -217,7 +221,6 @@
                         ><a @click="openConsentModal">our privacy statement</a></span
                       >
                     </p>
-                    <p v-if="errorMsg" class="pt-5 pl-2" style="color: red">{{ errorMsg }}</p>
                   </v-col>
                 </v-row>
               </v-row>
@@ -235,8 +238,11 @@
               </v-row>
               <v-row align="center" justify="center">
                 <v-col cols="auto">
-                  <!-- todo add in routing to login modal when its ready -->
-                  <v-btn variant="text" color="secondaryBlue" style="font-size: 12px"
+                  <v-btn
+                    variant="text"
+                    color="secondaryBlue"
+                    style="font-size: 12px"
+                    @click="modalStore.login"
                     >Already Have an account?</v-btn
                   >
                 </v-col>
@@ -265,6 +271,7 @@ import camelize from 'camelize-ts'
 import { useModalStore } from '@/stores/modal'
 import { storeToRefs } from 'pinia'
 import { reactiveOmit } from '@vueuse/core'
+import { notify } from '@kyvg/vue3-notification'
 const userStore = useUserStore()
 const modalStore = useModalStore()
 
@@ -322,6 +329,11 @@ const submit = async () => {
       Object.assign(errors, initialErrors)
       await userStore.registerUser(reactiveOmit(state, 'confirmPassword'))
       modalStore.login()
+      notify({
+        title: 'Sign Up',
+        type: 'success',
+        text: 'Sign Up Successful'
+      })
     } catch (error: AxiosError | any) {
       console.debug(error)
       if (error instanceof AxiosError && error.message) {
@@ -334,6 +346,11 @@ const submit = async () => {
       } else {
         errorMsg.value = JSON.stringify(error)
       }
+      notify({
+        title: 'Sign Up',
+        type: 'error',
+        text: 'Sign Up Unsuccessful'
+      })
     }
   }
 }
@@ -383,8 +400,11 @@ watchEffect(async () => {
   border: 6px solid #345e9e !important;
 }
 
+.avatar-hovered {
+  cursor: pointer !important;
+}
+
 .mode-selected {
   background-color: #345e9e !important;
 }
 </style>
-@/stores/modal

@@ -2,11 +2,9 @@
   <div v-if="!loading">
     <v-container>
       <v-row class="ma-0 px-13 pt-4" align="center" justify="center">
-        <v-spacer />
         <v-col align="center">
-          <h1>Welcome back, {{ firstName }}</h1>
+          <h1>Welcome back, {{ username }}</h1>
         </v-col>
-        <v-spacer />
         <v-btn size="medium" icon="mdi-cog" variant="text" href="/settings" />
       </v-row>
       <v-divider />
@@ -60,9 +58,11 @@
                 ></div>
               </div>
             </v-col>
-            <v-col cols="3" sm="2" lg="1">
+            <v-col cols="4" sm="2" lg="1">
               <div :class="`length-label rounded-lg ${challenge.colour}`">
-                <h3 class="primaryWhite text-center">{{ challenge.length + 'KM' }}</h3>
+                <h3 class="primaryWhite text-center">
+                  {{ `${distanceTravelled}/${challenge.length}KM` }}
+                </h3>
               </div>
             </v-col>
           </v-row>
@@ -83,7 +83,7 @@ const userStore = useUserStore()
 const method = ref()
 const loading = ref(true)
 const user = ref()
-const firstName = ref()
+const username = ref()
 
 const getIconName = (medium: any) => {
   switch (medium) {
@@ -133,7 +133,7 @@ onMounted(async () => {
   if (userStore.user) {
     try {
       user.value = userStore.user
-      firstName.value = user.value.firstName
+      username.value = user.value.username
       getIconName(user.value.travelMethod)
       await mileageStore.getRecentMileage(userStore.user.id)
       updateChallengeProgress()

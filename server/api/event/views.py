@@ -24,15 +24,15 @@ def create_event(request):
 def get_events(request):
     if request.user.is_authenticated is True:
         if (request.user.team_id is not None):
-            events = Event.objects.filter(Q(is_public=True) | Q(team_id=request.user.team_id))
+            events = Event.objects.filter((Q(is_public=True) | Q(team_id=request.user.team_id)) & Q(is_archived=False))
             team_serializer = EventSerialiser(events, many=True)
             return Response(team_serializer.data)
         else:
-            events = Event.objects.filter(is_public=True)
+            events = Event.objects.filter(Q(is_public=True) & Q(is_archived=False))
             serializer = EventSerialiser(events, many=True)
             return Response(serializer.data)
     else:
-        events = Event.objects.filter(is_public=True)
+        events = Event.objects.filter(Q(is_public=True) & Q(is_archived=False))
         limited_serializer = EventSerialiser(events, many=True)
         return Response(limited_serializer.data)
 
@@ -51,7 +51,9 @@ def update_event(request, event_id):
                     serializer = EventSerialiser(instance=event, data=request.data)
                     if serializer.is_valid():
                         serializer.save()
-                    return Response(serializer.data, status=200)
+                        return Response(serializer.data, status=200)
+                    else:
+                        return Response(serializer.errors, status=400)
                 else:
                     return Response("Event is not private", status=403)
             else:

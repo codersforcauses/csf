@@ -37,30 +37,42 @@ Developers will create a mobile-first web-app which will enable participants to 
 
 ## Technologies
 
-Frontend
+### Frontend
 
-- Client
-  - [Vue3 (Composition API)](https://vuejs.org/)
-  - [TypeScript](https://www.typescriptlang.org/)
-  - [Pinia (State Manager)](https://pinia.vuejs.org/)
-  - [Vuetify (UI Components Library)](https://vuetifyjs.com/en/)
-- Testing
-  - [Cypress](https://www.cypress.io/)
-- Linting
-  - [ESLint](https://eslint.org/)
-- Formatting
-  - [Prettier](https://prettier.io/)
+#### Client
 
-Backend
+- [Vue3 (Composition API)](https://vuejs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Pinia (State Manager)](https://pinia.vuejs.org/)
+- [Vuetify (UI Components Library)](https://vuetifyjs.com/en/)
 
-- Web Server
-  - [Django](https://www.djangoproject.com/)
-- Database
-  - [PostgreSQL](https://www.postgresql.org/)
-- Linting
-  - [flake8](https://flake8.pychond.org/)
+#### Linting
 
-Other
+- [ESLint](https://eslint.org/)
+
+#### Formatting
+
+- [Prettier](https://prettier.io/)
+
+---
+
+### Backend
+
+#### Web Server
+
+- [Django](https://www.djangoproject.com/)
+
+#### Database
+
+- [PostgreSQL](https://www.postgresql.org/)
+
+#### Linting
+
+- [flake8](https://flake8.pychond.org/)
+
+---
+
+### Other
 
 - [Docker](https://www.docker.com/)
 - [MkDocs](https://www.mkdocs.org/)

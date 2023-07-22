@@ -16,10 +16,9 @@
       >
         {{ event.isPublic ? 'Official' : 'Private' }}
       </v-chip>
-      <v-chip v-if="event.isArchived"> Archived </v-chip>
     </v-card-title>
     <v-card-subtitle class="text-primaryRed font-italic"
-      >{{ event.startDate }} - {{ event.endDate }}</v-card-subtitle
+      >{{ formatDate(event.startDate) }} - {{ formatDate(event.endDate) }}</v-card-subtitle
     >
     <v-card-text>{{ event.description }}</v-card-text>
   </v-card>
@@ -30,6 +29,9 @@
 import { useUserStore } from '@/stores/user'
 import { type Event } from '../types/event'
 import { storeToRefs } from 'pinia'
+
+import formatDate from '../utils/date'
+
 const props = defineProps<{ event: Event; backgroundColour: string }>()
 const emit = defineEmits(['edit'])
 

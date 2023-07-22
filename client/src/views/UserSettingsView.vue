@@ -46,15 +46,20 @@
     </v-col>
     <v-row dense class="px-10">
       <v-col v-for="avatar in avatarPaths" :key="avatar.url" cols="4">
-        <div class="text-center py-3">
-          <v-avatar
-            size="70"
-            @click="selectAvatar(avatar.url)"
-            :class="{ 'avatar-selected': avatar.isSelected === true }"
-          >
-            <v-img :src="`/avatars/${avatar.url}`" :alt="avatar.alt" />
-          </v-avatar>
-        </div>
+        <v-hover v-slot:default="{ isHovering, props }">
+          <div v-bind="props" class="text-center py-3">
+            <v-avatar
+              size="70"
+              @click="selectAvatar(avatar.url)"
+              :class="{
+                'avatar-selected': avatar.isSelected === true,
+                'avatar-hovered': isHovering === true
+              }"
+            >
+              <v-img :src="`/avatars/${avatar.url}`" :alt="avatar.alt" />
+            </v-avatar>
+          </div>
+        </v-hover>
       </v-col>
     </v-row>
     <v-col cols="12">
@@ -105,6 +110,7 @@ import { useUserStore } from '../stores/user'
 import { type UserSettings, type ChangeDetailsError } from '../types/user'
 import { AxiosError } from 'axios'
 import camelize from 'camelize-ts'
+import { notify } from '@kyvg/vue3-notification'
 
 const userStore = useUserStore()
 
@@ -117,6 +123,7 @@ const state = reactive<UserSettings>({
   travelMethod: userStore.user!.travelMethod
 })
 
+console.log(state.avatar)
 const errors = reactive<ChangeDetailsError>({
   username: '',
   email: '',
@@ -171,12 +178,21 @@ async function changeDetails() {
       // update the user details in the store
       userStore.getUser(newUsername)
       // TODO: replace this with a proper dialog/alert
-      alert('details successfully changed')
+      notify({
+        title: 'Change User Details',
+        type: 'success',
+        text: 'Details Successfully Changed'
+      })
     }
   } catch (error: AxiosError | any) {
     if (error instanceof AxiosError && error.response && error.response.status === 400) {
       let newErrors = camelize(error.response.data) as ChangeDetailsError
       Object.assign(errors, newErrors)
+      notify({
+        title: 'Change User Details',
+        type: 'error',
+        text: 'Error On Changing Details'
+      })
     }
   }
 }
@@ -189,6 +205,10 @@ function passwordChanged() {
 <style scoped>
 .avatar-selected {
   border: 6px solid #345e9e !important;
+}
+
+.avatar-hovered {
+  cursor: pointer !important;
 }
 
 .mode-selected {

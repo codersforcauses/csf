@@ -18,7 +18,7 @@
     </v-row>
     <v-row align="end">
       <v-col cols="12">
-        <v-img :src="NotFoundFooter" width="100%" />
+        <v-img :src="NotFoundFooter" eager width="100%" />
       </v-col>
     </v-row>
   </v-container>

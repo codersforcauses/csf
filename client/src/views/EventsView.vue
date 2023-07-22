@@ -1,4 +1,7 @@
 <template>
+  <div id="header-container" class="text-white pa-lg-12 pa-5">
+    <h1 class="text-md-h1 mb-md-10 mb-7 font-weight-medium" id="title">EVENTS</h1>
+  </div>
   <v-container v-if="!isLoading">
     <v-row
       class="bg-primaryWhite pt-6 mx-3"
@@ -16,7 +19,7 @@
         v-model="searchQuery"
       />
       <v-btn
-        v-if="user?.teamAdmin"
+        v-if="user?.teamAdmin && user?.teamId"
         size="x-large"
         density="compact"
         variant="flat"
@@ -32,13 +35,13 @@
         :key="event.eventId"
         :event="event"
         @edit="openEditModal"
-        :background-colour="idx % 2 === 0 ? 'bg-primaryWhite' : 'bg-backgroundGrey'"
+        :background-colour="idx % 2 === 0 ? 'bg-primaryWhite' : 'bg-grey-lighten-4'"
       />
       <div v-if="filteredEventsList.length == 0" class="mt-6 mx-3 text-center">
         <v-icon icon="mdi-calendar-blank" size="x-large" />
         <p class="font-weight-bold text-body-1 mt-3">No current events :(</p>
         <v-btn
-          v-if="user?.teamAdmin"
+          v-if="user?.teamAdmin && user?.teamId"
           size="x-large"
           class="bg-primaryRed text-primaryWhite mt-3"
           @click="isAddingEvent = true"
@@ -68,6 +71,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useEventStore } from '../stores/event'
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
+import { notify } from '@kyvg/vue3-notification'
 
 const eventStore = useEventStore()
 const { user } = storeToRefs(useUserStore())
@@ -78,14 +82,21 @@ onMounted(async () => {
     await eventStore.getEvents()
   } catch (e) {
     console.log(e)
+    notify({
+      title: 'Get Events',
+      type: 'error',
+      text: 'Get Events Error'
+    })
   }
   isLoading.value = false
 })
 
-const searchQuery = ref('')
+const searchQuery = ref<string | undefined>('') // pressing the clear button sets the text field to undefined
 const filteredEventsList = computed<Event[]>(() =>
-  eventStore.events.filter((e) =>
-    (e.name + e.description).toLowerCase().includes(searchQuery.value)
+  eventStore.events.filter(
+    (e) =>
+      !searchQuery.value ||
+      (e.name + e.description).toLowerCase().includes(searchQuery.value.toLowerCase())
   )
 )
 const isAddingEvent = ref<boolean>(false)
@@ -107,10 +118,6 @@ function openEditModal(id: number) {
 </script>
 
 <style scoped>
-/* #cards-container > .v-card:nth-child(odd) {
-  background-color: #f4f4f4;
-} */
-
 .v-field__input {
   padding-top: 19px;
   padding-bottom: 0px;
