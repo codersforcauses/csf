@@ -41,7 +41,7 @@
       <v-row class="ma-0 pt-0 pb-0" align="center">
         <v-col>
           <h1>Daily KMs</h1>
-          <MileageGraph v-if="isDailyKmsVisible" :teamPage="true"/>
+          <MileageGraph :teamPage="true"/>
         </v-col>
       </v-row>
       <!-- </v-container> -->
