@@ -53,7 +53,6 @@ const form = ref({
 // formValidation = check if team name already exists
 
 const submitForm = () => {
-
   loading.value = true
   teamStore.createTeam({ ...form.value }).catch((error: AxiosError | any) => {
     if (error instanceof AxiosError && error.response) {
