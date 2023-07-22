@@ -6,6 +6,7 @@ from ..users.models import User
 from ..team.models import Team
 from .serializers import MileageSerializer, UserSerializer, UserLeaderboardSerializer, TeamLeaderboardSerializer  # , PostMileageSerializer
 from django.core.exceptions import ObjectDoesNotExist
+import copy
 
 import datetime
 
@@ -81,8 +82,10 @@ def get_leaderboard(request):
         leaderboard_serializer = TeamLeaderboardSerializer(Team.objects.order_by("-total_mileage"), many=True)
         result = {"leaderboard": calculate_leaderboard_ranks(leaderboard_serializer.data[:LEADERBOARD_SIZE])}
         if "team_name" in request.GET:
+            print(leaderboard_serializer.data)
             rank, team_mileage, index = get_rank_and_mileage_from_leaderboard(leaderboard_serializer.data, request.GET["team_name"], "name")
             if rank != -1 and team_mileage != -1:
+                print(rank)
                 result["team"] = {"name": request.GET["team_name"], "bio": leaderboard_serializer.data[index]["bio"],
                                   "rank": rank, "total_mileage": team_mileage}
 
@@ -103,9 +106,15 @@ def get_rank_and_mileage_from_leaderboard(leaderboard, username, field_name):
             index = i
             mileage = leaderboard[i]['total_mileage']
             rank = i + 1
-        elif mileage != -1 and leaderboard[i]['total_mileage'] > mileage:
-            rank = i + 2
-            break
+        elif mileage != -1: 
+            # we step backwards through the leaderboard until we find a user/team with greater
+            # mileage, or until we've gone the whole way back
+            if leaderboard[i]['total_mileage'] > mileage:
+                rank = i + 2
+                break
+            elif i == 0:
+                rank = i + 1
+                break
         if mileage == -1:
             i += 1
         else:
@@ -116,13 +125,13 @@ def get_rank_and_mileage_from_leaderboard(leaderboard, username, field_name):
 # users with the exact same mileage should have the same rank
 def calculate_leaderboard_ranks(leaderboard):
     ranked_leaderboard = []
-    for (i, entry) in enumerate(leaderboard):
-        if i > 0 and entry["total_mileage"] == leaderboard[i-1]["total_mileage"]:
-            ranked_entry = entry
+    for i in range(len(leaderboard)):
+        if i > 0 and leaderboard[i]["total_mileage"] == leaderboard[i-1]["total_mileage"]:
+            ranked_entry = leaderboard[i]
             ranked_entry["rank"] = ranked_leaderboard[i-1]["rank"]
             ranked_leaderboard.append(ranked_entry)
         else:
-            ranked_entry = entry
+            ranked_entry = leaderboard[i]
             ranked_entry["rank"] = i+1
             ranked_leaderboard.append(ranked_entry)
     return ranked_leaderboard
