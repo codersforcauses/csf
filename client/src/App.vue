@@ -12,7 +12,6 @@ import { RouterView } from 'vue-router'
     classes="csf-notification"
     position="bottom right"
     width="350px"
-    duration="600"
     closeOnClick="True"
   />
 </template>
@@ -158,8 +157,8 @@ body {
 }
 
 .csf-notification.success {
-    background: rgb(0, 157, 79);
-  }
+  background: rgb(0, 157, 79);
+}
 
 .csf-notification.error {
   background: rgb(237, 28, 36);
