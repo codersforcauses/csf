@@ -12,30 +12,19 @@ export interface GetLeaderboardParam {
 }
 
 export interface UserLeaderboard {
-  leaderboard: UserLeaderboardEntry[]
+  leaderboard: RankedUserLeaderboardEntry[]
   user?: RankedUserLeaderboardEntry
 }
 
 export interface TeamLeaderboard {
-  leaderboard: TeamLeaderboardEntry[]
+  leaderboard: RankedTeamLeaderboardEntry[]
   team?: RankedTeamLeaderboardEntry
-}
-
-export interface UserLeaderboardEntry {
-  username: string
-  totalMileage: number
 }
 
 export interface RankedUserLeaderboardEntry {
   username: string
   totalMileage: number
   rank: number
-}
-
-export interface TeamLeaderboardEntry {
-  name: string
-  bio: string
-  totalMileage: number
 }
 
 export interface RankedTeamLeaderboardEntry {

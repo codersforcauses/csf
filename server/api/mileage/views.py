@@ -72,14 +72,14 @@ def post_mileage(request):
 def get_leaderboard(request):
     if request.GET["type"] == "users":
         leaderboard_serializer = UserLeaderboardSerializer(User.objects.filter(is_staff=False).order_by("-total_mileage"), many=True)
-        result = {"leaderboard": leaderboard_serializer.data[:LEADERBOARD_SIZE]}
+        result = {"leaderboard": calculate_leaderboard_ranks(leaderboard_serializer.data[:LEADERBOARD_SIZE])}
         if "username" in request.GET:
             rank, user_mileage, index = get_rank_and_mileage_from_leaderboard(leaderboard_serializer.data, request.GET["username"], "username")
             if rank != -1 and user_mileage != -1:
                 result["user"] = {"username": request.GET["username"], "rank": rank, "total_mileage": user_mileage}
     else:
         leaderboard_serializer = TeamLeaderboardSerializer(Team.objects.order_by("-total_mileage"), many=True)
-        result = {"leaderboard": leaderboard_serializer.data[:LEADERBOARD_SIZE]}
+        result = {"leaderboard": calculate_leaderboard_ranks(leaderboard_serializer.data[:LEADERBOARD_SIZE])}
         if "team_name" in request.GET:
             rank, team_mileage, index = get_rank_and_mileage_from_leaderboard(leaderboard_serializer.data, request.GET["team_name"], "name")
             if rank != -1 and team_mileage != -1:
@@ -111,3 +111,17 @@ def get_rank_and_mileage_from_leaderboard(leaderboard, username, field_name):
         else:
             i -= 1
     return rank, mileage, index
+
+# users with the exact same mileage should have the same rank
+def calculate_leaderboard_ranks(leaderboard):
+    ranked_leaderboard = []
+    for (i, entry) in enumerate(leaderboard):
+        if i > 0 and entry["total_mileage"] == leaderboard[i-1]["total_mileage"]:
+            ranked_entry = entry
+            ranked_entry["rank"] = ranked_leaderboard[i-1]["rank"]
+            ranked_leaderboard.append(ranked_entry)
+        else:
+            ranked_entry = entry
+            ranked_entry["rank"] = i+1
+            ranked_leaderboard.append(ranked_entry)
+    return ranked_leaderboard

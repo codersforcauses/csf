@@ -101,9 +101,7 @@ import { useMileageStore } from '@/stores/mileage'
 import { useUserStore } from '@/stores/user'
 import { useTeamStore } from '@/stores/team'
 import type {
-  UserLeaderboardEntry,
   RankedUserLeaderboardEntry,
-  TeamLeaderboardEntry,
   RankedTeamLeaderboardEntry,
   GetLeaderboardParam,
   UserLeaderboard,
@@ -144,34 +142,14 @@ onMounted(async () => {
   if (userStore.user) userParam.username = userStore.user.username
   let teamParam = {type:'teams'} as GetLeaderboardParam
   if (teamStore.team) teamParam.teamName = teamStore.team.name
-  let usersResult = await mileageStore.getLeaderboard(userParam)
+  let usersResult = await mileageStore.getLeaderboard(userParam) as UserLeaderboard
   if (usersResult) {
-    usersResult = usersResult as UserLeaderboard
-    let users = usersResult.leaderboard as UserLeaderboardEntry[]
-    let users2: RankedUserLeaderboardEntry[] = []
-    users.forEach((user, index) => {
-      if (index > 0 && user.totalMileage === users[index - 1].totalMileage) {
-        users2.push({ ...user, rank: users2[index - 1].rank })
-      } else {
-        users2.push({ ...user, rank: index + 1 })
-      }
-    })
-    userLeaderboard.value = users2
+    userLeaderboard.value = usersResult.leaderboard
     currentUser.value = usersResult.user
   }
-  let teamsResult = await mileageStore.getLeaderboard(teamParam)
+  let teamsResult = await mileageStore.getLeaderboard(teamParam) as TeamLeaderboard
   if (teamsResult) {
-    teamsResult = teamsResult as TeamLeaderboard
-    let teams = teamsResult.leaderboard as TeamLeaderboardEntry[]
-    let teams2: RankedTeamLeaderboardEntry[] = []
-    teams.forEach((team, index) => {
-      if (index > 0 && team.totalMileage === teams[index - 1].totalMileage) {
-        teams2.push({ ...team, rank: teams2[index - 1].rank })
-      } else {
-        teams2.push({ ...team, rank: index + 1 })
-      }
-    })
-    teamLeaderboard.value = teams2
+    teamLeaderboard.value = teamsResult.leaderboard
     currentTeam.value = teamsResult.team
     }
 

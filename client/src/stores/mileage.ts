@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { useStorage } from '@vueuse/core'
 import server from '@/utils/server'
-import type { UserLeaderboardEntry, TeamLeaderboardEntry, GetLeaderboardParam, UserLeaderboard, TeamLeaderboard } from '@/types/mileage'
+import type { GetLeaderboardParam, UserLeaderboard, TeamLeaderboard } from '@/types/mileage'
 import type Mileage from '@/types/mileage'
 import camelize from 'camelize-ts'
 import snakify from 'snakify-ts'
