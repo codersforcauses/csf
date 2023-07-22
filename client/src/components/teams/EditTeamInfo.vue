@@ -40,6 +40,8 @@
 import { ref, watchEffect } from 'vue'
 import { useTeamStore } from '@/stores/team'
 import { useUserStore } from '@/stores/user'
+import { AxiosError } from 'axios'
+import { notify } from '@kyvg/vue3-notification'
 const teamStore = useTeamStore()
 const userStore = useUserStore()
 
@@ -50,7 +52,17 @@ const newBioText = ref(teamStore.team ? teamStore.team.bio : '')
 const newTeamName = ref(teamStore.team ? teamStore.team.name : '')
 
 const editTeamInfo = async () => {
-  teamStore.editTeam({ name: newTeamName.value, bio: newBioText.value })
+  teamStore
+    .editTeam({ name: newTeamName.value, bio: newBioText.value })
+    .catch((error: AxiosError | any) => {
+      if (error instanceof AxiosError && error.response && error.response.status === 404) {
+        notify({
+          title: 'Edit Team',
+          type: 'error',
+          text: 'Edit Team Error'
+        })
+      }
+    })
   editTeamInfoDialog.value = false
 }
 

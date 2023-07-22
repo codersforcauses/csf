@@ -39,12 +39,29 @@ import { useDisplay } from 'vuetify'
 import NewTeamModal from '@/components/teams/NewTeamModal.vue'
 import { ref } from 'vue'
 import { useTeamStore } from '@/stores/team'
+import { AxiosError } from 'axios'
+import { notify } from '@kyvg/vue3-notification'
 const teamStore = useTeamStore()
 
 const joinCode = ref('')
 
 const joinTeam = () => {
-  teamStore.joinTeam(joinCode.value)
+  teamStore.joinTeam(joinCode.value).catch((error: AxiosError | any) => {
+    if (error instanceof AxiosError && error.response && error.response.status === 404) {
+      notify({
+          title: 'Join Team',
+          type: 'error',
+          text: 'Team Does Not Exists'
+        })
+      }
+    else if(error instanceof AxiosError && error.response && error.response.status === 404){
+      notify({
+          title: 'Join Team',
+          type: 'error',
+          text: 'Join Team Error'
+        })
+    }
+  })
 }
 
 const { mobile } = useDisplay()

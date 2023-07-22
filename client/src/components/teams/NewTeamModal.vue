@@ -30,7 +30,8 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
 import { useTeamStore } from '@/stores/team'
-
+import { AxiosError } from 'axios'
+import { notify } from '@kyvg/vue3-notification'
 const teamStore = useTeamStore()
 
 const isFullscreen = ref(false)
@@ -44,7 +45,15 @@ const form = ref({
 // formValidation = check if team name already exists
 
 const submitForm = () => {
-  teamStore.createTeam({ ...form.value })
+  teamStore.createTeam({ ...form.value }).catch((error: AxiosError | any) => {
+    if (error instanceof AxiosError && error.response && error.response.status === 404) {
+      notify({
+        title: 'Create Team',
+        type: 'error',
+        text: 'Create Team Error'
+      })
+    }
+  })
 }
 
 // never used vvv

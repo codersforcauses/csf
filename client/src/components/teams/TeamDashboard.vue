@@ -156,17 +156,44 @@ import ConfirmButton from '@/components/ConfirmButton.vue'
 const { mobile } = useDisplay()
 import { useTeamStore } from '@/stores/team'
 import { useUserStore } from '@/stores/user'
+import { AxiosError } from 'axios'
+import { notify } from '@kyvg/vue3-notification'
 const teamStore = useTeamStore()
 const userStore = useUserStore()
 
 onMounted(async () => {
-  if (userStore.user!.teamId) await teamStore.getTeam(userStore.user!.teamId)
+  if (userStore.user!.teamId)
+    await teamStore.getTeam(userStore.user!.teamId).catch((error: AxiosError | any) => {
+      if (error instanceof AxiosError && error.response && error.response.status === 404) {
+        notify({
+          title: 'Get Team',
+          type: 'error',
+          text: 'Get Team Error'
+        })
+      }
+    })
 })
 const deleteTeam = () => {
-  teamStore.deleteTeam()
+  teamStore.deleteTeam().catch((error: AxiosError | any) => {
+    if (error instanceof AxiosError && error.response && error.response.status === 404) {
+      notify({
+        title: 'Delete Team',
+        type: 'error',
+        text: 'Delete Team Error'
+      })
+    }
+  })
 }
 const removeTeam = () => {
-  teamStore.removeTeam()
+  teamStore.removeTeam().catch((error: AxiosError | any) => {
+    if (error instanceof AxiosError && error.response && error.response.status === 404) {
+      notify({
+        title: 'Remove Team',
+        type: 'error',
+        text: 'Remove Team Error'
+      })
+    }
+  })
 }
 
 const teamData = ref({
