@@ -8,11 +8,26 @@ from .serializers import MileageSerializer
 from freezegun import freeze_time
 import datetime
 
+USERNAME = 'testuser'
+PASSWORD = 'testuser123'
+
 
 class MileageTests(APITestCase):
+    def _get_token(self):
+        get_token_url = reverse('auth:jwt_token')
+        get_token_body = {
+            'username': USERNAME,
+            'password': PASSWORD
+        }
+        get_token_response = self.client.post(get_token_url, get_token_body, format='json')
+        token = get_token_response.data['access']
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
+
     def setUp(self):
-        self.user = User.objects.create(username='testuser')
+        self.user = User.objects.create_user(username=USERNAME, password=PASSWORD)
+        self.user.save()
         self.mileage = Mileage.objects.create(user=self.user, kilometres=100.0)
+        self._get_token()
 
     def test_get_mileage(self):
         url = reverse('mileage:get-mileage-by-user', args=[self.user.id])
@@ -96,6 +111,7 @@ class MileageTests(APITestCase):
 
     @freeze_time(datetime.date.today() + datetime.timedelta(days=15))
     def _test_rollover_challenge(self):
+        self._get_token()  # an ugly fix
 
         # get mileages after challenge period has ended
         url = reverse('mileage:get-mileage-by-user', args=[self.user.id])

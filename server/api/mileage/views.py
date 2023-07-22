@@ -22,25 +22,13 @@ def get_mileage_by_user(request, user):
     # only get mileages within current challenge period
     if "challenge" in request.GET:
         mileage = mileage.filter(
+            user__challenge_start_date__gte=datetime.date.today() - datetime.timedelta(days=CHALLENGE_LENGTH),
             date__range=(
                 F("user__challenge_start_date"),
                 F("user__challenge_start_date") + datetime.timedelta(days=CHALLENGE_LENGTH),
             )
         )
 
-        # do we need to do this here? its alr done in post_mileage
-
-        # end challenge period if days are up
-        # elif (datetime.date.today() - user.challenge_start_date).days > CHALLENGE_LENGTH:
-        #     user_serializer = UserSerializer(instance=user, data={'challenge_start_date': None})
-        #     if user_serializer.is_valid():
-        #         user_serializer.save()
-        #     mileages = []
-        # else:
-        #     mileages = filter(
-        #         lambda m: user.challenge_start_date and m.date >= user.challenge_start_date,
-        #         mileages
-        #     )
     serializer = MileageSerializer(mileage, many=True)
     return Response(serializer.data)
 
@@ -53,6 +41,7 @@ def get_mileage_by_team(request, team):
     # only get mileages within current challenge period
     if "challenge" in request.GET:
         mileage = mileage.filter(
+            user__challenge_start_date__gte=datetime.date.today() - datetime.timedelta(days=CHALLENGE_LENGTH),
             date__range=(
                 F("user__challenge_start_date"),
                 F("user__challenge_start_date") + datetime.timedelta(days=CHALLENGE_LENGTH),
