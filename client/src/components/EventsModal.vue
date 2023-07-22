@@ -11,6 +11,7 @@ const props = defineProps<{ type: 'Create' | 'Edit'; event?: Event }>()
 const emit = defineEmits(['close'])
 const eventStore = useEventStore()
 
+const loading = ref<string | null>(null)
 const name = ref(props.event?.name ?? '')
 const startDate = ref(props.event?.startDate ?? '')
 const endDate = ref(props.event?.endDate ?? '')
@@ -46,6 +47,7 @@ function setMinDate() {
 const required = (v: string) => !!v || 'Field is required'
 
 const addEvent = () => {
+  loading.value = "add"
   eventStore
     .createEvent(refs())
     .then(() => {
@@ -69,9 +71,13 @@ const addEvent = () => {
         text: 'Error adding event'
       })
     })
+  .finally(() => {
+    loading.value = null
+  })
 }
 
 const editEvent = () => {
+  loading.value = "edit"
   if (props.event)
     return eventStore
       .editEvent({
@@ -99,9 +105,13 @@ const editEvent = () => {
           text: 'Edit Event Error'
         })
       })
+      .finally(() => {
+    loading.value = null
+  })
 }
 
 const archiveEvent = () => {
+  loading.value = "archive"
   if (props.event)
     return eventStore
       .editEvent({
@@ -124,9 +134,13 @@ const archiveEvent = () => {
           text: 'Archive Event Error'
         })
       })
+      .finally(() => {
+    loading.value = null
+  })
 }
 
 const deleteEvent = () => {
+  loading.value = "delete"
   if (props.event)
     return eventStore
       .deleteEvent(props.event.eventId)
@@ -145,6 +159,9 @@ const deleteEvent = () => {
           text: 'Delete Event Error'
         })
       })
+      .finally(() => {
+    loading.value = null
+  })
 }
 
 const closeModal = () => emit('close')
@@ -214,7 +231,7 @@ watchEffect(async () => {
           class="mx-5"
         />
         <v-card-actions v-if="type === 'Edit'" class="justify-center mb-4">
-          <v-btn variant="outlined" class="text-secondaryBlue mr-16" @click="archiveEvent"
+          <v-btn variant="outlined" class="text-secondaryBlue mr-16" @click="archiveEvent" :loading="loading === 'archive'"
             >ARCHIVE</v-btn
           >
           <ConfirmButton
@@ -222,9 +239,10 @@ watchEffect(async () => {
             :object="'event'"
             :disabled="!valid"
             :use-done-for-button="true"
+            :loading="loading === 'edit'"
             @handle-confirm="editEvent"
           />
-          <v-btn variant="outlined" class="text-primaryRed ml-16" @click="deleteEvent"
+          <v-btn variant="outlined" class="text-primaryRed ml-16" @click="deleteEvent" :loading="loading === 'delete'"
             >DELETE</v-btn
           >
         </v-card-actions>
@@ -234,6 +252,7 @@ watchEffect(async () => {
             :object="'event'"
             :disabled="!valid"
             :use-done-for-button="true"
+            :loading="loading === 'add'"
             @handle-confirm="addEvent"
           />
         </v-card-actions>

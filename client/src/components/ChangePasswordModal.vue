@@ -51,7 +51,15 @@
           </v-row>
         </v-container>
         <v-card-actions class="justify-center mb-4">
-          <v-btn class="bg-primaryRed" @click="changePassword">Change Password</v-btn>
+          <v-btn class="bg-primaryRed" @click="changePassword">
+                <v-progress-circular
+                  v-if="loading"
+                  indeterminate
+                  size="24"
+                  color="white"
+                ></v-progress-circular>
+                <span v-else>Change Password</span>
+          </v-btn>
         </v-card-actions>
       </div>
     </v-card>
@@ -79,8 +87,10 @@ const errors = reactive({
 
 const passwordChanged = ref(false)
 const userStore = useUserStore()
+const loading = ref(false)
 
 async function changePassword() {
+  loading.value = true
   if (state.oldPassword === '') {
     errors.oldPassword = 'You must enter your old password'
   } else if (state.newPassword !== state.newPasswordConfirmation) {
@@ -113,6 +123,7 @@ async function changePassword() {
       }
     }
   }
+  loading.value = false
 }
 
 function closeModal() {

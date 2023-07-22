@@ -77,7 +77,6 @@
         <v-card-actions class="justify-center">
           <v-col cols="auto" class="mt-10">
             <v-row align="center" justify="center">
-              <!-- add this inside buttons to change it to loading -->
               <v-btn variant="flat" class="bg-primaryRed" size="large" @click="submitForm">
                 <v-progress-circular
                   v-if="loading"
