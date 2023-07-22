@@ -48,18 +48,18 @@
     </v-btn>
   </v-row>
   <v-row v-if="shown" justify="center" class="my-7 bg-secondaryGreen" no-gutters>
-    <p class="py-10 mx-10">Install it as an app? </p>
-      <v-btn
-        class="bg-primaryRed pb-14 mb-6"
-        size="x-large"
-        :style="{ fontFamily: 'Hackney', fontSize: '42px' }"
-        style="letter-spacing: -0.5px"
-        :active="false"
-        @click="installPWA"
-      >
-        INSTALL
-      </v-btn>
-    </v-row>
+    <p class="py-10 mx-10">Install it as an app?</p>
+    <v-btn
+      class="bg-primaryRed pb-14 mb-6"
+      size="x-large"
+      :style="{ fontFamily: 'Hackney', fontSize: '42px' }"
+      style="letter-spacing: -0.5px"
+      :active="false"
+      @click="installPWA"
+    >
+      INSTALL
+    </v-btn>
+  </v-row>
   <v-row class="px-8 bg-secondaryBlue" no-gutters>
     <h2 class="py-2" :style="{ fontFamily: 'Hackney', fontSize: '58px' }">OUR STORY</h2>
     <v-divider class="mr-16" />
@@ -140,8 +140,8 @@ import StrideForEducationRBGLogo from '/images/SFE_RGB_Logo.png'
 import { useModalStore } from '@/stores/modal'
 const modalStore = useModalStore()
 
-import type { StyleHTMLAttributes } from 'vue';
-import { ref, onBeforeMount } from 'vue';
+import type { StyleHTMLAttributes } from 'vue'
+import { ref, onBeforeMount } from 'vue'
 
 const beliefs = [
   'Every young person we work with should be able to dream big and be proud.',
@@ -153,28 +153,28 @@ const beliefs = [
 ]
 
 // PWA Install button
-const shown = ref(false);
-let installEvent = null;
+const shown = ref(false)
+let installEvent = null
 
 const dismissPrompt = () => {
-  shown.value = false;
-};
+  shown.value = false
+}
 
 const installPWA = () => {
-  installEvent!.prompt();
+  installEvent!.prompt()
   installEvent!.userChoice.then((choice: any) => {
-    dismissPrompt(); // Hide the prompt once the user's clicked
-  });
-};
+    dismissPrompt() // Hide the prompt once the user's clicked
+  })
+}
 
 // beforeMount hook equivalent in setup
 onBeforeMount(() => {
   window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    installEvent = e;
-    shown.value = true;
-  });
-});
+    e.preventDefault()
+    installEvent = e
+    shown.value = true
+  })
+})
 </script>
 
 <style></style>
