@@ -231,9 +231,21 @@
               <v-row align="center" justify="center">
                 <v-col cols="auto">
                   <v-btn variant="text" class="mx-2" @click="firstPage = true">BACK</v-btn>
-                  <v-btn variant="flat" class="mx-2" rounded="lg" color="primaryRed" @click="submit"
-                    >CREATE ACCOUNT</v-btn
+                  <v-btn
+                    variant="flat"
+                    class="mx-2"
+                    rounded="lg"
+                    color="primaryRed"
+                    @click="submit"
                   >
+                    <v-progress-circular
+                      v-if="loading"
+                      indeterminate
+                      size="24"
+                      color="white"
+                    ></v-progress-circular>
+                    <span v-else>CREATE ACCOUNT</span>
+                  </v-btn>
                 </v-col>
               </v-row>
               <v-row align="center" justify="center">
@@ -316,7 +328,10 @@ const initialErrors = {
 }
 const errors = reactive({ ...initialErrors })
 
+const loading = ref(false)
+
 const submit = async () => {
+  loading.value = true
   const avatar = avatarPaths.value.filter((avatar) => avatar.isSelected === true)
   const method = travelMethod.value.filter((method) => method.isSelected === true)
   state.travelMethod = method[0].mode
@@ -353,6 +368,7 @@ const submit = async () => {
       })
     }
   }
+  loading.value = false
 }
 const selectAvatar = (url: string) => {
   avatarPaths.value.forEach((avatar) => {

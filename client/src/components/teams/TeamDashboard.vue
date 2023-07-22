@@ -140,9 +140,18 @@
       :action="'delete'"
       :object="'team'"
       :use-done-for-button="false"
+      :loading="loading"
       @handle-confirm="deleteTeam"
     />
-    <v-btn size="large" color="red white--text" v-else @click="removeTeam">Leave Team</v-btn>
+    <v-btn size="large" color="red white--text" v-else @click="removeTeam">
+      <v-progress-circular
+        v-if="loading"
+        indeterminate
+        size="24"
+        color="white"
+      ></v-progress-circular>
+      <span v-else>Leave Team</span>
+    </v-btn>
   </v-row>
 </template>
 
@@ -158,14 +167,17 @@ import { useTeamStore } from '@/stores/team'
 import { useUserStore } from '@/stores/user'
 const teamStore = useTeamStore()
 const userStore = useUserStore()
+const loading = ref(false)
 
 onMounted(async () => {
   if (userStore.user!.teamId) await teamStore.getTeam(userStore.user!.teamId)
 })
 const deleteTeam = () => {
+  loading.value = true
   teamStore.deleteTeam()
 }
 const removeTeam = () => {
+  loading.value = true
   teamStore.removeTeam()
 }
 
