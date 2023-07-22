@@ -41,7 +41,7 @@
       <v-row class="ma-0 pt-0 pb-0" align="center">
         <v-col>
           <h1>Daily KMs</h1>
-          <MileageGraph :dataPoints="mileageStore.mileageByUser"/>
+          <MileageGraph :dataPoints="mileageStore.mileageByUser" />
         </v-col>
       </v-row>
       <!-- </v-container> -->

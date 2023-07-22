@@ -67,7 +67,7 @@
       <v-row align="start" id="pointer-cursor" class="my-2">
         <v-col>
           <h2>Daily KMs</h2>
-          <MileageGraph v-if="isDailyKmsVisible" :dataPoints="mileageStore.mileageByTeam"/>
+          <MileageGraph v-if="isDailyKmsVisible" :dataPoints="mileageStore.mileageByTeam" />
         </v-col>
         <v-icon
           v-if="isDailyKmsVisible"
@@ -173,7 +173,7 @@ const removeTeam = () => {
   teamStore.removeTeam()
 }
 
-const updateTeamMileage = () =>{
+const updateTeamMileage = () => {
   mileageStore.getMileageByTeam()
   totalKilometres.value = mileageStore.totalKmByTeam
 }

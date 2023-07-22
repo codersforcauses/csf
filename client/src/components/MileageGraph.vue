@@ -39,7 +39,7 @@ const filteredData = ref<Mileage[]>()
 const labels = computed(() => filteredData.value?.map((data) => data.date))
 const data = computed(() => filteredData.value?.map((data) => data.kilometres))
 const activeButton = ref('This Week')
-const props = defineProps<{dataPoints: Mileage[]}>()
+const props = defineProps<{ dataPoints: Mileage[] }>()
 
 function filterData(range: string) {
   activeButton.value = range

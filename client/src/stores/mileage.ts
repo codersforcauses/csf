@@ -13,7 +13,7 @@ export const useMileageStore = defineStore('mileage', {
   }),
   getters: {
     totalKmByUser: (state) => state.mileageByUser.reduce((acc, cur) => acc + cur.kilometres, 0),
-    totalKmByTeam: (state) => state.mileageByTeam.reduce((acc, cur) => acc + cur.kilometres, 0),
+    totalKmByTeam: (state) => state.mileageByTeam.reduce((acc, cur) => acc + cur.kilometres, 0)
   },
   actions: {
     addMileage(mileage: Omit<Mileage, 'mileageId'>) {
