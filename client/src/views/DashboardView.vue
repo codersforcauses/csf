@@ -137,7 +137,6 @@ function updateChallengeProgress(checkForCompletion: boolean) {
   if (checkForCompletion) {
     challenges.value.forEach((challenge) => {
       if (oldDistance < challenge.length && distanceTravelled.value >= challenge.length ) {
-      console.log(`Challenge ${challenge.name} completed`)
       challengeName.value = challenge.name
       isCompleted.value = true
       }
