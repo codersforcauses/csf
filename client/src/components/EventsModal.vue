@@ -47,7 +47,7 @@ function setMinDate() {
 const required = (v: string) => !!v || 'Field is required'
 
 const addEvent = () => {
-  loading.value = "add"
+  loading.value = 'add'
   eventStore
     .createEvent(refs())
     .then(() => {
@@ -71,13 +71,13 @@ const addEvent = () => {
         text: 'Error adding event'
       })
     })
-  .finally(() => {
-    loading.value = null
-  })
+    .finally(() => {
+      loading.value = null
+    })
 }
 
 const editEvent = () => {
-  loading.value = "edit"
+  loading.value = 'edit'
   if (props.event)
     return eventStore
       .editEvent({
@@ -106,12 +106,12 @@ const editEvent = () => {
         })
       })
       .finally(() => {
-    loading.value = null
-  })
+        loading.value = null
+      })
 }
 
 const archiveEvent = () => {
-  loading.value = "archive"
+  loading.value = 'archive'
   if (props.event)
     return eventStore
       .editEvent({
@@ -135,12 +135,12 @@ const archiveEvent = () => {
         })
       })
       .finally(() => {
-    loading.value = null
-  })
+        loading.value = null
+      })
 }
 
 const deleteEvent = () => {
-  loading.value = "delete"
+  loading.value = 'delete'
   if (props.event)
     return eventStore
       .deleteEvent(props.event.eventId)
@@ -160,8 +160,8 @@ const deleteEvent = () => {
         })
       })
       .finally(() => {
-    loading.value = null
-  })
+        loading.value = null
+      })
 }
 
 const closeModal = () => emit('close')
@@ -231,7 +231,11 @@ watchEffect(async () => {
           class="mx-5"
         />
         <v-card-actions v-if="type === 'Edit'" class="justify-center mb-4">
-          <v-btn variant="outlined" class="text-secondaryBlue mr-16" @click="archiveEvent" :loading="loading === 'archive'"
+          <v-btn
+            variant="outlined"
+            class="text-secondaryBlue mr-16"
+            @click="archiveEvent"
+            :loading="loading === 'archive'"
             >ARCHIVE</v-btn
           >
           <ConfirmButton
@@ -242,7 +246,11 @@ watchEffect(async () => {
             :loading="loading === 'edit'"
             @handle-confirm="editEvent"
           />
-          <v-btn variant="outlined" class="text-primaryRed ml-16" @click="deleteEvent" :loading="loading === 'delete'"
+          <v-btn
+            variant="outlined"
+            class="text-primaryRed ml-16"
+            @click="deleteEvent"
+            :loading="loading === 'delete'"
             >DELETE</v-btn
           >
         </v-card-actions>

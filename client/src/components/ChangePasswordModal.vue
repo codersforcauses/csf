@@ -52,13 +52,13 @@
         </v-container>
         <v-card-actions class="justify-center mb-4">
           <v-btn class="bg-primaryRed" @click="changePassword">
-                <v-progress-circular
-                  v-if="loading"
-                  indeterminate
-                  size="24"
-                  color="white"
-                ></v-progress-circular>
-                <span v-else>Change Password</span>
+            <v-progress-circular
+              v-if="loading"
+              indeterminate
+              size="24"
+              color="white"
+            ></v-progress-circular>
+            <span v-else>Change Password</span>
           </v-btn>
         </v-card-actions>
       </div>

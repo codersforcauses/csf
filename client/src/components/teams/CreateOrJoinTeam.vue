@@ -57,12 +57,11 @@ const joinTeam = async () => {
   try {
     await teamStore.joinTeam(joinCode.value)
   } catch (error) {
-    console.error("Error joining team:", error)
+    console.error('Error joining team:', error)
   } finally {
     loading.value = false
   }
 }
-
 
 const { mobile } = useDisplay()
 </script>

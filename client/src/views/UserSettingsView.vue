@@ -88,15 +88,15 @@
       </v-container>
     </v-row>
     <v-row>
-      <v-btn class="bg-primaryRed ma-4" @click="changeDetails">               
-         <v-progress-circular
-                  v-if="loading"
-                  indeterminate
-                  size="24"
-                  color="white"
-                ></v-progress-circular>
-                <span v-else>Update</span>
-                </v-btn>
+      <v-btn class="bg-primaryRed ma-4" @click="changeDetails">
+        <v-progress-circular
+          v-if="loading"
+          indeterminate
+          size="24"
+          color="white"
+        ></v-progress-circular>
+        <span v-else>Update</span>
+      </v-btn>
       <v-spacer />
       <v-btn class="bg-primaryRed ma-4" @click="showChangePasswordModal = true"
         >Change Password
