@@ -39,10 +39,10 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 const labels = ref<string[]>([])
 const data = ref<number[]>([])
 const ranges = ['This Week', 'This Month', 'This Year', 'Overall'] as const
-const activeButton = ref<typeof ranges[number]>('This Week')
+const activeButton = ref<(typeof ranges)[number]>('This Week')
 const props = defineProps<{ dataPoints: Mileage[] }>()
 
-function filterData(range?: typeof ranges[number]) {
+function filterData(range?: (typeof ranges)[number]) {
   if (range) activeButton.value = range
   else range = activeButton.value
   let minDate
@@ -85,7 +85,10 @@ function filterData(range?: typeof ranges[number]) {
     }
 
     //making sure dates that don't exist in the database are still included as 0 km
-    const km = props.dataPoints.reduce((acc, cur) => cur.date === dateString ? acc + cur.kilometres : acc, 0)
+    const km = props.dataPoints.reduce(
+      (acc, cur) => (cur.date === dateString ? acc + cur.kilometres : acc),
+      0
+    )
     labels.value.unshift(datalabel)
     data.value.unshift(km)
     currentDate.setDate(currentDate.getDate() - 1)
@@ -94,7 +97,10 @@ function filterData(range?: typeof ranges[number]) {
 
 // filterData()
 
-watch(() => props.dataPoints, () => filterData())
+watch(
+  () => props.dataPoints,
+  () => filterData()
+)
 
 // GRAPH DATA
 const graphData = computed(() => {
