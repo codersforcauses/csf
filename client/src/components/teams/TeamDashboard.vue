@@ -41,49 +41,61 @@
       <v-divider />
 
       <!-- Bio -->
-      <v-row id="pointer-cursor" class="my-2">
-        <v-col @click="isBioVisible = !isBioVisible">
-          <h2>Bio</h2>
-          <p v-if="isBioVisible">{{ teamData.bio }}</p>
-        </v-col>
-        <v-icon
-          v-if="isBioVisible"
-          icon="mdi mdi-chevron-down"
-          @click="isBioVisible = !isBioVisible"
-          class="px-10"
-          size="50px"
-        />
-        <v-icon
-          v-else
-          icon="mdi mdi-chevron-right"
-          @click="isBioVisible = !isBioVisible"
-          class="px-10"
-          size="50px"
-        />
-      </v-row>
+      <v-container class="ma-0 pa-0">
+        <v-row id="pointer-cursor" class="my-2">
+          <v-col @click="isBioVisible = !isBioVisible">
+            <h2>Bio</h2>
+          </v-col>
+          <v-icon
+            v-if="isBioVisible"
+            icon="mdi mdi-chevron-down"
+            @click="isBioVisible = !isBioVisible"
+            class="px-10"
+            size="50px"
+          />
+          <v-icon
+            v-else
+            icon="mdi mdi-chevron-right"
+            @click="isBioVisible = !isBioVisible"
+            class="px-10"
+            size="50px"
+          />
+        </v-row>
+        <v-row>
+          <v-col>
+            <p v-if="isBioVisible">{{ teamData.bio }}</p>
+          </v-col>
+        </v-row>
+      </v-container>
       <v-divider></v-divider>
 
       <!-- Daily Kilometres -->
-      <v-row align="start" id="pointer-cursor" class="my-2">
-        <v-col>
-          <h2>Daily KMs</h2>
-          <MileageGraph v-if="isDailyKmsVisible" />
-        </v-col>
-        <v-icon
-          v-if="isDailyKmsVisible"
-          @click="isDailyKmsVisible = !isDailyKmsVisible"
-          icon="mdi mdi-chevron-down"
-          size="50px"
-          class="px-10"
-        />
-        <v-icon
-          v-else
-          @click="isDailyKmsVisible = !isDailyKmsVisible"
-          icon="mdi mdi-chevron-right"
-          size="50px"
-          class="px-10"
-        />
-      </v-row>
+      <v-container class="ma-0 pa-0">
+        <v-row align="start" id="pointer-cursor" class="my-2">
+          <v-col>
+            <h2>Daily KMs</h2>
+          </v-col>
+          <v-icon
+            v-if="isDailyKmsVisible"
+            @click="isDailyKmsVisible = !isDailyKmsVisible"
+            icon="mdi mdi-chevron-down"
+            size="50px"
+            class="px-10"
+          />
+          <v-icon
+            v-else
+            @click="isDailyKmsVisible = !isDailyKmsVisible"
+            icon="mdi mdi-chevron-right"
+            size="50px"
+            class="px-10"
+          />
+        </v-row>
+        <v-row>
+          <v-col>
+            <MileageGraph v-if="isDailyKmsVisible" />
+          </v-col>
+        </v-row>
+      </v-container>
       <v-divider />
 
       <!-- Sub-teams -->

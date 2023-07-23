@@ -1,6 +1,6 @@
 <template>
   <v-card variant="flat">
-    <v-card-actions class="d-flex justify-space-between">
+    <div class="justify-space-between">
       <v-btn
         :class="activeButton === range ? 'bg-green' : 'text-green'"
         variant="tonal"
@@ -12,8 +12,8 @@
       >
         {{ range }}
       </v-btn>
-    </v-card-actions>
-    <LineWithLineChart :data="graphData" :options="options" />
+    </div>
+    <LineWithLineChart :data="graphData" :options="options"/>
   </v-card>
 </template>
 
