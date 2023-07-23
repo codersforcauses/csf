@@ -3,7 +3,13 @@
     <v-card-title style="word-break: break-word; overflow-wrap: break-word; white-space: normal">
       <v-row no-gutters>
         <span class="font-weight-bold">{{ event.name }}</span>
-        <v-icon icon="mdi-pencil" @click="openModal" size="24" class="mr-2 mt-1" />
+        <v-icon
+          v-if="user?.teamAdmin && !event.isPublic"
+          icon="mdi-pencil"
+          @click="openModal"
+          size="24"
+          class="mr-2 mt-1"
+        />
         <v-spacer />
         <v-chip
           variant="outlined"
