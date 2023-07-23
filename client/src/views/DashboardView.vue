@@ -17,7 +17,9 @@
                   <v-icon :icon="method" size="52"></v-icon>
                 </v-col>
                 <v-col>
-                  <v-chip color="green" class="rounded text-h5">{{ distanceTravelled }} KM</v-chip>
+                  <v-chip color="green" class="rounded text-h5"
+                    >{{ mileageStore.totalKmByUser }} KM</v-chip
+                  >
                   <v-card-subtitle>TOTAL</v-card-subtitle>
                 </v-col>
                 <v-spacer />
@@ -55,14 +57,17 @@
               <div class="progress-bar rounded-lg">
                 <div
                   :class="`rounded-lg ${challenge.colour}`"
-                  :style="`width: ${calcWidth(distanceTravelled, challenge.length)}%`"
+                  :style="`width: ${calcWidth(
+                    mileageStore.totalChallengeKmByUser,
+                    challenge.length
+                  )}%`"
                 ></div>
               </div>
             </v-col>
             <v-col cols="4" sm="2" lg="1">
               <div :class="`length-label rounded-lg ${challenge.colour}`">
                 <h3 class="primaryWhite text-center">
-                  {{ `${distanceTravelled}/${challenge.length}KM` }}
+                  {{ `${mileageStore.totalChallengeKmByUser}/${challenge.length}KM` }}
                 </h3>
               </div>
             </v-col>
@@ -91,7 +96,6 @@ const userStore = useUserStore()
 const mileageStore = useMileageStore()
 
 const method = ref()
-const distanceTravelled = ref()
 const loading = ref(true)
 const isCompleted = ref(false)
 const challengeName = ref('')
@@ -123,13 +127,15 @@ function calcWidth(travelDist: number, totalDist: number) {
 }
 
 async function updateChallengeProgress(checkForCompletion: boolean) {
-  let oldDistance = distanceTravelled.value
-  await mileageStore.getMileageByUser()
-  distanceTravelled.value = mileageStore.totalKmByUser
+  const oldDistance = mileageStore.totalChallengeKmByUser
+  await mileageStore.getChallengeMileage()
 
   if (checkForCompletion) {
     challenges.value.forEach((challenge) => {
-      if (oldDistance < challenge.length && distanceTravelled.value >= challenge.length) {
+      if (
+        oldDistance < challenge.length &&
+        mileageStore.totalChallengeKmByUser >= challenge.length
+      ) {
         challengeName.value = challenge.name
         isCompleted.value = true
       }
@@ -141,6 +147,7 @@ onMounted(async () => {
   if (userStore.user) {
     try {
       getIconName(userStore.user.travelMethod)
+      await mileageStore.getMileageByUser()
       await updateChallengeProgress(false)
     } catch (error) {
       console.log(error)

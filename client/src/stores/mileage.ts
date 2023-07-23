@@ -9,7 +9,8 @@ import { useUserStore } from './user'
 export const useMileageStore = defineStore('mileage', {
   state: () => ({
     byUser: useStorage('mileageByUser', { mileage: [] as Mileage[], totalKm: 0 }),
-    byTeam: useStorage('mileageByTeam', { mileage: [] as Mileage[], totalKm: 0 })
+    byTeam: useStorage('mileageByTeam', { mileage: [] as Mileage[], totalKm: 0 }),
+    totalChallengeKmByUser: 0
   }),
   getters: {
     mileageByUser: (state) => state.byUser.mileage,
@@ -51,6 +52,12 @@ export const useMileageStore = defineStore('mileage', {
       if (res.status == 200) this.byTeam.mileage = camelize(res.data) as Mileage[]
       res = await server.get(`mileage/get_mileage`, { params: { sum: true, team } })
       if (res.status == 200) this.byTeam.totalKm = res.data
+    },
+    async getChallengeMileage() {
+      const res = await server.get(`mileage/get_mileage`, {
+        params: { challenge: true, sum: true, user: useUserStore().user!.id }
+      })
+      if (res.status == 200) this.totalChallengeKmByUser = res.data
     }
   }
 })
