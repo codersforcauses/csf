@@ -1,5 +1,5 @@
 <template>
-  <div class="header text-white ">
+  <div class="header text-white">
     <h1 class="text-center font-weight-medium text-md-h1" id="title">EVENTS</h1>
   </div>
   <v-container v-if="!isLoading">

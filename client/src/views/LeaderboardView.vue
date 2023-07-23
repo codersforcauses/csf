@@ -1,8 +1,6 @@
 <template>
-  <div class="header text-white ">
-    <h1 class="text-center font-weight-medium text-md-h1" id="title">
-      Leaderboards
-    </h1>
+  <div class="header text-white">
+    <h1 class="text-center font-weight-medium text-md-h1" id="title">Leaderboards</h1>
   </div>
   <v-row class="ma-0 pt-5 pb-1" justify="space-evenly">
     <v-btn
@@ -39,7 +37,11 @@
       </tr>
     </thead>
     <tbody v-if="activeButton === 'Individual'">
-      <tr v-if="currentUser" style="border-collapse: separate; border-spacing: 20px" class="bg-grey-lighten-4">
+      <tr
+        v-if="currentUser"
+        style="border-collapse: separate; border-spacing: 20px"
+        class="bg-grey-lighten-4"
+      >
         <td v-if="currentUser.rank < 4" class="text-right text-subtitle-1">
           <v-icon icon="mdi-trophy" size="25px" :class="getTrophyColour(currentUser.rank)" />
           {{ currentUser.rank }}
@@ -72,7 +74,11 @@
       </tr>
     </tbody>
     <tbody v-else>
-      <tr v-if="currentTeam" style="border-collapse: separate; border-spacing: 20px" class="bg-grey-lighten-4">
+      <tr
+        v-if="currentTeam"
+        style="border-collapse: separate; border-spacing: 20px"
+        class="bg-grey-lighten-4"
+      >
         <td v-if="currentTeam.rank < 4" class="text-right text-subtitle-1">
           <v-icon icon="mdi-trophy" size="25px" :class="getTrophyColour(currentTeam.rank)" />
           {{ currentTeam.rank }}
@@ -98,7 +104,7 @@
         <td v-else class="text-right text-subtitle-1">{{ item.rank }}</td>
         <td>
           <p class="text-subtitle-1">{{ item.name }}</p>
-          <p class="text-body-2 text-grey">{{ item.bio }}</p>
+          <p class="text-body-2 text-grey">{{ shortenBio(item.bio) }}</p>
         </td>
         <td>
           <v-chip color="green" class="rounded text-h6 w-100 d-flex justify-center">{{
@@ -122,6 +128,8 @@ import type {
   TeamLeaderboard
 } from '@/types/mileage'
 import { ref, onMounted, computed } from 'vue'
+import { useDisplay } from 'vuetify'
+const { name } = useDisplay()
 
 const mileageStore = useMileageStore()
 const userStore = useUserStore()
@@ -143,6 +151,28 @@ const filteredTeamLeaderboard = computed<RankedTeamLeaderboardEntry[]>(() =>
     team.name.toLowerCase().includes(searchQuery.value.toLowerCase())
   )
 )
+
+const maxBioLength = computed(() => {
+  switch (name.value) {
+    case 'xs':
+      return 40
+    case 'sm':
+      return 80
+    case 'md':
+      return 160
+    case 'lg':
+      return 300
+    default:
+      return 500
+  }
+})
+
+function shortenBio(bio: string) {
+  if (bio.length > maxBioLength.value) {
+    return bio.substring(0, maxBioLength.value) + '...'
+  }
+  return bio
+}
 
 function getTrophyColour(rank: number) {
   switch (rank) {
