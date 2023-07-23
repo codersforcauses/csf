@@ -20,7 +20,7 @@ export const useMileageStore = defineStore('mileage', {
   actions: {
     addMileage(mileage: Omit<Mileage, 'mileageId'>) {
       return server
-        .post('mileage/post_mileage/', mileage)
+        .post('mileage/post_mileage', mileage)
         .then(async () => {
           await this.getMileageByUser()
           await this.getMileageByTeam()
@@ -40,14 +40,14 @@ export const useMileageStore = defineStore('mileage', {
     },
     async getMileageByUser() {
       const user = useUserStore().user!.id
-      let res = await server.get(`mileage/get_mileage`, { params: { challenge: true, user } })
+      let res = await server.get(`mileage/get_mileage`, { params: { user } })
       if (res.status == 200) this.byUser.mileage = camelize(res.data) as Mileage[]
       res = await server.get(`mileage/get_mileage`, { params: { sum: true, user } })
       if (res.status == 200) this.byUser.totalKm = res.data
     },
     async getMileageByTeam() {
       const team = useUserStore().user!.teamId
-      let res = await server.get(`mileage/get_mileage`, { params: { challenge: true, team } })
+      let res = await server.get(`mileage/get_mileage`, { params: { team } })
       if (res.status == 200) this.byTeam.mileage = camelize(res.data) as Mileage[]
       res = await server.get(`mileage/get_mileage`, { params: { sum: true, team } })
       if (res.status == 200) this.byTeam.totalKm = res.data

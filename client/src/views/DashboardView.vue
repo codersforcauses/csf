@@ -123,9 +123,9 @@ function calcWidth(travelDist: number, totalDist: number) {
   return Math.min((100 * travelDist) / totalDist, 100)
 }
 
-function updateChallengeProgress(checkForCompletion: boolean) {
+async function updateChallengeProgress(checkForCompletion: boolean) {
   let oldDistance = distanceTravelled.value
-  mileageStore.getMileageByUser()
+  await mileageStore.getMileageByUser()
   distanceTravelled.value = mileageStore.totalKmByUser
 
   if (checkForCompletion) {
@@ -142,7 +142,7 @@ onMounted(async () => {
   if (userStore.user) {
     try {
       getIconName(userStore.user.travelMethod)
-      updateChallengeProgress(false)
+      await updateChallengeProgress(false)
     } catch (error) {
       console.log(error)
     }

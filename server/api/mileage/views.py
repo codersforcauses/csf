@@ -48,7 +48,7 @@ def post_mileage(request):
     try:
         user = User.objects.get(id=request.user.id)
     except ObjectDoesNotExist:
-        return Response(user.first_name, status=status.HTTP_400_BAD_REQUEST)
+        return Response(request.user.first_name, status=status.HTTP_400_BAD_REQUEST)
     # start challenge for User if not already started
     challenge_start_date = user.challenge_start_date or datetime.date.today()
     # reset challenge if time is up
