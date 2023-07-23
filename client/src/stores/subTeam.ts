@@ -14,12 +14,12 @@ const urls = {
   deleteSubteam: (subTeamId: number) => `subteam/delete_subteam/${subTeamId}`,
   getSubteamMembers: (subTeamId: number) => `subteam/get_users/${subTeamId}`,
   getAvailableMembers: () => `subteam/get_available_users/`,
-  editUserSubteam: (userId: number) => `subteam/edit_user/${userId}`
+  editUserSubteam: (userId: number) => `subteam/edit_user/${userId}`,
+  deleteSubteamMember: (userId: number) => `subteam/delete_user_from_subteam/${userId}`
 }
 
 export const useSubTeamStore = defineStore('subTeam', {
   state: () => ({
-    info: <any>[],
     subteams: [] as Subteam[],
     teamMembers: [] as UserView[],
     availableMemberList: [] as UserView[],
@@ -27,24 +27,7 @@ export const useSubTeamStore = defineStore('subTeam', {
     subteamsView: [] as SubteamView[]
   }),
 
-  getters: {},
-
   actions: {
-    // keep this optional for now as to silence warning in teampagesview.vue
-    async getSubUsers() {
-      const userStore = useUserStore()
-      if (userStore.user && userStore.token) {
-        if (userStore.token.access != null) {
-          // to see what keys the user object has
-          console.log(userStore.user)
-
-          const { data } = await server.get(`subteam/get_users/${userStore.user?.teamId}`)
-
-          console.log(data)
-          this.info.push(data)
-        }
-      }
-    },
     async createSubteam(partialSubteam: Omit<Subteam, 'subteamId'>) {
       const api = urls.createSubteam()
       const { data, status } = await server.post(
@@ -82,42 +65,37 @@ export const useSubTeamStore = defineStore('subTeam', {
       const api = urls.getSubteams(teamId)
       const { data, status } = await server.get(api)
       if (status === 200) {
-        this.subteams = camelize(data as Snakify<Subteam>[]);
+        this.subteams = camelize(data as Snakify<Subteam>[])
       }
-   },
-   async updateSubteams(teamId: number) {
-    const api = urls.getSubteams(teamId);
-    const { data, status } = await server.get(api);
-    if (status === 200) {
-        this.subteams = camelize(data as Snakify<Subteam>[]);
-    }
+    },
+    async updateSubteam(subteam: Subteam) {
+      const subteamId = subteam.subteamId
+      const api = urls.updateSubteam(subteamId)
+      await server.put(api, snakify({...subteam}))
     },
     async getAvailableMembers() {
-        const api = urls.getAvailableMembers();
-        const { data, status } = await server.get(api);
-        if (status === 200) {
-            this.availableMemberList = camelize(data as Snakify<UserView>[]) ;
-        }
-    }, 
-    async getSubteamMembers(subteamId: number) {
-      
-      const api = urls.getSubteamMembers(subteamId)
-      console.log("hello" + api)
+      const api = urls.getAvailableMembers()
       const { data, status } = await server.get(api)
       if (status === 200) {
-        console.log("subteam members: " + JSON.stringify(data))
-        this.subteamMembers = camelize(data as Snakify<UserView>[]);
-        
-        // console.log("subteam members: " + this.subteamMembers[0])
+        this.availableMemberList = camelize(data as Snakify<UserView>[])
       }
     },
-    async editUserSubteam(userId: number) {
-        const api = urls.editUserSubteam(userId);
-        const { data, status } = await server.put(api);
-        if (status === 200) {
-            this.subteamMembers = camelize(data as Snakify<UserView>[]);
-        }
+    async getSubteamMembers(subteamId: number) {
+      const api = urls.getSubteamMembers(subteamId)
+      const { data, status } = await server.get(api)
+      if (status === 200) {
+        this.subteamMembers = camelize(data as Snakify<UserView>[])
+      }
     },
+    async editUserSubteam(subteamId:number, userId: number) {
+      const api = urls.editUserSubteam(userId)
+      await server.put(api, snakify({subteamId}))
+    },
+    async removeSubteamMember(userId: number) {
+      const api = urls.deleteSubteamMember(userId)
+      await server.put(api)
+    },
+
     //get all the subteams and their members
     async getSubteamsView(teamId: number) {
       this.subteamsView = []
@@ -125,32 +103,33 @@ export const useSubTeamStore = defineStore('subTeam', {
       let membersView: MemberView[] = []
       const totalKm = 0
 
-     await this.getSubteams(teamId)
-      console.log("subteams loaded")
+      await this.getSubteams(teamId)
 
       this.subteams.forEach(async (subteam) => {
         //convert from user type to memberview type
-        console.log("subteam: " + subteam.subteamId)
-        await  this.getSubteamMembers(subteam.subteamId)
-        console.log("subteam members loaded")
-
+        await this.getSubteamMembers(subteam.subteamId)
         membersView = this.subteamMembers.map((member) => {
-            return {
-              id: member.id,
-              firstName: member.firstName,
-              lastName: member.lastName,
-              avatar: member.avatar
-            }
-          });
-        
+          return {
+            id: member.id,
+            firstName: member.firstName,
+            lastName: member.lastName,
+            avatar: `/src/assets/Avatars/${member.avatar}`
+          }
+        })
+
         const data = snakify({
           ...subteam,
           totalKm: totalKm.toString() + 'KM',
-          members: membersView          
+          members: membersView
         })
         this.subteamsView.push(camelize(data as Snakify<SubteamView>))
-      });
-      console.log("subteams view loaded")
-    },    
+      })
+    },
+    async removeMembersFromSubteam(subteamId: number) {
+      await this.getSubteamMembers(subteamId)
+      this.subteamMembers.forEach(async (member) => {
+        await this.removeSubteamMember(member.id)
+      })
+    }
   }
 })
