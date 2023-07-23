@@ -58,7 +58,7 @@ def request_reset_password(request):
     try:
         user = User.objects.get(email=request.data["email"])
     except User.DoesNotExist:
-        return Response()
+        return Response(data=f"No user matching the email {request.data['email']} was found", status=400)
 
     data = {"reset_token": str(uuid.uuid4()), "reset_time": datetime.datetime.now()}
     serializer = RequestResetPasswordSerializer(instance=user, data=data)
@@ -73,8 +73,9 @@ def request_reset_password(request):
             fail_silently=False,
             html_message=html_content
         )
-
-    return Response()
+        return Response()
+    else:
+        return Response(data="Reset email error", status=400)
 
 
 @api_view(['POST'])
@@ -117,7 +118,10 @@ def make_reset_email_message(email, username, token):
 @api_view(['PATCH'])
 def join_team(request, id):
     user = User.objects.get(id=id)
-    team = Team.objects.get(join_code=request.data['join_code'])
+    try:
+        team = Team.objects.get(join_code=request.data['join_code'])
+    except Team.DoesNotExist:
+        return Response("Team does not exist", status=404)
 
     data = {
         'team_id': team.team_id,

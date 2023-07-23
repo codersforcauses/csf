@@ -17,7 +17,7 @@
                   <v-icon :icon="method" size="52"></v-icon>
                 </v-col>
                 <v-col>
-                  <v-chip color="green" class="rounded text-h5">{{ UserMileage }} KM</v-chip>
+                  <v-chip color="green" class="rounded text-h5">{{ distanceTravelled }} KM</v-chip>
                   <v-card-subtitle>TOTAL</v-card-subtitle>
                 </v-col>
                 <v-spacer />
@@ -30,7 +30,7 @@
                     color="primaryRed"
                     @click="dialog = true"
                   />
-                  <MileageModal v-model="dialog" @handle-submit="updateChallengeProgress" />
+                  <MileageModal v-model="dialog" @handle-submit="updateChallengeProgress(true)" />
                 </v-col>
               </v-row>
             </v-container>
@@ -55,14 +55,14 @@
               <div class="progress-bar rounded-lg">
                 <div
                   :class="`rounded-lg ${challenge.colour}`"
-                  :style="`width: ${calcWidth(UserMileage, challenge.length)}%`"
+                  :style="`width: ${calcWidth(distanceTravelled, challenge.length)}%`"
                 ></div>
               </div>
             </v-col>
             <v-col cols="4" sm="2" lg="1">
               <div :class="`length-label rounded-lg ${challenge.colour}`">
                 <h3 class="primaryWhite text-center">
-                  {{ `${UserMileage}/${challenge.length}KM` }}
+                  {{ `${distanceTravelled}/${challenge.length}KM` }}
                 </h3>
               </div>
             </v-col>
@@ -72,6 +72,11 @@
       <v-divider />
     </v-container>
   </div>
+
+  <ChallengeCompletePopupModalVue
+    v-model="isCompleted"
+    :challenge-name="challengeName"
+  ></ChallengeCompletePopupModalVue>
 </template>
 
 <script setup lang="ts">
@@ -79,15 +84,18 @@ import { ref, onMounted } from 'vue'
 import MileageModal from '../components/MileageModal.vue'
 import { useUserStore } from '@/stores/user'
 import { useMileageStore } from '@/stores/mileage'
+import ChallengeCompletePopupModalVue from '@/components/ChallengeCompletePopupModal.vue'
 import MileageGraph from '../components/MileageGraph.vue'
 
 const userStore = useUserStore()
 const mileageStore = useMileageStore()
 
 const method = ref()
-const UserMileage = ref()
+const distanceTravelled = ref()
 const loading = ref(true)
 const mileageLoaded = ref(true)
+const isCompleted = ref(false)
+const challengeName = ref('')
 
 const getIconName = (medium: any) => {
   switch (medium) {
@@ -115,16 +123,26 @@ function calcWidth(travelDist: number, totalDist: number) {
   return Math.min((100 * travelDist) / totalDist, 100)
 }
 
-function updateChallengeProgress() {
+function updateChallengeProgress(checkForCompletion: boolean) {
+  let oldDistance = distanceTravelled.value
   mileageStore.getMileageByUser()
-  UserMileage.value = mileageStore.totalKmByUser
+  distanceTravelled.value = mileageStore.totalKmByUser
+
+  if (checkForCompletion) {
+    challenges.value.forEach((challenge) => {
+      if (oldDistance < challenge.length && distanceTravelled.value >= challenge.length) {
+        challengeName.value = challenge.name
+        isCompleted.value = true
+      }
+    })
+  }
 }
 
 onMounted(async () => {
   if (userStore.user) {
     try {
       getIconName(userStore.user.travelMethod)
-      updateChallengeProgress()
+      updateChallengeProgress(false)
     } catch (error) {
       console.log(error)
     }

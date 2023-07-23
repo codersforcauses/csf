@@ -8,7 +8,9 @@ class SignUpmodelSerializer(serializers.ModelSerializer):
         model = get_user_model()
         fields = ['username', 'first_name', 'last_name', 'email', 'password', 'team_signup', 'has_consent', 'travel_method', 'avatar']
         extra_kwargs = {
-            'password': {'write_only': True}
+            'password': {'write_only': True},
+            'first_name': {'allow_blank': False},
+            'last_name': {'allow_blank': False}
         }
 
     def validate_password(self, value):

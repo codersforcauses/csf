@@ -4,7 +4,12 @@ import PopupDialog from './PopupDialog.vue'
 import { capitalize } from 'vue'
 
 const emit = defineEmits(['handleConfirm'])
-const props = defineProps<{ action: string; object: string; useDoneForButton?: boolean }>()
+const props = defineProps<{
+  action: string
+  object: string
+  useDoneForButton?: boolean
+  loading: boolean
+}>()
 
 const display = ref(false)
 </script>
@@ -19,6 +24,7 @@ const display = ref(false)
       :submit-text="capitalize(props.action)"
       @handle-submit="() => emit('handleConfirm')"
     />
-    {{ props.useDoneForButton ? 'DONE' : props.action.toUpperCase() }}
+    <v-progress-circular v-if="loading" indeterminate size="24" color="white"></v-progress-circular>
+    <span v-else> {{ props.useDoneForButton ? 'DONE' : props.action.toUpperCase() }}</span>
   </v-btn>
 </template>
