@@ -8,12 +8,14 @@ import { useUserStore } from './user'
 
 export const useMileageStore = defineStore('mileage', {
   state: () => ({
-    mileageByUser: useStorage('mileageByUser', [] as Mileage[]),
-    mileageByTeam: useStorage('mileageByTeam', [] as Mileage[])
+    byUser: useStorage('mileageByUser', { mileage: [] as Mileage[], totalKm: 0 }),
+    byTeam: useStorage('mileageByTeam', { mileage: [] as Mileage[], totalKm: 0 })
   }),
   getters: {
-    totalKmByUser: (state) => state.mileageByUser.reduce((acc, cur) => acc + cur.kilometres, 0),
-    totalKmByTeam: (state) => state.mileageByTeam.reduce((acc, cur) => acc + cur.kilometres, 0)
+    mileageByUser: (state) => state.byUser.mileage,
+    mileageByTeam: (state) => state.byTeam.mileage,
+    totalKmByUser: (state) => state.byUser.totalKm,
+    totalKmByTeam: (state) => state.byTeam.totalKm
   },
   actions: {
     addMileage(mileage: Omit<Mileage, 'mileageId'>) {
@@ -37,18 +39,18 @@ export const useMileageStore = defineStore('mileage', {
         )
     },
     async getMileageByUser() {
-      const { status, data } = await server.get(
-        `mileage/get_mileage/user/${useUserStore().user!.id}`,
-        { params: { challenge: true } }
-      )
-      if (status == 200) this.mileageByUser = <Mileage[]>camelize(data)
+      const user = useUserStore().user!.id
+      let res = await server.get(`mileage/get_mileage`, { params: { challenge: true, user } })
+      if (res.status == 200) this.byUser.mileage = camelize(res.data) as Mileage[]
+      res = await server.get(`mileage/get_mileage`, { params: { sum: true, user } })
+      if (res.status == 200) this.byUser.totalKm = res.data
     },
     async getMileageByTeam() {
-      const { status, data } = await server.get(
-        `mileage/get_mileage/team/${useUserStore().user!.teamId!}`,
-        { params: { challenge: true } }
-      )
-      if (status == 200) this.mileageByTeam = camelize(data) as Mileage[]
+      const team = useUserStore().user!.teamId
+      let res = await server.get(`mileage/get_mileage`, { params: { challenge: true, team } })
+      if (res.status == 200) this.byTeam.mileage = camelize(res.data) as Mileage[]
+      res = await server.get(`mileage/get_mileage`, { params: { sum: true, team } })
+      if (res.status == 200) this.byTeam.totalKm = res.data
     }
   }
 })
