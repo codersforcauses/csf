@@ -4,7 +4,9 @@
 
     <div class="ma-5">
       <h2 style="margin-bottom: 1vh" class="text-subtitle-1 text-md-h6 font-weight-bold">
-        Log your daily kilometers over the 14-day period, and watch your progress on the personal dashboard. Challenges serve as reference points for your achievements, providing valuable insights into your journey.
+        Log your daily kilometers over the 14-day period, and watch your progress on the personal
+        dashboard. Challenges serve as reference points for your achievements, providing valuable
+        insights into your journey.
       </h2>
       <h2 class="text-subtitle-1 text-md-h6">
         (Don't worry if you can't complete all the challenges, just do your best!)
