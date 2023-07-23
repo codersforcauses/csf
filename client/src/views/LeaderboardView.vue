@@ -1,10 +1,10 @@
 <template>
-  <div class="header">
-    <h1 class="text-center text-secondaryTint font-weight-medium text-md-h1" id="title">
+  <div class="header text-white ">
+    <h1 class="text-center font-weight-medium text-md-h1" id="title">
       Leaderboards
     </h1>
   </div>
-  <v-row class="ma-0 pt-4" justify="space-evenly">
+  <v-row class="ma-0 pt-5 pb-1" justify="space-evenly">
     <v-btn
       variant="flat"
       density="compact"
@@ -39,7 +39,7 @@
       </tr>
     </thead>
     <tbody v-if="activeButton === 'Individual'">
-      <tr v-if="currentUser" style="border-collapse: separate; border-spacing: 20px">
+      <tr v-if="currentUser" style="border-collapse: separate; border-spacing: 20px" class="bg-grey-lighten-4">
         <td v-if="currentUser.rank < 4" class="text-right text-subtitle-1">
           <v-icon icon="mdi-trophy" size="25px" :class="getTrophyColour(currentUser.rank)" />
           {{ currentUser.rank }}
@@ -50,10 +50,8 @@
           <v-chip color="green" class="rounded text-h6 w-100 d-flex justify-center">{{
             currentUser.totalMileage
           }}</v-chip>
-          <!-- <p class="text-subtitle-2 text-center">TOTAL MILEAGE</p> -->
         </td>
       </tr>
-      <!-- What follows is a dumb way of making a gap in the table -->
       <tr v-if="currentUser">
         <td id="gap"></td>
         <td id="gap"></td>
@@ -70,12 +68,11 @@
           <v-chip color="green" class="rounded text-h6 w-100 d-flex justify-center">{{
             item.totalMileage
           }}</v-chip>
-          <!-- <p class="text-subtitle-2 text-center">TOTAL MILEAGE</p> -->
         </td>
       </tr>
     </tbody>
     <tbody v-else>
-      <tr v-if="currentTeam" style="border-collapse: separate; border-spacing: 20px">
+      <tr v-if="currentTeam" style="border-collapse: separate; border-spacing: 20px" class="bg-grey-lighten-4">
         <td v-if="currentTeam.rank < 4" class="text-right text-subtitle-1">
           <v-icon icon="mdi-trophy" size="25px" :class="getTrophyColour(currentTeam.rank)" />
           {{ currentTeam.rank }}
@@ -176,7 +173,7 @@ onMounted(async () => {
 })
 </script>
 
-<style>
+<style scoped>
 .header {
   background-image: url('/images/Footer-min.jpeg');
   background-size: cover;

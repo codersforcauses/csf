@@ -81,7 +81,6 @@ def get_leaderboard(request):
         leaderboard_serializer = TeamLeaderboardSerializer(Team.objects.order_by("-total_mileage"), many=True)
         result = {"leaderboard": calculate_leaderboard_ranks(leaderboard_serializer.data[:LEADERBOARD_SIZE])}
         if "team_name" in request.GET:
-            print(leaderboard_serializer.data)
             rank, team_mileage, index = get_rank_and_mileage_from_leaderboard(leaderboard_serializer.data, request.GET["team_name"], "name")
             if rank != -1 and team_mileage != -1:
                 result["team"] = {"name": request.GET["team_name"], "bio": leaderboard_serializer.data[index]["bio"],
