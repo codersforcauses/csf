@@ -187,9 +187,9 @@ function getTrophyColour(rank: number) {
 
 onMounted(async () => {
   let userParam = { type: 'users' } as GetLeaderboardParam
-  if (userStore.user) userParam.username = userStore.user.username
+  if (userStore.user) userParam.userId = userStore.user.id
   let teamParam = { type: 'teams' } as GetLeaderboardParam
-  if (teamStore.team) teamParam.teamName = teamStore.team.name
+  if (teamStore.team) teamParam.teamId = teamStore.team.teamId
   let usersResult = (await mileageStore.getLeaderboard(userParam)) as UserLeaderboard
   if (usersResult) {
     userLeaderboard.value = usersResult.leaderboard

@@ -72,24 +72,24 @@ def post_mileage(request):
 def get_leaderboard(request):
     if request.GET["type"] == "users":
         leaderboard_serializer = UserLeaderboardSerializer(User.objects.filter(is_staff=False).order_by("-total_mileage"), many=True)
-        result = {"leaderboard": calculate_leaderboard_ranks(leaderboard_serializer.data[:LEADERBOARD_SIZE])}
-        if "username" in request.GET:
-            rank, user_mileage, index = get_rank_and_mileage_from_leaderboard(leaderboard_serializer.data, request.GET["username"], "username")
+        result = {"leaderboard": calculate_leaderboard_ranks(leaderboard_serializer.data[:LEADERBOARD_SIZE], "id")}
+        if "user_id" in request.GET:
+            rank, user_mileage, index = get_rank_and_mileage_from_leaderboard(leaderboard_serializer.data, int(request.GET["user_id"]), "id")
             if rank != -1 and user_mileage != -1:
-                result["user"] = {"username": request.GET["username"], "rank": rank, "total_mileage": user_mileage}
+                result["user"] = {"username": leaderboard_serializer.data[index]["username"], "rank": rank, "total_mileage": user_mileage}
     else:
         leaderboard_serializer = TeamLeaderboardSerializer(Team.objects.order_by("-total_mileage"), many=True)
-        result = {"leaderboard": calculate_leaderboard_ranks(leaderboard_serializer.data[:LEADERBOARD_SIZE])}
-        if "team_name" in request.GET:
-            rank, team_mileage, index = get_rank_and_mileage_from_leaderboard(leaderboard_serializer.data, request.GET["team_name"], "name")
+        result = {"leaderboard": calculate_leaderboard_ranks(leaderboard_serializer.data[:LEADERBOARD_SIZE], "team_id")}
+        if "team_id" in request.GET:
+            rank, team_mileage, index = get_rank_and_mileage_from_leaderboard(leaderboard_serializer.data, int(request.GET["team_id"]), "team_id")
             if rank != -1 and team_mileage != -1:
-                result["team"] = {"name": request.GET["team_name"], "bio": leaderboard_serializer.data[index]["bio"],
+                result["team"] = {"name": leaderboard_serializer.data[index]["name"], "bio": leaderboard_serializer.data[index]["bio"],
                                   "rank": rank, "total_mileage": team_mileage}
 
     return Response(result)
 
 
-def get_rank_and_mileage_from_leaderboard(leaderboard, username, field_name):
+def get_rank_and_mileage_from_leaderboard(leaderboard, id, field_name):
     i = 0
     length = len(leaderboard)
     rank = -1
@@ -99,7 +99,7 @@ def get_rank_and_mileage_from_leaderboard(leaderboard, username, field_name):
     # Once we achieve that, we step back through the leaderboard to make sure the previous
     # user/team has a bigger mileage, since that means they should have different ranks
     while i >= 0 and i < length:
-        if mileage == -1 and leaderboard[i][field_name] == username:
+        if mileage == -1 and leaderboard[i][field_name] == id:
             index = i
             mileage = leaderboard[i]['total_mileage']
             rank = i + 1
@@ -120,15 +120,16 @@ def get_rank_and_mileage_from_leaderboard(leaderboard, username, field_name):
 
 
 # users with the exact same mileage should have the same rank
-def calculate_leaderboard_ranks(leaderboard):
+def calculate_leaderboard_ranks(leaderboard, id_field_name):
     ranked_leaderboard = []
     for i in range(len(leaderboard)):
+        # copy because we'll need the id field if we're also calculating the rank of a specific user
+        ranked_entry = leaderboard[i].copy()
+        # no need to send the id back to the frontend
+        ranked_entry.pop(id_field_name)
         if i > 0 and leaderboard[i]["total_mileage"] == leaderboard[i-1]["total_mileage"]:
-            ranked_entry = leaderboard[i]
             ranked_entry["rank"] = ranked_leaderboard[i-1]["rank"]
-            ranked_leaderboard.append(ranked_entry)
         else:
-            ranked_entry = leaderboard[i]
             ranked_entry["rank"] = i+1
-            ranked_leaderboard.append(ranked_entry)
+        ranked_leaderboard.append(ranked_entry)
     return ranked_leaderboard

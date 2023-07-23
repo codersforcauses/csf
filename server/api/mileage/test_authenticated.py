@@ -172,7 +172,7 @@ class MileageTests(APITestCase):
                                                          {'username': 'user1', 'total_mileage': 5.0, 'rank': 2},
                                                          {'username': 'user2', 'total_mileage': 4.0, 'rank': 3},
                                                          {'username': 'Fred', 'total_mileage': 0.0, 'rank': 4}])
-        response = self.client.get(reverse('mileage:get-leaderboard'), {'type': 'users', "username": "user1"}, format='json')
+        response = self.client.get(reverse('mileage:get-leaderboard'), {'type': 'users', "user_id": user1.id}, format='json')
         self.assertTrue("leaderboard" in response.data and "user" in response.data)
         self.assertEquals(response.data["user"], {"username": "user1", "rank": 2, "total_mileage": 5.0})
 
@@ -180,6 +180,6 @@ class MileageTests(APITestCase):
         response = self.client.get(reverse('mileage:get-leaderboard'), {'type': 'team'}, format='json')
         self.assertEquals(response.data["leaderboard"], [{'name': 'team1', 'bio': 'we are team 1', 'total_mileage': 9.0, 'rank': 1},
                                                          {'name': 'team2', 'bio': 'we are team 2', 'total_mileage': 6.0, 'rank': 2}])
-        response = self.client.get(reverse('mileage:get-leaderboard'), {'type': 'team', "team_name": "team2"}, format='json')
+        response = self.client.get(reverse('mileage:get-leaderboard'), {'type': 'team', "team_id": team2.team_id}, format='json')
         self.assertTrue("leaderboard" in response.data and "team" in response.data)
         self.assertEquals(response.data["team"], {"name": "team2", "bio": "we are team 2", "rank": 2, "total_mileage": 6.0})
