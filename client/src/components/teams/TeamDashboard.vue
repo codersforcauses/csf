@@ -41,7 +41,7 @@
       <v-divider />
 
       <!-- Bio -->
-      <v-container class="ma-0 pa-0">
+      <v-container class="pa-0">
         <v-row id="pointer-cursor" class="my-2">
           <v-col @click="isBioVisible = !isBioVisible">
             <h2>Bio</h2>
@@ -61,16 +61,16 @@
             size="50px"
           />
         </v-row>
-        <v-row>
+        <v-row v-if="isBioVisible" class="mt-n4 mb-2">
           <v-col>
-            <p v-if="isBioVisible">{{ teamData.bio }}</p>
+            <p>{{ teamData.bio }}</p>
           </v-col>
         </v-row>
       </v-container>
       <v-divider></v-divider>
 
       <!-- Daily Kilometres -->
-      <v-container class="ma-0 pa-0">
+      <v-container class="pa-0">
         <v-row align="start" id="pointer-cursor" class="my-2">
           <v-col>
             <h2>Daily KMs</h2>
@@ -90,9 +90,9 @@
             class="px-10"
           />
         </v-row>
-        <v-row>
+        <v-row v-if="isDailyKmsVisible" class="mt-n4 mb-2">
           <v-col>
-            <MileageGraph v-if="isDailyKmsVisible" />
+            <MileageGraph />
           </v-col>
         </v-row>
       </v-container>
@@ -122,9 +122,11 @@
           class="px-10"
         />
       </v-row>
-      <v-col cols="12" class="w-100" id="pointer-cursor">
-        <SubTeams v-if="isSubTeamsVisible" />
-      </v-col>
+      <v-row v-if="isSubTeamsVisible" class="my-2">
+        <v-col cols="12" class="w-100" id="pointer-cursor">
+          <SubTeams />
+        </v-col>
+      </v-row>
       <v-divider />
 
       <!-- Leaderboard -->
