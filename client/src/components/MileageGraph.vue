@@ -13,7 +13,7 @@
         {{ range }}
       </v-btn>
     </div>
-    <LineWithLineChart :data="graphData" :options="options"/>
+    <LineWithLineChart :data="graphData" :options="options" />
   </v-card>
 </template>
 
