@@ -1,21 +1,23 @@
 <template>
   <v-card class="mx-3 elevation-0" :class="backgroundColour">
-    <v-card-title>
-      <span class="font-weight-bold">{{ event.name }}</span>
-      <v-spacer />
-      <v-icon
-        v-if="user?.teamAdmin && !event.isPublic"
-        icon="mdi-pencil"
-        @click="openModal"
-        size="24"
-        class="mr-2 mt-1"
-      />
-      <v-chip
-        variant="outlined"
-        :class="event.isPublic ? 'text-secondaryBlue' : 'text-secondaryGreen'"
-      >
-        {{ event.isPublic ? 'Official' : 'Private' }}
-      </v-chip>
+    <v-card-title style="word-break: break-word; overflow-wrap: break-word; white-space: normal">
+      <v-row no-gutters>
+        <span class="font-weight-bold">{{ event.name }}</span>
+        <v-icon
+          v-if="user?.teamAdmin && !event.isPublic"
+          icon="mdi-pencil"
+          @click="openModal"
+          size="24"
+          class="mr-2 mt-1"
+        />
+        <v-spacer />
+        <v-chip
+          variant="outlined"
+          :class="event.isPublic ? 'text-secondaryBlue' : 'text-secondaryGreen'"
+        >
+          {{ event.isPublic ? 'Official' : 'Private' }}
+        </v-chip>
+      </v-row>
     </v-card-title>
     <v-card-subtitle class="text-primaryRed font-italic"
       >{{ formatDate(event.startDate) }} - {{ formatDate(event.endDate) }}</v-card-subtitle
