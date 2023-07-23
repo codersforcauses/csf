@@ -30,7 +30,7 @@
                     color="primaryRed"
                     @click="dialog = true"
                   />
-                  <MileageModal v-model="dialog" @handle-submit="updateChallengeProgress" />
+                  <MileageModal v-model="dialog" @handle-submit="updateChallengeProgress(true)" />
                 </v-col>
               </v-row>
             </v-container>
@@ -71,6 +71,11 @@
       <v-divider />
     </v-container>
   </div>
+
+  <ChallengeCompletePopupModalVue
+    v-model="isCompleted"
+    :challenge-name="challengeName"
+  ></ChallengeCompletePopupModalVue>
 </template>
 
 <script setup lang="ts">
@@ -78,12 +83,15 @@ import { ref, onMounted } from 'vue'
 import MileageModal from '../components/MileageModal.vue'
 import { useUserStore } from '@/stores/user'
 import { useMileageStore } from '@/stores/mileage'
+import ChallengeCompletePopupModalVue from '@/components/ChallengeCompletePopupModal.vue'
 
 const userStore = useUserStore()
 const method = ref()
 const loading = ref(true)
 const user = ref()
 const username = ref()
+const isCompleted = ref(false)
+const challengeName = ref('')
 
 const getIconName = (medium: any) => {
   switch (medium) {
@@ -125,8 +133,18 @@ function getRecentMileage() {
   return 0
 }
 
-function updateChallengeProgress() {
+function updateChallengeProgress(checkForCompletion: boolean) {
+  let oldDistance = distanceTravelled.value
   distanceTravelled.value = getRecentMileage()
+
+  if (checkForCompletion) {
+    challenges.value.forEach((challenge) => {
+      if (oldDistance < challenge.length && distanceTravelled.value >= challenge.length) {
+        challengeName.value = challenge.name
+        isCompleted.value = true
+      }
+    })
+  }
 }
 
 onMounted(async () => {
@@ -136,7 +154,7 @@ onMounted(async () => {
       username.value = user.value.username
       getIconName(user.value.travelMethod)
       await mileageStore.getRecentMileage(userStore.user.id)
-      updateChallengeProgress()
+      updateChallengeProgress(false)
     } catch (error) {
       console.log(error)
     }

@@ -88,7 +88,15 @@
       </v-container>
     </v-row>
     <v-row>
-      <v-btn class="bg-primaryRed ma-4" @click="changeDetails">Update </v-btn>
+      <v-btn class="bg-primaryRed ma-4" @click="changeDetails">
+        <v-progress-circular
+          v-if="loading"
+          indeterminate
+          size="24"
+          color="white"
+        ></v-progress-circular>
+        <span v-else>Update</span>
+      </v-btn>
       <v-spacer />
       <v-btn class="bg-primaryRed ma-4" @click="showChangePasswordModal = true"
         >Change Password
@@ -113,6 +121,7 @@ import camelize from 'camelize-ts'
 import { notify } from '@kyvg/vue3-notification'
 
 const userStore = useUserStore()
+const loading = ref(false)
 
 const state = reactive<UserSettings>({
   username: userStore.user!.username,
@@ -155,14 +164,14 @@ const travelMethod = ref([
 
 const selectAvatar = (url: string) => {
   avatarPaths.value.forEach((avatar) => {
-    avatar.isSelected = avatar.url === url // ? !avatar.isSelected : false
+    avatar.isSelected = avatar.url === url
   })
   state.avatar = url
 }
 
 const selectMode = (mode: string) => {
   travelMethod.value.forEach((method) => {
-    method.isSelected = method.mode === mode ? !method.isSelected : false
+    method.isSelected = method.mode === mode
   })
   state.travelMethod = mode
 }
@@ -171,6 +180,7 @@ const showChangePasswordModal = ref(false)
 const showSuccessDialog = ref(false)
 
 async function changeDetails() {
+  loading.value = true
   try {
     let newUsername = state.username
     let status = await userStore.changeDetails(state)
@@ -195,6 +205,7 @@ async function changeDetails() {
       })
     }
   }
+  loading.value = false
 }
 
 function passwordChanged() {

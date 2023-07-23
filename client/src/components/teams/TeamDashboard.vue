@@ -140,9 +140,18 @@
       :action="'delete'"
       :object="'team'"
       :use-done-for-button="false"
+      :loading="loading"
       @handle-confirm="deleteTeam"
     />
-    <v-btn size="large" color="red white--text" v-else @click="removeTeam">Leave Team</v-btn>
+    <v-btn size="large" color="red white--text" v-else @click="removeTeam">
+      <v-progress-circular
+        v-if="loading"
+        indeterminate
+        size="24"
+        color="white"
+      ></v-progress-circular>
+      <span v-else>Leave Team</span>
+    </v-btn>
   </v-row>
 </template>
 
@@ -156,17 +165,47 @@ import ConfirmButton from '@/components/ConfirmButton.vue'
 const { mobile } = useDisplay()
 import { useTeamStore } from '@/stores/team'
 import { useUserStore } from '@/stores/user'
+import { AxiosError } from 'axios'
+import { notify } from '@kyvg/vue3-notification'
 const teamStore = useTeamStore()
 const userStore = useUserStore()
+const loading = ref(false)
 
 onMounted(async () => {
-  if (userStore.user!.teamId) await teamStore.getTeam(userStore.user!.teamId)
+  if (userStore.user!.teamId)
+    await teamStore.getTeam(userStore.user!.teamId).catch((error: AxiosError | any) => {
+      if (error instanceof AxiosError && error.response) {
+        notify({
+          title: 'Get Team',
+          type: 'error',
+          text: 'Get Team Error'
+        })
+      }
+    })
 })
 const deleteTeam = () => {
-  teamStore.deleteTeam()
+  loading.value = true
+  teamStore.deleteTeam().catch((error: AxiosError | any) => {
+    if (error instanceof AxiosError && error.response) {
+      notify({
+        title: 'Delete Team',
+        type: 'error',
+        text: 'Delete Team Error'
+      })
+    }
+  })
 }
 const removeTeam = () => {
-  teamStore.removeTeam()
+  loading.value = true
+  teamStore.removeTeam().catch((error: AxiosError | any) => {
+    if (error instanceof AxiosError && error.response) {
+      notify({
+        title: 'Remove Team',
+        type: 'error',
+        text: 'Remove Team Error'
+      })
+    }
+  })
 }
 
 const teamData = ref({
