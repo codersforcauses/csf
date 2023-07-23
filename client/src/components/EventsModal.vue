@@ -6,6 +6,7 @@ import ConfirmButton from '@/components/ConfirmButton.vue'
 import { notify } from '@kyvg/vue3-notification'
 import { AxiosError } from 'axios'
 import camelize from 'camelize-ts'
+import { computed } from 'vue'
 
 const props = defineProps<{ type: 'Create' | 'Edit'; event?: Event }>()
 const emit = defineEmits(['close'])
@@ -17,10 +18,21 @@ const startDate = ref(props.event?.startDate ?? '')
 const endDate = ref(props.event?.endDate ?? '')
 const description = ref(props.event?.description ?? '')
 const isPublic = ref(props.event?.isPublic ?? false)
-const isFullscreen = ref(false)
 const valid = ref(true)
+const isFullscreen = ref(false)
 const minDate = ref('')
 setMinDate()
+
+const startDateEnabled = computed(() => {
+  let now = new Date()
+  now.setHours(0, 0, 0, 0)
+  return props.event && now > new Date(props.event.startDate)
+})
+const endDateEnabled = computed(() => {
+  let now = new Date()
+  now.setHours(0, 0, 0, 0)
+  return props.event && now > new Date(props.event.endDate)
+})
 
 const refs = () => ({
   name: name.value,
@@ -210,6 +222,7 @@ watchEffect(async () => {
           :min="minDate"
           :rules="[required]"
           v-model="startDate"
+          :disabled="startDateEnabled"
           :error-messages="errors.startDate"
           @focus="errors.startDate = []"
           class="mx-5"
@@ -221,6 +234,7 @@ watchEffect(async () => {
           :min="minDate"
           :rules="[required]"
           v-model="endDate"
+          :disabled="endDateEnabled"
           class="mx-5"
         />
         <v-textarea
