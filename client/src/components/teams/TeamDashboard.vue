@@ -14,7 +14,7 @@
       <v-row align="center" class="my-2">
         <v-icon :class="['mdi','ml-3', getIconName(userStore.user!.travelMethod)]" size="50px" />
         <v-col>
-          <v-chip color="green" class="rounded text-h5">{{ totalKilometres }} KM</v-chip>
+          <v-chip color="green" class="rounded text-h5">{{ mileageStore.totalKmByTeam }} KM</v-chip>
           <h3>TOTAL</h3>
         </v-col>
       </v-row>
@@ -174,6 +174,8 @@ const userStore = useUserStore()
 const loading = ref(false)
 const mileageStore = useMileageStore()
 
+mileageStore.getMileageByTeam()
+
 onMounted(async () => {
   if (userStore.user!.teamId)
     await teamStore.getTeam(userStore.user!.teamId).catch((error: AxiosError | any) => {
@@ -185,7 +187,6 @@ onMounted(async () => {
         })
       }
     })
-  updateTeamMileage()
 })
 const deleteTeam = () => {
   loading.value = true
@@ -211,13 +212,6 @@ const removeTeam = () => {
     }
   })
 }
-
-const updateTeamMileage = () => {
-  mileageStore.getMileageByTeam()
-  totalKilometres.value = mileageStore.totalKmByTeam
-}
-
-const totalKilometres = ref()
 
 const teamData = ref({
   team_name: teamStore.team ? teamStore.team.name : '',

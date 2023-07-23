@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import { useStorage } from '@vueuse/core'
 import server from '@/utils/server'
 import type Mileage from '@/types/mileage'
 import camelize from 'camelize-ts'
@@ -8,8 +7,8 @@ import { useUserStore } from './user'
 
 export const useMileageStore = defineStore('mileage', {
   state: () => ({
-    byUser: useStorage('mileageByUser', { mileage: [] as Mileage[], totalKm: 0 }),
-    byTeam: useStorage('mileageByTeam', { mileage: [] as Mileage[], totalKm: 0 }),
+    byUser: { mileage: [] as Mileage[], totalKm: 0 },
+    byTeam: { mileage: [] as Mileage[], totalKm: 0 },
     totalChallengeKmByUser: 0
   }),
   getters: {
