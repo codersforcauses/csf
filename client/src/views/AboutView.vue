@@ -47,16 +47,29 @@
       REGISTER NOW
     </v-btn>
   </v-row>
-  <v-row v-if="shown" justify="center" class="my-7 bg-secondaryGreen" no-gutters>
-    <p class="py-10 mx-10">Install it as an app?</p>
+  <v-row
+    v-if="shown"
+    justify="space-evenly"
+    align="center"
+    class="bg-secondaryGrey py-5"
+    no-gutters
+  >
+    <p
+      class="py-10 mx-10 wrap"
+      :style="{ fontFamily: 'Hackney', fontSize: '24px' }"
+      style="letter-spacing: -0.5px"
+    >
+      Download the website as an app on any device!
+    </p>
     <v-btn
-      class="bg-primaryRed pb-14 mb-6"
-      size="x-large"
-      :style="{ fontFamily: 'Hackney', fontSize: '42px' }"
+      class="bg-primaryRed pb-9"
+      size="small"
+      :style="{ fontFamily: 'Hackney', fontSize: '28px' }"
       style="letter-spacing: -0.5px"
       :active="false"
       @click="installPWA"
     >
+      <v-icon size="24" class="mt-1"> mdi-download </v-icon>
       INSTALL
     </v-btn>
   </v-row>
