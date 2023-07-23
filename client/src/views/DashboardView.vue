@@ -93,7 +93,6 @@ const mileageStore = useMileageStore()
 const method = ref()
 const distanceTravelled = ref()
 const loading = ref(true)
-const mileageLoaded = ref(true)
 const isCompleted = ref(false)
 const challengeName = ref('')
 

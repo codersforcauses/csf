@@ -96,7 +96,10 @@ function filterData(range?: (typeof ranges)[number]) {
 }
 
 filterData()
-watch(() => props.dataPoints, () => filterData())
+watch(
+  () => props.dataPoints,
+  () => filterData()
+)
 
 // GRAPH DATA
 const graphData = computed(() => {

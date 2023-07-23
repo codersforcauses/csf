@@ -4,7 +4,6 @@ import type { Signup, Tokens, User, UserSettings } from '@/types/user'
 import camelize from 'camelize-ts'
 import snakify from 'snakify-ts'
 import { useTeamStore } from './team'
-import { useMileageStore } from './mileage'
 import useNullableStorage from '@/utils/useNullableStorage'
 import { useModalStore } from './modal'
 
@@ -107,7 +106,11 @@ export const useUserStore = defineStore('user', {
 
     async refreshToken() {
       if (this.token != null) {
-        const { status, data } = await server.post('auth/refresh/', {refresh: this.token.refresh}, { validateStatus: () => true})
+        const { status, data } = await server.post(
+          'auth/refresh/',
+          { refresh: this.token.refresh },
+          { validateStatus: () => true }
+        )
         if (status == 200) {
           this.token.access = data.access
           return true
