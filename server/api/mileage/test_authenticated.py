@@ -30,8 +30,7 @@ class MileageTests(APITestCase):
         self._get_token()
 
     def test_get_mileage(self):
-        url = reverse('mileage:get-mileage-by-user', args=[self.user.id])
-        response = self.client.get(url)
+        response = self.client.get(reverse('mileage:get-mileage'), {'user': self.user.id})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         serializer = MileageSerializer([self.mileage], many=True)
@@ -50,6 +49,17 @@ class MileageTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         self.assertEqual(Mileage.objects.count(), 3)
+
+    def test_total_km(self):
+        response = self.client.post(
+            reverse('mileage:post-mileage'),
+            {'user': self.user.id, 'kilometres': 200.0}, format='json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        response = self.client.get(reverse('mileage:get-mileage'), {'user': self.user.id, 'sum': True})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, 100 + 200)
 
     def test_post_mileage_invalid_data(self):
         url = reverse('mileage:post-mileage')
@@ -92,8 +102,7 @@ class MileageTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # test only get mileages within challenge period if challenge param in query
-        url = reverse('mileage:get-mileage-by-user', args=[self.user.id])
-        response = self.client.get(url, {'challenge': True})
+        response = self.client.get(reverse('mileage:get-mileage'), {'challenge': True, 'user': self.user.id})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.assertEqual(len(response.data), 2)
@@ -114,8 +123,7 @@ class MileageTests(APITestCase):
         self._get_token()  # an ugly fix
 
         # get mileages after challenge period has ended
-        url = reverse('mileage:get-mileage-by-user', args=[self.user.id])
-        response = self.client.get(url, {'challenge': True})
+        response = self.client.get(reverse('mileage:get-mileage'), {'challenge': True, 'user': self.user.id})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 0)
 
@@ -125,8 +133,7 @@ class MileageTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # test only gets mileage in new challenge period
-        url = reverse('mileage:get-mileage-by-user', args=[self.user.id])
-        response = self.client.get(url, {'challenge': True})
+        response = self.client.get(reverse('mileage:get-mileage'), {'challenge': True, 'user': self.user.id})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.assertEqual(len(response.data), 1)
