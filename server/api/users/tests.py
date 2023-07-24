@@ -1,7 +1,7 @@
 from django.urls import reverse
 from django.core import mail
 from rest_framework.test import APITestCase
-from .models import User
+from .models import User, Team
 
 
 class UserTest(APITestCase):
@@ -15,6 +15,12 @@ class UserTest(APITestCase):
         self.new_username = "user1"
         self.new_avatar = 'avatar6.jpg'
         self.bad_new_email = "fhushfw@sfd"
+
+        self.team = Team.objects.create(
+            name="mockTeam",
+            join_code="j01NtH3m0cKT34M",
+            bio="mockTeamFor UnitTest"
+        )
 
         self.user = User.objects.create_user(
             username=self.username,
@@ -105,3 +111,34 @@ class UserTest(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["username"], user_to_match.username)
         self.assertEqual(response.data["email"], user_to_match.email)
+
+    def test_join_team_valid(self):
+        mock_user = User.objects.get(id=self.user.id)
+        mock_team = Team.objects.get(team_id=self.team.team_id)
+        url = reverse("user:join-team",
+                      kwargs={"id": mock_user.id})
+        response = self.client.patch(
+            url,
+            {
+                "join_code": mock_team.join_code,
+                "team_admin": False,
+            },
+            format="json",
+        )
+        mock_user_reget = User.objects.get(id=self.user.id)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(mock_user_reget.team_id, mock_team)
+
+    def test_join_team_not_found(self):
+        mock_user = User.objects.get(id=self.user.id)
+        url = reverse("user:join-team",
+                      kwargs={"id": mock_user.id})
+        response = self.client.patch(
+            url,
+            {
+                "join_code": "f4k3J0iNC0d3",
+                "team_admin": False,
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, 404)

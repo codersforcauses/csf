@@ -78,7 +78,13 @@
           <v-col cols="auto" class="mt-10">
             <v-row align="center" justify="center">
               <v-btn variant="flat" class="bg-primaryRed" size="large" @click="submitForm">
-                Login
+                <v-progress-circular
+                  v-if="loading"
+                  indeterminate
+                  size="24"
+                  color="white"
+                ></v-progress-circular>
+                <span v-else>Login</span>
               </v-btn>
             </v-row>
 
@@ -121,7 +127,15 @@
           />
         </v-card-text>
         <v-card-actions class="justify-center mb-5">
-          <v-btn variant="flat" class="bg-primaryRed" @click="emailUser">Send Email</v-btn>
+          <v-btn variant="flat" class="bg-primaryRed" @click="emailUser">
+            <v-progress-circular
+              v-if="loading"
+              indeterminate
+              size="24"
+              color="white"
+            ></v-progress-circular>
+            <span v-else>Send Email</span>
+          </v-btn>
         </v-card-actions>
       </div>
       <div v-else-if="page === 3" class="bg-backgroundGrey">
@@ -147,9 +161,15 @@
         </v-card-text>
         <v-card-actions class="justify-center mb-5" align="center">
           <v-btn variant="text" class="mx-2" @click="emailUser">Resend Email</v-btn>
-          <v-btn variant="flat" class="mx-2" rounded="lg" color="primaryRed" @click="submitToken"
-            >Submit</v-btn
-          >
+          <v-btn variant="flat" class="mx-2" rounded="lg" color="primaryRed" @click="submitToken">
+            <v-progress-circular
+              v-if="loading"
+              indeterminate
+              size="24"
+              color="white"
+            ></v-progress-circular>
+            <span v-else>Submit</span>
+          </v-btn>
         </v-card-actions>
       </div>
       <div v-else-if="page === 4" class="bg-backgroundGrey">
@@ -218,6 +238,7 @@ const userStore = useUserStore()
 const modalStore = useModalStore()
 const page = ref<1 | 2 | 3 | 4 | 5>(1)
 const isFullscreen = ref(false)
+const loading = ref(false)
 
 const form = ref({
   email: '',
@@ -237,6 +258,7 @@ const required = (v: string) => !!v || 'Field is required'
 const isEmail = (candidate: string) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(candidate)
 
 const submitForm = async () => {
+  loading.value = true
   if (await userStore.login(modalStore.username, modalStore.password)) {
     notify({
       title: 'Login',
@@ -252,6 +274,7 @@ const submitForm = async () => {
       text: errors.value.login
     })
   }
+  loading.value = false
 }
 
 async function emailUser() {
@@ -259,14 +282,21 @@ async function emailUser() {
     try {
       if ((await userStore.sendResetEmail(form.value.email)) === 200) {
         errors.value.email = ''
+        page.value = 3
         notify({
           title: 'Reset Email',
           type: 'success',
-          text: 'Reset Email Sent'
+          text: `Reset email sent`
         })
       }
-    } finally {
-      page.value = 3
+    } catch (error: AxiosError | any) {
+      if (error instanceof AxiosError && error.response && error.response.status === 400) {
+        notify({
+          title: 'Reset Email',
+          type: 'error',
+          text: error.response.data
+        })
+      }
     }
   } else {
     errors.value.email = 'Email is invalid'
@@ -279,6 +309,7 @@ async function emailUser() {
 }
 
 async function submitToken() {
+  loading.value = true
   try {
     let status = await userStore.submitResetToken(form.value.token)
     if (status === 200) {
@@ -300,6 +331,7 @@ async function submitToken() {
       })
     }
   }
+  loading.value = false
 }
 async function submitNewPassword() {
   if (form.value.newPassword === form.value.confirmPassword) {

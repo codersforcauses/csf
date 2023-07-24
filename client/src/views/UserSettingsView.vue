@@ -46,15 +46,20 @@
     </v-col>
     <v-row dense class="px-10">
       <v-col v-for="avatar in avatarPaths" :key="avatar.url" cols="4">
-        <div class="text-center py-3">
-          <v-avatar
-            size="70"
-            @click="selectAvatar(avatar.url)"
-            :class="{ 'avatar-selected': avatar.isSelected === true }"
-          >
-            <v-img :src="`/avatars/${avatar.url}`" :alt="avatar.alt" />
-          </v-avatar>
-        </div>
+        <v-hover v-slot:default="{ isHovering, props }">
+          <div v-bind="props" class="text-center py-3">
+            <v-avatar
+              size="70"
+              @click="selectAvatar(avatar.url)"
+              :class="{
+                'avatar-selected': avatar.isSelected === true,
+                'avatar-hovered': isHovering === true
+              }"
+            >
+              <v-img :src="`/avatars/${avatar.url}`" :alt="avatar.alt" />
+            </v-avatar>
+          </div>
+        </v-hover>
       </v-col>
     </v-row>
     <v-col cols="12">
@@ -83,7 +88,15 @@
       </v-container>
     </v-row>
     <v-row>
-      <v-btn class="bg-primaryRed ma-4" @click="changeDetails">Update </v-btn>
+      <v-btn class="bg-primaryRed ma-4" @click="changeDetails">
+        <v-progress-circular
+          v-if="loading"
+          indeterminate
+          size="24"
+          color="white"
+        ></v-progress-circular>
+        <span v-else>Update</span>
+      </v-btn>
       <v-spacer />
       <v-btn class="bg-primaryRed ma-4" @click="showChangePasswordModal = true"
         >Change Password
@@ -108,6 +121,7 @@ import camelize from 'camelize-ts'
 import { notify } from '@kyvg/vue3-notification'
 
 const userStore = useUserStore()
+const loading = ref(false)
 
 const state = reactive<UserSettings>({
   username: userStore.user!.username,
@@ -118,6 +132,7 @@ const state = reactive<UserSettings>({
   travelMethod: userStore.user!.travelMethod
 })
 
+console.log(state.avatar)
 const errors = reactive<ChangeDetailsError>({
   username: '',
   email: '',
@@ -149,14 +164,14 @@ const travelMethod = ref([
 
 const selectAvatar = (url: string) => {
   avatarPaths.value.forEach((avatar) => {
-    avatar.isSelected = avatar.url === url // ? !avatar.isSelected : false
+    avatar.isSelected = avatar.url === url
   })
   state.avatar = url
 }
 
 const selectMode = (mode: string) => {
   travelMethod.value.forEach((method) => {
-    method.isSelected = method.mode === mode ? !method.isSelected : false
+    method.isSelected = method.mode === mode
   })
   state.travelMethod = mode
 }
@@ -165,6 +180,7 @@ const showChangePasswordModal = ref(false)
 const showSuccessDialog = ref(false)
 
 async function changeDetails() {
+  loading.value = true
   try {
     let status = await userStore.changeDetails(state)
     if (status === 200) {
@@ -188,6 +204,7 @@ async function changeDetails() {
       })
     }
   }
+  loading.value = false
 }
 
 function passwordChanged() {
@@ -198,6 +215,10 @@ function passwordChanged() {
 <style scoped>
 .avatar-selected {
   border: 6px solid #345e9e !important;
+}
+
+.avatar-hovered {
+  cursor: pointer !important;
 }
 
 .mode-selected {
