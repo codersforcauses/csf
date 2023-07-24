@@ -4,8 +4,6 @@ RUN apt-get update && apt-get install --yes --no-install-recommends postgresql-c
 
 RUN pip install --upgrade pip && pip install poetry
 
-RUN pip install sendgrid
-
 RUN poetry config virtualenvs.create false
 
 WORKDIR /app
