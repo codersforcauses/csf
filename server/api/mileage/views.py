@@ -13,13 +13,8 @@ from django.db.models import F, Sum, Q
 
 import datetime
 
-<<<<<<< HEAD
-CHALLENGE_LENGTH = 14  # days
-LEADERBOARD_SIZE = 100
-=======
 CHALLENGE_LENGTH = datetime.timedelta(days=14)
-
->>>>>>> origin
+LEADERBOARD_SIZE = 100
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
