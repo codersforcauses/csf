@@ -76,11 +76,11 @@ class UserTest(APITestCase):
         self.assertEqual(mail.outbox[1].subject, "Reset Password")
 
         # find the token sent in the email in a not particularly robust way
-        token_from_mail_start = mail.outbox[1].body.find("\n\n")
-        token_from_mail_end = mail.outbox[1].body.find(
+        token_from_mail_start = mail.outbox[emailbeforeReset].body.find("\n\n")
+        token_from_mail_end = mail.outbox[emailbeforeReset].body.find(
             "\n\n", token_from_mail_start + 1
         )
-        token_from_mail = mail.outbox[1].body[
+        token_from_mail = mail.outbox[emailbeforeReset].body[
             token_from_mail_start + 2:token_from_mail_end
         ]
 
