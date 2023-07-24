@@ -20,8 +20,8 @@ export const useUserStore = defineStore('user', {
       useTeamStore().team = null
     },
 
-    async getUser(username: string) {
-      const { status, data } = await server.get(`user/${username}/`)
+    async getUser() {
+      const { status, data } = await server.get(`user/get/`)
       if (status == 200) this.user = camelize<User>(data)
     },
 
@@ -32,11 +32,12 @@ export const useUserStore = defineStore('user', {
         { validateStatus: () => true }
       )
       if (status == 200) {
-        await this.getUser(username)
         this.token = data
+        await this.getUser()
         return true
+      } else {
+        return false
       }
-      return false
     },
 
     async changePassword(oldPassword: string, newPassword: string) {
