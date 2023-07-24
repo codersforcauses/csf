@@ -1,7 +1,7 @@
 from django.urls import reverse
 from django.core import mail
 from rest_framework.test import APITestCase
-from .models import User
+from .models import User, Team
 
 
 class UserTest(APITestCase):
@@ -16,11 +16,27 @@ class UserTest(APITestCase):
         self.new_avatar = 'avatar6.jpg'
         self.bad_new_email = "fhushfw@sfd"
 
+        self.team = Team.objects.create(
+            name="mockTeam",
+            join_code="j01NtH3m0cKT34M",
+            bio="mockTeamFor UnitTest"
+        )
+
         self.user = User.objects.create_user(
             username=self.username,
             email=self.email,
             password=self.password,
         )
+
+    def get_token(self):
+        get_token_url = reverse('auth:jwt_token')
+        get_token_body = {
+            'username': 'user0',
+            'password': 'dfjhvb593cdch'
+        }
+        get_token_response = self.client.post(get_token_url, get_token_body, format='json')
+        token = get_token_response.data['access']
+        return token
 
     def test_change_password(self):
         # test response is 200
@@ -51,19 +67,20 @@ class UserTest(APITestCase):
         self.assertTrue("email" in response.data)
 
     def test_reset_password(self):
+        emailbeforeReset = len(mail.outbox)
         url = reverse("user:request-reset-password")
         response = self.client.post(url, {"email": self.email})
 
         # test an email with the subject 'Reset Password' was sent
-        self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(mail.outbox[0].subject, "Reset Password")
+        self.assertEqual(len(mail.outbox) - 1, emailbeforeReset)
+        self.assertEqual(mail.outbox[emailbeforeReset].subject, "Reset Password")
 
         # find the token sent in the email in a not particularly robust way
-        token_from_mail_start = mail.outbox[0].body.find("\n\n")
-        token_from_mail_end = mail.outbox[0].body.find(
+        token_from_mail_start = mail.outbox[emailbeforeReset].body.find("\n\n")
+        token_from_mail_end = mail.outbox[emailbeforeReset].body.find(
             "\n\n", token_from_mail_start + 1
         )
-        token_from_mail = mail.outbox[0].body[
+        token_from_mail = mail.outbox[emailbeforeReset].body[
             token_from_mail_start + 2:token_from_mail_end
         ]
 
@@ -87,10 +104,42 @@ class UserTest(APITestCase):
         self.assertEqual(self.user.check_password(self.newer_password), True)
 
     def test_get_user(self):
-        url = reverse("user:get-user", kwargs={"username": self.username})
+        token = self.get_token()
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer {0}'.format(token))
+        url = reverse("user:get-user")
         response = self.client.get(url)
         user_to_match = User.objects.get(username=self.username)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["username"], user_to_match.username)
         self.assertEqual(response.data["email"], user_to_match.email)
-        self.assertEqual(response.data["password"], user_to_match.password)
+
+    def test_join_team_valid(self):
+        mock_user = User.objects.get(id=self.user.id)
+        mock_team = Team.objects.get(team_id=self.team.team_id)
+        url = reverse("user:join-team",
+                      kwargs={"id": mock_user.id})
+        response = self.client.patch(
+            url,
+            {
+                "join_code": mock_team.join_code,
+                "team_admin": False,
+            },
+            format="json",
+        )
+        mock_user_reget = User.objects.get(id=self.user.id)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(mock_user_reget.team_id, mock_team)
+
+    def test_join_team_not_found(self):
+        mock_user = User.objects.get(id=self.user.id)
+        url = reverse("user:join-team",
+                      kwargs={"id": mock_user.id})
+        response = self.client.patch(
+            url,
+            {
+                "join_code": "f4k3J0iNC0d3",
+                "team_admin": False,
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, 404)

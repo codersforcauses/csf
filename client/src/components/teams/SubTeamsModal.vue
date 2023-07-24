@@ -98,6 +98,25 @@ const handleRemoveSubteamBtn = () => {
   showDialog.value = false
 }
 
+//save subteam
+const handleSaveSubteamBtn = () => {
+  emit(
+    'saveSubteam',
+    props.selectedSubteam.subteamId,
+    updatedTeamName.value,
+    tmpSubteamMembers.value,
+    tmpAvailableSubTeamMembers.value
+  )
+  showDialog.value = false
+}
+
+// //delete subteam
+const handleRemoveSubteamBtn = () => {
+  emit('deleteSubTeam', props.selectedSubteam.subteamId)
+  showDialog.value = false
+}
+
+const loading = ref(false)
 const display = ref(false)
 const rules = {
   required: (value: string) => !!value || 'Field is required'
@@ -210,7 +229,8 @@ const showDialog = computed({
             :action="'delete'"
             :object="'subteam'"
             :use-done-for-button="false"
-            @handle-confirm="handleRemoveSubteamBtn"
+            :loading="loading"
+            @handle-confirm="$emit('removeSubTeam', selectedSubteam.teamId)"
           />
         </div>
       </v-card-text>

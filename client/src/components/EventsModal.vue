@@ -1,20 +1,38 @@
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue'
-import { type Event } from '../types/event'
+import { ref, watchEffect, reactive } from 'vue'
+import { type Event, type EventError } from '../types/event'
 import { useEventStore } from '../stores/event'
 import ConfirmButton from '@/components/ConfirmButton.vue'
 import { notify } from '@kyvg/vue3-notification'
+import { AxiosError } from 'axios'
+import camelize from 'camelize-ts'
+import { computed } from 'vue'
 
 const props = defineProps<{ type: 'Create' | 'Edit'; event?: Event }>()
 const emit = defineEmits(['close'])
 const eventStore = useEventStore()
 
+const loading = ref<string | null>(null)
 const name = ref(props.event?.name ?? '')
 const startDate = ref(props.event?.startDate ?? '')
 const endDate = ref(props.event?.endDate ?? '')
 const description = ref(props.event?.description ?? '')
 const isPublic = ref(props.event?.isPublic ?? false)
+const valid = ref(true)
 const isFullscreen = ref(false)
+const minDate = ref('')
+setMinDate()
+
+const startDateEnabled = computed(() => {
+  let now = new Date()
+  now.setHours(0, 0, 0, 0)
+  return props.event && now > new Date(props.event.startDate)
+})
+const endDateEnabled = computed(() => {
+  let now = new Date()
+  now.setHours(0, 0, 0, 0)
+  return props.event && now > new Date(props.event.endDate)
+})
 
 const refs = () => ({
   name: name.value,
@@ -24,7 +42,24 @@ const refs = () => ({
   isPublic: isPublic.value
 })
 
-const addEvent = () =>
+const errors = reactive<EventError>({
+  name: [],
+  startDate: [],
+  endDate: [],
+  description: []
+})
+
+function setMinDate() {
+  let now = new Date()
+  // need to shift, since toJSON() will get the UTC time
+  let nowShifted = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+  minDate.value = nowShifted.toJSON().slice(0, 10)
+}
+
+const required = (v: string) => !!v || 'Field is required'
+
+const addEvent = () => {
+  loading.value = 'add'
   eventStore
     .createEvent(refs())
     .then(() => {
@@ -35,16 +70,26 @@ const addEvent = () =>
       })
       closeModal()
     })
-    .catch(() => {
-      console.log
+    .catch((error: AxiosError | any) => {
+      if (error instanceof AxiosError && error.response && error.response.status === 400) {
+        let newErrors = camelize(error.response.data) as unknown as EventError
+        if (newErrors.nonFieldErrors) {
+          errors.startDate = newErrors.nonFieldErrors
+        }
+      }
       notify({
         title: 'Add Event',
         type: 'error',
-        text: 'Add Event Error'
+        text: 'Error adding event'
       })
     })
+    .finally(() => {
+      loading.value = null
+    })
+}
 
 const editEvent = () => {
+  loading.value = 'edit'
   if (props.event)
     return eventStore
       .editEvent({
@@ -59,17 +104,26 @@ const editEvent = () => {
         })
         closeModal()
       })
-      .catch(() => {
-        console.log
+      .catch((error: AxiosError | any) => {
+        if (error instanceof AxiosError && error.response && error.response.status === 400) {
+          let newErrors = camelize(error.response.data) as unknown as EventError
+          if (newErrors.nonFieldErrors) {
+            errors.startDate = newErrors.nonFieldErrors
+          }
+        }
         notify({
           title: 'Edit Event',
           type: 'error',
           text: 'Edit Event Error'
         })
       })
+      .finally(() => {
+        loading.value = null
+      })
 }
 
 const archiveEvent = () => {
+  loading.value = 'archive'
   if (props.event)
     return eventStore
       .editEvent({
@@ -91,11 +145,14 @@ const archiveEvent = () => {
           type: 'error',
           text: 'Archive Event Error'
         })
-        console.log
+      })
+      .finally(() => {
+        loading.value = null
       })
 }
 
 const deleteEvent = () => {
+  loading.value = 'delete'
   if (props.event)
     return eventStore
       .deleteEvent(props.event.eventId)
@@ -108,12 +165,14 @@ const deleteEvent = () => {
         closeModal()
       })
       .catch(() => {
-        console.log
         notify({
           title: 'Delete Event',
           type: 'error',
           text: 'Delete Event Error'
         })
+      })
+      .finally(() => {
+        loading.value = null
       })
 }
 
@@ -148,34 +207,64 @@ watchEffect(async () => {
         <v-icon icon="mdi-close" size="x-large" @click="closeModal" />
       </v-card-actions>
       <v-card-title class="justify-center text-h4 mb-6">{{ `${type} Event` }}</v-card-title>
-      <form class="pb-0 mb-0 mx-8">
-        <v-text-field bg-color="white" label="Event Name" v-model="name" class="mx-5" />
+      <v-form class="pb-0 mb-0 mx-8" v-model="valid">
+        <v-text-field
+          bg-color="white"
+          label="Event Name"
+          v-model="name"
+          class="mx-5"
+          :rules="[required]"
+        />
         <v-text-field
           bg-color="white"
           label="Start Date"
           type="date"
+          :min="minDate"
+          :rules="[required]"
           v-model="startDate"
+          :disabled="startDateEnabled"
+          :error-messages="errors.startDate"
+          @focus="errors.startDate = []"
           class="mx-5"
         />
         <v-text-field
           bg-color="white"
           label="End Date"
           type="date"
+          :min="minDate"
+          :rules="[required]"
           v-model="endDate"
+          :disabled="endDateEnabled"
           class="mx-5"
         />
-        <v-textarea bg-color="white" label="Description" v-model="description" class="mx-5" />
+        <v-textarea
+          bg-color="white"
+          label="Description"
+          v-model="description"
+          :rules="[required]"
+          class="mx-5"
+        />
         <v-card-actions v-if="type === 'Edit'" class="justify-center mb-4">
-          <v-btn variant="outlined" class="text-secondaryBlue mr-16" @click="archiveEvent"
+          <v-btn
+            variant="outlined"
+            class="text-secondaryBlue mr-16"
+            @click="archiveEvent"
+            :loading="loading === 'archive'"
             >ARCHIVE</v-btn
           >
           <ConfirmButton
             :action="'edit'"
             :object="'event'"
+            :disabled="!valid"
             :use-done-for-button="true"
+            :loading="loading === 'edit'"
             @handle-confirm="editEvent"
           />
-          <v-btn variant="outlined" class="text-primaryRed ml-16" @click="deleteEvent"
+          <v-btn
+            variant="outlined"
+            class="text-primaryRed ml-16"
+            @click="deleteEvent"
+            :loading="loading === 'delete'"
             >DELETE</v-btn
           >
         </v-card-actions>
@@ -183,11 +272,13 @@ watchEffect(async () => {
           <ConfirmButton
             :action="'create'"
             :object="'event'"
+            :disabled="!valid"
             :use-done-for-button="true"
+            :loading="loading === 'add'"
             @handle-confirm="addEvent"
           />
         </v-card-actions>
-      </form>
+      </v-form>
     </v-card>
   </v-dialog>
 </template>

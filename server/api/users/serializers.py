@@ -85,18 +85,19 @@ class ResetPasswordSerializer(ModelSerializer):
         return instance
 
 
-class UserUpdateSerializer(ModelSerializer):
-       
+class PublicUserSerializer(ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = [
             "id",
-            "username",
             "first_name",
             "last_name",
+            "username",
             "email",
-            "subteam_id",
-            "team_id",
             "avatar",
-            "team_admin"
+            "travel_method",
+            "team_id",
+            "subteam_id",
+            "team_admin",
+            "challenge_start_date"
         ]
