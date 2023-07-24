@@ -41,7 +41,6 @@ def update_subteam(request, subteam_id):
         # if (request.user.team_admin is False):
         #     return Response("User is not authorised to update a subteam", status=403)
         # else:
-         
         subteam = SubTeam.objects.get(subteam_id=subteam_id)
         serializer = SubTeamSerialiser(instance=subteam, data=request.data)
         if serializer.is_valid():
