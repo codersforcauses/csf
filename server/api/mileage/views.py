@@ -8,7 +8,7 @@ from ..users.models import User
 from ..team.models import Team
 from .serializers import MileageSerializer, UserSerializer, UserLeaderboardSerializer, TeamLeaderboardSerializer  # , PostMileageSerializer
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import F, Sum, Q
+from django.db.models import F, Q
 
 
 import datetime
@@ -20,11 +20,24 @@ LEADERBOARD_SIZE = 100
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_mileage(request: HttpRequest):
+    if request.GET.get("sum"):
+        if "user" in request.GET:
+            try:
+                user = User.objects.get(id=request.GET["user"])
+                return Response(user.total_mileage)
+            except ObjectDoesNotExist:
+                return Response(request.user.first_name, status=status.HTTP_400_BAD_REQUEST)
+        if "team" in request.GET:
+            try:
+                team = Team.objects.get(team_id=request.GET["team"])
+                return Response(team.total_mileage)
+            except ObjectDoesNotExist:
+                return Response(request.user.team_id.name, status=status.HTTP_400_BAD_REQUEST)
     queries = []
     if "user" in request.GET:
         queries.append(Q(user__in=request.GET.getlist("user")))
     if "team" in request.GET:
-        queries.append(Q(user__team_id__in=request.GET.getlist("team")))
+        queries.append(Q(team__in=request.GET.getlist("team")))
     if request.GET.get("challenge"):
         # only get mileages within *current* challenge period
         queries.append(
@@ -38,10 +51,7 @@ def get_mileage(request: HttpRequest):
         )
 
     mileage = Mileage.objects.filter(*queries)
-    return Response(
-        mileage.aggregate(Sum("kilometres"))["kilometres__sum"] if request.GET.get("sum")
-        else MileageSerializer(mileage, many=True).data
-    )
+    return Response(MileageSerializer(mileage, many=True).data)
 
 
 @api_view(["POST"])
@@ -60,6 +70,8 @@ def post_mileage(request):
     user_serializer = UserSerializer(instance=user, data=user_data)
     if user_serializer.is_valid():
         user_serializer.save()
+        if user.team_id:
+            request.data.update({"team":  user.team_id.team_id})
         serializer = MileageSerializer(data=request.data)
         if serializer.is_valid():
             mileage = serializer.save()
