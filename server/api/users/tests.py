@@ -67,19 +67,20 @@ class UserTest(APITestCase):
         self.assertTrue("email" in response.data)
 
     def test_reset_password(self):
+        emailbeforeReset = len(mail.outbox)
         url = reverse("user:request-reset-password")
         response = self.client.post(url, {"email": self.email})
 
         # test an email with the subject 'Reset Password' was sent
-        self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(mail.outbox[0].subject, "Reset Password")
+        self.assertEqual(len(mail.outbox) - 1, emailbeforeReset)
+        self.assertEqual(mail.outbox[1].subject, "Reset Password")
 
         # find the token sent in the email in a not particularly robust way
-        token_from_mail_start = mail.outbox[0].body.find("\n\n")
-        token_from_mail_end = mail.outbox[0].body.find(
+        token_from_mail_start = mail.outbox[1].body.find("\n\n")
+        token_from_mail_end = mail.outbox[1].body.find(
             "\n\n", token_from_mail_start + 1
         )
-        token_from_mail = mail.outbox[0].body[
+        token_from_mail = mail.outbox[1].body[
             token_from_mail_start + 2:token_from_mail_end
         ]
 
