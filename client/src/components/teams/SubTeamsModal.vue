@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch} from 'vue'
+import { ref, computed, watch } from 'vue'
 import type { Ref, PropType } from 'vue'
 
 import ConfirmButton from '@/components/ConfirmButton.vue'
@@ -31,11 +31,14 @@ const toMemberView = (member: UserView): MemberView => {
     id: member.id,
     firstName: member.firstName,
     lastName: member.lastName,
-    avatar: `/src/assets/Avatars/${member.avatar}` 
+    // todo change to public folder
+    avatar: `/avatars/${member.avatar}`
   }
 }
 
-const tmpAvailableSubTeamMembers: Ref<MemberView[]> = ref(props.availableMemeberList.map(toMemberView))
+const tmpAvailableSubTeamMembers: Ref<MemberView[]> = ref(
+  props.availableMemeberList.map(toMemberView)
+)
 const tmpSubteamMembers: Ref<MemberView[]> = ref(props.selectedSubteam.members)
 const updatedTeamName: Ref<String> = ref(props.selectedSubteam.name)
 const selectedMember: Ref<MemberView | null> = ref(null)
@@ -43,14 +46,14 @@ const selectedMember: Ref<MemberView | null> = ref(null)
 watch(
   () => props.selectedSubteam,
   (first) => {
-    updatedTeamName.value = JSON.parse(JSON.stringify(first.name));
-    tmpSubteamMembers.value = JSON.parse(JSON.stringify(first.members));
+    updatedTeamName.value = JSON.parse(JSON.stringify(first.name))
+    tmpSubteamMembers.value = JSON.parse(JSON.stringify(first.members))
   }
 )
 watch(
   () => props.availableMemeberList,
   (first) => {
-    tmpAvailableSubTeamMembers.value = JSON.parse(JSON.stringify(first.map(toMemberView)));
+    tmpAvailableSubTeamMembers.value = JSON.parse(JSON.stringify(first.map(toMemberView)))
   }
 )
 
@@ -59,31 +62,40 @@ watch(
 const handleAddMemberBtn = () => {
   if (selectedMember.value) {
     tmpSubteamMembers.value.push(selectedMember.value)
-    tmpAvailableSubTeamMembers.value = tmpAvailableSubTeamMembers.value.filter(member => member.id !== selectedMember.value?.id)
+    tmpAvailableSubTeamMembers.value = tmpAvailableSubTeamMembers.value.filter(
+      (member) => member.id !== selectedMember.value?.id
+    )
     selectedMember.value = null
   }
 }
 
 //remove a member
 const handleRemoveMemberBtn = (memberId: number) => {
-  const foundMember: MemberView | undefined = tmpSubteamMembers.value.find(member => member.id === memberId)
+  const foundMember: MemberView | undefined = tmpSubteamMembers.value.find(
+    (member) => member.id === memberId
+  )
   if (foundMember) {
     tmpAvailableSubTeamMembers.value.push(foundMember)
-    tmpSubteamMembers.value = tmpSubteamMembers.value.filter(member => member.id !== memberId)
+    tmpSubteamMembers.value = tmpSubteamMembers.value.filter((member) => member.id !== memberId)
   }
 }
 
-
 //save subteam
 const handleSaveSubteamBtn = () => {
-  emit('saveSubteam', props.selectedSubteam.subteamId, updatedTeamName.value, tmpSubteamMembers.value, tmpAvailableSubTeamMembers.value);
-  showDialog.value = false;
+  emit(
+    'saveSubteam',
+    props.selectedSubteam.subteamId,
+    updatedTeamName.value,
+    tmpSubteamMembers.value,
+    tmpAvailableSubTeamMembers.value
+  )
+  showDialog.value = false
 }
 
 // //delete subteam
 const handleRemoveSubteamBtn = () => {
-  emit('deleteSubTeam', props.selectedSubteam.subteamId);
-  showDialog.value = false;
+  emit('deleteSubTeam', props.selectedSubteam.subteamId)
+  showDialog.value = false
 }
 
 const display = ref(false)
@@ -106,7 +118,6 @@ const showDialog = computed({
   <v-dialog v-model="showDialog" fullscreen transition="dialog-bottom-transition">
     <v-img src="/images/Footer-min.jpeg" width="100%" max-height="32" cover />
     <v-card>
-      {{ selectedSubteam }}
       <v-card-text>
         <!--Subteam Name-->
         <v-btn
@@ -149,7 +160,7 @@ const showDialog = computed({
           <template v-slot:item="{ props, item }">
             <v-list-item
               v-bind="props"
-              :prepend-avatar= item.raw.avatar
+              :prepend-avatar="item.raw.avatar"
               :title="item.raw.firstName + ' ' + item.raw.lastName"
             />
             <v-divider color="info"></v-divider>
@@ -192,18 +203,14 @@ const showDialog = computed({
         </v-list>
         <!--Buttons-->
         <div class="w-100 d-flex justify-center">
-          <v-btn
-            color="success"
-            class="mr-8"
-            variant="flat"
-            @click= "handleSaveSubteamBtn"
+          <v-btn color="secondaryGreen" class="mr-8" variant="flat" @click="handleSaveSubteamBtn"
             >Save</v-btn
           >
           <ConfirmButton
             :action="'delete'"
             :object="'subteam'"
             :use-done-for-button="false"
-            @handle-confirm= "handleRemoveSubteamBtn"
+            @handle-confirm="handleRemoveSubteamBtn"
           />
         </div>
       </v-card-text>
@@ -221,6 +228,7 @@ const showDialog = computed({
   height: 32px;
   border-radius: 50%;
 }
+
 .v-input.custom-text-field input {
   font-size: 48px !important;
 }

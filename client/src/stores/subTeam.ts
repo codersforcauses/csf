@@ -71,7 +71,7 @@ export const useSubTeamStore = defineStore('subTeam', {
     async updateSubteam(subteam: Subteam) {
       const subteamId = subteam.subteamId
       const api = urls.updateSubteam(subteamId)
-      await server.put(api, snakify({...subteam}))
+      await server.put(api, snakify({ ...subteam }))
     },
     async getAvailableMembers() {
       const api = urls.getAvailableMembers()
@@ -87,9 +87,9 @@ export const useSubTeamStore = defineStore('subTeam', {
         this.subteamMembers = camelize(data as Snakify<UserView>[])
       }
     },
-    async editUserSubteam(subteamId:number, userId: number) {
+    async editUserSubteam(subteamId: number, userId: number) {
       const api = urls.editUserSubteam(userId)
-      await server.put(api, snakify({subteamId}))
+      await server.put(api, snakify({ subteamId }))
     },
     async removeSubteamMember(userId: number) {
       const api = urls.deleteSubteamMember(userId)
