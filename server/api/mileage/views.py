@@ -16,6 +16,7 @@ import datetime
 CHALLENGE_LENGTH = datetime.timedelta(days=14)
 LEADERBOARD_SIZE = 100
 
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_mileage(request: HttpRequest):
