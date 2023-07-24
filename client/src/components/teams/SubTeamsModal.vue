@@ -98,24 +98,6 @@ const handleRemoveSubteamBtn = () => {
   showDialog.value = false
 }
 
-//save subteam
-const handleSaveSubteamBtn = () => {
-  emit(
-    'saveSubteam',
-    props.selectedSubteam.subteamId,
-    updatedTeamName.value,
-    tmpSubteamMembers.value,
-    tmpAvailableSubTeamMembers.value
-  )
-  showDialog.value = false
-}
-
-// //delete subteam
-const handleRemoveSubteamBtn = () => {
-  emit('deleteSubTeam', props.selectedSubteam.subteamId)
-  showDialog.value = false
-}
-
 const loading = ref(false)
 const display = ref(false)
 const rules = {
