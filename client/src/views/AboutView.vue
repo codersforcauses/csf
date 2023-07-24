@@ -140,7 +140,6 @@ import StrideForEducationRBGLogo from '/images/SFE_RGB_Logo.png'
 import { useModalStore } from '@/stores/modal'
 const modalStore = useModalStore()
 
-import type { StyleHTMLAttributes } from 'vue'
 import { ref, onBeforeMount } from 'vue'
 
 const beliefs = [
@@ -167,9 +166,7 @@ const dismissPrompt = () => {
 
 const installPWA = () => {
   installEvent!.prompt()
-  installEvent!.userChoice.then((choice: any) => {
-    dismissPrompt() // Hide the prompt once the user's clicked
-  })
+  installEvent!.userChoice.then(dismissPrompt) // Hide the prompt once the user's clicked
 }
 
 // beforeMount hook equivalent in setup

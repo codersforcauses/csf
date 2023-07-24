@@ -14,7 +14,7 @@
       <v-row align="center" class="my-2">
         <v-icon :class="['mdi','ml-3', getIconName(userStore.user!.travelMethod)]" size="50px" />
         <v-col>
-          <v-chip color="green" class="rounded text-h5">{{ teamData.total_kilometres }} KM</v-chip>
+          <v-chip color="green" class="rounded text-h5">{{ mileageStore.totalKmByTeam }} KM</v-chip>
           <h3>TOTAL</h3>
         </v-col>
       </v-row>
@@ -92,7 +92,7 @@
         </v-row>
         <v-row v-if="isDailyKmsVisible" class="mt-n4 mb-2">
           <v-col>
-            <MileageGraph />
+            <MileageGraph :dataPoints="mileageStore.mileageByTeam" />
           </v-col>
         </v-row>
       </v-container>
@@ -181,9 +181,14 @@ import { useTeamStore } from '@/stores/team'
 import { useUserStore } from '@/stores/user'
 import { AxiosError } from 'axios'
 import { notify } from '@kyvg/vue3-notification'
+import { useMileageStore } from '@/stores/mileage'
+
 const teamStore = useTeamStore()
 const userStore = useUserStore()
 const loading = ref(false)
+const mileageStore = useMileageStore()
+
+mileageStore.getMileageByTeam()
 
 onMounted(async () => {
   if (userStore.user!.teamId)
@@ -224,7 +229,7 @@ const removeTeam = () => {
 
 const teamData = ref({
   team_name: teamStore.team ? teamStore.team.name : '',
-  total_kilometres: 990,
+  total_kilometres: 0,
   invite_code: teamStore.team ? teamStore.team.joinCode : '',
   bio: teamStore.team ? teamStore.team.bio : '',
   daily_kms: [],
