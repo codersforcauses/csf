@@ -1,7 +1,7 @@
 <template>
   <!--Display Subteams-->
   <v-row justify="space-between" align="center" no-gutters>
-    <v-col v-if="userStore.user?.teamAdmin" cols="10">
+    <v-col v-if="userStore.user?.teamAdmin" cols="11">
       <div class="d-flex justify-center">
         <v-text-field
           :error-messages="errorMessage"
@@ -13,7 +13,7 @@
         />
       </div>
     </v-col>
-    <v-col v-if="userStore.user?.teamAdmin" cols="2">
+    <v-col v-if="userStore.user?.teamAdmin" cols="1">
       <div class="d-flex justify-center mb-6">
         <v-btn
           size="x-large"
