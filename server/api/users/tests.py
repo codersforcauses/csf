@@ -73,7 +73,7 @@ class UserTest(APITestCase):
 
         # test an email with the subject 'Reset Password' was sent
         self.assertEqual(len(mail.outbox) - 1, emailbeforeReset)
-        self.assertEqual(mail.outbox[1].subject, "Reset Password")
+        self.assertEqual(mail.outbox[emailbeforeReset].subject, "Reset Password")
 
         # find the token sent in the email in a not particularly robust way
         token_from_mail_start = mail.outbox[emailbeforeReset].body.find("\n\n")
