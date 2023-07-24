@@ -59,7 +59,7 @@ const submitForm = () => {
       notify({
         title: 'Create Team',
         type: 'error',
-        text: 'Create Team Error'
+        text: 'Team name already exists'
       })
     }
   })
