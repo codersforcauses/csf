@@ -130,7 +130,7 @@ watchEffect(async () => {
 <template>
   <!--Edit Subteam-->
   <v-dialog :fullscreen="isFullscreen" max-width="500px" max-height="100vh" v-model="showDialog">
-    <v-card>
+    <v-card class="bg-backgroundGrey">
       <v-img src="/images/Footer-min.jpeg" width="100%" max-height="16" cover />
       <v-card-actions>
         <v-spacer />
@@ -140,15 +140,16 @@ watchEffect(async () => {
       <!--Subteam Name-->
       <v-form class="pb-0 mb-0 mx-8">
         <v-text-field
+          bg-color="white"
           v-model="updatedTeamName"
           :rules="[rules.required]"
           label="Edit subteam name"
           required
         />
-        <v-divider class="my-4" color="info"></v-divider>
+        <v-divider color="info"></v-divider>
 
         <!--Members-->
-        <v-card-title class="justify-center my-6 text-h4">Members</v-card-title>
+        <v-card-title class="justify-center my-2 text-h4">Members</v-card-title>
 
         <!--Add New Member-->
         <v-select
@@ -157,6 +158,7 @@ watchEffect(async () => {
           v-model="selectedMember"
           dense
           @update:modelValue="handleAddMemberBtn"
+          bg-color="white"
         >
           <template v-slot:selection="{ item }">
             <v-list-item
@@ -175,7 +177,7 @@ watchEffect(async () => {
         </v-select>
 
         <!--Member List-->
-        <v-list v-if="tmpSubteamMembers.length != 0">
+        <v-list v-if="tmpSubteamMembers.length != 0" class="bg-backgroundGrey">
           <v-list-item v-for="(member, index) in tmpSubteamMembers" :key="index">
             <v-avatar>
               <img :src="member.avatar" alt="Avatar" class="custom-avatar" />
@@ -206,19 +208,22 @@ watchEffect(async () => {
             <v-divider class="mt-4" color="info"></v-divider>
           </v-list-item>
         </v-list>
+        <v-row v-else justify="center" class="mb-4">No members attached to subteam</v-row>
         <!--Buttons-->
-        <div class="w-100 d-flex justify-center">
-          <v-btn color="secondaryGreen" class="mr-8" variant="flat" @click="handleSaveSubteamBtn"
-            >Save</v-btn
-          >
-          <ConfirmButton
-            :action="'delete'"
-            :object="'subteam'"
-            :use-done-for-button="false"
-            :loading="loading"
-            @handle-confirm="$emit('removeSubTeam', selectedSubteam.teamId)"
-          />
-        </div>
+        <v-card-actions class="justify-center mb-4">
+          <div class="w-100 d-flex justify-center">
+            <v-btn color="secondaryGreen" class="mr-8" variant="flat" @click="handleSaveSubteamBtn"
+              >Save</v-btn
+            >
+            <ConfirmButton
+              :action="'delete'"
+              :object="'subteam'"
+              :use-done-for-button="false"
+              :loading="loading"
+              @handle-confirm="$emit('removeSubTeam', selectedSubteam.teamId)"
+            />
+          </div>
+        </v-card-actions>
       </v-form>
     </v-card>
   </v-dialog>
