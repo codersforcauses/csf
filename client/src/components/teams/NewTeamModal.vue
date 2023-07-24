@@ -55,11 +55,33 @@ const form = ref({
 const submitForm = () => {
   loading.value = true
   teamStore.createTeam({ ...form.value }).catch((error: AxiosError | any) => {
-    if (error instanceof AxiosError && error.response) {
+    console.log(error.response.data.name)
+    if (error instanceof AxiosError && error.response.data.name == "team with this name already exists.") {
       notify({
         title: 'Create Team',
         type: 'error',
-        text: 'Team name already exists'
+        text: "Team name already exists"
+      })
+    }
+    else if (error instanceof AxiosError && error.response.data.name == "Ensure this field has no more than 254 characters.") {
+      notify({
+        title: 'Create Team',
+        type: 'error',
+        text: "Team name is too long"
+      })
+    }
+    else if (error instanceof AxiosError && error.response.data.name == "This field may not be blank.") {
+      notify({
+        title: 'Create Team',
+        type: 'error',
+        text: "Team name can't be blank"
+      })
+    }
+    else {
+      notify({
+        title: 'Create Team',
+        type: 'error',
+        text: 'Create Team Error'
       })
     }
   })
