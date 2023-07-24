@@ -15,8 +15,7 @@ class MileageTests(APITestCase):
         self.mileage = Mileage.objects.create(user=self.user, kilometres=100.0)
 
     def test_get_mileage(self):
-        url = reverse('mileage:get-mileage', args=[self.user.id])
-        response = self.client.get(url)
+        response = self.client.get(reverse('mileage:get-mileage'), {'user': self.user.id})
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_post_mileage(self):

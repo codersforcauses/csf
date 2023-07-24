@@ -14,7 +14,7 @@
       <v-row align="center" class="my-2">
         <v-icon :class="['mdi','ml-3', getIconName(userStore.user!.travelMethod)]" size="50px" />
         <v-col>
-          <v-chip color="green" class="rounded text-h5">{{ teamData.total_kilometres }} KM</v-chip>
+          <v-chip color="green" class="rounded text-h5">{{ mileageStore.totalKmByTeam }} KM</v-chip>
           <h3>TOTAL</h3>
         </v-col>
       </v-row>
@@ -41,49 +41,61 @@
       <v-divider />
 
       <!-- Bio -->
-      <v-row id="pointer-cursor" class="my-2">
-        <v-col @click="isBioVisible = !isBioVisible">
-          <h2>Bio</h2>
-          <p v-if="isBioVisible">{{ teamData.bio }}</p>
-        </v-col>
-        <v-icon
-          v-if="isBioVisible"
-          icon="mdi mdi-chevron-down"
-          @click="isBioVisible = !isBioVisible"
-          class="px-10"
-          size="50px"
-        />
-        <v-icon
-          v-else
-          icon="mdi mdi-chevron-right"
-          @click="isBioVisible = !isBioVisible"
-          class="px-10"
-          size="50px"
-        />
-      </v-row>
+      <v-container class="pa-0">
+        <v-row id="pointer-cursor" class="my-2">
+          <v-col @click="isBioVisible = !isBioVisible">
+            <h2>Bio</h2>
+          </v-col>
+          <v-icon
+            v-if="isBioVisible"
+            icon="mdi mdi-chevron-down"
+            @click="isBioVisible = !isBioVisible"
+            class="px-10"
+            size="50px"
+          />
+          <v-icon
+            v-else
+            icon="mdi mdi-chevron-right"
+            @click="isBioVisible = !isBioVisible"
+            class="px-10"
+            size="50px"
+          />
+        </v-row>
+        <v-row v-if="isBioVisible" class="mt-n4 mb-2">
+          <v-col>
+            <p>{{ teamData.bio }}</p>
+          </v-col>
+        </v-row>
+      </v-container>
       <v-divider></v-divider>
 
       <!-- Daily Kilometres -->
-      <v-row align="start" id="pointer-cursor" class="my-2">
-        <v-col>
-          <h2>Daily KMs</h2>
-          <MileageGraph v-if="isDailyKmsVisible" />
-        </v-col>
-        <v-icon
-          v-if="isDailyKmsVisible"
-          @click="isDailyKmsVisible = !isDailyKmsVisible"
-          icon="mdi mdi-chevron-down"
-          size="50px"
-          class="px-10"
-        />
-        <v-icon
-          v-else
-          @click="isDailyKmsVisible = !isDailyKmsVisible"
-          icon="mdi mdi-chevron-right"
-          size="50px"
-          class="px-10"
-        />
-      </v-row>
+      <v-container class="pa-0">
+        <v-row align="start" id="pointer-cursor" class="my-2">
+          <v-col>
+            <h2>Daily KMs</h2>
+          </v-col>
+          <v-icon
+            v-if="isDailyKmsVisible"
+            @click="isDailyKmsVisible = !isDailyKmsVisible"
+            icon="mdi mdi-chevron-down"
+            size="50px"
+            class="px-10"
+          />
+          <v-icon
+            v-else
+            @click="isDailyKmsVisible = !isDailyKmsVisible"
+            icon="mdi mdi-chevron-right"
+            size="50px"
+            class="px-10"
+          />
+        </v-row>
+        <v-row v-if="isDailyKmsVisible" class="mt-n4 mb-2">
+          <v-col>
+            <MileageGraph :dataPoints="mileageStore.mileageByTeam" />
+          </v-col>
+        </v-row>
+      </v-container>
       <v-divider />
 
       <!-- Sub-teams -->
@@ -110,9 +122,11 @@
           class="px-10"
         />
       </v-row>
-      <v-col cols="12" class="w-100" id="pointer-cursor">
-        <SubTeams v-if="isSubTeamsVisible" />
-      </v-col>
+      <v-row v-if="isSubTeamsVisible" class="my-2">
+        <v-col cols="12" class="w-100" id="pointer-cursor">
+          <SubTeams />
+        </v-col>
+      </v-row>
       <v-divider />
 
       <!-- Leaderboard -->
@@ -167,9 +181,14 @@ import { useTeamStore } from '@/stores/team'
 import { useUserStore } from '@/stores/user'
 import { AxiosError } from 'axios'
 import { notify } from '@kyvg/vue3-notification'
+import { useMileageStore } from '@/stores/mileage'
+
 const teamStore = useTeamStore()
 const userStore = useUserStore()
 const loading = ref(false)
+const mileageStore = useMileageStore()
+
+mileageStore.getMileageByTeam()
 
 onMounted(async () => {
   if (userStore.user!.teamId)
@@ -210,7 +229,7 @@ const removeTeam = () => {
 
 const teamData = ref({
   team_name: teamStore.team ? teamStore.team.name : '',
-  total_kilometres: 990,
+  total_kilometres: 0,
   invite_code: teamStore.team ? teamStore.team.joinCode : '',
   bio: teamStore.team ? teamStore.team.bio : '',
   daily_kms: [],

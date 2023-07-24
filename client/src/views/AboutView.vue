@@ -166,9 +166,7 @@ const dismissPrompt = () => {
 
 const installPWA = () => {
   installEvent!.prompt()
-  installEvent!.userChoice.then(() => {
-    dismissPrompt() // Hide the prompt once the user's clicked
-  })
+  installEvent!.userChoice.then(dismissPrompt) // Hide the prompt once the user's clicked
 }
 
 // beforeMount hook equivalent in setup

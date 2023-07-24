@@ -1,8 +1,8 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import User
-from .serializers import (ChangeDetailsSerializer, ChangePasswordSerializer, RequestResetPasswordSerializer, ResetPasswordSerializer,
-                          UserSerialiser, JoinTeamSerializer)
+from .serializers import (ChangeDetailsSerializer, ChangePasswordSerializer, RequestResetPasswordSerializer,
+                          ResetPasswordSerializer, JoinTeamSerializer, PublicUserSerializer)
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
@@ -16,10 +16,16 @@ import datetime
 
 
 @api_view(['GET'])
-def get_user(request, username):
-    user = User.objects.get(username=username)
-    serializer = UserSerialiser(user)
-    return Response(serializer.data)
+def get_user(request):
+    if request.user.is_authenticated is False:
+        return Response(status=401)
+    else:
+        try:
+            user = User.objects.get(id=request.user.id)
+        except User.DoesNotExist:
+            return Response(status=400)
+        serializer = PublicUserSerializer(user)
+        return Response(serializer.data, status=200)
 
 
 @api_view(['PATCH'])

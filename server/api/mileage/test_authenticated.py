@@ -9,36 +9,35 @@ from .serializers import MileageSerializer
 from freezegun import freeze_time
 import datetime
 
+USERNAME = 'testuser'
+PASSWORD = 'testuser123'
+
 
 class MileageTests(APITestCase):
-    def setUp(self):
-        self.user = User.objects.create_user(username='Fred', password="Fred123")
-        self.mileage = Mileage.objects.create(user=self.user, kilometres=100.0)
-        self.user.save()
-
-    def get_token(self):
+    def _get_token(self):
         get_token_url = reverse('auth:jwt_token')
         get_token_body = {
-            'username': 'Fred',
-            'password': 'Fred123'
+            'username': USERNAME,
+            'password': PASSWORD
         }
         get_token_response = self.client.post(get_token_url, get_token_body, format='json')
         token = get_token_response.data['access']
-        return token
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
+
+    def setUp(self):
+        self.user = User.objects.create_user(username=USERNAME, password=PASSWORD)
+        self.user.save()
+        self.mileage = Mileage.objects.create(user=self.user, kilometres=100.0)
+        self._get_token()
 
     def test_get_mileage(self):
-        token = self.get_token()
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer {0}'.format(token))
-        url = reverse('mileage:get-mileage', args=[self.user.id])
-        response = self.client.get(url)
+        response = self.client.get(reverse('mileage:get-mileage'), {'user': self.user.id})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         serializer = MileageSerializer([self.mileage], many=True)
         self.assertEqual(response.data, serializer.data)
 
     def test_post_mileage(self):
-        token = self.get_token()
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer {0}'.format(token))
         url = reverse('mileage:post-mileage')
 
         data = {'user': self.user.id, 'kilometres': 200.0}
@@ -52,9 +51,18 @@ class MileageTests(APITestCase):
 
         self.assertEqual(Mileage.objects.count(), 3)
 
+    def test_total_km(self):
+        response = self.client.post(
+            reverse('mileage:post-mileage'),
+            {'user': self.user.id, 'kilometres': 200.0}, format='json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        response = self.client.get(reverse('mileage:get-mileage'), {'user': self.user.id, 'sum': True})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, 100 + 200)
+
     def test_post_mileage_invalid_data(self):
-        token = self.get_token()
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer {0}'.format(token))
         url = reverse('mileage:post-mileage')
 
         data = {'user': self.user.id}  # Missing 'kilometres' field
@@ -71,8 +79,6 @@ class MileageTests(APITestCase):
     # test challenge periods
 
     def test_start_challenge(self):
-        token = self.get_token()
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer {0}'.format(token))
         url = reverse('mileage:post-mileage')
         data = {'user': self.user.id, 'kilometres': 200.0}
         response = self.client.post(url, data, format='json')
@@ -83,8 +89,6 @@ class MileageTests(APITestCase):
         self.assertEqual(self.user.challenge_start_date, datetime.date.today())
 
     def test_get_challenge_mileages(self):
-        token = self.get_token()
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer {0}'.format(token))
         url = reverse('mileage:post-mileage')
 
         # start challenge period
@@ -99,15 +103,12 @@ class MileageTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # test only get mileages within challenge period if challenge param in query
-        url = reverse('mileage:get-mileage', args=[self.user.id])
-        response = self.client.get(url, {'challenge': True})
+        response = self.client.get(reverse('mileage:get-mileage'), {'challenge': True, 'user': self.user.id})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.assertEqual(len(response.data), 2)
 
     def test_rollover_challenge(self):
-        token = self.get_token()
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer {0}'.format(token))
         url = reverse('mileage:post-mileage')
 
         # start challenge period
@@ -120,12 +121,10 @@ class MileageTests(APITestCase):
 
     @freeze_time(datetime.date.today() + datetime.timedelta(days=15))
     def _test_rollover_challenge(self):
-        token = self.get_token()
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer {0}'.format(token))
+        self._get_token()  # an ugly fix
 
         # get mileages after challenge period has ended
-        url = reverse('mileage:get-mileage', args=[self.user.id])
-        response = self.client.get(url, {'challenge': True})
+        response = self.client.get(reverse('mileage:get-mileage'), {'challenge': True, 'user': self.user.id})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 0)
 
@@ -135,8 +134,7 @@ class MileageTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # test only gets mileage in new challenge period
-        url = reverse('mileage:get-mileage', args=[self.user.id])
-        response = self.client.get(url, {'challenge': True})
+        response = self.client.get(reverse('mileage:get-mileage'), {'challenge': True, 'user': self.user.id})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.assertEqual(len(response.data), 1)

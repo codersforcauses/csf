@@ -3,7 +3,7 @@
     <v-container>
       <v-row class="ma-0 px-13 pt-4" align="center" justify="center">
         <v-col align="center">
-          <h1>Welcome back, {{ username }}</h1>
+          <h1>Welcome back, {{ userStore.user!.username }}</h1>
         </v-col>
         <v-btn size="medium" icon="mdi-cog" variant="text" href="/settings" />
       </v-row>
@@ -17,7 +17,9 @@
                   <v-icon :icon="method" size="52"></v-icon>
                 </v-col>
                 <v-col>
-                  <v-chip color="green" class="rounded text-h5">{{ tempUserMileage }} KM</v-chip>
+                  <v-chip color="green" class="rounded text-h5"
+                    >{{ mileageStore.totalKmByUser }} KM</v-chip
+                  >
                   <v-card-subtitle>TOTAL</v-card-subtitle>
                 </v-col>
                 <v-spacer />
@@ -41,6 +43,7 @@
       <v-row class="ma-0 pt-0 pb-0" align="center">
         <v-col>
           <h1>Daily KMs</h1>
+          <MileageGraph :dataPoints="mileageStore.mileageByUser" />
         </v-col>
       </v-row>
       <!-- </v-container> -->
@@ -54,14 +57,17 @@
               <div class="progress-bar rounded-lg">
                 <div
                   :class="`rounded-lg ${challenge.colour}`"
-                  :style="`width: ${calcWidth(distanceTravelled, challenge.length)}%`"
+                  :style="`width: ${calcWidth(
+                    mileageStore.totalChallengeKmByUser,
+                    challenge.length
+                  )}%`"
                 ></div>
               </div>
             </v-col>
             <v-col cols="4" sm="2" lg="1">
               <div :class="`length-label rounded-lg ${challenge.colour}`">
                 <h3 class="primaryWhite text-center">
-                  {{ `${distanceTravelled}/${challenge.length}KM` }}
+                  {{ `${mileageStore.totalChallengeKmByUser}/${challenge.length}KM` }}
                 </h3>
               </div>
             </v-col>
@@ -84,12 +90,13 @@ import MileageModal from '../components/MileageModal.vue'
 import { useUserStore } from '@/stores/user'
 import { useMileageStore } from '@/stores/mileage'
 import ChallengeCompletePopupModalVue from '@/components/ChallengeCompletePopupModal.vue'
+import MileageGraph from '../components/MileageGraph.vue'
 
 const userStore = useUserStore()
+const mileageStore = useMileageStore()
+
 const method = ref()
 const loading = ref(true)
-const user = ref()
-const username = ref()
 const isCompleted = ref(false)
 const challengeName = ref('')
 
@@ -107,9 +114,6 @@ const getIconName = (medium: any) => {
   }
 }
 
-const mileageStore = useMileageStore()
-
-const tempUserMileage = ref(100)
 const dialog = ref(false)
 const challenges = ref([
   { name: 'WOORABINDA', length: 24, colour: 'bg-secondaryGreen' },
@@ -117,29 +121,21 @@ const challenges = ref([
   { name: "GALIWIN'KU", length: 84, colour: 'bg-primaryRed' },
   { name: 'PALM ISLAND', length: 120, colour: 'bg-primaryBlack' }
 ])
-const distanceTravelled = ref(0)
 
 function calcWidth(travelDist: number, totalDist: number) {
   return Math.min((100 * travelDist) / totalDist, 100)
 }
 
-function getRecentMileage() {
-  if (userStore.user) {
-    let arr = mileageStore.recentMileage
-    if (arr) {
-      return arr.reduce((a, b) => a + b.kilometres, 0)
-    }
-  }
-  return 0
-}
-
-function updateChallengeProgress(checkForCompletion: boolean) {
-  let oldDistance = distanceTravelled.value
-  distanceTravelled.value = getRecentMileage()
+async function updateChallengeProgress(checkForCompletion: boolean) {
+  const oldDistance = mileageStore.totalChallengeKmByUser
+  await mileageStore.getChallengeMileage()
 
   if (checkForCompletion) {
     challenges.value.forEach((challenge) => {
-      if (oldDistance < challenge.length && distanceTravelled.value >= challenge.length) {
+      if (
+        oldDistance < challenge.length &&
+        mileageStore.totalChallengeKmByUser >= challenge.length
+      ) {
         challengeName.value = challenge.name
         isCompleted.value = true
       }
@@ -150,11 +146,9 @@ function updateChallengeProgress(checkForCompletion: boolean) {
 onMounted(async () => {
   if (userStore.user) {
     try {
-      user.value = userStore.user
-      username.value = user.value.username
-      getIconName(user.value.travelMethod)
-      await mileageStore.getRecentMileage(userStore.user.id)
-      updateChallengeProgress(false)
+      getIconName(userStore.user.travelMethod)
+      await mileageStore.getMileageByUser()
+      await updateChallengeProgress(false)
     } catch (error) {
       console.log(error)
     }

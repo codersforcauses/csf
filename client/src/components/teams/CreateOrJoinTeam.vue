@@ -47,7 +47,7 @@ import { useDisplay } from 'vuetify'
 import NewTeamModal from '@/components/teams/NewTeamModal.vue'
 import { ref } from 'vue'
 import { useTeamStore } from '@/stores/team'
-import { AxiosError } from 'axios'
+import type { AxiosError } from 'axios'
 import { notify } from '@kyvg/vue3-notification'
 
 const loading = ref(false)

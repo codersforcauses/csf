@@ -182,11 +182,10 @@ const showSuccessDialog = ref(false)
 async function changeDetails() {
   loading.value = true
   try {
-    let newUsername = state.username
     let status = await userStore.changeDetails(state)
     if (status === 200) {
       // update the user details in the store
-      userStore.getUser(newUsername)
+      userStore.getUser()
       // TODO: replace this with a proper dialog/alert
       notify({
         title: 'Change User Details',
