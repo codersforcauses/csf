@@ -1,6 +1,6 @@
 <template>
-  <div id="header-container" class="text-white pa-lg-12 pa-5">
-    <h1 class="text-md-h1 mb-md-10 mb-7 font-weight-medium" id="title">EVENTS</h1>
+  <div class="header text-white">
+    <h1 class="text-center font-weight-medium text-md-h1" id="title">EVENTS</h1>
   </div>
   <v-container v-if="!isLoading">
     <v-row
@@ -122,5 +122,15 @@ function openEditModal(id: number) {
   padding-top: 19px;
   padding-bottom: 0px;
   margin-top: -19px;
+}
+
+.header {
+  background-image: url('/images/Footer-min.jpeg');
+  background-size: cover;
+  font-family: Hackney !important;
+}
+
+#title {
+  font-family: Hackney !important;
 }
 </style>

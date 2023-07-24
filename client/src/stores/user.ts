@@ -34,6 +34,7 @@ export const useUserStore = defineStore('user', {
       if (status == 200) {
         this.token = data
         await this.getUser()
+        if (this.user?.teamId) useTeamStore().getTeam(this.user.teamId)
         return true
       } else {
         return false

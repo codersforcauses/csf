@@ -1,7 +1,9 @@
 import { defineStore } from 'pinia'
 import server from '@/utils/server'
+import type { GetLeaderboardParam, UserLeaderboard, TeamLeaderboard } from '@/types/mileage'
 import type Mileage from '@/types/mileage'
 import camelize from 'camelize-ts'
+import snakify from 'snakify-ts'
 import { notify } from '@kyvg/vue3-notification'
 import { useUserStore } from './user'
 
@@ -37,6 +39,17 @@ export const useMileageStore = defineStore('mileage', {
             text: 'Post Mileage Error'
           })
         )
+    },
+    async getLeaderboard(param: GetLeaderboardParam) {
+      return await server
+        .get('mileage/get_leaderboard/', {
+          params: snakify(param)
+        })
+        .then((res) => {
+          if (res.status == 200) {
+            return camelize(res.data) as unknown as UserLeaderboard | TeamLeaderboard
+          }
+        })
     },
     async getMileageByUser() {
       const user = useUserStore().user!.id

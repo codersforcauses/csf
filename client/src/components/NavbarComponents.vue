@@ -262,7 +262,7 @@ const menu = [
   { icon: 'mdi-account-group', title: 'Team', link: '/team' },
   { icon: 'mdi-calendar', title: 'Events', link: '/events' },
   { icon: 'mdi-trophy', title: 'Challenges', link: '/challenges' },
-  { icon: 'mdi-star', title: 'Leaderboards', link: '/' },
+  { icon: 'mdi-star', title: 'Leaderboards', link: '/leaderboards' },
   { icon: 'mdi-currency-usd', title: 'Donate', link: 'https://stride-for-education.raisely.com' }
 ]
 </script>
