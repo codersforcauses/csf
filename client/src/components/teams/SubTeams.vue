@@ -1,32 +1,19 @@
 <template>
   <!--Display Subteams-->
   <v-row justify="space-between" align="center" no-gutters>
-    <v-col cols="10">
-      <div class="d-flex justify-center">
-        <v-text-field
-          :error-messages="errorMessage"
-          prepend-inner-icon="mdi-magnify"
-          variant="outlined"
-          placeholder="Add Subteam"
-          class="mr-3"
-          clearable
-          v-model="newSubTeamName"
-        />
-      </div>
-    </v-col>
-    <v-col cols="2">
-      <div class="d-flex justify-center mb-6">
-        <v-btn
-          size="x-large"
-          density="compact"
-          variant="flat"
-          icon="mdi-plus"
-          class="bg-primaryRed text-primaryWhite"
-          @click="addSubTeam"
-        >
-        </v-btn>
-      </div>
-    </v-col>
+      <v-col v-if="userStore.user?.teamAdmin" cols="10">
+        <div class="d-flex justify-center">
+          <v-text-field :error-messages="errorMessage" variant="outlined" placeholder="Add Subteam" class="mr-3" clearable
+            v-model="newSubTeamName" />
+        </div>
+      </v-col>
+      <v-col v-if="userStore.user?.teamAdmin"  cols="2">
+        <div class="d-flex justify-center mb-6">
+          <v-btn size="x-large" density="compact" variant="flat" icon="mdi-plus" class="bg-primaryRed text-primaryWhite"
+            @click="addSubTeam">
+          </v-btn>
+        </div>
+      </v-col>
 
     <v-col cols="12">
       <v-list v-model:opened="state.open">
@@ -35,39 +22,28 @@
             <v-list-group sub-group no-action :value="subteam.subteamId">
               <template v-slot:activator="{ props }">
                 <v-list-item v-bind="props">
-                  <v-list-item-content>
-                    <!--Subteam Info-->
-                    <div class="d-flex justify-space-between">
-                      <div>
-                        {{ subteam.name }}
-                      </div>
-                      <!-- <span class="km-text rounded-lg ml-auto text-no-wrap pa-1 bg-success">
+                  <!--Subteam Info-->
+                  <div class="d-flex justify-space-between">
+                    <div>
+                      {{ subteam.name }}
+                    </div>
+                    <!-- <span class="km-text rounded-lg ml-auto text-no-wrap pa-1 bg-success">
                        {{ subteam.totalKm }} 
                       </span> -->
-                      <div v-if="userStore.user?.teamAdmin">
-                        <!--Edit Subteam Pencil Icon-->
-                        <v-icon
-                          class="ml-5"
-                          icon="mdi mdi-pencil"
-                          @click="openEditSubteamDialog(subteam.subteamId)"
-                          size="16px"
-                          id="pointer-cursor"
-                        />
-                      </div>
+                    <div v-if="userStore.user?.teamAdmin">
+                      <!--Edit Subteam Pencil Icon-->
+                      <v-icon class="ml-5" icon="mdi mdi-pencil" @click="openEditSubteamDialog(subteam.subteamId)"
+                        size="16px" id="pointer-cursor" />
                     </div>
-                  </v-list-item-content>
+                  </div>
                 </v-list-item>
               </template>
               <!--Member List-->
-              <v-list-item
-                v-for="member in subteam.members"
-                :key="member.id"
-                :value="member.firstName"
-                :title="member.firstName + ' ' + member.lastName"
-              >
+              <v-list-item v-for="member in subteam.members" :key="member.id" :value="member.firstName"
+                :title="member.firstName + ' ' + member.lastName">
                 <template v-slot:title="{ title }">
                   <v-list-item :prepend-avatar="member.avatar">
-                    <v-list-item-content> {{ title }}</v-list-item-content>
+                    {{ title }}
                   </v-list-item>
                 </template>
               </v-list-item>
@@ -78,13 +54,8 @@
       </v-list>
     </v-col>
   </v-row>
-  <SubTeamsModal
-    v-model="showSubTeamModal"
-    @save-subteam="saveSubteam"
-    @delete-sub-team="deleteSubTeam"
-    :selectedSubteam="selectedSubteam!"
-    :availableMemeberList="availableMembersList"
-  />
+  <SubTeamsModal v-model="showSubTeamModal" @save-subteam="saveSubteam" @delete-sub-team="deleteSubTeam"
+    :selectedSubteam="selectedSubteam!" :availableMemeberList="availableMembersList" />
 </template>
 
 <script setup lang="ts">

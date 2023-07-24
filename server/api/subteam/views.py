@@ -3,11 +3,11 @@ from rest_framework.decorators import api_view
 from .models import SubTeam
 from .serializers import SubTeamSerialiser
 from ..users.models import User
-from ..users.serializers import UserSerialiser, UserUpdateSerializer
+from ..users.serializers import PublicUserSerializer
 
 from django.db.models import Q
-from django.http import HttpResponse
 import json
+
 
 @api_view(['POST'])
 def create_subteam(request):
@@ -67,7 +67,7 @@ def get_subteam_users(request, subteam_id):
         return Response("User not authenticated", status=403)
     else:
         users = User.objects.filter(Q(subteam_id=subteam_id) & Q(team_id=request.user.team_id))
-        serialiser = UserUpdateSerializer(users, many=True)
+        serialiser = PublicUserSerializer(users, many=True)
         return Response(serialiser.data, status=200)
 
 
@@ -77,24 +77,24 @@ def get_available_users(request):
         return Response("User not authenticated", status=403)
     else:
         users = User.objects.filter(Q(subteam_id=None) & Q(team_id=request.user.team_id))
-        serialiser = UserUpdateSerializer(users, many=True)
+        serialiser = PublicUserSerializer(users, many=True)
         return Response(serialiser.data, status=200)
 
 
 @api_view(['PUT'])
 def edit_user_to_subteam(request, user_id):
     data = json.loads(request.body)
-    subteam_id=data['subteam_id']
+    subteam_id = data['subteam_id']
     subteam = SubTeam.objects.get(subteam_id=subteam_id)
-    
     user = User.objects.get(id=user_id)
     user.subteam_id = subteam
     user.save()
     return Response("User added to subteam", status=200)
+
 
 @api_view(['PUT'])
 def delete_user_from_subteam(request, user_id):
     user = User.objects.get(id=user_id)
     user.subteam_id = None
     user.save()
-    return Response("User removed from subteam", status=200)  
+    return Response("User removed from subteam", status=200)

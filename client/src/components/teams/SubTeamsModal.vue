@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, watchEffect } from 'vue'
 import type { Ref, PropType } from 'vue'
-
 import ConfirmButton from '@/components/ConfirmButton.vue'
 import PopupDialog from '@/components/PopupDialog.vue'
-
 import type { SubteamView, MemberView, UserView } from '@/types/subteam'
 
 // Open dialog, get methods from SubTeams.vue
@@ -24,6 +22,8 @@ const props = defineProps({
     required: true
   }
 })
+
+const isFullscreen = ref(false)
 
 // selectable avaliable member list
 const toMemberView = (member: UserView): MemberView => {
@@ -112,110 +112,82 @@ const showDialog = computed({
     emit('update:modelValue', newValue)
   }
 })
+
+watchEffect(async () => {
+  const updateFullscreen = async () => {
+    isFullscreen.value = window.innerWidth <= 500
+  }
+
+  await updateFullscreen()
+
+  window.addEventListener('resize', updateFullscreen)
+  return () => {
+    window.removeEventListener('resize', updateFullscreen)
+  }
+})
+
 </script>
 
 <template>
   <!--Edit Subteam-->
-  <v-dialog v-model="showDialog" fullscreen transition="dialog-bottom-transition">
-    <v-img src="/images/Footer-min.jpeg" width="100%" max-height="32" cover />
+  <v-dialog :fullscreen="isFullscreen" max-width="500px" max-height="100vh" v-model="showDialog">
     <v-card>
-      <v-card-text>
-        <!--Subteam Name-->
-        <v-btn
-          class="ma-0 pa-0 float-right"
-          variant="text"
-          icon="mdi mdi-window-close"
-          @click="emit('update:modelValue', !modelValue)"
-        />
-        <div class="font-weight-bold my-6 text-h4">Edit Subteam</div>
-        <div class="w-100 d-flex flex-column text-center align-center justify-center">
-          <v-text-field
-            variant="solo"
-            v-model="updatedTeamName"
-            :rules="[rules.required]"
-            label="Edit subteam name"
-            required
-            dense
-            class="text-h3 w-75 py-3 custom-text-field"
-          />
-        </div>
+      <v-img src="/images/Footer-min.jpeg" width="100%" max-height="16" cover />
+      <v-card-actions>
+        <v-spacer />
+        <v-icon icon="mdi-close" size="x-large" @click="emit('update:modelValue', !modelValue)" />
+      </v-card-actions>
+      <v-card-title class="justify-center text-h4 mb-6">Edit Subteam</v-card-title>
+      <!--Subteam Name-->
+      <v-form class="pb-0 mb-0 mx-8">
+        <v-text-field  v-model="updatedTeamName" :rules="[rules.required]" label="Edit subteam name"
+          required />
         <v-divider class="my-4" color="info"></v-divider>
 
         <!--Members-->
-        <div class="font-weight-bold my-6 text-h4">Members</div>
+        <v-card-title class="justify-center my-6 text-h4">Members</v-card-title>
 
         <!--Add New Member-->
-        <v-select
-          :items="tmpAvailableSubTeamMembers"
-          label="Select member"
-          v-model="selectedMember"
-          dense
-          @update:modelValue="handleAddMemberBtn"
-        >
+        <v-select  :items="tmpAvailableSubTeamMembers" label="Select members" v-model="selectedMember"
+          dense @update:modelValue="handleAddMemberBtn">
           <template v-slot:selection="{ item }">
-            <v-list-item
-              v-bind="item"
-              :title="item.raw.firstName + ' ' + item.raw.lastName"
-            ></v-list-item>
+            <v-list-item v-bind="item" :title="item.raw.firstName + ' ' + item.raw.lastName"></v-list-item>
           </template>
           <template v-slot:item="{ props, item }">
-            <v-list-item
-              v-bind="props"
-              :prepend-avatar="item.raw.avatar"
-              :title="item.raw.firstName + ' ' + item.raw.lastName"
-            />
+            <v-list-item v-bind="props" :prepend-avatar="item.raw.avatar"
+              :title="item.raw.firstName + ' ' + item.raw.lastName" />
             <v-divider color="info"></v-divider>
           </template>
         </v-select>
 
         <!--Member List-->
-        <v-list>
+        <v-list v-if="tmpSubteamMembers.length != 0">
           <v-list-item v-for="(member, index) in tmpSubteamMembers" :key="index">
-            <v-list-item-content>
-              <v-avatar>
-                <img :src="member.avatar" alt="Avatar" class="custom-avatar" />
-              </v-avatar>
-              <span class="ml-3 font-weight-bold">
-                {{ member.firstName + ' ' + member.lastName }}
-              </span>
-              <!--remove member icon-->
-              <v-icon
-                class="float-right"
-                icon="mdi mdi-window-close"
-                size="24px"
-                id="pointer-cursor"
-                @click="
-                  () => {
-                    display = true
-                    memberId = member.id
-                  }
-                "
-              />
-              <PopupDialog
-                v-model="display"
-                :title="'Remove Team Member'"
-                :text="`Are you sure you wish to remove this member?`"
-                :submit-text="'Confirm'"
-                @handle-submit="handleRemoveMemberBtn(memberId)"
-              />
-            </v-list-item-content>
+            <v-avatar>
+              <img :src="member.avatar" alt="Avatar" class="custom-avatar" />
+            </v-avatar>
+            <span class="ml-3 font-weight-bold">
+              {{ member.firstName + ' ' + member.lastName }}
+            </span>
+            <!--remove member icon-->
+            <v-icon class="float-right" icon="mdi mdi-window-close" size="24px" id="pointer-cursor" @click="() => {
+              display = true
+              memberId = member.id
+            }
+              " />
+            <PopupDialog v-model="display" :title="'Remove Team Member'"
+              :text="`Are you sure you wish to remove this member?`" :submit-text="'Confirm'"
+              @handle-submit="handleRemoveMemberBtn(memberId)" />
             <v-divider class="mt-4" color="info"></v-divider>
           </v-list-item>
         </v-list>
         <!--Buttons-->
         <div class="w-100 d-flex justify-center">
-          <v-btn color="secondaryGreen" class="mr-8" variant="flat" @click="handleSaveSubteamBtn"
-            >Save</v-btn
-          >
-          <ConfirmButton
-            :action="'delete'"
-            :object="'subteam'"
-            :use-done-for-button="false"
-            :loading="loading"
-            @handle-confirm="$emit('removeSubTeam', selectedSubteam.teamId)"
-          />
+          <v-btn color="secondaryGreen" class="mr-8" variant="flat" @click="handleSaveSubteamBtn">Save</v-btn>
+          <ConfirmButton :action="'delete'" :object="'subteam'" :use-done-for-button="false" :loading="loading"
+            @handle-confirm="$emit('removeSubTeam', selectedSubteam.teamId)" />
         </div>
-      </v-card-text>
+      </v-form>
     </v-card>
   </v-dialog>
 </template>
@@ -229,6 +201,10 @@ const showDialog = computed({
   width: 32px;
   height: 32px;
   border-radius: 50%;
+}
+
+.v-list__input:hover {
+  background-color: #ff0000 !important;
 }
 
 .v-input.custom-text-field input {
