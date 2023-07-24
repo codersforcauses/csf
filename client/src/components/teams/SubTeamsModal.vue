@@ -125,7 +125,6 @@ watchEffect(async () => {
     window.removeEventListener('resize', updateFullscreen)
   }
 })
-
 </script>
 
 <template>
@@ -140,22 +139,37 @@ watchEffect(async () => {
       <v-card-title class="justify-center text-h4 mb-6">Edit Subteam</v-card-title>
       <!--Subteam Name-->
       <v-form class="pb-0 mb-0 mx-8">
-        <v-text-field  v-model="updatedTeamName" :rules="[rules.required]" label="Edit subteam name"
-          required />
+        <v-text-field
+          v-model="updatedTeamName"
+          :rules="[rules.required]"
+          label="Edit subteam name"
+          required
+        />
         <v-divider class="my-4" color="info"></v-divider>
 
         <!--Members-->
         <v-card-title class="justify-center my-6 text-h4">Members</v-card-title>
 
         <!--Add New Member-->
-        <v-select  :items="tmpAvailableSubTeamMembers" label="Select members" v-model="selectedMember"
-          dense @update:modelValue="handleAddMemberBtn">
+        <v-select
+          :items="tmpAvailableSubTeamMembers"
+          label="Select members"
+          v-model="selectedMember"
+          dense
+          @update:modelValue="handleAddMemberBtn"
+        >
           <template v-slot:selection="{ item }">
-            <v-list-item v-bind="item" :title="item.raw.firstName + ' ' + item.raw.lastName"></v-list-item>
+            <v-list-item
+              v-bind="item"
+              :title="item.raw.firstName + ' ' + item.raw.lastName"
+            ></v-list-item>
           </template>
           <template v-slot:item="{ props, item }">
-            <v-list-item v-bind="props" :prepend-avatar="item.raw.avatar"
-              :title="item.raw.firstName + ' ' + item.raw.lastName" />
+            <v-list-item
+              v-bind="props"
+              :prepend-avatar="item.raw.avatar"
+              :title="item.raw.firstName + ' ' + item.raw.lastName"
+            />
             <v-divider color="info"></v-divider>
           </template>
         </v-select>
@@ -170,22 +184,40 @@ watchEffect(async () => {
               {{ member.firstName + ' ' + member.lastName }}
             </span>
             <!--remove member icon-->
-            <v-icon class="float-right" icon="mdi mdi-window-close" size="24px" id="pointer-cursor" @click="() => {
-              display = true
-              memberId = member.id
-            }
-              " />
-            <PopupDialog v-model="display" :title="'Remove Team Member'"
-              :text="`Are you sure you wish to remove this member?`" :submit-text="'Confirm'"
-              @handle-submit="handleRemoveMemberBtn(memberId)" />
+            <v-icon
+              class="float-right"
+              icon="mdi mdi-window-close"
+              size="24px"
+              id="pointer-cursor"
+              @click="
+                () => {
+                  display = true
+                  memberId = member.id
+                }
+              "
+            />
+            <PopupDialog
+              v-model="display"
+              :title="'Remove Team Member'"
+              :text="`Are you sure you wish to remove this member?`"
+              :submit-text="'Confirm'"
+              @handle-submit="handleRemoveMemberBtn(memberId)"
+            />
             <v-divider class="mt-4" color="info"></v-divider>
           </v-list-item>
         </v-list>
         <!--Buttons-->
         <div class="w-100 d-flex justify-center">
-          <v-btn color="secondaryGreen" class="mr-8" variant="flat" @click="handleSaveSubteamBtn">Save</v-btn>
-          <ConfirmButton :action="'delete'" :object="'subteam'" :use-done-for-button="false" :loading="loading"
-            @handle-confirm="$emit('removeSubTeam', selectedSubteam.teamId)" />
+          <v-btn color="secondaryGreen" class="mr-8" variant="flat" @click="handleSaveSubteamBtn"
+            >Save</v-btn
+          >
+          <ConfirmButton
+            :action="'delete'"
+            :object="'subteam'"
+            :use-done-for-button="false"
+            :loading="loading"
+            @handle-confirm="$emit('removeSubTeam', selectedSubteam.teamId)"
+          />
         </div>
       </v-form>
     </v-card>
