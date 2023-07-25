@@ -1,6 +1,6 @@
 <template>
   <div id="header-container" class="text-white pa-lg-12 pa-5">
-    <h1 class="text-md-h1 mb-md-10 mb-7 font-weight-medium" id="title">PICK A CHALLENGE</h1>
+    <h1 class="text-md-h1 mb-md-10 mb-7 font-weight-medium" id="title">CHALLENGES</h1>
 
     <div class="ma-5">
       <h2 style="margin-bottom: 1vh" class="text-subtitle-1 text-md-h6 font-weight-bold">
