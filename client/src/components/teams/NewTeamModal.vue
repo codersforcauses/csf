@@ -58,7 +58,7 @@ const submitForm = () => {
     console.log(error.response.data.name)
     if (
       error instanceof AxiosError &&
-      //@ts-ignore
+      error.response !== undefined &&
       error.response.data.name == 'team with this name already exists.'
     ) {
       notify({
@@ -68,17 +68,17 @@ const submitForm = () => {
       })
     } else if (
       error instanceof AxiosError &&
-      //@ts-ignore
+      error.response !== undefined &&
       error.response.data.name == 'Ensure this field has no more than 254 characters.'
     ) {
       notify({
         title: 'Create Team',
         type: 'error',
-        text: 'Team name must be over 254 characters'
+        text: 'Team name is too long'
       })
     } else if (
       error instanceof AxiosError &&
-      //@ts-ignore
+      error.response !== undefined &&
       error.response.data.name == 'This field may not be blank.'
     ) {
       notify({
