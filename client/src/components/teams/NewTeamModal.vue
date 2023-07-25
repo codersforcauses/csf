@@ -74,7 +74,7 @@ const submitForm = () => {
       notify({
         title: 'Create Team',
         type: 'error',
-        text: 'Team name is too long'
+        text: 'Team name must be over 254 characters'
       })
     } else if (
       error instanceof AxiosError &&
