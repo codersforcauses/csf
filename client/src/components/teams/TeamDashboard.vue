@@ -278,11 +278,6 @@ const getIconName = (medium: string) => {
 </script>
 
 <style scoped>
-h1,
-h2,
-.v-icon {
-  color: black;
-}
 
 .totalKms {
   font-size: 1.5rem;
