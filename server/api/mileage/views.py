@@ -58,6 +58,7 @@ def get_mileage(request: HttpRequest):
     if "team" in request.GET:
         mileage = Mileage.objects.filter(team__in=request.GET.getlist("team"))
         return Response(MileageSerializer(mileage, many=True).data)
+    return Response("Invalid parameters", status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(["POST"])
