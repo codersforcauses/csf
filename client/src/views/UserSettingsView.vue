@@ -42,7 +42,7 @@
       </v-col>
     </v-row>
     <v-col cols="12">
-      <p>Change Avatar</p>
+      <p>Change avatar</p>
     </v-col>
     <v-row dense class="px-10">
       <v-col v-for="avatar in avatarPaths" :key="avatar.url" cols="4">
