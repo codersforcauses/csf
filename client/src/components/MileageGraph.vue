@@ -3,6 +3,7 @@
     <div class="justify-space-between">
       <v-btn
         :class="activeButton === range ? 'bg-green' : 'text-green'"
+        class="ml-md-5 ml-2 mb-2"
         variant="tonal"
         v-for="range in ranges"
         :key="range"
