@@ -157,15 +157,14 @@
       :loading="loading"
       @handle-confirm="deleteTeam"
     />
-    <v-btn size="large" color="red white--text" v-else @click="removeTeam">
-      <v-progress-circular
-        v-if="loading"
-        indeterminate
-        size="24"
-        color="white"
-      ></v-progress-circular>
-      <span v-else>Leave Team</span>
-    </v-btn>
+    <ConfirmButton
+      v-else
+      :action="'leave'"
+      :object="'team'"
+      :use-done-for-button="false"
+      :loading="loading"
+      @handle-confirm="removeTeam"
+    />
   </v-row>
 </template>
 
