@@ -10,7 +10,7 @@
         extra time if you forget to record your journey.
       </h2>
       <h2 class="text-subtitle-1 text-md-h6">
-        (Don't worry if you can't complete all the challenges, just do you best!)
+        (Don't worry if you can't complete all the challenges, just do your best!)
       </h2>
     </div>
   </div>
