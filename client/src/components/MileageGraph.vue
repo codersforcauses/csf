@@ -7,7 +7,8 @@
         v-for="range in ranges"
         :key="range"
         rounded="xl"
-        size="small"
+        size="x-small"
+        class="mr-2 mb-2"
         @click="filterData(range)"
       >
         {{ range }}
