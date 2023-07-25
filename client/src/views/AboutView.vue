@@ -47,7 +47,7 @@
       REGISTER NOW
     </v-btn>
   </v-row>
-  <v-row v-if="shown" justify="center" align="center" class="bg-secondaryGrey py-5" no-gutters>
+  <v-row justify="center" align="center" class="bg-secondaryGrey py-5" no-gutters>
     <v-col cols="5" class="text-center my-4">
       <v-img :src="Devices" alt="Stride for education Devices" />
     </v-col>
@@ -57,6 +57,7 @@
         Download the website as an app on any device!
       </p>
       <v-btn
+        v-if="shown"
         class="bg-primaryRed pb-9"
         size="small"
         :style="{ fontFamily: 'Hackney', fontSize: '28px' }"
@@ -168,7 +169,7 @@ type BeforeInstallPromptEvent = Event & {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
 }
 
-const shown = ref(true)
+const shown = ref(false)
 let installEvent: BeforeInstallPromptEvent | null = null
 
 const dismissPrompt = () => {
