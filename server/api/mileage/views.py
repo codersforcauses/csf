@@ -24,18 +24,18 @@ def get_mileage(request: HttpRequest):
         user = User.objects.get(id=request.GET["user"])
 
         if user.challenge_start_date is None:   
-            mileage = []
+            return Response([])
         
         # end challenge period if days are up
         elif (datetime.date.today() - user.challenge_start_date).days > CHALLENGE_LENGTH:
             user_serializer = UserSerializer(instance=user, data={'challenge_start_date': None})
             if user_serializer.is_valid():
                 user_serializer.save()
-            mileage = []
+            return Response([])
 
         else:
             mileage = Mileage.objects.filter(date__gte=user.challenge_start_date)
-        return Response(mileage.aggregate(Sum("kilometres"))["kilometres__sum"])
+            return Response(mileage.aggregate(Sum("kilometres"))["kilometres__sum"])
     if request.GET.get("sum") and not request.GET.get("challenge"):
         if "user" in request.GET:
             try:

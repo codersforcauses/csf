@@ -67,7 +67,7 @@ export const useMileageStore = defineStore('mileage', {
     },
     async getChallengeMileage() {
       const res = await server.get(`mileage/get_mileage`, {
-        params: { challenge: true, sum: true, user: useUserStore().user!.id }
+        params: { challenge: true, user: useUserStore().user!.id }
       })
       if (res.status == 200) this.totalChallengeKmByUser = res.data
     }
