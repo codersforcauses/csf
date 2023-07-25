@@ -8,12 +8,12 @@ from ..users.models import User
 from ..team.models import Team
 from .serializers import MileageSerializer, UserSerializer, UserLeaderboardSerializer, TeamLeaderboardSerializer  # , PostMileageSerializer
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import F, Q
+from django.db.models import Sum
 
 
 import datetime
 
-CHALLENGE_LENGTH = datetime.timedelta(days=14)
+CHALLENGE_LENGTH = 14
 LEADERBOARD_SIZE = 100
 
 
@@ -33,25 +33,32 @@ def get_mileage(request: HttpRequest):
                 return Response(team.total_mileage)
             except ObjectDoesNotExist:
                 return Response(request.user.team_id.name, status=status.HTTP_400_BAD_REQUEST)
-    queries = []
-    if "user" in request.GET:
-        queries.append(Q(user__in=request.GET.getlist("user")))
-    if "team" in request.GET:
-        queries.append(Q(team__in=request.GET.getlist("team")))
-    if request.GET.get("challenge"):
-        # only get mileages within *current* challenge period
-        queries.append(
-            Q(
-                user__challenge_start_date__gte=datetime.date.today() - CHALLENGE_LENGTH,
-                date__range=(
-                    F("user__challenge_start_date"),
-                    F("user__challenge_start_date") + CHALLENGE_LENGTH,
-                ),
-            )
-        )
+    if "challenge" in request.GET and "user" in request.GET:
+        user = User.objects.get(id=request.GET["user"])
 
-    mileage = Mileage.objects.filter(*queries)
-    return Response(MileageSerializer(mileage, many=True).data)
+        if user.challenge_start_date is None:
+            return Response(0.0)
+
+        # end challenge period if days are up
+        elif (datetime.date.today() - user.challenge_start_date).days > CHALLENGE_LENGTH:
+            user_serializer = UserSerializer(instance=user, data={'challenge_start_date': None})
+            if user_serializer.is_valid():
+                user_serializer.save()
+            return Response(0.0)
+
+        else:
+            mileage = Mileage.objects.filter(user=request.GET["user"], date__gte=user.challenge_start_date)
+            if mileage:  # the mileage QuerySet is not empty
+                return Response(mileage.aggregate(Sum("kilometres"))["kilometres__sum"])
+            else:
+                return Response(0.0)
+    if "user" in request.GET:
+        mileage = Mileage.objects.filter(user__in=request.GET.getlist("user"))
+        return Response(MileageSerializer(mileage, many=True).data)
+    if "team" in request.GET:
+        mileage = Mileage.objects.filter(team__in=request.GET.getlist("team"))
+        return Response(MileageSerializer(mileage, many=True).data)
+    return Response("Invalid parameters", status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(["POST"])
@@ -64,7 +71,7 @@ def post_mileage(request):
     # start challenge for User if not already started
     challenge_start_date = user.challenge_start_date or datetime.date.today()
     # reset challenge if time is up
-    if (datetime.date.today() - challenge_start_date) > CHALLENGE_LENGTH:
+    if (datetime.date.today() - challenge_start_date).days > CHALLENGE_LENGTH:
         challenge_start_date = datetime.date.today()
     user_data = {"id": user.id, "challenge_start_date": challenge_start_date}
     user_serializer = UserSerializer(instance=user, data=user_data)
