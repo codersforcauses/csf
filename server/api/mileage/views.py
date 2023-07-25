@@ -8,7 +8,7 @@ from ..users.models import User
 from ..team.models import Team
 from .serializers import MileageSerializer, UserSerializer, UserLeaderboardSerializer, TeamLeaderboardSerializer  # , PostMileageSerializer
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Sum, Q
+from django.db.models import Sum
 
 
 import datetime
@@ -36,9 +36,9 @@ def get_mileage(request: HttpRequest):
     if "challenge" in request.GET and "user" in request.GET:
         user = User.objects.get(id=request.GET["user"])
 
-        if user.challenge_start_date is None:   
+        if user.challenge_start_date is None:
             return Response(0.0)
-        
+
         # end challenge period if days are up
         elif (datetime.date.today() - user.challenge_start_date).days > CHALLENGE_LENGTH:
             user_serializer = UserSerializer(instance=user, data={'challenge_start_date': None})
