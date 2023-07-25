@@ -47,8 +47,11 @@ def get_mileage(request: HttpRequest):
             return Response(0.0)
 
         else:
-            mileage = Mileage.objects.filter(date__gte=user.challenge_start_date)
-            return Response(mileage.aggregate(Sum("kilometres"))["kilometres__sum"])
+            mileage = Mileage.objects.filter(user=request.GET["user"], date__gte=user.challenge_start_date)
+            if mileage:  # the mileage QuerySet is not empty
+                return Response(mileage.aggregate(Sum("kilometres"))["kilometres__sum"])
+            else:
+                return Response(0.0)
     if "user" in request.GET:
         mileage = Mileage.objects.filter(user__in=request.GET.getlist("user"))
         return Response(MileageSerializer(mileage, many=True).data)
