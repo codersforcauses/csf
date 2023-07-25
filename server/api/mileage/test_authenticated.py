@@ -106,7 +106,7 @@ class MileageTests(APITestCase):
         response = self.client.get(reverse('mileage:get-mileage'), {'challenge': True, 'user': self.user.id})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        self.assertEqual(len(response.data), 2)
+        self.assertEqual(response.data, 300.0)
 
     def test_rollover_challenge(self):
         url = reverse('mileage:post-mileage')
@@ -137,7 +137,7 @@ class MileageTests(APITestCase):
         response = self.client.get(reverse('mileage:get-mileage'), {'challenge': True, 'user': self.user.id})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data, 5.5)
 
         # refresh user
         self.user = User.objects.get(id=self.user.id)
