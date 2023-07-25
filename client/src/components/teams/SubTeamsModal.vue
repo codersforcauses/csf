@@ -220,7 +220,7 @@ watchEffect(async () => {
               :object="'subteam'"
               :use-done-for-button="false"
               :loading="loading"
-              @handle-confirm="$emit('removeSubTeam', selectedSubteam.teamId)"
+              @handle-confirm="handleRemoveSubteamBtn"
             />
           </div>
         </v-card-actions>

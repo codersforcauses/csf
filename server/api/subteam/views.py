@@ -55,7 +55,11 @@ def delete_subteam(request, subteam_id):
     if (request.user.is_authenticated is False):
         return Response("User not authenticated", status=401)
     else:
+        users = User.objects.filter(subteam_id=subteam_id)
         subteam = SubTeam.objects.get(subteam_id=subteam_id)
+        for user in users:
+            user.subteam_id = None
+            user.save()
         subteam.delete()
         return Response("subteam deleted", status=200)
 
