@@ -83,3 +83,21 @@ class ResetPasswordSerializer(ModelSerializer):
         instance.set_password(validated_data['password'])
         instance.save()
         return instance
+
+
+class PublicUserSerializer(ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = [
+            "id",
+            "first_name",
+            "last_name",
+            "username",
+            "email",
+            "avatar",
+            "travel_method",
+            "team_id",
+            "subteam_id",
+            "team_admin",
+            "challenge_start_date"
+        ]

@@ -1,4 +1,7 @@
 <template>
+  <div class="header text-white">
+    <h1 class="text-center font-weight-medium text-md-h1" id="title">EVENTS</h1>
+  </div>
   <v-container v-if="!isLoading">
     <v-row
       class="bg-primaryWhite pt-6 mx-3"
@@ -16,7 +19,7 @@
         v-model="searchQuery"
       />
       <v-btn
-        v-if="user?.teamAdmin"
+        v-if="user?.teamAdmin && user?.teamId"
         size="x-large"
         density="compact"
         variant="flat"
@@ -32,13 +35,13 @@
         :key="event.eventId"
         :event="event"
         @edit="openEditModal"
-        :background-colour="idx % 2 === 0 ? 'bg-primaryWhite' : 'bg-backgroundGrey'"
+        :background-colour="idx % 2 === 0 ? 'bg-primaryWhite' : 'bg-grey-lighten-4'"
       />
       <div v-if="filteredEventsList.length == 0" class="mt-6 mx-3 text-center">
         <v-icon icon="mdi-calendar-blank" size="x-large" />
         <p class="font-weight-bold text-body-1 mt-3">No current events :(</p>
         <v-btn
-          v-if="user?.teamAdmin"
+          v-if="user?.teamAdmin && user?.teamId"
           size="x-large"
           class="bg-primaryRed text-primaryWhite mt-3"
           @click="isAddingEvent = true"
@@ -115,13 +118,19 @@ function openEditModal(id: number) {
 </script>
 
 <style scoped>
-/* #cards-container > .v-card:nth-child(odd) {
-  background-color: #f4f4f4;
-} */
-
 .v-field__input {
   padding-top: 19px;
   padding-bottom: 0px;
   margin-top: -19px;
+}
+
+.header {
+  background-image: url('/images/Footer-min.jpeg');
+  background-size: cover;
+  font-family: Hackney !important;
+}
+
+#title {
+  font-family: Hackney !important;
 }
 </style>

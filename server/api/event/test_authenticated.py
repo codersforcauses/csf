@@ -74,7 +74,7 @@ class EventTests(APITestCase):
     def test_get_events(self):
         token = self.get_token()
         self.client.credentials(HTTP_AUTHORIZATION='Bearer {0}'.format(token))
-        all_event = Event.objects.all()
+        all_event = Event.objects.filter(is_archived=False)
         response = self.client.get(reverse("event:get-events"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data_count = 0

@@ -18,33 +18,48 @@
       </div>
       <div v-else>
         <v-card-title class="justify-center text-h4 mb-5">Change Password</v-card-title>
-        <v-text-field
-          bg-color="white"
-          label="Old Password"
-          v-model="state.oldPassword"
-          type="password"
-          :error-messages="errors.oldPassword"
-          @focus="errors.newPassword = ''"
-          class="mx-5 mb-5"
-        />
-        <v-text-field
-          bg-color="white"
-          label="New Password"
-          v-model="state.newPassword"
-          type="password"
-          :error-messages="errors.newPassword"
-          @focus="errors.oldPassword = ''"
-          class="mx-5 mb-5"
-        />
-        <v-text-field
-          bg-color="white"
-          label="Confirm New Password"
-          type="password"
-          v-model="state.newPasswordConfirmation"
-          class="mx-5 mb-16"
-        />
+        <v-container>
+          <v-row dense>
+            <v-col cols="12">
+              <v-text-field
+                bg-color="white"
+                label="Old Password"
+                v-model="state.oldPassword"
+                type="password"
+                :error-messages="errors.oldPassword"
+                @focus="errors.newPassword = ''"
+              />
+            </v-col>
+            <v-col cols="12">
+              <v-text-field
+                bg-color="white"
+                label="New Password"
+                v-model="state.newPassword"
+                type="password"
+                :error-messages="errors.newPassword"
+                @focus="errors.oldPassword = ''"
+              />
+            </v-col>
+            <v-col cols="12">
+              <v-text-field
+                bg-color="white"
+                label="Confirm New Password"
+                type="password"
+                v-model="state.newPasswordConfirmation"
+              />
+            </v-col>
+          </v-row>
+        </v-container>
         <v-card-actions class="justify-center mb-4">
-          <v-btn class="bg-primaryRed" @click="changePassword">Change Password</v-btn>
+          <v-btn class="bg-primaryRed" @click="changePassword">
+            <v-progress-circular
+              v-if="loading"
+              indeterminate
+              size="24"
+              color="white"
+            ></v-progress-circular>
+            <span v-else>Change Password</span>
+          </v-btn>
         </v-card-actions>
       </div>
     </v-card>
@@ -72,8 +87,10 @@ const errors = reactive({
 
 const passwordChanged = ref(false)
 const userStore = useUserStore()
+const loading = ref(false)
 
 async function changePassword() {
+  loading.value = true
   if (state.oldPassword === '') {
     errors.oldPassword = 'You must enter your old password'
   } else if (state.newPassword !== state.newPasswordConfirmation) {
@@ -106,6 +123,7 @@ async function changePassword() {
       }
     }
   }
+  loading.value = false
 }
 
 function closeModal() {

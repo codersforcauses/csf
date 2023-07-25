@@ -3,31 +3,26 @@ import server from '@/utils/server'
 import type { Signup, Tokens, User, UserSettings } from '@/types/user'
 import camelize from 'camelize-ts'
 import snakify from 'snakify-ts'
-import useNullableStorage from '@/utils/useNullableStorage'
 import { useTeamStore } from './team'
-import { useMileageStore } from './mileage'
+import useNullableStorage from '@/utils/useNullableStorage'
+import { useModalStore } from './modal'
 
-export const useUserStore = defineStore('user', () => {
-  const user = useNullableStorage<User>('authUser')
-  const token = useNullableStorage<Tokens>('authToken')
+export const useUserStore = defineStore('user', {
+  state: () => ({
+    user: useNullableStorage<User>('authUser'),
+    token: useNullableStorage<Tokens>('authToken')
+  }),
 
-  if (token.value != null)
-    server.defaults.headers.common['Authorization'] = 'Bearer ' + token.value.access
-
-  return {
-    user,
-
+  actions: {
     logout() {
-      user.value = null
-      token.value = null
+      this.user = null
+      this.token = null
       useTeamStore().team = null
-      useMileageStore().recentMileage = []
-      delete server.defaults.headers.common['Authorization']
     },
 
-    async getUser(username: string) {
-      const { status, data } = await server.get(`user/${username}/`)
-      if (status == 200) user.value = camelize<User>(data)
+    async getUser() {
+      const { status, data } = await server.get(`user/get/`)
+      if (status == 200) this.user = camelize<User>(data)
     },
 
     async login(username: string, password: string) {
@@ -37,19 +32,20 @@ export const useUserStore = defineStore('user', () => {
         { validateStatus: () => true }
       )
       if (status == 200) {
-        await this.getUser(username)
-        token.value = data
-        server.defaults.headers.common['Authorization'] = 'Bearer ' + data.access
+        this.token = data
+        await this.getUser()
+        if (this.user?.teamId) useTeamStore().getTeam(this.user.teamId)
         return true
+      } else {
+        return false
       }
-      return false
     },
 
     async changePassword(oldPassword: string, newPassword: string) {
-      if (user.value) {
+      if (this.user) {
         return await server
           .patch(
-            `user/change_password/${user.value.id}`,
+            `user/change_password/${this.user.id}`,
             snakify({
               oldPassword: oldPassword,
               password: newPassword
@@ -63,7 +59,7 @@ export const useUserStore = defineStore('user', () => {
 
     async changeDetails(newDetails: UserSettings) {
       return await server
-        .patch(`user/change_details/${user.value!.id}`, snakify(newDetails))
+        .patch(`user/change_details/${this.user!.id}`, snakify(newDetails))
         .then((res) => {
           return res.status
         })
@@ -108,6 +104,23 @@ export const useUserStore = defineStore('user', () => {
 
     async registerUser(signup: Signup) {
       await server.post('auth/register/', snakify(signup))
+    },
+
+    async refreshToken() {
+      if (this.token != null) {
+        const { status, data } = await server.post(
+          'auth/refresh/',
+          { refresh: this.token.refresh },
+          { validateStatus: () => true }
+        )
+        if (status == 200) {
+          this.token.access = data.access
+          return true
+        }
+        this.logout()
+        useModalStore().login()
+      }
+      return false
     }
   }
 })

@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from django.db.models import Q
 
 from .models import Event
-from .serializers import EventSerialiser
+from .serializers import EventSerialiser, CreateEventSerializer, EditEventSerializer
 
 
 @api_view(["POST"])
@@ -12,7 +12,7 @@ def create_event(request):
     if request.user.is_authenticated is False:
         return Response("User not authenticated", status=401)
     else:
-        serialiser = EventSerialiser(data=request.data)
+        serialiser = CreateEventSerializer(data=request.data)
         if serialiser.is_valid():
             serialiser.save()
             return Response(serialiser.data, status=200)
@@ -24,15 +24,15 @@ def create_event(request):
 def get_events(request):
     if request.user.is_authenticated is True:
         if (request.user.team_id is not None):
-            events = Event.objects.filter(Q(is_public=True) | Q(team_id=request.user.team_id))
+            events = Event.objects.filter((Q(is_public=True) | Q(team_id=request.user.team_id)) & Q(is_archived=False))
             team_serializer = EventSerialiser(events, many=True)
             return Response(team_serializer.data)
         else:
-            events = Event.objects.filter(is_public=True)
+            events = Event.objects.filter(Q(is_public=True) & Q(is_archived=False))
             serializer = EventSerialiser(events, many=True)
             return Response(serializer.data)
     else:
-        events = Event.objects.filter(is_public=True)
+        events = Event.objects.filter(Q(is_public=True) & Q(is_archived=False))
         limited_serializer = EventSerialiser(events, many=True)
         return Response(limited_serializer.data)
 
@@ -48,10 +48,12 @@ def update_event(request, event_id):
             event = Event.objects.get(event_id=event_id)
             if request.user.team_id == event.team_id:
                 if event.is_public is False:
-                    serializer = EventSerialiser(instance=event, data=request.data)
+                    serializer = EditEventSerializer(instance=event, data=request.data)
                     if serializer.is_valid():
                         serializer.save()
-                    return Response(serializer.data, status=200)
+                        return Response(serializer.data, status=200)
+                    else:
+                        return Response(serializer.errors, status=400)
                 else:
                     return Response("Event is not private", status=403)
             else:

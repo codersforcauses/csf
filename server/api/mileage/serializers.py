@@ -1,5 +1,6 @@
 from .models import Mileage
 from ..users.models import User
+from ..team.models import Team
 from rest_framework.serializers import ModelSerializer, ValidationError
 
 import datetime
@@ -22,10 +23,13 @@ class UserSerializer(ModelSerializer):
         fields = ['id', 'challenge_start_date']
 
 
-# class PostMileageSerializer(ModelSerializer):
+class UserLeaderboardSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'total_mileage']
 
-#     user = UserSerializer()
 
-#     class Meta:
-#         model = Mileage
-#         fields = '__all__'
+class TeamLeaderboardSerializer(ModelSerializer):
+    class Meta:
+        model = Team
+        fields = ['team_id', 'name', 'bio', 'total_mileage']

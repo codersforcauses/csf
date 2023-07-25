@@ -11,7 +11,14 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
-from datetime import timedelta
+
+LOGGING = LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "root": {
+        "level": "INFO",
+    },
+}
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,6 +34,8 @@ SECRET_KEY = os.environ.get("API_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("APP_ENV") == "DEVELOPMENT"
+
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8081', 'https://csf.codersforcauses.org', 'http://localhost:8000']
 
 ALLOWED_HOSTS = (
     os.environ.get("API_ALLOWED_HOSTS").split()
@@ -170,12 +179,8 @@ AUTH_USER_MODEL = "users.User"
 
 # JWT
 
-
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=3),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=3),
-    "ALGORITHM": "HS256",
-    "SIGNING_KEY": os.environ.get("JWT_SECRET_KEY"),
+    "SIGNING_KEY": os.environ.get("JWT_SIGNING_KEY"),
 }
 
 REST_FRAMEWORK = {
