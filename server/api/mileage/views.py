@@ -20,23 +20,7 @@ LEADERBOARD_SIZE = 100
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_mileage(request: HttpRequest):
-    if "challenge" in request.GET and "user" in request.GET:
-        user = User.objects.get(id=request.GET["user"])
-
-        if user.challenge_start_date is None:   
-            return Response([])
-        
-        # end challenge period if days are up
-        elif (datetime.date.today() - user.challenge_start_date).days > CHALLENGE_LENGTH:
-            user_serializer = UserSerializer(instance=user, data={'challenge_start_date': None})
-            if user_serializer.is_valid():
-                user_serializer.save()
-            return Response([])
-
-        else:
-            mileage = Mileage.objects.filter(date__gte=user.challenge_start_date)
-            return Response(mileage.aggregate(Sum("kilometres"))["kilometres__sum"])
-    if request.GET.get("sum") and not request.GET.get("challenge"):
+    if request.GET.get("sum"):
         if "user" in request.GET:
             try:
                 user = User.objects.get(id=request.GET["user"])
@@ -49,6 +33,22 @@ def get_mileage(request: HttpRequest):
                 return Response(team.total_mileage)
             except ObjectDoesNotExist:
                 return Response(request.user.team_id.name, status=status.HTTP_400_BAD_REQUEST)
+    if "challenge" in request.GET and "user" in request.GET:
+        user = User.objects.get(id=request.GET["user"])
+
+        if user.challenge_start_date is None:   
+            return Response(0.0)
+        
+        # end challenge period if days are up
+        elif (datetime.date.today() - user.challenge_start_date).days > CHALLENGE_LENGTH:
+            user_serializer = UserSerializer(instance=user, data={'challenge_start_date': None})
+            if user_serializer.is_valid():
+                user_serializer.save()
+            return Response(0.0)
+
+        else:
+            mileage = Mileage.objects.filter(date__gte=user.challenge_start_date)
+            return Response(mileage.aggregate(Sum("kilometres"))["kilometres__sum"])
     if "user" in request.GET:
         mileage = Mileage.objects.filter(user__in=request.GET.getlist("user"))
         return Response(MileageSerializer(mileage, many=True).data)
