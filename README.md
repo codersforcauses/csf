@@ -37,3 +37,22 @@ The Django development server can be viewed on
 ```
 http://localhost:8081/
 ```
+
+The documentation can be viewed on
+
+```
+http://localhost:8000/
+```
+
+### Documentation
+
+If you wish to view the documentation without running everything else then run these commands
+
+```
+cd documentation
+```
+```
+mkdocs serve
+```
+
+Note: if you are using windows you have to preface any `mkdocs` command with `python -m`. For example `python -m mkdocs serve`.
