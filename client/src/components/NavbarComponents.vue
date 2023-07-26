@@ -155,7 +155,7 @@
           </v-list-item>
         </v-list>
         <v-row class="ml-4 mb-6 mr-4" align="end">
-          <v-icon icon="mdi-login" color="text-primaryWhite pb-6" />
+          <v-icon icon="mdi-account" color="pb-6" />
           <v-spacer />
           <v-btn
             v-if="user"
