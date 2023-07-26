@@ -47,18 +47,28 @@
       REGISTER NOW
     </v-btn>
   </v-row>
-  <v-row v-if="shown" justify="center" class="my-7 bg-secondaryGreen" no-gutters>
-    <p class="py-10 mx-10">Install it as an app?</p>
-    <v-btn
-      class="bg-primaryRed pb-14 mb-6"
-      size="x-large"
-      :style="{ fontFamily: 'Hackney', fontSize: '42px' }"
-      style="letter-spacing: -0.5px"
-      :active="false"
-      @click="installPWA"
-    >
-      INSTALL
-    </v-btn>
+  <v-row justify="center" align="center" class="bg-secondaryGrey py-5" no-gutters>
+    <v-col cols="5" class="text-center my-4">
+      <v-img :src="Devices" alt="Stride for education Devices" />
+    </v-col>
+
+    <v-col justify="center" align="center" cols="6">
+      <p :style="{ fontFamily: 'Hackney', fontSize: '24px' }" style="letter-spacing: -0.5px">
+        Download the website as an app on any device!
+      </p>
+      <v-btn
+        v-if="shown"
+        class="bg-primaryRed pb-9"
+        size="small"
+        :style="{ fontFamily: 'Hackney', fontSize: '28px' }"
+        style="letter-spacing: -0.5px"
+        :active="false"
+        @click="installPWA"
+      >
+        <v-icon size="24" class="mt-1"> mdi-download </v-icon>
+        INSTALL
+      </v-btn>
+    </v-col>
   </v-row>
   <v-row class="px-8 bg-secondaryBlue" no-gutters>
     <h2 class="py-2" :style="{ fontFamily: 'Hackney', fontSize: '58px' }">OUR STORY</h2>
@@ -136,6 +146,7 @@ import thankYou from '/images/thank_you.jpg'
 import StrideForEducationGif from '/gif/Stride_1.gif'
 import CSFBanner from '/images/CSF_Banner.jpg'
 import StrideForEducationRBGLogo from '/images/SFE_RGB_Logo.png'
+import Devices from '/images/devices.png'
 
 import { useModalStore } from '@/stores/modal'
 const modalStore = useModalStore()
