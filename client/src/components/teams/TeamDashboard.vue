@@ -277,7 +277,6 @@ const getIconName = (medium: string) => {
 </script>
 
 <style scoped>
-
 .totalKms {
   font-size: 1.5rem;
 }
