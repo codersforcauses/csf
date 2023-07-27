@@ -1,58 +1,70 @@
 <template>
   <!--Display Subteams-->
-  <v-row no-gutters>
-    <v-col cols="12">
-      <v-row justify="space-between" no-gutters>
-        <v-col cols="10">
-          <v-text-field
-            :rules="[state.rules.required]"
-            variant="outlined"
-            v-model="state.newSubTeamName"
-            label="Add subteam"
-          />
-        </v-col>
-        <v-col cols="2">
-          <v-icon class="float-right" @click="addSubTeam" icon="mdi mdi-plus" size="48px" />
-        </v-col>
-      </v-row>
+  <v-row justify="space-between" align="center" no-gutters>
+    <v-col v-if="userStore.user?.teamAdmin" cols="10">
+      <div class="d-flex justify-center">
+        <v-text-field
+          :error-messages="errorMessage"
+          variant="outlined"
+          placeholder="Add Subteam"
+          class="mr-3"
+          clearable
+          v-model="newSubTeamName"
+        />
+      </div>
+    </v-col>
+    <v-col v-if="userStore.user?.teamAdmin" cols="2">
+      <div class="d-flex justify-center mb-6">
+        <v-btn
+          size="x-large"
+          density="compact"
+          variant="flat"
+          icon="mdi-plus"
+          class="bg-primaryRed text-primaryWhite"
+          @click="addSubTeam"
+        >
+        </v-btn>
+      </div>
     </v-col>
 
     <v-col cols="12">
       <v-list v-model:opened="state.open">
         <v-list-group value="Users">
-          <template v-for="team in state.subteams" :key="team.teamName">
-            <v-list-group sub-group no-action :value="team.teamName">
+          <template v-for="subteam in subteamViews" :key="subteam.name">
+            <v-list-group sub-group no-action :value="subteam.subteamId">
               <template v-slot:activator="{ props }">
-                <!--avatar-->
                 <v-list-item v-bind="props">
-                  <v-list-item-content>
-                    <!--team name-->
-                    <div class="d-flex align-center">
-                      {{ team.teamName }}
-                      <span class="km-text rounded-lg ml-auto text-no-wrap pa-1 bg-success">
-                        {{ team.totalKM }}
-                      </span>
-
+                  <!--Subteam Info-->
+                  <div class="d-flex justify-space-between">
+                    <div>
+                      {{ subteam.name }}
+                    </div>
+                    <!-- <span class="km-text rounded-lg ml-auto text-no-wrap pa-1 bg-success">
+                       {{ subteam.totalKm }} 
+                      </span> -->
+                    <div v-if="userStore.user?.teamAdmin">
+                      <!--Edit Subteam Pencil Icon-->
                       <v-icon
                         class="ml-5"
                         icon="mdi mdi-pencil"
-                        @click="openEditSubteamDialog(team.teamId)"
+                        @click="openEditSubteamDialog(subteam.subteamId)"
                         size="16px"
                         id="pointer-cursor"
                       />
                     </div>
-                  </v-list-item-content>
+                  </div>
                 </v-list-item>
               </template>
+              <!--Member List-->
               <v-list-item
-                v-for="member in team.members"
-                :key="member.firstname"
-                :value="member.firstname"
-                :title="member.firstname + ' ' + member.lastname"
+                v-for="member in subteam.members"
+                :key="member.id"
+                :value="member.firstName"
+                :title="member.firstName + ' ' + member.lastName"
               >
                 <template v-slot:title="{ title }">
                   <v-list-item :prepend-avatar="member.avatar">
-                    <v-list-item-content> {{ title }}</v-list-item-content>
+                    {{ title }}
                   </v-list-item>
                 </template>
               </v-list-item>
@@ -65,193 +77,166 @@
   </v-row>
   <SubTeamsModal
     v-model="showSubTeamModal"
-    @saveTeam="saveTeam"
-    @removeSubTeam="removeSubTeam"
-    :selectedSubteam="selectedSubteam"
-    :avaliableMemeberList="state.avaliableMemeberList"
+    @save-subteam="saveSubteam"
+    @delete-sub-team="deleteSubTeam"
+    :selectedSubteam="selectedSubteam!"
+    :availableMemeberList="availableMembersList"
   />
 </template>
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import SubTeamsModal from './SubTeamsModal.vue'
+import type { SubteamView, MemberView, UserView } from '@/types/subteam'
+import { useSubTeamStore } from '@/stores/subTeam'
+import { onMounted } from 'vue'
+import { notify } from '@kyvg/vue3-notification'
+import { useUserStore } from '@/stores/user'
 
-//import { type Subteam } from '../types/subteam.ts'
+const state = reactive({
+  open: ['Users']
+})
 
-let selectedSubteam = reactive({
-  teamName: '',
-  teamId: '',
-  subteamId: '',
-  totalKM: '',
+const errorMessage = ref()
+
+let selectedSubteam = ref<SubteamView>({
+  subteamId: 0,
+  name: '',
+  teamId: 0,
+  totalKm: '0',
   members: [
     {
       id: 13,
-      firstname: 'Unknown',
-      lastname: 'Unknown',
+      firstName: 'Unknown',
+      lastName: 'Unknown',
       avatar: 'https://cdn.vuetifyjs.com/images/john.png'
     }
   ]
 })
-
+import SubTeamsModal from './SubTeamsModal.vue'
 const showSubTeamModal = ref(false)
-//dummy data
-const state = reactive({
-  newSubTeamName: '',
-  open: ['Users'],
-  // dialog: false,
-  i: '1',
-  selectedMember: null,
-  rules: {
-    required: (value: string) => !!value || 'Field is required'
-  },
-  avaliableMemeberList: [
-    {
-      id: 111,
-      firstname: 'Ned',
-      lastname: 'A',
-      avatar: 'https://cdn.vuetifyjs.com/images/john.png'
-    },
-    {
-      id: 131,
-      firstname: 'Ned',
-      lastname: 'B',
-      avatar: 'https://cdn.vuetifyjs.com/images/john.png'
-    },
-    {
-      id: 141,
-      firstname: 'Ned',
-      lastname: 'C',
-      avatar: 'https://cdn.vuetifyjs.com/images/john.png'
-    }
-  ],
-  subteams: [
-    {
-      teamName: 'Team1',
-      teamId: '1',
-      totalKM: '60KM',
-      members: [
-        {
-          id: 2,
-          firstname: 'Tom',
-          lastname: 'A',
-          avatar: 'src/assets/Avatars/avatar4.jpg'
-        },
-        {
-          id: 3,
-          firstname: 'Tom',
-          lastname: 'B',
-          avatar: 'src/assets/Avatars/avatar5.jpg'
-        },
-        {
-          id: 4,
-          firstname: 'Tom',
-          lastname: 'C',
-          avatar: 'src/assets/Avatars/avatar6.jpg'
-        }
-      ]
-    },
-    {
-      teamName: 'Team2',
-      teamId: '2',
-      totalKM: '120KM',
-      members: [
-        {
-          id: 11,
-          firstname: 'John',
-          lastname: 'A',
-          avatar: 'src/assets/Avatars/avatar1.jpg'
-        },
-        {
-          id: 12,
-          firstname: 'John',
-          lastname: 'B',
-          avatar: 'src/assets/Avatars/avatar2.jpg'
-        },
-        {
-          id: 13,
-          firstname: 'John',
-          lastname: 'C',
-          avatar: 'src/assets/Avatars/avatar3.jpg'
-        }
-      ]
-    }
-  ],
 
-  selectedSubteam: {
-    teamName: '',
-    teamId: '',
-    totalKM: '',
-    members: [
-      {
-        id: 13,
-        firstname: 'Unknown',
-        lastname: 'Unknown',
-        avatar: 'https://cdn.vuetifyjs.com/images/john.png'
-      }
-    ]
-  },
-  selectedId: '',
-  updatedTeamName: ''
+const userStore = useUserStore()
+const subTeamStore = useSubTeamStore()
+
+const teamId = ref(-1)
+
+if (userStore.user && userStore.user.teamId) {
+  teamId.value = userStore.user.teamId
+}
+
+const availableMembersList = ref<UserView[]>([])
+let subteamViews = ref<SubteamView[]>([])
+
+//Loading data
+onMounted(async () => {
+  try {
+    await subTeamStore.getAvailableMembers()
+    availableMembersList.value = subTeamStore.availableMemberList
+
+    await subTeamStore.getSubteamsView(teamId.value)
+    subteamViews.value = subTeamStore.subteamsView
+    // console.log(subteamViews)
+  } catch (e) {
+    console.log(e)
+    notify({
+      title: 'Get Subteams',
+      type: 'error',
+      text: 'Loading error'
+    })
+  }
+  console.log(userStore.user)
 })
 
-const saveTeam = (selectedSubteam: any, avaliableMemeberList: any) => {
-  if (selectedSubteam.teamName === '') {
+// create new subteam
+const newSubTeamName = ref('')
+
+const addSubTeam = async () => {
+  errorMessage.value = ''
+  if (newSubTeamName.value === '') {
+    errorMessage.value = 'Subteam name cannot be empty'
     return
   }
-  state.subteams = state.subteams.map((item) => {
-    if (item.teamId === selectedSubteam.teamId) {
-      return selectedSubteam
+  await subTeamStore.createSubteam({
+    name: newSubTeamName.value,
+    teamId: teamId.value
+  })
+  await subTeamStore.getSubteamsView(teamId.value)
+  subteamViews.value = subTeamStore.subteamsView
+  newSubTeamName.value = ''
+}
+
+// ----------------- modal actions -----------------
+const deleteSubTeam = async (subteamId: number) => {
+  await subTeamStore.removeMembersFromSubteam(subteamId)
+  await subTeamStore.deleteSubteam(subteamId)
+  await subTeamStore.getAvailableMembers()
+  availableMembersList.value = subTeamStore.availableMemberList
+  await subTeamStore.getSubteamsView(teamId.value)
+  subteamViews.value = subTeamStore.subteamsView
+}
+
+const saveSubteam = async (
+  subteamId: number,
+  newName: string,
+  updatedSubteamMembers: MemberView[],
+  updatedAvailableMembers: MemberView[]
+) => {
+  if (newName !== '' && newName !== selectedSubteam.value.name) {
+    await subTeamStore.updateSubteam({
+      subteamId: selectedSubteam.value.subteamId,
+      name: newName,
+      teamId: selectedSubteam.value.teamId
+    })
+  }
+  // update subteam members and available members
+  updateSubteamMembers(subteamId, updatedAvailableMembers, updatedSubteamMembers)
+  //refresh data
+  await subTeamStore.getAvailableMembers()
+  availableMembersList.value = subTeamStore.availableMemberList
+  await subTeamStore.getSubteamsView(teamId.value)
+  subteamViews.value = subTeamStore.subteamsView
+}
+
+const updateSubteamMembers = async (
+  subteamId: number,
+  updatedAvailableMembers: MemberView[],
+  updatedSubteamMembers: MemberView[]
+) => {
+  const subteamMembers = subteamViews.value.find(
+    (subteam) => subteam.subteamId === subteamId
+  )!.members
+
+  let availableMembersIdSet = new Set(availableMembersList.value.map((member) => member.id))
+  let updatedAvailableMembersIdSet = new Set(updatedAvailableMembers.map((member) => member.id))
+  let subteamMemberIdSet = new Set(subteamMembers.map((member) => member.id))
+  let updatedSubteamMembersIdSet = new Set(updatedSubteamMembers.map((member) => member.id))
+
+  updatedAvailableMembersIdSet.forEach((e) => {
+    if (availableMembersIdSet.has(e)) {
+      updatedAvailableMembersIdSet.delete(e)
     }
-    return item
   })
-  updateAvaliableMemeberList(avaliableMemeberList)
-  showSubTeamModal.value = false
-}
-
-const removeSubTeam = (teamId: string | number) => {
-  // relase members to avaliableMemeberList
-  const team = state.subteams.find((item) => item.teamId === teamId)
-  if (team) {
-    updateAvaliableMemeberList([...state.avaliableMemeberList, ...team.members])
-  }
-  state.subteams = state.subteams.filter((item) => item.teamId !== teamId)
-  showSubTeamModal.value = false
-}
-
-const updateAvaliableMemeberList = (members: any) => {
-  state.avaliableMemeberList = members
-}
-
-// team list actions
-const addSubTeam = () => {
-  if (state.newSubTeamName === '') {
-    return
-  }
-  state.subteams.push({
-    teamName: state.newSubTeamName,
-    teamId: randomString(32),
-    totalKM: '0KM',
-    members: []
+  updatedAvailableMembersIdSet.forEach(async (e) => {
+    await subTeamStore.removeSubteamMember(e)
   })
-}
-const randomString = (len: number) => {
-  len = len || 32
-  var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'
-  var maxPos = $chars.length
-  var pwd = ''
-  for (let i = 0; i < len; i++) {
-    pwd += $chars.charAt(Math.floor(Math.random() * maxPos))
-  }
-  return pwd
+
+  updatedSubteamMembersIdSet.forEach((e) => {
+    if (subteamMemberIdSet.has(e)) {
+      updatedSubteamMembersIdSet.delete(e)
+    }
+  })
+  updatedSubteamMembersIdSet.forEach(async (e) => {
+    await subTeamStore.editUserSubteam(subteamId, e)
+  })
 }
 
 // ----------------- dialog actions -----------------
-state.subteams.find((item) => item.teamId === state.selectedId)
-
-const openEditSubteamDialog = (teamId: string) => {
-  selectedSubteam = JSON.parse(
-    JSON.stringify(state.subteams.find((item) => item.teamId === teamId))
+const openEditSubteamDialog = async (subteamId: number) => {
+  selectedSubteam.value = JSON.parse(
+    JSON.stringify(subTeamStore.subteamsView.find((item) => item.subteamId === subteamId))
   )
+  await subTeamStore.getAvailableMembers()
+  availableMembersList.value = subTeamStore.availableMemberList
   showSubTeamModal.value = true
 }
 </script>

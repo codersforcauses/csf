@@ -1,229 +1,250 @@
 <script setup lang="ts">
-import { ref, reactive, toRef, computed, watch } from 'vue'
+import { ref, computed, watch, watchEffect } from 'vue'
 import type { Ref, PropType } from 'vue'
-
 import ConfirmButton from '@/components/ConfirmButton.vue'
 import PopupDialog from '@/components/PopupDialog.vue'
-
-import type { SubteamView, MemberView } from '@/types/subteam'
+import type { SubteamView, MemberView, UserView } from '@/types/subteam'
 
 // Open dialog, get methods from SubTeams.vue
-const emit = defineEmits(['saveTeam', 'removeSubTeam', 'update:modelValue'])
+const emit = defineEmits(['saveSubteam', 'deleteSubTeam', 'update:modelValue'])
 
 const props = defineProps({
-  selectedSubteam: {
-    type: Object as PropType<SubteamView>,
-    required: true
-  },
   modelValue: {
     type: Boolean,
     required: true
   },
-  avaliableMemeberList: {
-    type: Array as PropType<MemberView[]>,
+  selectedSubteam: {
+    type: Object as PropType<SubteamView>,
+    required: true
+  },
+  availableMemeberList: {
+    type: Array as PropType<UserView[]>,
     required: true
   }
 })
 
-let selectedSubteamCopy: SubteamView = reactive({
-  teamName: '',
-  teamId: '',
-  subteamId: '',
-  totalKM: '',
-  members: [
-    {
-      id: 13,
-      firstname: 'Unknown',
-      lastname: 'Unknown',
-      avatar: 'https://cdn.vuetifyjs.com/images/john.png'
-    }
-  ]
-})
+const isFullscreen = ref(false)
 
-//Modify selectedSubteam Copy
+// selectable avaliable member list
+const toMemberView = (member: UserView): MemberView => {
+  return {
+    id: member.id,
+    firstName: member.firstName,
+    lastName: member.lastName,
+    // todo change to public folder
+    avatar: `/avatars/${member.avatar}`
+  }
+}
+
+const tmpAvailableSubTeamMembers: Ref<MemberView[]> = ref(
+  props.availableMemeberList.map(toMemberView)
+)
+const tmpSubteamMembers: Ref<MemberView[]> = ref(props.selectedSubteam.members)
+const updatedTeamName: Ref<String> = ref(props.selectedSubteam.name)
+const selectedMember: Ref<MemberView | null> = ref(null)
+
 watch(
   () => props.selectedSubteam,
   (first) => {
-    //local selectedTeam Copy to change values
-    selectedSubteamCopy = reactive({
-      teamName: first.teamName,
-      teamId: first.teamId,
-      subteamId: first.subteamId,
-      totalKM: first.totalKM,
-      members: first.members
-    })
+    updatedTeamName.value = JSON.parse(JSON.stringify(first.name))
+    tmpSubteamMembers.value = JSON.parse(JSON.stringify(first.members))
+  }
+)
+watch(
+  () => props.availableMemeberList,
+  (first) => {
+    tmpAvailableSubTeamMembers.value = JSON.parse(JSON.stringify(first.map(toMemberView)))
   }
 )
 
-// edit sub team name input rules
-const rules = {
-  required: (value: string) => !!value || 'Field is required'
-}
-
-//avaliable member list
-const avaliableMemeberList: Ref<MemberView[]> = toRef(props, 'avaliableMemeberList')
-const selectedMember: Ref<MemberView> = ref({
-  id: 0,
-  firstname: '',
-  lastname: '',
-  avatar: ''
-})
-
-const addMember = () => {
-  if (selectedMember.value !== null) {
-    selectedSubteamCopy.members.push(selectedMember.value)
-    // Removing that member from the avaliable members drop down list
-    for (let i = 0; i < avaliableMemeberList.value.length; i++) {
-      if (avaliableMemeberList.value[i].id === selectedMember.value.id) {
-        avaliableMemeberList.value.splice(i, 1)
-      }
-    }
-    // Setting selected member to null
-    selectedMember.value = {
-      id: 0,
-      firstname: '',
-      lastname: '',
-      avatar: ''
-    }
+//dialog button handler methods
+//add a member
+const handleAddMemberBtn = () => {
+  if (selectedMember.value) {
+    tmpSubteamMembers.value.push(selectedMember.value)
+    tmpAvailableSubTeamMembers.value = tmpAvailableSubTeamMembers.value.filter(
+      (member) => member.id !== selectedMember.value?.id
+    )
+    selectedMember.value = null
   }
 }
 
-const removeMember = (memberId: number) => {
-  // Find the member to be removed
-  const foundMember: MemberView | undefined = selectedSubteamCopy.members.find(
-    (item) => item.id === memberId
+//remove a member
+const handleRemoveMemberBtn = (memberId: number) => {
+  const foundMember: MemberView | undefined = tmpSubteamMembers.value.find(
+    (member) => member.id === memberId
   )
-
-  // If found, add it to the avaliable member list and remove it from the selected subteam
   if (foundMember) {
-    avaliableMemeberList.value.push(foundMember)
-    selectedSubteamCopy.members = selectedSubteamCopy.members.filter((item) => item.id !== memberId)
+    tmpAvailableSubTeamMembers.value.push(foundMember)
+    tmpSubteamMembers.value = tmpSubteamMembers.value.filter((member) => member.id !== memberId)
   }
+}
+
+//save subteam
+const handleSaveSubteamBtn = () => {
+  emit(
+    'saveSubteam',
+    props.selectedSubteam.subteamId,
+    updatedTeamName.value,
+    tmpSubteamMembers.value,
+    tmpAvailableSubTeamMembers.value
+  )
+  showDialog.value = false
+}
+
+// //delete subteam
+const handleRemoveSubteamBtn = () => {
+  emit('deleteSubTeam', props.selectedSubteam.subteamId)
+  showDialog.value = false
 }
 
 const loading = ref(false)
 const display = ref(false)
+const rules = {
+  required: (value: string) => !!value || 'Field is required'
+}
 const memberId = ref(0)
-
 const showDialog = computed({
-  // getter
   get() {
     return props.modelValue
   },
-  // setter
   set(newValue: boolean) {
-    // Note: we are using destructuring assignment syntax here.
     emit('update:modelValue', newValue)
+  }
+})
+
+watchEffect(async () => {
+  const updateFullscreen = async () => {
+    isFullscreen.value = window.innerWidth <= 500
+  }
+
+  await updateFullscreen()
+
+  window.addEventListener('resize', updateFullscreen)
+  return () => {
+    window.removeEventListener('resize', updateFullscreen)
   }
 })
 </script>
 
 <template>
   <!--Edit Subteam-->
-  <v-dialog v-model="showDialog" fullscreen transition="dialog-bottom-transition">
-    <v-img src="/images/Footer-min.jpeg" width="100%" max-height="32" cover />
-    <v-card>
-      <v-card-text>
-        <!--Subteam Name-->
-        <v-btn
-          class="ma-0 pa-0 float-right"
-          variant="text"
-          icon="mdi mdi-window-close"
-          @click="emit('update:modelValue', !modelValue)"
+  <v-dialog :fullscreen="isFullscreen" max-width="500px" max-height="100vh" v-model="showDialog">
+    <v-card class="bg-backgroundGrey">
+      <v-img src="/images/Footer-min.jpeg" width="100%" max-height="16" cover />
+      <v-card-actions>
+        <v-spacer />
+        <v-icon icon="mdi-close" size="x-large" @click="emit('update:modelValue', !modelValue)" />
+      </v-card-actions>
+      <v-card-title class="justify-center text-h4 mb-6">Edit Subteam</v-card-title>
+      <!--Subteam Name-->
+      <v-form class="pb-0 mb-0 mx-8">
+        <v-text-field
+          bg-color="white"
+          v-model="updatedTeamName"
+          :rules="[rules.required]"
+          label="Edit subteam name"
+          required
         />
-        <div class="font-weight-bold my-6 text-h4">Edit Subteam</div>
-        <div class="w-100 d-flex flex-column text-center align-center justify-center">
-          <v-text-field
-            variant="solo"
-            v-model="selectedSubteamCopy.teamName"
-            :rules="[rules.required]"
-            label="Edit subteam name"
-            required
-            dense
-            class="text-h3 w-75 py-3 custom-text-field"
-          />
-        </div>
-        <v-divider class="my-4" color="info"></v-divider>
+        <v-divider color="info"></v-divider>
 
         <!--Members-->
-        <div class="font-weight-bold my-6 text-h4">Members</div>
+        <v-card-title class="justify-center my-2 text-h4">Members</v-card-title>
 
         <!--Add New Member-->
         <v-select
-          :items="avaliableMemeberList"
-          label="Select member"
+          :items="tmpAvailableSubTeamMembers"
+          label="Select members"
           v-model="selectedMember"
           dense
-          @update:modelValue="addMember"
+          @update:modelValue="handleAddMemberBtn"
+          bg-color="white"
         >
           <template v-slot:selection="{ item }">
             <v-list-item
               v-bind="item"
-              :title="item.raw.firstname + ' ' + item.raw.lastname"
+              :title="item.raw.firstName + ' ' + item.raw.lastName"
             ></v-list-item>
           </template>
           <template v-slot:item="{ props, item }">
             <v-list-item
               v-bind="props"
-              prepend-avatar="https://cdn.vuetifyjs.com/images/john.png"
-              :title="item.raw.firstname + ' ' + item.raw.lastname"
+              :prepend-avatar="item.raw.avatar"
+              :title="item.raw.firstName + ' ' + item.raw.lastName"
             />
             <v-divider color="info"></v-divider>
           </template>
         </v-select>
 
         <!--Member List-->
-        <v-list>
-          <v-list-item v-for="(member, index) in selectedSubteamCopy.members" :key="index">
-            <v-list-item-content>
-              <v-avatar>
-                <img :src="member.avatar" alt="Avatar" class="custom-avatar" />
-              </v-avatar>
-              <span class="ml-3 font-weight-bold">
-                {{ member.firstname + ' ' + member.lastname }}
-              </span>
-              <!--remove member icon-->
-              <v-icon
-                class="float-right"
-                icon="mdi mdi-window-close"
-                size="24px"
-                id="pointer-cursor"
-                @click="
-                  () => {
-                    display = true
-                    memberId = member.id
-                  }
-                "
-              />
-              <PopupDialog
-                v-model="display"
-                :title="'Remove Team Member'"
-                :text="`Are you sure you wish to remove this member?`"
-                :submit-text="'Confirm'"
-                @handle-submit="removeMember(memberId)"
-              />
-            </v-list-item-content>
+        <v-list v-if="tmpSubteamMembers.length != 0" class="bg-backgroundGrey">
+          <v-list-item v-for="(member, index) in tmpSubteamMembers" :key="index">
+            <v-avatar>
+              <img :src="member.avatar" alt="Avatar" class="custom-avatar" />
+            </v-avatar>
+            <span class="ml-3 font-weight-bold">
+              {{ member.firstName + ' ' + member.lastName }}
+            </span>
+            <!--remove member icon-->
+            <v-icon
+              class="float-right"
+              icon="mdi mdi-window-close"
+              size="24px"
+              id="pointer-cursor"
+              @click="
+                () => {
+                  display = true
+                  memberId = member.id
+                }
+              "
+            />
+            <PopupDialog
+              v-model="display"
+              :title="'Remove Team Member'"
+              :text="`Are you sure you wish to remove this member?`"
+              :submit-text="'Confirm'"
+              @handle-submit="handleRemoveMemberBtn(memberId)"
+            />
             <v-divider class="mt-4" color="info"></v-divider>
           </v-list-item>
         </v-list>
+        <v-row v-else justify="center" class="mb-4">No members attached to subteam</v-row>
         <!--Buttons-->
-        <div class="w-100 d-flex justify-center">
-          <v-btn
-            color="success"
-            class="mr-8"
-            variant="flat"
-            @click="$emit('saveTeam', selectedSubteamCopy, avaliableMemeberList)"
-            >Save</v-btn
-          >
-          <ConfirmButton
-            :action="'delete'"
-            :object="'subteam'"
-            :use-done-for-button="false"
-            :loading="loading"
-            @handle-confirm="$emit('removeSubTeam', selectedSubteam.teamId)"
-          />
-        </div>
-      </v-card-text>
+        <v-card-actions class="justify-center mb-4">
+          <div class="w-100 d-flex justify-center">
+            <v-btn color="secondaryGreen" class="mr-8" variant="flat" @click="handleSaveSubteamBtn"
+              >Save</v-btn
+            >
+            <ConfirmButton
+              :action="'delete'"
+              :object="'subteam'"
+              :use-done-for-button="false"
+              :loading="loading"
+              @handle-confirm="handleRemoveSubteamBtn"
+            />
+          </div>
+        </v-card-actions>
+      </v-form>
     </v-card>
   </v-dialog>
 </template>
+
+<style scoped>
+.v-list-item {
+  padding: 4px 10px !important;
+}
+
+.custom-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.v-list__input:hover {
+  background-color: #ff0000 !important;
+}
+
+.v-input.custom-text-field input {
+  font-size: 48px !important;
+}
+</style>
