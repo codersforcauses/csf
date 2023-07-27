@@ -1,7 +1,7 @@
 <template>
   <div v-if="!loading">
     <v-container>
-      <v-row class="ma-0 px-13 pt-4" align="center" justify="center">
+      <v-row class="ma-0 px-13" align="center" justify="center">
         <v-col align="center">
           <h1>Welcome back, {{ userStore.user!.username }}</h1>
         </v-col>
@@ -13,15 +13,16 @@
           <v-card variant="flat" class="pb-1">
             <v-container class="pa-0" fluid>
               <v-row class="ma-0">
-                <v-col cols="auto" class="pl-0 pr-0">
-                  <v-icon :icon="method" size="52"></v-icon>
-                </v-col>
-                <v-col>
-                  <v-chip color="green" class="rounded text-h5"
-                    >{{ mileageStore.totalKmByUser }} KM</v-chip
-                  >
-                  <v-card-subtitle>TOTAL</v-card-subtitle>
-                </v-col>
+                <v-row align="center" class="my-1">
+                  <v-icon :class="['mdi', 'ml-2', method]" size="52" color="#2c3d4f" />
+                  <v-col class="pb-0">
+                    <v-chip color="green" class="rounded text-h5"
+                      >{{ mileageStore.totalKmByTeam }} KM</v-chip
+                    >
+                    <h3>TOTAL</h3>
+                  </v-col>
+                </v-row>
+
                 <v-spacer />
                 <v-col cols="auto">
                   <v-btn
@@ -42,14 +43,14 @@
       <v-divider />
       <v-row class="ma-0 pt-0 pb-0" align="center">
         <v-col>
-          <h1>Daily KMs</h1>
+          <h2>Daily KMs</h2>
           <MileageGraph :dataPoints="mileageStore.mileageByUser" />
         </v-col>
       </v-row>
       <!-- </v-container> -->
 
       <div class="px-2">
-        <h1>Challenges</h1>
+        <h2>Challenges</h2>
         <div v-for="challenge in challenges" :key="challenge.name" class="my-4">
           <h3>{{ challenge.name }}</h3>
           <v-row dense>
