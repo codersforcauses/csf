@@ -132,7 +132,6 @@ const state = reactive<UserSettings>({
   travelMethod: userStore.user!.travelMethod
 })
 
-console.log(state.avatar)
 const errors = reactive<ChangeDetailsError>({
   username: '',
   email: '',

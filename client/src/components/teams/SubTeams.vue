@@ -135,7 +135,6 @@ onMounted(async () => {
 
     await subTeamStore.getSubteamsView(teamId.value)
     subteamViews.value = subTeamStore.subteamsView
-    // console.log(subteamViews)
   } catch (e) {
     console.log(e)
     notify({
@@ -144,7 +143,6 @@ onMounted(async () => {
       text: 'Loading error'
     })
   }
-  console.log(userStore.user)
 })
 
 // create new subteam
