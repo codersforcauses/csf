@@ -9,7 +9,6 @@
         :key="range"
         rounded="xl"
         size="x-small"
-        class="mr-2 mb-2"
         @click="filterData(range)"
       >
         {{ range }}
