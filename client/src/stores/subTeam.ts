@@ -113,7 +113,7 @@ export const useSubTeamStore = defineStore('subTeam', {
             id: member.id,
             firstName: member.firstName,
             lastName: member.lastName,
-            avatar: `/src/assets/Avatars/${member.avatar}`
+            avatar: `/avatars/${member.avatar}`
           }
         })
 

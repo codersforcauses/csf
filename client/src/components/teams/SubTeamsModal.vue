@@ -31,7 +31,6 @@ const toMemberView = (member: UserView): MemberView => {
     id: member.id,
     firstName: member.firstName,
     lastName: member.lastName,
-    // todo change to public folder
     avatar: `/avatars/${member.avatar}`
   }
 }
