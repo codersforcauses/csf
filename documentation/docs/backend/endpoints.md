@@ -71,7 +71,7 @@
 #### Views
 
 - `get_leaderboard/` - Returns leaderboard data
-- `get_mileage` - Retrieve a list of mileage
+- `get_mileage` - Return a list of mileage
 - `post_mileage` - Add mileage
 
 ## User Endpoint
