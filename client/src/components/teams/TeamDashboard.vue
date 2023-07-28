@@ -129,7 +129,7 @@
       </v-container>
       <v-divider />
 
-      <!-- Leaderboard: Hopefully coming soon!!  -->
+      <!-- Leaderboard: Hopefully coming soon!! For future developer to implement -->
       <!-- <v-row
         align="start"
         @click="isLeaderboardVisible = !isLeaderboardVisible"

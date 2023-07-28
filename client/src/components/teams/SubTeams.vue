@@ -39,9 +39,6 @@
                     <div>
                       {{ subteam.name }}
                     </div>
-                    <!-- <span class="km-text rounded-lg ml-auto text-no-wrap pa-1 bg-success">
-                       {{ subteam.totalKm }} 
-                      </span> -->
                     <div v-if="userStore.user?.teamAdmin">
                       <!--Edit Subteam Pencil Icon-->
                       <v-icon

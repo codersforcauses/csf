@@ -47,7 +47,6 @@
           <MileageGraph :dataPoints="mileageStore.mileageByUser" />
         </v-col>
       </v-row>
-      <!-- </v-container> -->
 
       <div class="px-2">
         <h2>Challenges</h2>
