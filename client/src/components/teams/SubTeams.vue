@@ -39,9 +39,6 @@
                     <div>
                       {{ subteam.name }}
                     </div>
-                    <!-- <span class="km-text rounded-lg ml-auto text-no-wrap pa-1 bg-success">
-                       {{ subteam.totalKm }} 
-                      </span> -->
                     <div v-if="userStore.user?.teamAdmin">
                       <!--Edit Subteam Pencil Icon-->
                       <v-icon
@@ -135,7 +132,6 @@ onMounted(async () => {
 
     await subTeamStore.getSubteamsView(teamId.value)
     subteamViews.value = subTeamStore.subteamsView
-    // console.log(subteamViews)
   } catch (e) {
     console.log(e)
     notify({
@@ -144,7 +140,6 @@ onMounted(async () => {
       text: 'Loading error'
     })
   }
-  console.log(userStore.user)
 })
 
 // create new subteam

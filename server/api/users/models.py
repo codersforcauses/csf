@@ -65,7 +65,7 @@ class User(AbstractUser):
     reset_token = models.CharField(max_length=36, blank=True)
     reset_time = models.DateTimeField(null=True, blank=True)
     challenge_start_date = models.DateField(null=True, blank=True)
-    total_mileage = models.FloatField(default=0.0)
+    total_mileage = models.FloatField(default=0.0, null=True, blank=True)
 
     objects = UserManager()
 

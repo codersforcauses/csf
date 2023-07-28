@@ -12,7 +12,7 @@
 
       <!-- Total Kilometres -->
       <v-row align="center" class="my-2">
-        <v-icon :class="['mdi','ml-3', getIconName(userStore.user!.travelMethod)]" size="50px" />
+        <v-icon :class="['mdi','ml-3 mt-1', getIconName(userStore.user!.travelMethod)]" size="52" />
         <v-col>
           <v-chip color="green" class="rounded text-h5">{{ mileageStore.totalKmByTeam }} KM</v-chip>
           <h3>TOTAL</h3>
@@ -129,8 +129,8 @@
       </v-container>
       <v-divider />
 
-      <!-- Leaderboard -->
-      <v-row
+      <!-- Leaderboard: Hopefully coming soon!! For future developer to implement -->
+      <!-- <v-row
         align="start"
         @click="isLeaderboardVisible = !isLeaderboardVisible"
         id="pointer-cursor"
@@ -143,7 +143,7 @@
         <v-icon v-if="isLeaderboardVisible" icon="mdi mdi-chevron-down" size="50px" class="px-10" />
         <v-icon v-else icon="mdi mdi-chevron-right" size="50px" class="px-10" />
       </v-row>
-      <v-divider class="mb-10" />
+      <v-divider class="mb-10" /> -->
     </v-row>
   </v-container>
 
@@ -277,12 +277,6 @@ const getIconName = (medium: string) => {
 </script>
 
 <style scoped>
-h1,
-h2,
-.v-icon {
-  color: black;
-}
-
 .totalKms {
   font-size: 1.5rem;
 }

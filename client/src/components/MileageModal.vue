@@ -54,7 +54,7 @@
                       elevation="0"
                       :step="1"
                       min="1"
-                      max="100"
+                      max="50"
                     />
                   </div>
                   <div
@@ -69,7 +69,7 @@
                       elevation="0"
                       :step="1"
                       min="1"
-                      max="100"
+                      max="50"
                     />
                   </div>
                   <div
@@ -84,7 +84,7 @@
                       elevation="0"
                       :step="1"
                       min="1"
-                      max="100"
+                      max="50"
                     />
                   </div>
                 </v-col>

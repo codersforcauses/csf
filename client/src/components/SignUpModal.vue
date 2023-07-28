@@ -156,7 +156,7 @@
             <v-container>
               <v-row>
                 <v-col cols="12">
-                  <p>Select an Avatar</p>
+                  <p>Select an avatar</p>
                 </v-col>
                 <v-row dense class="px-10">
                   <v-col v-for="avatar in avatarPaths" :key="avatar.url" cols="4">

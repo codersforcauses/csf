@@ -19,8 +19,8 @@ const display = ref(false)
   <v-btn class="bg-primaryRed" @click="display = true">
     <PopupDialog
       v-model="display"
-      :title="'Confirm ' + capitalize(`${props.object} ${props.action}`)"
-      :text="`Are you sure you wish to ${props.action} this ${props.object}?`"
+      :title="'Confirm ' + capitalize(`${props.object}`) + ' ' + capitalize(`${props.action}`)"
+      :text="`Are you sure you wish to ${props.action.toLowerCase()} this ${props.object.toLowerCase()}?`"
       :submit-text="capitalize(props.action)"
       @handle-submit="() => emit('handleConfirm')"
     />
