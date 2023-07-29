@@ -17,7 +17,7 @@
                   <v-icon :class="['mdi', 'ml-2', method]" size="52" color="#2c3d4f" />
                   <v-col class="pb-0">
                     <v-chip color="green" class="rounded text-h5"
-                      >{{ mileageStore.totalKmByTeam }} KM</v-chip
+                      >{{ mileageStore.totalKmByUser }} KM</v-chip
                     >
                     <h3>TOTAL</h3>
                   </v-col>
