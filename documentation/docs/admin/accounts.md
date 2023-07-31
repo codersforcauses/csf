@@ -25,8 +25,10 @@
 - `Subteam id`: This can be ignored, it is used if the user has joined a team and been assigned to a subteam
 - `Team id`: Used to select the team this user is part of (can be blank)
 - `Team admin`: This should be checked if the user is the admin of the team above
-- `Reset Token`: Ignore
-- `Reset Time`: Sets challenge reset date and time (leave this as blank)
+- `Reset Token`: Ignore - A token used when it needs to be reset
+- `Reset Time`: Ignore - Time the token above should reset
+- `challenge_start_date`: Ignore - Sets challenge reset date and time (leave this as blank)
+- `total_mileage`: Set to 0 - The amount of mileage this user has
 
 ![Add User: Step 2](../img/usersp2.png)
 

@@ -37,3 +37,9 @@ The Django development server can be viewed on
 ```
 http://localhost:8081/
 ```
+
+The documentation can be viewed on
+
+```
+http://localhost:8000/
+```

@@ -8,13 +8,14 @@
 - `name`
 - `join_code`
 - `bio`
+- `total_mileage`
 
 #### Views
 
-- `create_team/` - Create a new team
+- `create/` - Create a new team
 - `get_teams/` - Retrieve a list of teams
-- `get_team/<int:team_id>` - Retrieve a team by id
-- `update_team/<int:team_id>` - Update a team by id
+- `get/<int:team_id>` - Retrieve a team by id
+- `edit/<int:team_id>` - Update a team by id
 - `delete_team/<int:team_id>` - Delete a team by id
 
 ## Event Endpoint
@@ -32,10 +33,10 @@
 
 #### Views
 
-- `create_event/` - Create a new event
-- `get_events/` - Retrieve a list of events
-- `update_event/<int:event_id>` - Update an event by id
-- `delete_event/<int:event_id>` - Delete an event by id
+- `create/` - Create a new event
+- `get/` - Retrieve a list of events
+- `update/<int:event_id>` - Update an event by id
+- `delete/<int:event_id>` - Delete an event by id
 
 ## Subteam Endpoint
 
@@ -51,6 +52,11 @@
 - `get_subteams/<int:team_id>` - Retrieve a subteam by team_id
 - `update_subteam/<int:subteam_id>` - Update a subteam by id
 - `delete_subteam/<int:subteam_id>` - Delete a subteam by id
+- `get_users/<int:subteam_id>` - Get users by subteam id
+- `get_available_users/` - Get users that have no subteam
+- `edit_user/<int:user_id>` - Change user subteam
+- `delete_user_from_subteam/<int>:user_id>` - Remove an user from subteam
+-
 
 ## Mileage Endpoint
 
@@ -60,11 +66,13 @@
 - `user_id`
 - `kilometers`
 - `date`
+- `team`
 
 #### Views
 
-- `create_mileage/` - create new mileage
-- `get_mileage/<int:user_id>` - Retrieve a list of mileage by user_id
+- `get_leaderboard/` - Returns leaderboard data
+- `get_mileage` - Returns a list of mileage
+- `post_mileage` - Add mileage
 
 ## User Endpoint
 
@@ -82,3 +90,7 @@
 - `team_id` [Optional]
 - `subteam_id` [Optional]
 - `team_admin` [Optional]
+- `reset_token` [Optional]
+- `reset_time` [Optional]
+- `challenge_start_date` [Optional]
+- `total_mileage` [Optional]

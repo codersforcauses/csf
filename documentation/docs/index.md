@@ -76,6 +76,15 @@ Developers will create a mobile-first web-app which will enable participants to 
 
 - [Docker](https://www.docker.com/)
 - [MkDocs](https://www.mkdocs.org/)
+- [Mailhog](https://github.com/mailhog/MailHog)
+
+### Deployment
+
+- [DigitalOcean](https://digitalocean.com)
+- [Cloudflare](https://www.cloudflare.com/)
+- [Vercel](https://vercel.com)
+- [DockerHub](https://hub.docker.com)
+- [Sendgrid](https://sendgrid.com)
 
 ## Style Guide and Branding
 
