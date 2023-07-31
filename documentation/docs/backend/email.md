@@ -8,7 +8,7 @@ If you haven't got it installed already, Mailhog should automatically install wh
 
 ### Production
 
-Sendgrid is used to send and recieve emails in the production version of the application. The Community Spirit Foundation email account has been added as the sender. The Sendgrid account is made under Coders For Causes credentials and will allow for 100 free emails per day, anything over will cost $20 per month.
+Sendgrid is used to send and receive emails in the production version of the application. The Community Spirit Foundation email account has been added as the sender. The Sendgrid account is made under Coders For Causes credentials and will allow for 100 free emails per day, anything over will cost $20 per month.
 
 Password reset emails will be sent from the Community Spirit Foundation email address to the user email that requests the change.
 
