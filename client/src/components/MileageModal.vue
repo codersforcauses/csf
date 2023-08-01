@@ -52,7 +52,7 @@
                       color="secondaryGreen"
                       :thumb-size="40"
                       elevation="0"
-                      :step="1"
+                      :step="0.1"
                       min="1"
                       max="50"
                     />
