@@ -4,6 +4,7 @@ from .models import User
 
 # Register your models here.
 class UserAdmin(admin.ModelAdmin):
+    readonly_fields = ('total_mileage',)
     def save_model(self, request, obj, form, change):
         if obj.pk is not None:  # Existing user
             original_obj = self.model.objects.get(pk=obj.pk)
