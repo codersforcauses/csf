@@ -53,7 +53,7 @@
                       :thumb-size="40"
                       elevation="0"
                       :step="0.1"
-                      min="1"
+                      min="0.1"
                       max="50"
                     />
                   </div>
@@ -68,7 +68,7 @@
                       :thumb-size="40"
                       elevation="0"
                       :step="0.1"
-                      min="1"
+                      min="0.1"
                       max="50"
                     />
                   </div>
@@ -83,7 +83,7 @@
                       :thumb-size="40"
                       elevation="0"
                       :step="0.1"
-                      min="1"
+                      min="0.1"
                       max="50"
                     />
                   </div>

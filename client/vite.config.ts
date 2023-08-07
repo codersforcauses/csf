@@ -33,6 +33,11 @@ export default defineConfig({
           {
             src: 'images/CSF_feet_144_sq_px.png',
             sizes: '144x144',
+            type: 'image/png'
+          },
+          {
+            src: 'images/CSF_feet_144_sq_px.png',
+            sizes: '144x144',
             type: 'image/png',
             purpose: 'maskable'
           },
