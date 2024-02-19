@@ -209,7 +209,7 @@ import { useUserStore } from '@/stores/user'
 import { AxiosError } from 'axios'
 import { notify } from '@kyvg/vue3-notification'
 import { useMileageStore } from '@/stores/mileage'
-import type { UserLeaderboard, TeamLeaderboard } from '@/types/mileage'
+import type { UserLeaderboard } from '@/types/mileage'
 
 const teamStore = useTeamStore()
 const userStore = useUserStore()
@@ -230,10 +230,10 @@ onMounted(async () => {
       }
     })
   if (userStore.user!.teamId) {
-    teamData.value.leaderboard = await mileageStore.getLeaderboard({
+    teamData.value.leaderboard = (await mileageStore.getLeaderboard({
       type: 'users',
       teamId: userStore.user!.teamId
-    })
+    })) as UserLeaderboard
   }
 })
 const deleteTeam = () => {
@@ -268,7 +268,7 @@ const teamData = ref({
   bio: teamStore.team ? teamStore.team.bio : '',
   daily_kms: [],
   sub_teams: [],
-  leaderboard: {} as UserLeaderboard | TeamLeaderboard | undefined
+  leaderboard: {} as UserLeaderboard | undefined
 })
 
 watch(
