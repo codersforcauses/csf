@@ -101,7 +101,6 @@
       </v-container>
       <v-divider />
 
-      <!-- ? Leaderboard: Hopefully coming soon!! For future developer to implement -->
       <!-- Leaderboard -->
       <v-container class="pa-0">
         <v-row
@@ -115,24 +114,56 @@
             <div v-if="isLeaderboardVisible" class="">
               <v-table fixed-header class="pt-2 px-12">
                 <thead>
-                  <th class="text-left">Place</th>
-                  <th class="text-left">Name</th>
-                  <th class="text-right">Distance</th>
+                  <th class="text-left">
+                    <p class="font-weight-light">Place</p>
+                  </th>
+                  <th class="text-left">
+                    <p class="font-weight-light">Name</p>
+                  </th>
+                  <th class="text-right">
+                    <p class="font-weight-light">Distance</p>
+                  </th>
                 </thead>
                 <tbody>
                   <tr v-for="entry in teamData.leaderboard?.leaderboard" :key="entry.rank">
-                    <td class="text-left">
-                      <!-- todo add in the shape with text above it -->
-                      <!-- <div v-if="entry.rank == 1" class="align-center">
-                        <v-icon aria-hidden="false" icon="mdi mdi-octagram text-blue" size="48">
-                        </v-icon>
-                        <span class="text-center pt-4" >{{ entry.rank }}</span>     
-                      </div> -->
-                      <div>
-                        <span class="text-center pt-4">{{ entry.rank }}</span>
+                    <td class="text-left pl-0 py-2">
+                      <div v-if="entry.rank == 1" class="align-center">
+                        <div>
+                          <div class="circle gold d-flex justify-center">
+                            <span class="text-center">{{ entry.rank }}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div v-if="entry.rank == 2" class="align-center">
+                        <div>
+                          <div class="circle silver d-flex justify-center">
+                            <span class="text-center">{{ entry.rank }}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div v-if="entry.rank == 3" class="align-center">
+                        <div>
+                          <div class="circle bronze d-flex justify-center">
+                            <span class="text-center">{{ entry.rank }}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div v-if="entry.rank > 3" class="align-center">
+                        <div>
+                          <div class="circle d-flex justify-center">
+                            <span class="text-center">{{ entry.rank }}</span>
+                          </div>
+                        </div>
                       </div>
                     </td>
-                    <td class="text-left pl-0">{{ entry.username }}</td>
+                    <td class="px-0">
+                      <div class="">
+                        <span>{{ entry.username }}</span>
+                      </div>
+                    </td>
                     <td class="text-right">{{ Math.round(entry.totalMileage * 100) / 100 }}</td>
                   </tr>
                 </tbody>
@@ -336,5 +367,24 @@ const getIconName = (medium: string) => {
 
 .invite-code {
   font-size: 0.7rem;
+}
+
+.circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  align-items: center;
+}
+
+.gold {
+  background-color: #ffd700;
+}
+
+.silver {
+  background-color: #d2d2d2;
+}
+
+.bronze {
+  background-color: #ff8000;
 }
 </style>
