@@ -111,64 +111,6 @@
         >
           <v-col>
             <h2>Leaderboard</h2>
-            <div v-if="isLeaderboardVisible" class="">
-              <v-table fixed-header class="pt-2 px-12">
-                <thead>
-                  <th class="text-left">
-                    <p class="font-weight-light">Place</p>
-                  </th>
-                  <th class="text-left">
-                    <p class="font-weight-light">Name</p>
-                  </th>
-                  <th class="text-right">
-                    <p class="font-weight-light">Distance</p>
-                  </th>
-                </thead>
-                <tbody>
-                  <tr v-for="entry in teamData.leaderboard?.leaderboard" :key="entry.rank">
-                    <td class="text-left pl-0 py-2">
-                      <div v-if="entry.rank == 1" class="align-center">
-                        <div>
-                          <div class="circle gold d-flex justify-center">
-                            <span class="text-center">{{ entry.rank }}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div v-if="entry.rank == 2" class="align-center">
-                        <div>
-                          <div class="circle silver d-flex justify-center">
-                            <span class="text-center">{{ entry.rank }}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div v-if="entry.rank == 3" class="align-center">
-                        <div>
-                          <div class="circle bronze d-flex justify-center">
-                            <span class="text-center">{{ entry.rank }}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div v-if="entry.rank > 3" class="align-center">
-                        <div>
-                          <div class="circle d-flex justify-center">
-                            <span class="text-center">{{ entry.rank }}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="px-0">
-                      <div class="">
-                        <span>{{ entry.username }}</span>
-                      </div>
-                    </td>
-                    <td class="text-right">{{ Math.round(entry.totalMileage * 100) / 100 }}</td>
-                  </tr>
-                </tbody>
-              </v-table>
-            </div>
           </v-col>
           <v-icon
             v-if="isLeaderboardVisible"
@@ -178,6 +120,64 @@
           />
           <v-icon v-else icon="mdi mdi-chevron-right" size="50px" class="px-10" />
         </v-row>
+        <div v-if="isLeaderboardVisible" class="">
+          <v-table fixed-header class="py-2 px-12">
+            <thead>
+              <th class="text-left">
+                <p class="font-weight-light">Place</p>
+              </th>
+              <th class="text-left">
+                <p class="font-weight-light">Name</p>
+              </th>
+              <th class="text-right">
+                <p class="font-weight-light">Distance</p>
+              </th>
+            </thead>
+            <tbody>
+              <tr v-for="entry in teamData.leaderboard?.leaderboard" :key="entry.rank">
+                <td class="text-left pl-0 py-2">
+                  <div v-if="entry.rank == 1" class="align-center">
+                    <div>
+                      <div class="circle gold d-flex justify-center">
+                        <span class="text-center">{{ entry.rank }}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div v-if="entry.rank == 2" class="align-center">
+                    <div>
+                      <div class="circle silver d-flex justify-center">
+                        <span class="text-center">{{ entry.rank }}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div v-if="entry.rank == 3" class="align-center">
+                    <div>
+                      <div class="circle bronze d-flex justify-center">
+                        <span class="text-center">{{ entry.rank }}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div v-if="entry.rank > 3" class="align-center">
+                    <div>
+                      <div class="circle d-flex justify-center">
+                        <span class="text-center">{{ entry.rank }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-0">
+                  <div class="">
+                    <span>{{ entry.username }}</span>
+                  </div>
+                </td>
+                <td class="text-right">{{ Math.round(entry.totalMileage * 100) / 100 }}</td>
+              </tr>
+            </tbody>
+          </v-table>
+        </div>
       </v-container>
       <v-divider />
 
