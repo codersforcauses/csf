@@ -121,9 +121,19 @@
                 </thead>
                 <tbody>
                   <tr v-for="entry in teamData.leaderboard?.leaderboard" :key="entry.rank">
-                    <td class="text-left">{{ entry.rank }}</td>
+                    <td class="text-left">
+                      <!-- todo add in the shape with text above it -->
+                      <!-- <div v-if="entry.rank == 1" class="align-center">
+                        <v-icon aria-hidden="false" icon="mdi mdi-octagram text-blue" size="48">
+                        </v-icon>
+                        <span class="text-center pt-4" >{{ entry.rank }}</span>     
+                      </div> -->
+                      <div>
+                        <span class="text-center pt-4">{{ entry.rank }}</span>
+                      </div>
+                    </td>
                     <td class="text-left pl-0">{{ entry.username }}</td>
-                    <td class="text-right">{{ entry.totalMileage }}</td>
+                    <td class="text-right">{{ Math.round(entry.totalMileage * 100) / 100 }}</td>
                   </tr>
                 </tbody>
               </v-table>
