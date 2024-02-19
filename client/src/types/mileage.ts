@@ -25,6 +25,7 @@ export interface RankedUserLeaderboardEntry {
   username: string
   totalMileage: number
   rank: number
+  teamId: number
 }
 
 export interface RankedTeamLeaderboardEntry {

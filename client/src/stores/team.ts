@@ -22,14 +22,18 @@ export const useTeamStore = defineStore('team', () => {
     team,
 
     async getTeams() {
-      const teams = await server.get('team/get_teams/').then((res) => {
-        if (res.status == 200) return res.data
-      })
-      notify({
-        title: 'Get Teams',
-        type: 'error',
-        text: 'Get Teams Error'
-      })
+      const teams = await server
+        .get('team/get_teams/')
+        .then((res) => {
+          if (res.status == 200) return res.data
+        })
+        .catch(() => {
+          notify({
+            title: 'Get Teams',
+            type: 'error',
+            text: 'Get Teams Error'
+          })
+        })
       return camelize(teams)
     },
 
