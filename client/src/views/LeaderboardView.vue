@@ -34,7 +34,7 @@
         <tr>
           <th id="rankColumn" class="text-right">Rank</th>
           <th id="nameColumn" class="text-left">Name</th>
-          <th id="teamColumn" class="text-left">Team</th>
+          <th v-if="activeButton == 'Individual'" id="teamColumn" class="text-left">Team</th>
           <th id="mileageColumn" class="text-left">Mileage</th>
         </tr>
       </thead>
@@ -50,10 +50,12 @@
           </td>
           <td v-else class="text-right text-subtitle-1">{{ currentUser.rank }}</td>
           <td class="text-subtitle-1">{{ currentUser.username }}</td>
-          <td class="text-subtitle-1">{{ getTeamName(currentUser.teamId) }}</td>
+          <td v-if="(activeButton = 'Individual')" class="text-subtitle-1">
+            {{ getTeamName(currentUser.teamId) }}
+          </td>
           <td>
             <v-chip color="green" class="rounded text-h6 w-100 d-flex justify-center">{{
-              currentUser.totalMileage
+              Math.round(currentUser.totalMileage * 100) / 100
             }}</v-chip>
           </td>
         </tr>
@@ -73,7 +75,7 @@
           <td class="text-subtitle-1">{{ getTeamName(item.teamId) }}</td>
           <td>
             <v-chip color="green" class="rounded text-h6 w-100 d-flex justify-center">{{
-              item.totalMileage
+              Math.round(item.totalMileage * 100) / 100
             }}</v-chip>
           </td>
         </tr>
@@ -92,7 +94,7 @@
           <td class="text-subtitle-1">{{ currentTeam.name }}</td>
           <td>
             <v-chip color="green" class="rounded text-h6 w-100 d-flex justify-center">{{
-              currentTeam.totalMileage
+              Math.round(currentTeam.totalMileage * 100) / 100
             }}</v-chip>
           </td>
         </tr>
@@ -113,7 +115,7 @@
           </td>
           <td>
             <v-chip color="green" class="rounded text-h6 w-100 d-flex justify-center">{{
-              item.totalMileage
+              Math.round(item.totalMileage * 100) / 100
             }}</v-chip>
           </td>
         </tr>
