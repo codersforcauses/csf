@@ -12,7 +12,10 @@
 
       <!-- Total Kilometres -->
       <v-row align="center" class="my-2">
-        <v-icon :class="['mdi','ml-3 mt-1', getIconName(userStore.user!.travelMethod)]" size="52" />
+        <v-icon
+          :class="['mdi', 'ml-3 mt-1', getIconName(userStore.user!.travelMethod)]"
+          size="52"
+        />
         <v-col>
           <v-chip color="green" class="rounded text-h5">{{ mileageStore.totalKmByTeam }} KM</v-chip>
           <h3>TOTAL</h3>
@@ -98,6 +101,45 @@
       </v-container>
       <v-divider />
 
+      <!-- ? Leaderboard: Hopefully coming soon!! For future developer to implement -->
+      <!-- Leaderboard -->
+      <v-container class="pa-0">
+        <v-row
+          align="start"
+          @click="isLeaderboardVisible = !isLeaderboardVisible"
+          id="pointer-cursor"
+          class="my-2"
+        >
+          <v-col>
+            <h2>Leaderboard</h2>
+            <div v-if="isLeaderboardVisible" class="">
+              <v-table fixed-header class="pt-2 px-12">
+                <thead>
+                  <th class="text-left">Place</th>
+                  <th class="text-left">Name</th>
+                  <th class="text-right">Distance</th>
+                </thead>
+                <tbody>
+                  <tr v-for="entry in teamData.leaderboard?.leaderboard" :key="entry.rank">
+                    <td class="text-left">{{ entry.rank }}</td>
+                    <td class="text-left pl-0">{{ entry.username }}</td>
+                    <td class="text-right">{{ entry.totalMileage }}</td>
+                  </tr>
+                </tbody>
+              </v-table>
+            </div>
+          </v-col>
+          <v-icon
+            v-if="isLeaderboardVisible"
+            icon="mdi mdi-chevron-down"
+            size="50px"
+            class="px-10"
+          />
+          <v-icon v-else icon="mdi mdi-chevron-right" size="50px" class="px-10" />
+        </v-row>
+      </v-container>
+      <v-divider />
+
       <!-- Sub-teams -->
       <v-container class="pa-0">
         <v-row align="start" class="my-2">
@@ -129,21 +171,7 @@
       </v-container>
       <v-divider />
 
-      <!-- Leaderboard: Hopefully coming soon!! For future developer to implement -->
-      <!-- <v-row
-        align="start"
-        @click="isLeaderboardVisible = !isLeaderboardVisible"
-        id="pointer-cursor"
-        class="my-2"
-      >
-        <v-col>
-          <h2>Leaderboard</h2>
-          <p v-if="isLeaderboardVisible">Leave this for now</p>
-        </v-col>
-        <v-icon v-if="isLeaderboardVisible" icon="mdi mdi-chevron-down" size="50px" class="px-10" />
-        <v-icon v-else icon="mdi mdi-chevron-right" size="50px" class="px-10" />
-      </v-row>
-      <v-divider class="mb-10" /> -->
+      <v-divider class="mb-10" />
     </v-row>
   </v-container>
 
@@ -181,6 +209,7 @@ import { useUserStore } from '@/stores/user'
 import { AxiosError } from 'axios'
 import { notify } from '@kyvg/vue3-notification'
 import { useMileageStore } from '@/stores/mileage'
+import type { UserLeaderboard, TeamLeaderboard } from '@/types/mileage'
 
 const teamStore = useTeamStore()
 const userStore = useUserStore()
@@ -200,6 +229,12 @@ onMounted(async () => {
         })
       }
     })
+  if (userStore.user!.teamId) {
+    teamData.value.leaderboard = await mileageStore.getLeaderboard({
+      type: 'users',
+      teamId: userStore.user!.teamId
+    })
+  }
 })
 const deleteTeam = () => {
   loading.value = true
@@ -233,7 +268,7 @@ const teamData = ref({
   bio: teamStore.team ? teamStore.team.bio : '',
   daily_kms: [],
   sub_teams: [],
-  leaderboard: []
+  leaderboard: {} as UserLeaderboard | TeamLeaderboard | undefined
 })
 
 watch(
