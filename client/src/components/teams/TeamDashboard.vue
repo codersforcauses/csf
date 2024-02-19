@@ -120,60 +120,30 @@
           />
           <v-icon v-else icon="mdi mdi-chevron-right" size="50px" class="px-10" />
         </v-row>
-        <div v-if="isLeaderboardVisible" class="">
-          <v-table fixed-header class="py-2 px-12">
+        <div v-if="isLeaderboardVisible" class="mx-12">
+          <v-table fixed-header class="py-2">
             <thead>
-              <th class="text-left">
-                <p class="font-weight-light">Place</p>
-              </th>
-              <th class="text-left">
-                <p class="font-weight-light">Name</p>
-              </th>
-              <th class="text-right">
-                <p class="font-weight-light">Distance</p>
-              </th>
+              <tr>
+                <th id="placeColumn" class="text-right">Place</th>
+                <th id="nameColumn" class="text-left">Name</th>
+                <th id="distanceColumn" class="text-right">Distance</th>
+              </tr>
             </thead>
             <tbody>
               <tr v-for="entry in teamData.leaderboard?.leaderboard" :key="entry.rank">
-                <td class="text-left pl-0 py-2">
-                  <div v-if="entry.rank == 1" class="align-center">
-                    <div>
-                      <div class="circle gold d-flex justify-center">
-                        <span class="text-center">{{ entry.rank }}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div v-if="entry.rank == 2" class="align-center">
-                    <div>
-                      <div class="circle silver d-flex justify-center">
-                        <span class="text-center">{{ entry.rank }}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div v-if="entry.rank == 3" class="align-center">
-                    <div>
-                      <div class="circle bronze d-flex justify-center">
-                        <span class="text-center">{{ entry.rank }}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div v-if="entry.rank > 3" class="align-center">
-                    <div>
-                      <div class="circle d-flex justify-center">
-                        <span class="text-center">{{ entry.rank }}</span>
-                      </div>
-                    </div>
-                  </div>
+                <td v-if="entry.rank < 4" class="text-right text-subtitle-1">
+                  <v-icon icon="mdi-trophy" size="25px" :class="getTrophyColour(entry.rank)" />
+                  <span>{{ entry.rank }}</span>
                 </td>
-                <td class="px-0">
-                  <div class="">
-                    <span>{{ entry.username }}</span>
-                  </div>
+                <td v-if="entry.rank > 3" class="text-right text-subtitle-1">
+                  <span>{{ entry.rank }}</span>
                 </td>
-                <td class="text-right">{{ Math.round(entry.totalMileage * 100) / 100 }}</td>
+                <td class="text-subtitle-1">
+                  <span>{{ entry.username }}</span>
+                </td>
+                <td class="text-right text-subtitle-1">
+                  {{ Math.round(entry.totalMileage * 100) / 100 }}
+                </td>
               </tr>
             </tbody>
           </v-table>
@@ -350,6 +320,17 @@ const getIconName = (medium: string) => {
       return 'mdi-walk'
   }
 }
+
+const getTrophyColour = (rank: number) => {
+  switch (rank) {
+    case 1:
+      return 'text-yellow-darken-1'
+    case 2:
+      return 'text-blue-grey-lighten-1'
+    default:
+      return 'text-orange-darken-1'
+  }
+}
 </script>
 
 <style scoped>
@@ -369,22 +350,15 @@ const getIconName = (medium: string) => {
   font-size: 0.7rem;
 }
 
-.circle {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  align-items: center;
+#placeColumn {
+  width: 80px;
 }
 
-.gold {
-  background-color: #ffd700;
+#nameColumn {
+  width: auto;
 }
 
-.silver {
-  background-color: #d2d2d2;
-}
-
-.bronze {
-  background-color: #ff8000;
+#distanceColumn {
+  width: 33%;
 }
 </style>
