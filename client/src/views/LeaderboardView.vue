@@ -61,6 +61,7 @@
           <td id="gap"></td>
           <td id="gap"></td>
           <td id="gap"></td>
+          <td id="gap"></td>
         </tr>
         <tr v-for="item in filteredUserLeaderboard" :key="item.username">
           <td v-if="item.rank < 4" class="text-right text-subtitle-1">
