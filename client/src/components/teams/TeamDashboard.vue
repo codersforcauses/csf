@@ -17,7 +17,7 @@
           size="52"
         />
         <v-col>
-          <v-chip color="green" class="rounded text-h5">{{ mileageStore.totalKmByTeam }} KM</v-chip>
+          <v-chip color="green" class="rounded text-h5">{{ Math.round(mileageStore.totalKmByTeam * 100) / 100 }} KM</v-chip>
           <h3>TOTAL</h3>
         </v-col>
       </v-row>
