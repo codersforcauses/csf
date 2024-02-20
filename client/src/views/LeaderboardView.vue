@@ -48,10 +48,24 @@
             ></v-icon>
           </th>
           <th
+            v-if="activeButton == 'Individual'"
             id="mileageColumn"
             class="text-left"
             style="cursor: pointer"
             @click="sortMileage(filteredUserLeaderboard)"
+          >
+            Mileage
+            <v-icon
+              size="24"
+              :class="{ 'mdi mdi-menu-down': !mileageSorted, 'mdi mdi-menu-up': mileageSorted }"
+            ></v-icon>
+          </th>
+          <th
+            v-if="activeButton != 'Individual'"
+            id="mileageColumn"
+            class="text-left"
+            style="cursor: pointer"
+            @click="sortTeamsMileage(filteredTeamLeaderboard)"
           >
             Mileage
             <v-icon
@@ -283,6 +297,16 @@ const sortTeam = (data: RankedUserLeaderboardEntry[]) => {
 }
 
 const sortMileage = (data: RankedUserLeaderboardEntry[]) => {
+  if (!mileageSorted.value) {
+    mileageSorted.value = !mileageSorted.value
+    return data.sort((a, b) => a.totalMileage - b.totalMileage)
+  } else {
+    mileageSorted.value = !mileageSorted.value
+    return data.sort((a, b) => b.totalMileage - a.totalMileage)
+  }
+}
+
+const sortTeamsMileage = (data: RankedTeamLeaderboardEntry[]) => {
   if (!mileageSorted.value) {
     mileageSorted.value = !mileageSorted.value
     return data.sort((a, b) => a.totalMileage - b.totalMileage)
