@@ -258,8 +258,13 @@ const findTeams = async (data: RankedUserLeaderboardEntry[]) => {
 
 const sortTeam = (data: RankedUserLeaderboardEntry[]) => {
   if (topTeam.value === 0) topTeam.value = 1
+
   if (topTeam.value === teamList.value.length + 1) {
     topTeam.value = 1
+  }
+  // if the team with index 1 is at the top, then we need to increment the topTeam value by 1
+  if (data[0].teamId === topTeam.value) {
+    topTeam.value = 1 + topTeam.value
   }
   let items = <RankedUserLeaderboardEntry[]>[]
   data.forEach((element) => {
