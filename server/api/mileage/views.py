@@ -6,7 +6,12 @@ from rest_framework import status
 from .models import Mileage
 from ..users.models import User
 from ..team.models import Team
-from .serializers import MileageSerializer, UserSerializer, UserLeaderboardSerializer, TeamLeaderboardSerializer  # , PostMileageSerializer
+from .serializers import (
+    MileageSerializer,
+    UserSerializer,
+    UserLeaderboardSerializer,
+    TeamLeaderboardSerializer,
+)  # , PostMileageSerializer
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Sum
 
@@ -26,13 +31,17 @@ def get_mileage(request: HttpRequest):
                 user = User.objects.get(id=request.GET["user"])
                 return Response(user.total_mileage)
             except ObjectDoesNotExist:
-                return Response(request.user.first_name, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    request.user.first_name, status=status.HTTP_400_BAD_REQUEST
+                )
         if "team" in request.GET:
             try:
                 team = Team.objects.get(team_id=request.GET["team"])
                 return Response(team.total_mileage)
             except ObjectDoesNotExist:
-                return Response(request.user.team_id.name, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    request.user.team_id.name, status=status.HTTP_400_BAD_REQUEST
+                )
     if "challenge" in request.GET and "user" in request.GET:
         user = User.objects.get(id=request.GET["user"])
 
@@ -40,14 +49,20 @@ def get_mileage(request: HttpRequest):
             return Response(0.0)
 
         # end challenge period if days are up
-        elif (datetime.date.today() - user.challenge_start_date).days > CHALLENGE_LENGTH:
-            user_serializer = UserSerializer(instance=user, data={'challenge_start_date': None})
+        elif (
+            datetime.date.today() - user.challenge_start_date
+        ).days > CHALLENGE_LENGTH:
+            user_serializer = UserSerializer(
+                instance=user, data={"challenge_start_date": None}
+            )
             if user_serializer.is_valid():
                 user_serializer.save()
             return Response(0.0)
 
         else:
-            mileage = Mileage.objects.filter(user=request.GET["user"], date__gte=user.challenge_start_date)
+            mileage = Mileage.objects.filter(
+                user=request.GET["user"], date__gte=user.challenge_start_date
+            )
             if mileage:  # the mileage QuerySet is not empty
                 return Response(mileage.aggregate(Sum("kilometres"))["kilometres__sum"])
             else:
@@ -78,7 +93,7 @@ def post_mileage(request):
     if user_serializer.is_valid():
         user_serializer.save()
         if user.team_id:
-            request.data.update({"team":  user.team_id.team_id})
+            request.data.update({"team": user.team_id.team_id})
         serializer = MileageSerializer(data=request.data)
         if serializer.is_valid():
             mileage = serializer.save()
@@ -87,23 +102,50 @@ def post_mileage(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 def get_leaderboard(request):
     if request.GET["type"] == "users":
-        leaderboard_serializer = UserLeaderboardSerializer(User.objects.filter(is_staff=False).order_by("-total_mileage"), many=True)
-        result = {"leaderboard": calculate_leaderboard_ranks(leaderboard_serializer.data[:LEADERBOARD_SIZE], "id")}
+        leaderboard_serializer = UserLeaderboardSerializer(
+            User.objects.filter(is_staff=False).order_by("-total_mileage"), many=True
+        )
+        result = {
+            "leaderboard": calculate_leaderboard_ranks(
+                leaderboard_serializer.data[:LEADERBOARD_SIZE], "id"
+            )
+        }
         if "user_id" in request.GET:
-            rank, user_mileage, index = get_rank_and_mileage_from_leaderboard(leaderboard_serializer.data, int(request.GET["user_id"]), "id")
+            rank, user_mileage, index = get_rank_and_mileage_from_leaderboard(
+                leaderboard_serializer.data, int(request.GET["user_id"]), "id"
+            )
             if rank != -1 and user_mileage != -1:
-                result["user"] = {"username": leaderboard_serializer.data[index]["username"], "rank": rank, "total_mileage": user_mileage}
+                result["user"] = {
+                    "username": leaderboard_serializer.data[index]["username"],
+                    "rank": rank,
+                    "total_mileage": user_mileage,
+                    "team_id": User.objects.get(
+                        id=request.GET["user_id"]
+                    ).team_id.team_id,
+                }
     else:
-        leaderboard_serializer = TeamLeaderboardSerializer(Team.objects.order_by("-total_mileage"), many=True)
-        result = {"leaderboard": calculate_leaderboard_ranks(leaderboard_serializer.data[:LEADERBOARD_SIZE], "team_id")}
+        leaderboard_serializer = TeamLeaderboardSerializer(
+            Team.objects.order_by("-total_mileage"), many=True
+        )
+        result = {
+            "leaderboard": calculate_leaderboard_ranks(
+                leaderboard_serializer.data[:LEADERBOARD_SIZE], "team_id"
+            )
+        }
         if "team_id" in request.GET:
-            rank, team_mileage, index = get_rank_and_mileage_from_leaderboard(leaderboard_serializer.data, int(request.GET["team_id"]), "team_id")
+            rank, team_mileage, index = get_rank_and_mileage_from_leaderboard(
+                leaderboard_serializer.data, int(request.GET["team_id"]), "team_id"
+            )
             if rank != -1 and team_mileage != -1:
-                result["team"] = {"name": leaderboard_serializer.data[index]["name"], "bio": leaderboard_serializer.data[index]["bio"],
-                                  "rank": rank, "total_mileage": team_mileage}
+                result["team"] = {
+                    "name": leaderboard_serializer.data[index]["name"],
+                    "bio": leaderboard_serializer.data[index]["bio"],
+                    "rank": rank,
+                    "total_mileage": team_mileage,
+                }
 
     return Response(result)
 
@@ -120,12 +162,12 @@ def get_rank_and_mileage_from_leaderboard(leaderboard, id, field_name):
     while i >= 0 and i < length:
         if mileage == -1 and leaderboard[i][field_name] == id:
             index = i
-            mileage = leaderboard[i]['total_mileage']
+            mileage = leaderboard[i]["total_mileage"]
             rank = i + 1
         elif mileage != -1:
             # we step backwards through the leaderboard until we find a user/team with greater
             # mileage, or until we've gone the whole way back
-            if leaderboard[i]['total_mileage'] > mileage:
+            if leaderboard[i]["total_mileage"] > mileage:
                 rank = i + 2
                 break
             elif i == 0:
@@ -146,9 +188,12 @@ def calculate_leaderboard_ranks(leaderboard, id_field_name):
         ranked_entry = leaderboard[i].copy()
         # no need to send the id back to the frontend
         ranked_entry.pop(id_field_name)
-        if i > 0 and leaderboard[i]["total_mileage"] == leaderboard[i-1]["total_mileage"]:
-            ranked_entry["rank"] = ranked_leaderboard[i-1]["rank"]
+        if (
+            i > 0
+            and leaderboard[i]["total_mileage"] == leaderboard[i - 1]["total_mileage"]
+        ):
+            ranked_entry["rank"] = ranked_leaderboard[i - 1]["rank"]
         else:
-            ranked_entry["rank"] = i+1
+            ranked_entry["rank"] = i + 1
         ranked_leaderboard.append(ranked_entry)
     return ranked_leaderboard

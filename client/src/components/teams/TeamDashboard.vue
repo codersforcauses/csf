@@ -12,9 +12,14 @@
 
       <!-- Total Kilometres -->
       <v-row align="center" class="my-2">
-        <v-icon :class="['mdi','ml-3 mt-1', getIconName(userStore.user!.travelMethod)]" size="52" />
+        <v-icon
+          :class="['mdi', 'ml-3 mt-1', getIconName(userStore.user!.travelMethod)]"
+          size="52"
+        />
         <v-col>
-          <v-chip color="green" class="rounded text-h5">{{ mileageStore.totalKmByTeam }} KM</v-chip>
+          <v-chip color="green" class="rounded text-h5"
+            >{{ Math.round(mileageStore.totalKmByTeam * 100) / 100 }} KM</v-chip
+          >
           <h3>TOTAL</h3>
         </v-col>
       </v-row>
@@ -98,6 +103,56 @@
       </v-container>
       <v-divider />
 
+      <!-- Leaderboard -->
+      <v-container class="pa-0">
+        <v-row
+          align="start"
+          @click="isLeaderboardVisible = !isLeaderboardVisible"
+          id="pointer-cursor"
+          class="my-2"
+        >
+          <v-col>
+            <h2>Leaderboard</h2>
+          </v-col>
+          <v-icon
+            v-if="isLeaderboardVisible"
+            icon="mdi mdi-chevron-down"
+            size="50px"
+            class="px-10"
+          />
+          <v-icon v-else icon="mdi mdi-chevron-right" size="50px" class="px-10" />
+        </v-row>
+        <div v-if="isLeaderboardVisible" class="mx-12">
+          <v-table fixed-header class="py-2">
+            <thead>
+              <tr>
+                <th id="placeColumn" class="text-right">Place</th>
+                <th id="nameColumn" class="text-left">Name</th>
+                <th id="distanceColumn" class="text-right">Distance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="entry in teamData.leaderboard?.leaderboard" :key="entry.rank">
+                <td v-if="entry.rank < 4" class="text-right text-subtitle-1">
+                  <v-icon icon="mdi-trophy" size="25px" :class="getTrophyColour(entry.rank)" />
+                  <span>{{ entry.rank }}</span>
+                </td>
+                <td v-if="entry.rank > 3" class="text-right text-subtitle-1">
+                  <span>{{ entry.rank }}</span>
+                </td>
+                <td class="text-subtitle-1">
+                  <span>{{ entry.username }}</span>
+                </td>
+                <td class="text-right text-subtitle-1">
+                  {{ Math.round(entry.totalMileage * 100) / 100 }}
+                </td>
+              </tr>
+            </tbody>
+          </v-table>
+        </div>
+      </v-container>
+      <v-divider />
+
       <!-- Sub-teams -->
       <v-container class="pa-0">
         <v-row align="start" class="my-2">
@@ -129,21 +184,7 @@
       </v-container>
       <v-divider />
 
-      <!-- Leaderboard: Hopefully coming soon!! For future developer to implement -->
-      <!-- <v-row
-        align="start"
-        @click="isLeaderboardVisible = !isLeaderboardVisible"
-        id="pointer-cursor"
-        class="my-2"
-      >
-        <v-col>
-          <h2>Leaderboard</h2>
-          <p v-if="isLeaderboardVisible">Leave this for now</p>
-        </v-col>
-        <v-icon v-if="isLeaderboardVisible" icon="mdi mdi-chevron-down" size="50px" class="px-10" />
-        <v-icon v-else icon="mdi mdi-chevron-right" size="50px" class="px-10" />
-      </v-row>
-      <v-divider class="mb-10" /> -->
+      <v-divider class="mb-10" />
     </v-row>
   </v-container>
 
@@ -181,6 +222,7 @@ import { useUserStore } from '@/stores/user'
 import { AxiosError } from 'axios'
 import { notify } from '@kyvg/vue3-notification'
 import { useMileageStore } from '@/stores/mileage'
+import type { UserLeaderboard } from '@/types/mileage'
 
 const teamStore = useTeamStore()
 const userStore = useUserStore()
@@ -200,6 +242,12 @@ onMounted(async () => {
         })
       }
     })
+  if (userStore.user!.teamId) {
+    teamData.value.leaderboard = (await mileageStore.getLeaderboard({
+      type: 'users',
+      teamId: userStore.user!.teamId
+    })) as UserLeaderboard
+  }
 })
 const deleteTeam = () => {
   loading.value = true
@@ -233,7 +281,7 @@ const teamData = ref({
   bio: teamStore.team ? teamStore.team.bio : '',
   daily_kms: [],
   sub_teams: [],
-  leaderboard: []
+  leaderboard: {} as UserLeaderboard | undefined
 })
 
 watch(
@@ -274,6 +322,17 @@ const getIconName = (medium: string) => {
       return 'mdi-walk'
   }
 }
+
+const getTrophyColour = (rank: number) => {
+  switch (rank) {
+    case 1:
+      return 'text-yellow-darken-1'
+    case 2:
+      return 'text-blue-grey-lighten-1'
+    default:
+      return 'text-orange-darken-1'
+  }
+}
 </script>
 
 <style scoped>
@@ -291,5 +350,17 @@ const getIconName = (medium: string) => {
 
 .invite-code {
   font-size: 0.7rem;
+}
+
+#placeColumn {
+  width: 80px;
+}
+
+#nameColumn {
+  width: auto;
+}
+
+#distanceColumn {
+  width: 33%;
 }
 </style>

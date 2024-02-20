@@ -1,119 +1,127 @@
 <template>
-  <div class="header text-white">
-    <h1 class="text-center font-weight-medium text-md-h1" id="title">Leaderboards</h1>
-  </div>
-  <v-row class="ma-0 pt-5 pb-1" justify="space-evenly">
-    <v-btn
-      variant="flat"
-      density="compact"
-      width="120px"
-      :color="activeButton === board ? 'rgb(52, 94, 158, 0.3)' : ''"
-      :class="activeButton === board ? 'text-secondaryBlue' : 'black'"
-      v-for="board in ['Individual', 'Teams']"
-      :key="board"
-      rounded="xl"
-      @click="activeButton = board"
-      >{{ board }}</v-btn
-    >
-  </v-row>
-  <v-row class="ma-0 pa-4">
-    <v-text-field
-      prepend-inner-icon="mdi-magnify"
-      hide-details
-      variant="outlined"
-      placeholder="Search Leaderboard"
-      class="mx-3"
-      clearable
-      v-model="searchQuery"
-    />
-  </v-row>
+  <div v-if="!isLoading">
+    <div class="header text-white">
+      <h1 class="text-center font-weight-medium text-md-h1" id="title">Leaderboards</h1>
+    </div>
+    <v-row class="ma-0 pt-5 pb-1" justify="space-evenly">
+      <v-btn
+        variant="flat"
+        density="compact"
+        width="120px"
+        :color="activeButton === board ? 'rgb(52, 94, 158, 0.3)' : ''"
+        :class="activeButton === board ? 'text-secondaryBlue' : 'black'"
+        v-for="board in ['Individual', 'Teams']"
+        :key="board"
+        rounded="xl"
+        @click="activeButton = board"
+        >{{ board }}</v-btn
+      >
+    </v-row>
+    <v-row class="ma-0 pa-4">
+      <v-text-field
+        prepend-inner-icon="mdi-magnify"
+        hide-details
+        variant="outlined"
+        placeholder="Search Leaderboard"
+        class="mx-3"
+        clearable
+        v-model="searchQuery"
+      />
+    </v-row>
 
-  <v-table fixed-header class="mx-8">
-    <thead>
-      <tr>
-        <th id="rankColumn" class="text-right">Rank</th>
-        <th id="nameColumn" class="text-left">Name</th>
-        <th id="mileageColumn" class="text-left">Mileage</th>
-      </tr>
-    </thead>
-    <tbody v-if="activeButton === 'Individual'">
-      <tr
-        v-if="currentUser"
-        style="border-collapse: separate; border-spacing: 20px"
-        class="bg-grey-lighten-4"
-      >
-        <td v-if="currentUser.rank < 4" class="text-right text-subtitle-1">
-          <v-icon icon="mdi-trophy" size="25px" :class="getTrophyColour(currentUser.rank)" />
-          {{ currentUser.rank }}
-        </td>
-        <td v-else class="text-right text-subtitle-1">{{ currentUser.rank }}</td>
-        <td class="text-subtitle-1">{{ currentUser.username }}</td>
-        <td>
-          <v-chip color="green" class="rounded text-h6 w-100 d-flex justify-center">{{
-            currentUser.totalMileage
-          }}</v-chip>
-        </td>
-      </tr>
-      <tr v-if="currentUser">
-        <td id="gap"></td>
-        <td id="gap"></td>
-        <td id="gap"></td>
-      </tr>
-      <tr v-for="item in filteredUserLeaderboard" :key="item.username">
-        <td v-if="item.rank < 4" class="text-right text-subtitle-1">
-          <v-icon icon="mdi-trophy" size="25px" :class="getTrophyColour(item.rank)" />
-          {{ item.rank }}
-        </td>
-        <td v-else class="text-right text-subtitle-1">{{ item.rank }}</td>
-        <td class="text-subtitle-1">{{ item.username }}</td>
-        <td>
-          <v-chip color="green" class="rounded text-h6 w-100 d-flex justify-center">{{
-            item.totalMileage
-          }}</v-chip>
-        </td>
-      </tr>
-    </tbody>
-    <tbody v-else>
-      <tr
-        v-if="currentTeam"
-        style="border-collapse: separate; border-spacing: 20px"
-        class="bg-grey-lighten-4"
-      >
-        <td v-if="currentTeam.rank < 4" class="text-right text-subtitle-1">
-          <v-icon icon="mdi-trophy" size="25px" :class="getTrophyColour(currentTeam.rank)" />
-          {{ currentTeam.rank }}
-        </td>
-        <td v-else class="text-right text-subtitle-1">{{ currentTeam.rank }}</td>
-        <td class="text-subtitle-1">{{ currentTeam.name }}</td>
-        <td>
-          <v-chip color="green" class="rounded text-h6 w-100 d-flex justify-center">{{
-            currentTeam.totalMileage
-          }}</v-chip>
-        </td>
-      </tr>
-      <tr v-if="currentTeam">
-        <td id="gap"></td>
-        <td id="gap"></td>
-        <td id="gap"></td>
-      </tr>
-      <tr v-for="item in filteredTeamLeaderboard" :key="item.name">
-        <td v-if="item.rank < 4" class="text-right text-subtitle-1">
-          <v-icon icon="mdi-trophy" size="25px" :class="getTrophyColour(item.rank)" />
-          {{ item.rank }}
-        </td>
-        <td v-else class="text-right text-subtitle-1">{{ item.rank }}</td>
-        <td>
-          <p class="text-subtitle-1">{{ item.name }}</p>
-          <p class="text-body-2 text-grey">{{ shortenBio(item.bio) }}</p>
-        </td>
-        <td>
-          <v-chip color="green" class="rounded text-h6 w-100 d-flex justify-center">{{
-            item.totalMileage
-          }}</v-chip>
-        </td>
-      </tr>
-    </tbody>
-  </v-table>
+    <v-table fixed-header class="mx-8">
+      <thead>
+        <tr>
+          <th id="rankColumn" class="text-right">Rank</th>
+          <th id="nameColumn" class="text-left">Name</th>
+          <th v-if="activeButton == 'Individual'" id="teamColumn" class="text-left">Team</th>
+          <th id="mileageColumn" class="text-left">Mileage</th>
+        </tr>
+      </thead>
+      <tbody v-if="activeButton === 'Individual'">
+        <tr
+          v-if="currentUser"
+          style="border-collapse: separate; border-spacing: 20px"
+          class="bg-grey-lighten-4"
+        >
+          <td v-if="currentUser.rank < 4" class="text-right text-subtitle-1">
+            <v-icon icon="mdi-trophy" size="25px" :class="getTrophyColour(currentUser.rank)" />
+            {{ currentUser.rank }}
+          </td>
+          <td v-else class="text-right text-subtitle-1">{{ currentUser.rank }}</td>
+          <td class="text-subtitle-1">{{ currentUser.username }}</td>
+          <td v-if="(activeButton = 'Individual')" class="text-subtitle-1">
+            {{ getTeamName(currentUser.teamId) }}
+          </td>
+          <td>
+            <v-chip color="green" class="rounded text-h6 w-100 d-flex justify-center">{{
+              Math.round(currentUser.totalMileage * 100) / 100
+            }}</v-chip>
+          </td>
+        </tr>
+        <tr v-if="currentUser">
+          <td id="gap"></td>
+          <td id="gap"></td>
+          <td id="gap"></td>
+          <td id="gap"></td>
+        </tr>
+        <tr v-for="item in filteredUserLeaderboard" :key="item.username">
+          <td v-if="item.rank < 4" class="text-right text-subtitle-1">
+            <v-icon icon="mdi-trophy" size="25px" :class="getTrophyColour(item.rank)" />
+            {{ item.rank }}
+          </td>
+          <td v-else class="text-right text-subtitle-1">{{ item.rank }}</td>
+          <td class="text-subtitle-1">{{ item.username }}</td>
+          <td class="text-subtitle-1">{{ getTeamName(item.teamId) }}</td>
+          <td>
+            <v-chip color="green" class="rounded text-h6 w-100 d-flex justify-center">{{
+              Math.round(item.totalMileage * 100) / 100
+            }}</v-chip>
+          </td>
+        </tr>
+      </tbody>
+      <tbody v-else>
+        <tr
+          v-if="currentTeam"
+          style="border-collapse: separate; border-spacing: 20px"
+          class="bg-grey-lighten-4"
+        >
+          <td v-if="currentTeam.rank < 4" class="text-right text-subtitle-1">
+            <v-icon icon="mdi-trophy" size="25px" :class="getTrophyColour(currentTeam.rank)" />
+            {{ currentTeam.rank }}
+          </td>
+          <td v-else class="text-right text-subtitle-1">{{ currentTeam.rank }}</td>
+          <td class="text-subtitle-1">{{ currentTeam.name }}</td>
+          <td>
+            <v-chip color="green" class="rounded text-h6 w-100 d-flex justify-center">{{
+              Math.round(currentTeam.totalMileage * 100) / 100
+            }}</v-chip>
+          </td>
+        </tr>
+        <tr v-if="currentTeam">
+          <td id="gap"></td>
+          <td id="gap"></td>
+          <td id="gap"></td>
+        </tr>
+        <tr v-for="item in filteredTeamLeaderboard" :key="item.name">
+          <td v-if="item.rank < 4" class="text-right text-subtitle-1">
+            <v-icon icon="mdi-trophy" size="25px" :class="getTrophyColour(item.rank)" />
+            {{ item.rank }}
+          </td>
+          <td v-else class="text-right text-subtitle-1">{{ item.rank }}</td>
+          <td>
+            <p class="text-subtitle-1">{{ item.name }}</p>
+            <p class="text-body-2 text-grey">{{ shortenBio(item.bio) }}</p>
+          </td>
+          <td>
+            <v-chip color="green" class="rounded text-h6 w-100 d-flex justify-center">{{
+              Math.round(item.totalMileage * 100) / 100
+            }}</v-chip>
+          </td>
+        </tr>
+      </tbody>
+    </v-table>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -129,6 +137,7 @@ import type {
 } from '@/types/mileage'
 import { ref, onMounted, computed } from 'vue'
 import { useDisplay } from 'vuetify'
+import type { Team } from '@/types/team'
 const { name } = useDisplay()
 
 const mileageStore = useMileageStore()
@@ -140,6 +149,8 @@ const userLeaderboard = ref<RankedUserLeaderboardEntry[]>([])
 const teamLeaderboard = ref<RankedTeamLeaderboardEntry[]>([])
 const currentUser = ref<RankedUserLeaderboardEntry | undefined>()
 const currentTeam = ref<RankedTeamLeaderboardEntry | undefined>()
+const teams = ref()
+const isLoading = ref(true)
 
 const filteredUserLeaderboard = computed<RankedUserLeaderboardEntry[]>(() =>
   userLeaderboard.value.filter((user) =>
@@ -200,7 +211,14 @@ onMounted(async () => {
     teamLeaderboard.value = teamsResult.leaderboard
     currentTeam.value = teamsResult.team
   }
+  teams.value = (await teamStore.getTeams()) as Team[]
+  isLoading.value = false
 })
+
+const getTeamName = (teamId: number) => {
+  // console.log(teamId);
+  return teams.value.find((team: Team) => team.teamId === teamId).name
+}
 </script>
 
 <style scoped>
@@ -219,6 +237,10 @@ onMounted(async () => {
 }
 
 #nameColumn {
+  width: auto;
+}
+
+#teamColumn {
   width: auto;
 }
 
