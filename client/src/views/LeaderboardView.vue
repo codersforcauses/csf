@@ -34,8 +34,45 @@
         <tr>
           <th id="rankColumn" class="text-right">Rank</th>
           <th id="nameColumn" class="text-left">Name</th>
-          <th v-if="activeButton == 'Individual'" id="teamColumn" class="text-left">Team</th>
-          <th id="mileageColumn" class="text-left">Mileage</th>
+          <th
+            v-if="activeButton == 'Individual'"
+            id="teamColumn"
+            class="text-left"
+            style="cursor: pointer"
+            @click="sortTeam(filteredUserLeaderboard)"
+          >
+            Team
+            <v-icon
+              size="24"
+              :class="{ 'mdi mdi-menu-down': !teamSorted, 'mdi mdi-menu-up': teamSorted }"
+            ></v-icon>
+          </th>
+          <th
+            v-if="activeButton == 'Individual'"
+            id="mileageColumn"
+            class="text-left"
+            style="cursor: pointer"
+            @click="sortMileage(filteredUserLeaderboard)"
+          >
+            Mileage
+            <v-icon
+              size="24"
+              :class="{ 'mdi mdi-menu-down': !mileageSorted, 'mdi mdi-menu-up': mileageSorted }"
+            ></v-icon>
+          </th>
+          <th
+            v-if="activeButton != 'Individual'"
+            id="mileageColumn"
+            class="text-left"
+            style="cursor: pointer"
+            @click="sortTeamsMileage(filteredTeamLeaderboard)"
+          >
+            Mileage
+            <v-icon
+              size="24"
+              :class="{ 'mdi mdi-menu-down': !mileageSorted, 'mdi mdi-menu-up': mileageSorted }"
+            ></v-icon>
+          </th>
         </tr>
       </thead>
       <tbody v-if="activeButton === 'Individual'">
@@ -151,6 +188,10 @@ const currentUser = ref<RankedUserLeaderboardEntry | undefined>()
 const currentTeam = ref<RankedTeamLeaderboardEntry | undefined>()
 const teams = ref()
 const isLoading = ref(true)
+const teamSorted = ref(false)
+const mileageSorted = ref(false)
+const teamList = ref<Number[]>([])
+const topTeam = ref(0)
 
 const filteredUserLeaderboard = computed<RankedUserLeaderboardEntry[]>(() =>
   userLeaderboard.value.filter((user) =>
@@ -212,12 +253,67 @@ onMounted(async () => {
     currentTeam.value = teamsResult.team
   }
   teams.value = (await teamStore.getTeams()) as Team[]
+  await findTeams(filteredUserLeaderboard.value)
   isLoading.value = false
 })
 
 const getTeamName = (teamId: number) => {
-  // console.log(teamId);
   return teams.value.find((team: Team) => team.teamId === teamId).name
+}
+
+const findTeams = async (data: RankedUserLeaderboardEntry[]) => {
+  data.forEach((element) => {
+    if (!teamList.value.includes(element.teamId)) {
+      teamList.value.push(element.teamId)
+    }
+  })
+  teamList.value.sort()
+}
+
+const sortTeam = (data: RankedUserLeaderboardEntry[]) => {
+  if (topTeam.value === 0) topTeam.value = 1
+
+  if (topTeam.value === teamList.value.length + 1) {
+    topTeam.value = 1
+  }
+  // if the team with index 1 is at the top, then we need to increment the topTeam value by 1
+  if (data[0].teamId === topTeam.value) {
+    topTeam.value = 1 + topTeam.value
+  }
+  let items = <RankedUserLeaderboardEntry[]>[]
+  data.forEach((element) => {
+    if (element.teamId !== topTeam.value) {
+      items.push(element)
+    }
+  })
+
+  for (let i = 0; i < items.length; i++) {
+    const index = data.indexOf(items[i])
+    data.splice(index, 1)
+  }
+  data.push(...items)
+  userLeaderboard.value = [...data]
+  topTeam.value = 1 + topTeam.value
+}
+
+const sortMileage = (data: RankedUserLeaderboardEntry[]) => {
+  if (!mileageSorted.value) {
+    mileageSorted.value = !mileageSorted.value
+    return data.sort((a, b) => a.totalMileage - b.totalMileage)
+  } else {
+    mileageSorted.value = !mileageSorted.value
+    return data.sort((a, b) => b.totalMileage - a.totalMileage)
+  }
+}
+
+const sortTeamsMileage = (data: RankedTeamLeaderboardEntry[]) => {
+  if (!mileageSorted.value) {
+    mileageSorted.value = !mileageSorted.value
+    return data.sort((a, b) => a.totalMileage - b.totalMileage)
+  } else {
+    mileageSorted.value = !mileageSorted.value
+    return data.sort((a, b) => b.totalMileage - a.totalMileage)
+  }
 }
 </script>
 
