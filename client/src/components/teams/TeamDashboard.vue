@@ -244,7 +244,7 @@ onMounted(async () => {
     })
   if (userStore.user!.teamId) {
     teamData.value.leaderboard = (await mileageStore.getLeaderboard({
-      type: 'users',
+      type: 'team',
       teamId: userStore.user!.teamId
     })) as UserLeaderboard
   }
