@@ -106,7 +106,7 @@ def post_mileage(request):
 def get_leaderboard(request):
     if request.GET["type"] == "users":
         leaderboard_serializer = UserLeaderboardSerializer(
-            User.objects.filter(is_staff=False, team_id=request.GET["team_id"]).order_by("-total_mileage"), many=True
+            User.objects.filter(is_staff=False).order_by("-total_mileage"), many=True
         )
         result = {
             "leaderboard": calculate_leaderboard_ranks(
